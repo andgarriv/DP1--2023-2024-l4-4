@@ -74,6 +74,21 @@
 				</picUrl>
 			</properties>
 		</developer>
+
+		<developer>
+			<id>jormunrod</id>
+			<name>Jorge Muñoz Rodriguez</name>
+			<email>jormunrod@alum.us.es</email>
+			<url>http://www.tmht.com/jormunrod</url>
+			<roles>
+				<role>developer</role>
+			</roles>
+			<properties>
+				<picUrl>
+					https://i.pinimg.com/originals/e7/56/73/e75673c1a8a6d7156bebc0c8ac7d836b.png
+				</picUrl>	
+			</properties>
+		</developer>
 	</developers>
 
 
