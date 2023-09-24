@@ -36,9 +36,15 @@
 
 	<developers>
 		<developer>
-			<name>JAParejo</name>
-			<email>japarejo@gmail.com</email>
-			<url>http://www.isa.us.es</url>
+			<name>Angelgares</name>
+			<email>anggaresc1@alum.us.es</email>
+			<url>http://www.tmht.com/anggaresc1</url>
+			<roles>
+			<role>developer</role>
+			</roles>
+			<properties>
+			<picUrl> https://i.pinimg.com/originals/09/69/c2/0969c2f8a87af926fcf912330b67206f.jpg
+			</picUrl></properties>
 		</developer>
 	</developers>
 
