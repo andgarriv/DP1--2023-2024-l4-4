@@ -74,21 +74,6 @@
 				</picUrl>
 			</properties>
 		</developer>
-
-		<developer>
-			<id>jormunrod</id>
-			<name>Jorge</name>
-			<email>jormunrod@alum.us.es</email>
-			<roles>
-				<role>developer</role>
-			</roles>
-			<properties>
-				<picUrl>
-					https://static.vecteezy.com/system/resources/thumbnails/023/188/132/small/natural-view-of-the-beach-and-sea-design-abstract-3d-illustration-generated-ai-photo.jpg
-				</picUrl>
-			</properties>
-		</developer>
-
 	</developers>
 
 
