@@ -95,6 +95,21 @@
 				</picUrl>	
 			</properties>
 		</developer>
+
+        <developer>
+			<id>alepersan3</id>
+			<name>Alejandro</name>
+			<email>alepersan3@alum.us.es</email>
+			<url>http://www.tmht.com/alepersan3</url>
+			<roles>
+				<role>leader</role>
+			</roles>
+			<properties>
+				<picUrl>
+					https://i.pinimg.com/564x/51/8c/e4/518ce4beeab94e52cd6b17cf8fc0ea62.jpg
+				</picUrl>
+			</properties>
+		</developer>
 	</developers>
 
 
