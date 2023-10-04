@@ -48,78 +48,9 @@
 			    </picUrl>
             </properties>
 		</developer>
-<<<<<<< HEAD
 	</developers>
 
 	<dependencies>		
-=======
-    
-		<developer>
-			<id>isasolpad</id>
-			<name>Isaac</name>
-			<email>isasolpad@alum.us.es</email>
-			<roles>
-				<role>leader</role>
-			</roles>
-		</developer>
-
-		<developer>
-			<id>javrodrei</id>
-			<name>Javier</name>
-			<email>javrodrei@alum.us.es</email>
-			<roles>
-				<role>leader</role>
-			</roles>
-		</developer>
-	
-		<developer>
-			<id>andgarriv</id>
-			<name>Andres Garcia Rivero</name>
-			<email>andgarriv@alum.us.es</email>
-			<url>http://www.tmht.com/andgarriv</url>
-			<roles>
-				<role>developer</role>
-			</roles>
-			<properties>
-				<picUrl>
-					https://i.pinimg.com/originals/e7/56/73/e75673c1a8a6d7156bebc0c8ac7d836b.png
-				</picUrl>
-			</properties>
-		</developer>
-
-		<developer>
-			<id>jormunrod</id>
-			<name>Jorge Muñoz Rodriguez</name>
-			<email>jormunrod@alum.us.es</email>
-			<url>http://www.tmht.com/jormunrod</url>
-			<roles>
-				<role>developer</role>
-			</roles>
-			<properties>
-				<picUrl>
-					https://i.pinimg.com/originals/e7/56/73/e75673c1a8a6d7156bebc0c8ac7d836b.png
-				</picUrl>	
-			</properties>
-		</developer>
-
-        <developer>
-            <id>alepersan3</id>
-            <name>Alejandro</name>
-            <email>alepersan3@alum.us.es</email>
-            <url>http://www.tmht.com/alepersan3</url>
-            <roles>
-                <role>leader</role>
-            </roles>
-            <properties>
-                <picUrl>
-                    https://i.pinimg.com/564x/51/8c/e4/518ce4beeab94e52cd6b17cf8fc0ea62.jpg
-                </picUrl>
-            </properties>
-        </developer>
-    </developers>
-  
-	<dependencies>
->>>>>>> 631694a15ad4bfd631fe6faa76ac5920c2fe5422
 
 		<!-- Spring and Spring Boot dependencies -->
 		<dependency>
