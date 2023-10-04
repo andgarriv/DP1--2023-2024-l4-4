@@ -1,11 +1,18 @@
 package org.springframework.samples.petclinic.configuration;
 
+<<<<<<< HEAD
+=======
+import static org.springframework.security.config.Customizer.withDefaults;
+>>>>>>> upstream/main
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+<<<<<<< HEAD
 import static org.springframework.security.config.Customizer.*;
+=======
+>>>>>>> upstream/main
 
 import javax.sql.DataSource;
 
@@ -26,6 +33,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+<<<<<<< HEAD
+=======
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+>>>>>>> upstream/main
 
 @Configuration
 @EnableWebSecurity
@@ -51,6 +62,7 @@ public class SecurityConfiguration {
 			.cors(withDefaults())		
 			.csrf(AbstractHttpConfigurer::disable)		
 			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))			
+<<<<<<< HEAD
 			.headers((headers) -> headers.frameOptions((frameOptions) -> frameOptions.sameOrigin()))
 			.exceptionHandling((exepciontHandling) -> exepciontHandling.authenticationEntryPoint(unauthorizedHandler))			
 			
@@ -73,6 +85,30 @@ public class SecurityConfiguration {
 			.requestMatchers(HttpMethod.GET, "/api/v1/vets/stats").hasAuthority(ADMIN)
 			.requestMatchers(HttpMethod.GET, "/api/v1/vets/**").authenticated()
 			.requestMatchers("/api/v1/vets/**").hasAnyAuthority(ADMIN, "VET", CLINIC_OWNER) 
+=======
+			.headers((headers) -> headers.frameOptions((frameOptions) -> frameOptions.disable()))
+			.exceptionHandling((exepciontHandling) -> exepciontHandling.authenticationEntryPoint(unauthorizedHandler))			
+			
+			.authorizeHttpRequests(authorizeRequests ->	authorizeRequests
+			.requestMatchers("/resources/**", "/webjars/**", "/static/**", "/swagger-resources/**").permitAll()			
+			.requestMatchers( "/api/v1/clinics","/", "/oups","/api/v1/auth/**","/v3/api-docs/**","/swagger-ui.html","/swagger-ui/**").permitAll()												
+			.requestMatchers("/api/v1/developers").permitAll()												
+			.requestMatchers("/api/v1/plan").hasAuthority("OWNER")
+			.requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/users/**")).hasAuthority(ADMIN)
+			.requestMatchers("/api/v1/clinicOwners/all").hasAuthority(ADMIN)
+			.requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/clinicOwners/**")).hasAnyAuthority(ADMIN, CLINIC_OWNER)
+			.requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.DELETE, "/api/v1/consultations/**")).hasAuthority(ADMIN)
+			.requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/owners/**")).hasAuthority(ADMIN)
+			.requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/visits/**")).authenticated()			
+			.requestMatchers(HttpMethod.GET, "/api/v1/pets/stats").hasAuthority(ADMIN)
+			.requestMatchers("/api/v1/pets").authenticated()
+			.requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/pets/**")).authenticated()
+			.requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/clinics/**")).hasAnyAuthority(CLINIC_OWNER, ADMIN)
+			.requestMatchers(HttpMethod.GET, "/api/v1/vets/stats").hasAuthority(ADMIN)
+			.requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.GET, "/api/v1/vets/**")).authenticated()
+			.requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/vets/**")).hasAnyAuthority(ADMIN, "VET", CLINIC_OWNER) 
+			.requestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")).permitAll()
+>>>>>>> upstream/main
 			.anyRequest().authenticated())					
 			
 			.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);		
