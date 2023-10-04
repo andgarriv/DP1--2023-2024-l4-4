@@ -24,25 +24,14 @@ export default function deleteFromList(url, id, [state, setState], [alerts, setA
                     else
                         setState(state.filter((i) => i.id !== id));
                 }
-<<<<<<< HEAD
-                return response.json();
-            })
-            .then(json => {
-                getDeleteAlertsOrModal(json, id, alerts, setAlerts, setMessage, setVisible);
-=======
                 return response.text();
             })
             .then(text => {if(text!=='')
                         getDeleteAlertsOrModal(JSON.parse(text), id, alerts, setAlerts, setMessage, setVisible);
->>>>>>> upstream/main
             })
             .catch((err) => {
                 console.log(err);
                 alert("Error deleting entity")
             });
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> upstream/main
