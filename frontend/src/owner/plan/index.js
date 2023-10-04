@@ -23,13 +23,8 @@ export default function PricingPlan () {
     ).json();
     if (myowner.message) setMessage(myowner.message);
     else{
-<<<<<<< HEAD
-      setPlan(owner.clinic.plan);
-      setOwner(owner);
-=======
       setPlan(myowner.clinic.plan);
       setOwner(myowner);
->>>>>>> upstream/main
     } 
   }
 
