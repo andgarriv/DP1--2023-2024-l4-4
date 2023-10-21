@@ -1,19 +1,25 @@
-.home-page-container{
+@font-face {
+    font-family: 'AudioWide';
+    src: url('../../fonts/Audiowide-Regular.ttf') format('truetype');
+}
+
+.home-page-container {
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
     z-index: -1;
-    background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url('../../images/EOL.jpg');
+    background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url('../../images/EOL2.jpg');
     background-size: cover;
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
 }
 
-.hero-div{
-    background-color: rgba(255, 255, 255, 0.3);
+.hero-div {
+    background-color: rgba(34, 34, 34, 0.67);
     padding: 2rem;
     border-radius: 25px;
     backdrop-filter: blur(10px);
@@ -23,14 +29,45 @@
     align-items: center;
 }
 
-.hero-div h1{
+.hero-div h1 {
     font-size: 3rem;
-    font-weight: 700;
-    color: #2f324f;
+    font-weight: 500;
+    color: #75FBFD;
     text-align: center;
     text-transform: uppercase;
+    font-family: 'AudioWide';
 }
 
-.hero-div h3{
+.hero-div h4 {
     text-align: center;
+    color: white;
+    font-family: 'AudioWide';
+}
+
+.fuente {
+    font-family: 'AudioWide';
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.button-style {
+    background-color: rgba(34, 34, 34, 0.67);
+    margin-top: 20px;
+    color: #EF87E0;
+    border: 2px solid #EF87E0;
+    padding: 20px 300px;
+    cursor: pointer;
+    font-size: 28px;
+    border-radius: 10px;
+
+}
+
+.button-style:hover {
+    background-color: #EF87E0;
+    color: black;
 }
