@@ -34,16 +34,17 @@ export default function Login() {
   }
 
   
-    return (
-      <div className="auth-page-container">
-        {message ? (
-          <Alert color="primary">{message}</Alert>
-        ) : (
-          <></>
-        )}
-
-        <h1>Login</h1>
-
+  return (
+    <div className="auth-page-container">
+      {message ? (
+        <Alert color="primary">{message}</Alert>
+      ) : (
+        <></>
+      )}
+  
+      <div className="custom-container">
+        <h1 style={{ color: "lightskyblue" }}>Sing In</h1>
+  
         <div className="auth-form-container">
           <FormGenerator
             ref={loginFormRef}
@@ -56,5 +57,6 @@ export default function Login() {
           />
         </div>
       </div>
-    );  
+    </div>
+  );
 }

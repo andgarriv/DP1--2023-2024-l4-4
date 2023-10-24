@@ -93,9 +93,13 @@ function AppNavbar() {
     } else {
         userLogout = (
             <>
+            <NavItem>
+                    <NavLink className="fuente" style={{ color: "#75FBFD" }} tag={Link} to="/rules">Rules</NavLink>
+                </NavItem>
                 <NavItem className="d-flex">
                     <NavLink className="fuente" style={{ color: "#EF87E0" }} id="logout" tag={Link} to="/logout">Logout</NavLink>
                 </NavItem>
+                
             </>
         )
 
