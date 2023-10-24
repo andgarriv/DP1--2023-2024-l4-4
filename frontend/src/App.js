@@ -47,6 +47,7 @@ import ConsultationListClinicOwner from "./clinicOwner/consultations/Consultatio
 import ConsultationEditClinicOwner from "./clinicOwner/consultations/ConsultationEditClinicOwner";
 import VetListClinicOwner from "./clinicOwner/vets/VetListClinicOwner";
 import VetEditClinicOwner from "./clinicOwner/vets/VetEditClinicOwner";
+import PDFViewer from "./rules";
 
 function ErrorFallback({ error, resetErrorBoundary }) {
   return (
@@ -146,7 +147,8 @@ function App() {
   } else {
     userRoutes = (
       <>
-        {/* <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} /> */}        
+        {/* <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} /> */}     
+        <Route path="/rules" element={<PDFViewer />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/login" element={<Login />} />
       </>

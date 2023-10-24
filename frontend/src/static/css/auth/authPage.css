@@ -19,6 +19,15 @@
     width: 90%;
 }
 
+.custom-container {
+  width: 400px;
+  background-color: black; /* Fondo blanco dentro del fondo negro */
+  border: 5px solid lightskyblue; /* Borde azul claro */
+  border-radius: 50px; /* Bordes redondeados */
+  padding: 50px; /* Espacio interno para los elementos */
+  text-align: center; /* Alinea el contenido al centro */
+}
+
 .auth-page-container h1 {
   
   text-align: center;

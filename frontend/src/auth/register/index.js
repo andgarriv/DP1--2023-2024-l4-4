@@ -128,8 +128,8 @@ export default function Register() {
     return (
       <div className="auth-page-container">
         <div className="auth-form-container">
-          <h1>Register</h1>
-          <h2 className="text-center text-md">
+          <h1 style={{color:"white"}}>Register</h1>
+          <h2 style={{color:"white"}} className="text-center text-md">
             What type of user will you be?
           </h2>
           <div className="options-row">
