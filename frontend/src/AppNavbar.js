@@ -39,7 +39,9 @@ function AppNavbar() {
                         <NavLink className="fuente" style={{ color: "#75FBFD" }} tag={Link} to="/rules">Rules</NavLink>
                     </NavItem>
                     <span style={{ color: "gray", display: "inline-block", margin: "5px 10px" }}>|</span>
-
+                    <NavItem>
+                        <NavLink style={{ color: "white" }} tag={Link} to="/achievements">Achievements</NavLink>
+                    </NavItem>
                 </>
             )
         }
@@ -93,13 +95,13 @@ function AppNavbar() {
     } else {
         userLogout = (
             <>
-            <NavItem>
+                <NavItem>
                     <NavLink className="fuente" style={{ color: "#75FBFD" }} tag={Link} to="/rules">Rules</NavLink>
                 </NavItem>
                 <NavItem className="d-flex">
                     <NavLink className="fuente" style={{ color: "#EF87E0" }} id="logout" tag={Link} to="/logout">Logout</NavLink>
                 </NavItem>
-                
+
             </>
         )
 
