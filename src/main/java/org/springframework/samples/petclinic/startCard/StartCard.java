@@ -1,11 +1,8 @@
-package org.springframework.samples.petclinic.card;
-
-
+package org.springframework.samples.petclinic.startCard;
 
 import org.springframework.samples.petclinic.model.BaseEntity;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,9 +11,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @EqualsAndHashCode(of="id")
-public class Card extends BaseEntity{
-    
-
-    String color;
-    
+public class StartCard extends BaseEntity {
+    Integer exit;
 }
