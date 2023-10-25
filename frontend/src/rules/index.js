@@ -1,33 +1,39 @@
-import React, { useState } from 'react';
-import { Document, Page } from 'react-pdf';
+import React, { useEffect, useState } from 'react';
+import 'whatwg-fetch';
+import '../static/css/home/home.css';
 
-function PDFViewer() {
-  const [numPages, setNumPages] = useState(null);
-  const [pageNumber, setPageNumber] = useState(1);
-  const [showPDF, setShowPDF] = useState(false); // Controla la visibilidad del PDF
 
-  function onDocumentLoadSuccess({ numPages }) {
-    setNumPages(numPages);
+const PDFViewer = () => {
+  const [html, setHtml] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('ReglasEs.html');
+        if (response.ok) {
+          const data = await response.text();
+          setHtml(data);
+        } else {
+          setHtml(<h3>Error al cargar el archivo HTML</h3>);
+        }
+      } catch (error) {
+        setHtml(<h3>{error}</h3>);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (!html) {
+    return <div></div>;
   }
 
   return (
-    <div>
-      <button onClick={() => setShowPDF(!showPDF)}>Rules</button>
-      {showPDF && (
-        <div>
-          <Document
-            file="frontend/public/ReglasES.pdf"
-            onLoadSuccess={onDocumentLoadSuccess}
-          >
-            <Page pageNumber={pageNumber} />
-          </Document>
-          <p>
-            Página {pageNumber} de {numPages}
-          </p>
-        </div>
-      )}
+    <div className="home-page-container">
+        <div dangerouslySetInnerHTML={{ __html: html }}></div>
     </div>
+
   );
-}
+};
 
 export default PDFViewer;

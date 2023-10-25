@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Navbar, NavbarBrand, NavLink, NavItem, Nav, NavbarToggler, Collapse, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import { Link } from 'react-router-dom';
-import tokenService from './services/token.service';
 import jwt_decode from "jwt-decode";
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Collapse, DropdownItem, DropdownMenu, DropdownToggle, Nav, NavItem, NavLink, Navbar, NavbarBrand, NavbarToggler, UncontrolledDropdown } from 'reactstrap';
+import tokenService from './services/token.service';
 import './static/css/home/home.css';
 
 function AppNavbar() {
@@ -43,7 +43,7 @@ function AppNavbar() {
                 </>
             )
         }
-        if (role === "PLAYER") {
+        if (role === "OWNER") {
             playerLinks = (
                 <>
                     <NavItem>
@@ -93,13 +93,9 @@ function AppNavbar() {
     } else {
         userLogout = (
             <>
-            <NavItem>
-                    <NavLink className="fuente" style={{ color: "#75FBFD" }} tag={Link} to="/rules">Rules</NavLink>
-                </NavItem>
                 <NavItem className="d-flex">
                     <NavLink className="fuente" style={{ color: "#EF87E0" }} id="logout" tag={Link} to="/logout">Logout</NavLink>
                 </NavItem>
-                
             </>
         )
 
