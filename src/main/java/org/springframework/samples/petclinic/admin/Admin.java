@@ -1,6 +1,8 @@
 package org.springframework.samples.petclinic.admin;
 
-import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
+
+
+import org.springframework.samples.petclinic.model.User;
 
 import jakarta.persistence.Entity;
 import lombok.Getter;
