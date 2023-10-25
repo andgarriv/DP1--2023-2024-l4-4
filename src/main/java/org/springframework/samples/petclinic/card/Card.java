@@ -1,4 +1,4 @@
-package org.springframework.samples.petclinic.position;
+package org.springframework.samples.petclinic.card;
 
 
 
@@ -12,11 +12,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @EqualsAndHashCode(of="id")
-public class Position{
-    @Id 
+public class Card{
+    @Id
     private int id;
 
-    Integer row;
-    Integer colum;
+    String color;
     
 }
