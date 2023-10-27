@@ -148,7 +148,6 @@ function App() {
     userRoutes = (
       <>
         {/* <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} /> */}     
-        <Route path="/rules" element={<PDFViewer />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/login" element={<Login />} />
       </>
@@ -163,6 +162,7 @@ function App() {
           <Route path="/" exact={true} element={<Home />} />
           <Route path="/plans" element={<PlanList />} />
           <Route path="/docs" element={<SwaggerDocs />} />
+          <Route path="/rules" element={<PDFViewer />} />
           {publicRoutes}
           {userRoutes}
           {adminRoutes}

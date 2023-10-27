@@ -9,7 +9,7 @@ const PDFViewer = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('ReglasEs.html');
+        const response = await fetch('rules.html');
         if (response.ok) {
           const data = await response.text();
           setHtml(data);
