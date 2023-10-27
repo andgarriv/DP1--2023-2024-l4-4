@@ -49,6 +49,7 @@ import VetListClinicOwner from "./clinicOwner/vets/VetListClinicOwner";
 import VetEditClinicOwner from "./clinicOwner/vets/VetEditClinicOwner";
 import PDFViewer from "./rules";
 import AchievementList from "./achievement/achievementList";
+import AchievementEdit from "./achievement/achievementEdit";
 
 
 function ErrorFallback({ error, resetErrorBoundary }) {
@@ -102,6 +103,7 @@ function App() {
           <Route path="/consultations/:consultationId" exact={true} element={<PrivateRoute><ConsultationEditAdmin /></PrivateRoute>} />
           <Route path="/consultations/:consultationId/tickets" exact={true} element={<PrivateRoute><TicketListAdmin /></PrivateRoute>} />
           <Route path="/achievements" exact={true} element={<PrivateRoute><AchievementList /></PrivateRoute>} />
+          <Route path="/achievements/:achievementId" exact={true} element={<PrivateRoute><AchievementEdit/></PrivateRoute>} />
         </>)
     }
     if (role === "OWNER") {
@@ -142,7 +144,7 @@ function App() {
   })
   if (!jwt) {
     publicRoutes = (
-      <>        
+      <>
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
       </>
@@ -150,7 +152,7 @@ function App() {
   } else {
     userRoutes = (
       <>
-        {/* <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} /> */}     
+        {/* <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} /> */}
         <Route path="/rules" element={<PDFViewer />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/login" element={<Login />} />
