@@ -1,4 +1,4 @@
-package org.springframework.samples.petclinic.position;
+package org.springframework.samples.petclinic.card;
 
 
 
@@ -14,8 +14,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @EqualsAndHashCode(of="id")
-public class Position extends BaseEntity{
-    Integer row;
-    Integer column;
+public class Card extends BaseEntity{
+    
+
+    String color;
     
 }
