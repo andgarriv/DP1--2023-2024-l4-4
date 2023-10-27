@@ -3,6 +3,8 @@ import React from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { Route, Routes } from "react-router-dom";
 import AppNavbar from "./AppNavbar";
+import AchievementEdit from "./achievement/achievementEdit";
+import AchievementList from "./achievement/achievementList";
 import ClinicOwnerEditAdmin from "./admin/clinicOwners/ClinicOwnerEditAdmin";
 import ClinicOwnerListAdmin from "./admin/clinicOwners/ClinicOwnerListAdmin";
 import ClinicEditAdmin from "./admin/clinics/ClinicEditAdmin";
@@ -99,6 +101,8 @@ function App() {
           <Route path="/consultations" exact={true} element={<PrivateRoute><ConsultationListAdmin /></PrivateRoute>} />
           <Route path="/consultations/:consultationId" exact={true} element={<PrivateRoute><ConsultationEditAdmin /></PrivateRoute>} />
           <Route path="/consultations/:consultationId/tickets" exact={true} element={<PrivateRoute><TicketListAdmin /></PrivateRoute>} />
+          <Route path="/achievements" exact={true} element={<PrivateRoute><AchievementList /></PrivateRoute>} />
+          <Route path="/achievements/:achievementId" exact={true} element={<PrivateRoute><AchievementEdit/></PrivateRoute>} />
         </>)
     }
     if (role === "OWNER") {
@@ -139,7 +143,7 @@ function App() {
   })
   if (!jwt) {
     publicRoutes = (
-      <>        
+      <>
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
       </>
@@ -147,7 +151,7 @@ function App() {
   } else {
     userRoutes = (
       <>
-        {/* <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} /> */}     
+        {/* <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} /> */}
         <Route path="/logout" element={<Logout />} />
         <Route path="/login" element={<Login />} />
       </>

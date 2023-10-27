@@ -38,8 +38,10 @@ function AppNavbar() {
                     <NavItem>
                         <NavLink className="fuente" style={{ color: "#75FBFD" }} tag={Link} to="/rules">Rules</NavLink>
                     </NavItem>
+                    <NavItem>
+                        <NavLink className="fuente" style={{ color: "#75FBFD" }} tag={Link} to="/achievements">Achievements</NavLink>
+                    </NavItem>
                     <span style={{ color: "gray", display: "inline-block", margin: "5px 10px" }}>|</span>
-
                 </>
             )
         }
