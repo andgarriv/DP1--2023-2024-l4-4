@@ -19,18 +19,8 @@ export default function Home() {
 
     let indexNotLogged = null;
     let indexLogged = null;
-
-    if (!jwt) {
-        indexNotLogged = (
-            <div className="home-page-container">
-                <div className="hero-div">
-                    <h1 style={{ marginBottom: "40px" }}>END OF LINE</h1>
-                    <h4>YOU WILL HAVE ONE SOLE OBJECTIVE: CUT YOUR</h4>
-                    <h4>OPPONENT'S LINE BEFORE THEY CUT YOURS</h4>
-                </div>
-            </div>
-        );
-    } else {
+    roles.forEach((role)=>{ 
+        if(role === 'OWNER'){
         indexLogged = (
             <div className="home-page-container">
                 <div className="hero-div">
@@ -45,7 +35,31 @@ export default function Home() {
                 </div>
             </div>
         );
-    }
+    }else{
+        indexLogged = (
+            <div className="home-page-container">
+                <div className="hero-div">
+                    <h1 style={{ marginBottom: "40px" }}>Welcome {username}!</h1>
+                    <h4>YOU WILL HAVE ONE SOLE OBJECTIVE: CUT YOUR</h4>
+                    <h4>OPPONENT'S LINE BEFORE THEY CUT YOURS</h4>
+                </div>
+            </div>
+        );
+
+    }})
+
+    if (!jwt) {
+        indexNotLogged = (
+            <div className="home-page-container">
+                <div className="hero-div">
+                    <h1 style={{ marginBottom: "40px" }}>END OF LINE</h1>
+                    <h4>YOU WILL HAVE ONE SOLE OBJECTIVE: CUT YOUR</h4>
+                    <h4>OPPONENT'S LINE BEFORE THEY CUT YOURS</h4>
+                </div>
+            </div>
+        );
+    } 
+   
 
     return jwt ? indexLogged : indexNotLogged;
 }
