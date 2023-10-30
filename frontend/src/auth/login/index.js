@@ -26,7 +26,7 @@ export default function Login() {
       .then(function (data) {
         tokenService.setUser(data);
         tokenService.updateLocalAccessToken(data.token);
-        window.location.href = "/dashboard";
+        window.location.href = "/"; //Esto es para que se vaya a la pagina inicio en vez de al dashboard.
       })
       .catch((error) => {         
         setMessage(error);
@@ -43,7 +43,7 @@ export default function Login() {
       )}
   
       <div className="custom-container">
-        <h1 style={{ color: "lightskyblue" }}>Sing In</h1>
+        <h1 style={{ color: "lightskyblue" }}>Sign In</h1>
   
         <div className="auth-form-container">
           <FormGenerator
@@ -53,7 +53,7 @@ export default function Login() {
             numberOfColumns={1}
             listenEnterKey
             buttonText="Login"
-            buttonClassName="auth-button"
+            buttonClassName="auth-button-eol"
           />
         </div>
       </div>
