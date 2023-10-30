@@ -30,6 +30,9 @@ function AppNavbar() {
             adminLinks = (
                 <>
                     <NavItem>
+                    <NavLink className="fuente" style={{ color: "#75FBFD" }} id="docs" tag={Link} to="/docs">Docs</NavLink>
+                    </NavItem>
+                    <NavItem>
                         <NavLink className="fuente" style={{ color: "#75FBFD" }} tag={Link} to="/playedgames">Games</NavLink>
                     </NavItem>
                     <NavItem>
@@ -61,13 +64,15 @@ function AppNavbar() {
                         </DropdownToggle>
                         <DropdownMenu right style={{ backgroundColor: "#222222", textAlign: 'center' }}>
                             <DropdownItem style={{ borderBottom: '1px solid gray', padding: '10px' }}>
-                                <NavLink className="fuente" style={{ color: "white" }} tag={Link} to="/profile">My Profile</NavLink>
+                                <NavLink className="fuente" style={{ color: "#EF87E0" }} tag={Link} to="/profile">My Profile</NavLink>
                             </DropdownItem>
                             <DropdownItem style={{ borderBottom: '1px solid gray', padding: '10px' }}>
-                                <NavLink className="fuente" style={{ color: "white" }} tag={Link} to="/achievements">Achievementes</NavLink>
+                            <NavItem>
+                                <NavLink className="fuente" style={{ color: "#EF87E0" }} tag={Link} to="/achievements">Achievements</NavLink>
+                            </NavItem>                            
                             </DropdownItem>
                             <DropdownItem>
-                                <NavLink className="fuente" style={{ color: "white" }} tag={Link} to="/stats">Stats</NavLink>
+                                <NavLink className="fuente" style={{ color: "#EF87E0" }} tag={Link} to="/stats">Stats</NavLink>
                             </DropdownItem>
                         </DropdownMenu>
                     </UncontrolledDropdown>
@@ -80,6 +85,7 @@ function AppNavbar() {
     if (!jwt) {
         publicLinks = (
             <>
+               
                 <NavItem>
                     <NavLink className="fuente" style={{ color: "#75FBFD" }} tag={Link} to="/rules">Rules</NavLink>
                 </NavItem>

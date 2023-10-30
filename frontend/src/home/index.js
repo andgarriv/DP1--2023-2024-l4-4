@@ -3,6 +3,7 @@ import tokenService from '../services/token.service';
 import jwt_decode from "jwt-decode";
 import '../App.css';
 import '../static/css/home/home.css';
+import { Link } from 'react-router-dom';
 
 export default function Home() {
     const [roles, setRoles] = useState([]);
@@ -38,7 +39,9 @@ export default function Home() {
                     <h4>OPPONENT'S LINE BEFORE THEY CUT YOURS</h4>
                 </div>
                 <div className="button-container">
+                    <Link to={'/play'}>
                     <button className="fuente button-style">Play Now!</button>
+                    </Link>
                 </div>
             </div>
         );
