@@ -7,6 +7,8 @@ import org.springframework.samples.petclinic.model.BaseEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -29,10 +31,15 @@ public class Game extends BaseEntity{
     @Column(name = "winner")
     private Integer winner;
 
-    @Column(name = "startedAt")
+    @Column(name = "started")
     @NotNull
     private Date startedAt;
 
-    @Column(name = "endedAt")
+    @Column(name = "ended")
     private Date endedAt;
+
+    @Column(name = "game_state")
+    @Enumerated(EnumType.STRING)
+	@NotNull
+	private GameStatus gameState;
 }
