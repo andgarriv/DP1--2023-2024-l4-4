@@ -140,5 +140,3 @@ INSERT INTO consultation_tickets(id,description,creation_date, user_id, consulta
 INSERT INTO achievement(id,name,description,threshold,badge_image,metric) VALUES (1,'Basic expirence','Play 10 games',10.0,'https://cdn-icons-png.flaticon.com/512/5243/5243423.png','GAMES_PLAYED');
 INSERT INTO achievement(id,name,description,threshold,badge_image,metric) VALUES (2,'Explorer','Play 25 games',25.0,'https://cdn-icons-png.flaticon.com/512/603/603855.png','GAMES_PLAYED');
 INSERT INTO achievement(id,name,description,threshold,metric) VALUES (3,'Expert','Win 20 games',20.0,'VICTORIES');
-
-INSERT INTO games(id, players, rounds, winner, started, ended, game_state) VALUES (1, 1, 5, NULL, '2023-11-01 08:00:00', NULL, 'inProgress');

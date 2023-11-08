@@ -1,16 +1,20 @@
 package org.springframework.samples.petclinic.game;
 
 import java.util.Date;
-import java.util.List;
 
 import org.springframework.samples.petclinic.model.BaseEntity;
+import org.springframework.samples.petclinic.player.Player;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,18 +22,23 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "games")
-public class Game extends BaseEntity{
-    
-    @Column(name = "players")
+public class Game extends BaseEntity {
+
+    @ManyToOne
     @NotNull
-    private List<Integer> players;
-    
+    private Player playerOne;
+
+    @ManyToOne
+    @NotNull
+    private Player playerTwo;
+
     @Column(name = "rounds")
     @NotNull
+    @Positive
     private Integer rounds;
 
-    @Column(name = "winner")
-    private Integer winner;
+    @ManyToOne
+    private Player winner;
 
     @Column(name = "started")
     @NotNull
@@ -40,6 +49,13 @@ public class Game extends BaseEntity{
 
     @Column(name = "game_state")
     @Enumerated(EnumType.STRING)
-	@NotNull
-	private GameStatus gameState;
+    @NotNull
+    private GameStatus gameState;
+
+    @Transient
+    private Message message;
+
+    @Transient
+    @Max(6)
+    private Effect effect;
 }
