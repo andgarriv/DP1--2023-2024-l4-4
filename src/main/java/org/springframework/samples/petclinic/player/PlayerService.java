@@ -20,8 +20,8 @@ public class PlayerService {
 	}
 
 	@Transactional
-	public void createPlayer(Player player){
-		playerRepository.save(player);
+	public Player createPlayer(Player player){
+		return playerRepository.save(player);
 	}
 
 	@Transactional(readOnly = true)
