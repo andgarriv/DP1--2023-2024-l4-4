@@ -1,23 +1,11 @@
-# React Petclinic
-Small project based on spring-petclinic for teaching SPA architectures with react, java and spring developer for teaching DP1 at the Software Engineering degree of University of Sevilla.
+# End Of Line
 
-This is a fork of https://github.com/spring-projects/spring-petclinic  The main changes that have been performed were:
-- Trimming several parts of the application to keep the example low
-- Reorganize some parts of the code according to best practices introduced in the course
-- Modifying the Controllers to work as RestControllers creating several API endpoings
-- Modifying the security configuration to use JWT
-- Creating a React frontend.
-
-## Understanding the Spring Petclinic application  backend with a few diagrams
-<a href="https://speakerdeck.com/michaelisvy/spring-petclinic-sample-application">See the presentation here</a>
-
-## Running petclinic backend locally
-Petclinic is a [Spring Boot](https://spring.io/guides/gs/spring-boot) application built using [Maven](https://spring.io/guides/gs/maven/). You can build a jar file and run it from the command line:
-
+## Running EOL backend locally
+EOL is a [Spring Boot](https://spring.io/guides/gs/spring-boot) application built using [Maven](https://spring.io/guides/gs/maven/). You can build a jar file and run it from the command line:
 
 ```
-git clone https://github.com/gii-is-DP1/spring-petclinic.git
-cd spring-petclinic
+git clone https://github.com/gii-is-DP1/DP1--2023-2024-l4-4
+cd DP1--2023-2024-l4-4
 ./mvnw package
 java -jar target/*.jar
 ```
@@ -36,7 +24,7 @@ Or you can run it from Maven directly using the Spring Boot Maven plugin. If you
 In its default configuration, Petclinic uses an in-memory database (H2) which
 gets populated at startup with data. The INSERTs are specified in the file data.sql.
 
-## Working with React Petclinic in your IDE
+## Working with EOL in your IDE
 
 ### Prerequisites
 The following items should be installed in your system:
@@ -54,7 +42,7 @@ The following items should be installed in your system:
 
 1) On the command line
 ```
-git clone https://github.com/gii-is-DP1/spring-petclinic.git
+git clone https://github.com/gii-is-DP1/DP1--2023-2024-l4-4
 ```
 2) Inside Eclipse or STS
 ```
@@ -74,21 +62,12 @@ A run configuration named `PetClinicApplication` should have been created for yo
 version. Otherwise, run the application by right clicking on the `PetClinicApplication` main class and choosing
 `Run 'PetClinicApplication'`.
 
-4) Navigate to Petclinic
+4) Navigate to EOL
 Visit [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html) in your browser.
-
-
-## Looking for something in particular?
-
-|Spring Boot Configuration | Class or Java property files  |
-|--------------------------|---|
-|The Main Class | [PetClinicApplication](https://github.com/gii-is-DP1/spring-petclinic/blob/master/src/main/java/org/springframework/samples/petclinic/PetClinicApplication.java) |
-|Properties Files | [application.properties](https://github.com/gii-is-DP1/spring-petclinic/blob/master/src/main/resources) |
-
 
 ## Starting the frontend
 
-The Spring Petclinic is implemented with a React frontend in the folder named "frontend".
+The EOL is implemented with a React frontend in the folder named "frontend".
 You can start the development server to see frontend using the command (maybe you should use the command npm insall prior to this):
 ```
 npm start

@@ -1,9 +1,17 @@
 import { formValidators } from "../../../validators/formValidators";
 
-export const registerFormClinicOwnerInputs = [
+export const registerFormPlayerInputs = [
   {
-    tag: "Username",
-    name: "username",
+    tag: "Name",
+    name: "name",
+    type: "text",
+    defaultValue: "",
+    isRequired: true,
+    validators: [formValidators.notEmptyValidator],
+  },
+  {
+    tag: "Surname",
+    name: "surname",
     type: "text",
     defaultValue: "",
     isRequired: true,
@@ -18,19 +26,27 @@ export const registerFormClinicOwnerInputs = [
     validators: [formValidators.notEmptyValidator],
   },
   {
-    tag: "First Name",
-    name: "firstName",
+    tag: "Birth Date",
+    name: "birthDate",
+    type: "date",
+    defaultValue: "",
+    isRequired: true,
+    validators: [formValidators.notEmptyValidator && formValidators.validDateValidator]
+  },
+  {
+    tag: "Nickname",
+    name: "nickname",
     type: "text",
     defaultValue: "",
     isRequired: true,
     validators: [formValidators.notEmptyValidator],
   },
   {
-    tag: "Last Name",
-    name: "lastName",
+    tag: "Avatar",
+    name: "avatar",
     type: "text",
-    defaultValue: "",
-    isRequired: true,
-    validators: [formValidators.notEmptyValidator],
+    defaultValue: "https://cdn-icons-png.flaticon.com/512/5556/5556468.png",
+    isRequired: false,
+    validators: [],
   },
 ];
