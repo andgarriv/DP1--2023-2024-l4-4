@@ -23,11 +23,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Map;
-
-import jakarta.transaction.Transactional;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,11 +36,10 @@ import org.springframework.samples.petclinic.owner.Owner;
 import org.springframework.samples.petclinic.owner.OwnerService;
 import org.springframework.samples.petclinic.pet.exceptions.DuplicatedPetNameException;
 import org.springframework.samples.petclinic.util.EntityUtils;
-import org.springframework.samples.petclinic.vet.VetRestController;
-import org.springframework.samples.petclinic.vet.Vet;
 import org.springframework.samples.petclinic.vet.VetService;
-import org.springframework.samples.petclinic.visit.Visit;
-import org.springframework.samples.petclinic.visit.VisitService;
+//import org.springframework.samples.petclinic.visit.VisitService;
+
+import jakarta.transaction.Transactional;
 
 //@DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 @SpringBootTest
@@ -55,8 +51,8 @@ class PetServiceTests {
 	@Autowired
 	protected OwnerService ownerService;
 
-	@Autowired
-	protected VisitService visitService;
+	/*@Autowired
+	protected VisitService visitService;*/
 
 	@Autowired
 	protected VetService vetService;
@@ -187,12 +183,12 @@ class PetServiceTests {
 		pet.setBirthDate(LocalDate.now());
 		pet.setOwner(owner6);
 		petService.savePet(pet);
-		Visit visit = new Visit();
+		/*Visit visit = new Visit();
 		visit.setDatetime(LocalDateTime.now());
 		visit.setDescription("prueba");
 		visit.setPet(pet);
 		visit.setVet(vetService.findVetById(1));
-		visitService.saveVisit(visit);
+		visitService.saveVisit(visit);*/
 		Integer secondCount = petService.findAll().size();
 		assertEquals(firstCount + 1, secondCount);
 		petService.deletePet(pet.getId());

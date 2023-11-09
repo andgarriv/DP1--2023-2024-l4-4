@@ -24,9 +24,4 @@ public class GamePlayer {
     @NotNull
     @OneToMany
     List<Card> cards;
-
-    //@NotNull
-    //@ManyToOne
-    //Player player;
-    
 }
