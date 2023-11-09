@@ -6,29 +6,31 @@ import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.Setter;
-
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Getter
 @Setter
 @MappedSuperclass
 public class User extends BaseEntity{
     
-	@NotEmpty
+	@NotBlank
 	protected String name;
 
-    @NotEmpty
+    @NotBlank
     protected String surname;
 
-    @NotEmpty
+    @NotBlank
+    @Size(min=5, max = 40)
     protected String password;
 
-    @NotEmpty
+    @Email
     @Column(unique = true)
     protected String email;
 
-    @NotEmpty
+    @NotBlank
     protected LocalDate birthDate;
-
-    protected Boolean isAdmin;
 }
