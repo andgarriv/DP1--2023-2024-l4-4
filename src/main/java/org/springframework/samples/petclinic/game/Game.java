@@ -25,7 +25,7 @@ import lombok.Setter;
 @Table(name = "games")
 public class Game extends BaseEntity {
 
-    @ManyToOne
+    @Transient
     @NotNull
     private List<Player> players;
 
