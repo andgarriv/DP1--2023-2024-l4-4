@@ -1,11 +1,11 @@
+import { useEffect, useRef, useState } from "react";
+import FormGenerator from "../../components/formGenerator/formGenerator";
+import tokenService from "../../services/token.service";
 import "../../static/css/auth/authButton.css";
 import "../../static/css/auth/authPage.css";
-import tokenService from "../../services/token.service";
-import FormGenerator from "../../components/formGenerator/formGenerator";
+import { registerFormClinicOwnerInputs } from "./form/registerFormClinicOwnerInputs";
 import { registerFormOwnerInputs } from "./form/registerFormOwnerInputs";
 import { registerFormVetInputs } from "./form/registerFormVetInputs";
-import { registerFormClinicOwnerInputs } from "./form/registerFormClinicOwnerInputs";
-import { useEffect, useRef, useState } from "react";
 
 export default function Register() {
   let [type, setType] = useState(null);
