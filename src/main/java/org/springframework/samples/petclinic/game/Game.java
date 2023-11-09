@@ -1,6 +1,7 @@
 package org.springframework.samples.petclinic.game;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.samples.petclinic.model.BaseEntity;
 import org.springframework.samples.petclinic.player.Player;
@@ -26,7 +27,7 @@ public class Game extends BaseEntity {
 
     @ManyToOne
     @NotNull
-    private Player playerOne;
+    private List<Player> players;
 
     @ManyToOne
     @NotNull
