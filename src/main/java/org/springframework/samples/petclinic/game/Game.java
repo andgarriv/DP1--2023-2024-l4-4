@@ -29,10 +29,6 @@ public class Game extends BaseEntity {
     @NotNull
     private List<Player> players;
 
-    @ManyToOne
-    @NotNull
-    private Player playerTwo;
-
     @Column(name = "rounds")
     @NotNull
     @Positive
