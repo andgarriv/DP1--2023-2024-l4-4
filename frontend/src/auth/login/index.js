@@ -43,7 +43,7 @@ export default function Login() {
       )}
   
       <div className="custom-container">
-        <h1 style={{ color: "lightskyblue" }}>Sign In</h1>
+        <h1 style={{ color: "lightskyblue", whiteSpace: "nowrap"  }}>Sign In</h1>
   
         <div className="auth-form-container">
           <FormGenerator

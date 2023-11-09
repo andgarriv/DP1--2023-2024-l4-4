@@ -48,7 +48,7 @@ function AppNavbar() {
                 </>
             )
         }
-        if (role === "OWNER") {
+        if (role === "PLAYER") {
             playerLinks = (
                 <>
                     <NavItem>
@@ -69,7 +69,7 @@ function AppNavbar() {
                             <DropdownItem style={{ borderBottom: '1px solid gray', padding: '10px' }}>
                             <NavItem>
                                 <NavLink className="fuente" style={{ color: "#EF87E0" }} tag={Link} to="/achievements">Achievements</NavLink>
-                            </NavItem>                            
+                            </NavItem>
                             </DropdownItem>
                             <DropdownItem>
                                 <NavLink className="fuente" style={{ color: "#EF87E0" }} tag={Link} to="/stats">Stats</NavLink>
@@ -85,7 +85,6 @@ function AppNavbar() {
     if (!jwt) {
         publicLinks = (
             <>
-               
                 <NavItem>
                     <NavLink className="fuente" style={{ color: "#75FBFD" }} tag={Link} to="/rules">Rules</NavLink>
                 </NavItem>
