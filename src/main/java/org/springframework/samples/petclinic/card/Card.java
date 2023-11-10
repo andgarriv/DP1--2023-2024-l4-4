@@ -6,6 +6,7 @@ import org.springframework.samples.petclinic.model.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,6 +14,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
+@Table(name = "cards")
 public class Card extends BaseEntity{
 
     @NotNull

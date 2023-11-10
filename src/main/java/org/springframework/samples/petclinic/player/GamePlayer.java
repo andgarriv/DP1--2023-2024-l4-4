@@ -13,6 +13,11 @@ import jakarta.validation.constraints.NotNull;
 
 public class GamePlayer {
 
+    /*TO DO. Arreglar la relación ya que no sólo hay que incluir las IDs de las dos entidades sino que también
+     * hay que incluir dos propiedades más: el color y la energía. llamar a la tabla "game_players" y 
+     * comprobar mediante la BD de H2.
+     */
+
     @NotNull
     @Enumerated(EnumType.STRING)
     Color color;
