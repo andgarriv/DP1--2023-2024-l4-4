@@ -15,11 +15,8 @@
  */
 package org.springframework.samples.petclinic.owner;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Collection;
 import java.util.List;
@@ -30,11 +27,10 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.exceptions.ResourceNotFoundException;
-import org.springframework.samples.petclinic.pet.Pet;
-import org.springframework.samples.petclinic.pet.PetService;
-import org.springframework.samples.petclinic.pet.exceptions.DuplicatedPetNameException;
+//import org.springframework.samples.petclinic.pet.Pet;
+//import org.springframework.samples.petclinic.pet.PetService;
+//import org.springframework.samples.petclinic.pet.exceptions.DuplicatedPetNameException;
 import org.springframework.samples.petclinic.user.AuthoritiesService;
 import org.springframework.samples.petclinic.user.User;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -47,14 +43,14 @@ import org.springframework.transaction.annotation.Transactional;
 public class OwnerServiceTests {
 
 	private OwnerService ownerService;
-	private PetService petService;
+	//private PetService petService;
 	private AuthoritiesService authService;
 	
 
 	@Autowired
-	public OwnerServiceTests(OwnerService ownerService, PetService petService, AuthoritiesService authService) {
+	public OwnerServiceTests(OwnerService ownerService, /*PetService petService,*/ AuthoritiesService authService) {
 		this.ownerService = ownerService;
-		this.petService = petService;
+		/*this.petService = petService;*/
 		this.authService = authService;
 	}
 
@@ -73,7 +69,7 @@ public class OwnerServiceTests {
 		assertThat(owners.isEmpty()).isTrue();
 	}
 
-	@Test
+	/*@Test
 	void shouldFindSingleOwnerWithPet() {
 		Owner owner = this.ownerService.findOwnerById(1);
 		List<Pet> pets = petService.findAllPetsByOwnerId(owner.getId());
@@ -81,7 +77,7 @@ public class OwnerServiceTests {
 		assertEquals(1, pets.size());
 		assertNotNull(pets.get(0).getType());
 		assertEquals("cat", pets.get(0).getType().getName());
-	}
+	}*/
 
 	@Test
 	void shouldNotFindSingleOwnerWithBadID() {
@@ -133,7 +129,7 @@ public class OwnerServiceTests {
 		int finalCount = ((Collection<Owner>) this.ownerService.findAll()).size();
 		assertEquals(initialCount + 1, finalCount);
 	}
-
+/*
 	@Test
 	@Transactional
 	void shouldDeleteOwner() throws DataAccessException, DuplicatedPetNameException {
@@ -151,7 +147,7 @@ public class OwnerServiceTests {
 		ownerService.deleteOwner(owner.getId());
 		Integer lastCount = ((Collection<Owner>) ownerService.findAll()).size();
 		assertEquals(firstCount, lastCount);
-	}
+	}*/
 
 	private Owner createOwnerUser() {
 		Owner owner = new Owner();

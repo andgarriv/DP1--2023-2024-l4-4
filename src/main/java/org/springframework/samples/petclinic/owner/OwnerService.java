@@ -16,14 +16,13 @@
 package org.springframework.samples.petclinic.owner;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.exceptions.ResourceNotFoundException;
-import org.springframework.samples.petclinic.pet.PetService;
+//import org.springframework.samples.petclinic.pet.PetService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,12 +30,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class OwnerService {
 
 	private OwnerRepository ownerRepository;
-	private PetService petService;
+	//private PetService petService;
 
 	@Autowired
-	public OwnerService(OwnerRepository ownerRepository, PetService petService) {
+	public OwnerService(OwnerRepository ownerRepository /*PetService petService*/) {
 		this.ownerRepository = ownerRepository;
-		this.petService = petService;
+		//this.petService = petService;
 	}
 
 	@Transactional(readOnly = true)
@@ -98,7 +97,7 @@ public class OwnerService {
 		return res;
 
 	}*/
-
+/*
 	private Integer getOwnersWithMoreThanOnePet() {
 		Integer res = 0;
 		List<Owner> owners = (List<Owner>) findAll();
@@ -107,7 +106,7 @@ public class OwnerService {
 				res++;
 		}
 		return res;
-	}
+	}*/
 /*
 	private Map<String, Integer> getOwnersVisits() {
 		Map<String, Integer> unsortedOwnersVisits = new HashMap<>();
