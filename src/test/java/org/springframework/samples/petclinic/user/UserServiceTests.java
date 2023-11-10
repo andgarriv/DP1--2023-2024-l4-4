@@ -13,8 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.samples.petclinic.exceptions.ResourceNotFoundException;
-import org.springframework.samples.petclinic.owner.Owner;
-import org.springframework.samples.petclinic.owner.OwnerService;
+//import org.springframework.samples.petclinic.owner.Owner;
+//import org.springframework.samples.petclinic.owner.OwnerService;
 //import org.springframework.samples.petclinic.vet.VetService;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,8 +33,8 @@ class UserServiceTests {
 	/*@Autowired
 	private VetService vetService;*/
 
-	@Autowired
-	private OwnerService ownerService;
+	/*@Autowired
+	private OwnerService ownerService;*/
 
 	@Test
 	@WithMockUser(username = "owner1", password = "0wn3r")
@@ -83,27 +83,27 @@ class UserServiceTests {
 		assertThrows(ResourceNotFoundException.class, () -> this.userService.findUser("usernotexists"));
 	}
 
-	@Test
+	/*@Test
 	void shouldFindSingleOwnerByUsername() {
 		Owner owner = this.userService.findOwnerByUser("owner1");
 		assertEquals("owner1", owner.getUser().getUsername());
-	}
+	}*/
 
-	@Test
+	/*@Test
 	void shouldNotFindSingleOwnerWithBadUsername() {
 		assertThrows(ResourceNotFoundException.class, () -> this.userService.findOwnerByUser("badusername"));
-	}
+	}*/
 
-	@Test
+	/*@Test
 	void shouldFindSingleOwnerByUserId() {
 		Owner owner = this.userService.findOwnerByUser(4);
 		assertEquals("owner1", owner.getUser().getUsername());
-	}
+	}*/
 
-	@Test
+	/*@Test
 	void shouldNotFindSingleUserOwnerWithBadUserId() {
 		assertThrows(ResourceNotFoundException.class, () -> this.userService.findOwnerByUser(100));
-	}
+	}*/
 
 	@Test
 	void shouldFindSingleUser() {

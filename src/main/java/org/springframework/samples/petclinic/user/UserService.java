@@ -18,7 +18,7 @@ package org.springframework.samples.petclinic.user;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.exceptions.ResourceNotFoundException;
-import org.springframework.samples.petclinic.owner.Owner;
+//import org.springframework.samples.petclinic.owner.Owner;
 /*import org.springframework.samples.petclinic.vet.Vet;
 import org.springframework.samples.petclinic.vet.VetService;*/
 import org.springframework.security.core.Authentication;
@@ -61,11 +61,11 @@ public class UserService {
 		return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
 	}
 
-	@Transactional(readOnly = true)
+	/*@Transactional(readOnly = true)
 	public Owner findOwnerByUser(String username) {
 		return userRepository.findOwnerByUser(username)
 				.orElseThrow(() -> new ResourceNotFoundException("Owner", "username", username));
-	}
+	}*/
 
 	/*@Transactional(readOnly = true)
 	public Vet findVetByUser(int userId) {
@@ -73,10 +73,10 @@ public class UserService {
 				.orElseThrow(() -> new ResourceNotFoundException("Vet", "id", userId));
 	}*/
 
-	@Transactional(readOnly = true)
+	/*@Transactional(readOnly = true)
 	public Owner findOwnerByUser(int id) {
 		return userRepository.findOwnerByUser(id).orElseThrow(() -> new ResourceNotFoundException("Owner", "ID", id));
-	}
+	}*/
 
 	@Transactional(readOnly = true)
 	public User findCurrentUser() {
