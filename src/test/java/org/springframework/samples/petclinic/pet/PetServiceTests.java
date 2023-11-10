@@ -35,8 +35,6 @@ import org.springframework.samples.petclinic.owner.Owner;
 import org.springframework.samples.petclinic.owner.OwnerService;
 import org.springframework.samples.petclinic.pet.exceptions.DuplicatedPetNameException;
 import org.springframework.samples.petclinic.util.EntityUtils;
-import org.springframework.samples.petclinic.vet.VetService;
-//import org.springframework.samples.petclinic.visit.VisitService;
 
 import jakarta.transaction.Transactional;
 
@@ -53,8 +51,8 @@ class PetServiceTests {
 	/*@Autowired
 	protected VisitService visitService;*/
 
-	@Autowired
-	protected VetService vetService;
+	/*@Autowired
+	protected VetService vetService;*/
 
 	@Test
 	void shouldFindPetWithCorrectId() {

@@ -23,7 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.samples.petclinic.exceptions.AccessDeniedException;
 import org.springframework.samples.petclinic.exceptions.LimitReachedException;
 import org.springframework.samples.petclinic.exceptions.ResourceNotOwnedException;
 import org.springframework.samples.petclinic.owner.Owner;
@@ -39,7 +38,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -57,7 +55,7 @@ public class PetRestController {
 	private final UserService userService;
 	private static final String OWNER_AUTH = "OWNER";
 	private static final String ADMIN_AUTH = "ADMIN";
-	private static final String VET_AUTH = "VET";
+	//private static final String VET_AUTH = "VET";
 	private static final String CLINIC_OWNER_AUTH = "CLINIC_OWNER";
 
 	@Autowired
@@ -70,7 +68,7 @@ public class PetRestController {
 	public void initPetBinder(WebDataBinder dataBinder) {
 		dataBinder.setValidator(new PetValidator());
 	}
-
+/*
 	@GetMapping
 	public ResponseEntity<List<Pet>> findAll(@RequestParam(required = false) Integer userId) {
 		User user = userService.findCurrentUser();
@@ -82,7 +80,7 @@ public class PetRestController {
 				return new ResponseEntity<>((List<Pet>) this.petService.findAll(), HttpStatus.OK);
 		}
 		throw new AccessDeniedException();
-	}
+	}*/
 
 	@GetMapping("types")
 	public ResponseEntity<List<PetType>> findAllTypes() {
