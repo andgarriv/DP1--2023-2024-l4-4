@@ -2,12 +2,9 @@ package org.springframework.samples.petclinic.auth.payload.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-
 import java.time.LocalDate;
-
 import org.hibernate.validator.constraints.URL;
-import org.springframework.samples.petclinic.clinic.Clinic;
-
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,30 +12,27 @@ import lombok.Setter;
 @Setter
 public class SignupRequest {
 	
-	// User
 	@NotBlank
 	private String name;
 
 	@NotBlank
 	private String surname;
-
-	@NotBlank
-	private String nickname;
 	
 	@NotBlank
-	private String authority;
-
-	@NotBlank
+	@Size(min=5, max = 40)
 	private String password;
 	
 	@Email
 	private String email;
 	
 	@NotBlank
-	private String birthDate;
+	private LocalDate birthdate;
 
-	//@URL
+	@NotBlank
+	@Size(min = 5, max = 15)
+	private String nickname;
+
+	@NotBlank
+	@URL
 	private String avatar;
-
-
 }

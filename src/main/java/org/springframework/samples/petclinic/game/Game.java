@@ -8,8 +8,8 @@ import org.springframework.samples.petclinic.player.Player;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
@@ -25,16 +25,16 @@ import lombok.Setter;
 @Table(name = "games")
 public class Game extends BaseEntity {
 
-    @Transient
-    @NotNull
-    private List<Player> players;
+    /*TO DO Modificar la relación con Player para que aparezcan registrados 
+    en la BD las IDs de los jugadores de una partida. Comprobar mediante la BD de H2.
+    Chequear si las agragaciones se declaran como transient o usan el cascade = CascadeType. */
 
-    @Column(name = "rounds")
     @NotNull
     @Positive
     private Integer rounds;
 
     @ManyToOne
+    @JoinColumn(name = "winner")
     private Player winner;
 
     @Column(name = "started")
@@ -44,15 +44,14 @@ public class Game extends BaseEntity {
     @Column(name = "ended")
     private Date endedAt;
 
-    @Column(name = "game_state")
-    @Enumerated(EnumType.STRING)
-    @NotNull
-    private GameStatus gameState;
-
     @Transient
     private Message message;
 
     @Transient
     @Max(6)
     private Effect effect;
+
+    @NotNull
+    @ManyToMany
+    List<Player> players;
 }

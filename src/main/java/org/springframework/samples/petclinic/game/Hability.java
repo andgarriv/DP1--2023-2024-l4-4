@@ -1,5 +1,5 @@
 package org.springframework.samples.petclinic.game;
 
 public enum Hability {
-    speedUp, brake, reverse, extraGas;
+    SPEED_UP, BRAKE, REVERSE, EXTRA_GAS;
 }

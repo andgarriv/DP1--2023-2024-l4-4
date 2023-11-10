@@ -35,7 +35,6 @@ public class AchievementService {
         return repo.save(newAchievement);
     }
 
-
     @Transactional
     public void deleteAchievementById(int id){
         repo.deleteById(id);
@@ -45,6 +44,4 @@ public class AchievementService {
     public Achievement getAchievementByName(String name){
         return repo.findByName(name);
     }
-
-
 }
