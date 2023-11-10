@@ -6,9 +6,6 @@ import "../../static/css/auth/authPage.css";
 import { registerFormClinicOwnerInputs } from "./form/registerFormClinicOwnerInputs";
 import { registerFormOwnerInputs } from "./form/registerFormOwnerInputs";
 import { registerFormPlayerInputs } from "./form/registerFormPlayerInputs";
-import { registerFormClinicOwnerInputs } from "./form/registerFormClinicOwnerInputs";
-import { useEffect, useRef, useState } from "react";
-import { registerFormVetInputs } from "./form/registerFormVetInputs";
 
 export default function Register() {
   let [type, setType] = useState(null);
