@@ -5,7 +5,7 @@ import "../../static/css/auth/authButton.css";
 import "../../static/css/auth/authPage.css";
 import { registerFormClinicOwnerInputs } from "./form/registerFormClinicOwnerInputs";
 import { registerFormOwnerInputs } from "./form/registerFormOwnerInputs";
-import { registerFormVetInputs } from "./form/registerFormVetInputs";
+import { registerFormPlayerInputs } from "./form/registerFormPlayerInputs";
 
 export default function Register() {
   let [type, setType] = useState(null);
@@ -76,7 +76,7 @@ export default function Register() {
   }
 
   useEffect(() => {
-    if (type === "Owner" || type === "Vet") {
+    if (type === "Owner") {
       if (registerFormOwnerInputs[5].values.length === 1){
         fetch("/api/v1/clinics")
         .then(function (response) {
@@ -100,7 +100,20 @@ export default function Register() {
           alert(message);
         });
       }
+    }else if (type === "Player") {
+      fetch("/api/v1/player")
+      .then(function (response) {
+        if (response.status === 200) {
+          return response.json();
+        } else {
+          return response.json();
+        }
+      })
+      .catch((message) => {
+        alert(message);
+      });
     }
+
   }, [type]);
 
   if (type) {
@@ -112,7 +125,7 @@ export default function Register() {
             ref={registerFormRef}
             inputs={
               type === "Owner" ? registerFormOwnerInputs 
-              : type === "Vet" ? registerFormVetInputs
+              : type === "Player" ? registerFormPlayerInputs
               : registerFormClinicOwnerInputs
             }
             onSubmit={handleSubmit}
@@ -142,17 +155,10 @@ export default function Register() {
             </button>
             <button
               className="auth-button"
-              value="Vet"
+              value="Player"
               onClick={handleButtonClick}
             >
-              Vet
-            </button>
-            <button
-              className="auth-button"
-              value="Clinic Owner"
-              onClick={handleButtonClick}
-            >
-              Clinic Owner
+              Player
             </button>
           </div>
         </div>

@@ -15,7 +15,7 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("api/v1/player")
 @Tag(name = "Player", description = "API for the management of Player")
-@SecurityRequirement(name = "bearerAuth")
+//@SecurityRequirement(name = "bearerAuth")
 public class PlayerController {
 
     private PlayerService playerService;
