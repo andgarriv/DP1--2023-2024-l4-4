@@ -15,37 +15,34 @@
  */
 package org.springframework.samples.petclinic.user;
 
-import java.util.Optional;
-
-import jakarta.validation.Valid;
-
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.exceptions.ResourceNotFoundException;
-import org.springframework.samples.petclinic.owner.Owner;
-import org.springframework.samples.petclinic.vet.Vet;
-import org.springframework.samples.petclinic.vet.VetService;
+//import org.springframework.samples.petclinic.owner.Owner;
+/*import org.springframework.samples.petclinic.vet.Vet;
+import org.springframework.samples.petclinic.vet.VetService;*/
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import jakarta.validation.Valid;
 
 @Service
 public class UserService {
 
 	private UserRepository userRepository;
 
-//	private OwnerService ownerService;
-//
-	private VetService vetService;
+	//private OwnerService ownerService;
 
-	@Autowired
+	//private VetService vetService;
+
+	/*@Autowired
 	public UserService(UserRepository userRepository, VetService vetService) {
 		this.userRepository = userRepository;
-//		this.ownerService = ownerService;
+		this.ownerService = ownerService;
 		this.vetService = vetService;
-	}
+	}*/
 
 	@Transactional
 	public User saveUser(User user) throws DataAccessException {
@@ -64,22 +61,22 @@ public class UserService {
 		return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
 	}
 
-	@Transactional(readOnly = true)
+	/*@Transactional(readOnly = true)
 	public Owner findOwnerByUser(String username) {
 		return userRepository.findOwnerByUser(username)
 				.orElseThrow(() -> new ResourceNotFoundException("Owner", "username", username));
-	}
+	}*/
 
-	@Transactional(readOnly = true)
+	/*@Transactional(readOnly = true)
 	public Vet findVetByUser(int userId) {
 		return userRepository.findVetByUser(userId)
 				.orElseThrow(() -> new ResourceNotFoundException("Vet", "id", userId));
-	}
+	}*/
 
-	@Transactional(readOnly = true)
+	/*@Transactional(readOnly = true)
 	public Owner findOwnerByUser(int id) {
 		return userRepository.findOwnerByUser(id).orElseThrow(() -> new ResourceNotFoundException("Owner", "ID", id));
-	}
+	}*/
 
 	@Transactional(readOnly = true)
 	public User findCurrentUser() {
@@ -116,13 +113,13 @@ public class UserService {
 	@Transactional
 	public void deleteUser(Integer id) {
 		User toDelete = findUser(id);
-		deleteRelations(id, toDelete.getAuthority().getAuthority());
+		//deleteRelations(id, toDelete.getAuthority().getAuthority());
 //		this.userRepository.deleteOwnerRelation(id);
 //		this.userRepository.deleteVetRelation(id);
 		this.userRepository.delete(toDelete);
 	}
 
-	private void deleteRelations(Integer id, String auth) {
+	/*private void deleteRelations(Integer id, String auth) {
 		switch (auth) {
 		case "OWNER":
 //			Optional<Owner> owner = ownerService.optFindOwnerByUser(id);
@@ -139,8 +136,8 @@ public class UserService {
 		default:
 			// The only relations that have user are Owner and Vet
 			break;
-		}
+		}*/
 
 	}
 
-}
+
