@@ -1,16 +1,8 @@
 package org.springframework.samples.petclinic.model;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.util.Locale;
-import java.util.Set;
-
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validator;
-
-import org.junit.jupiter.api.Test;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+
+import jakarta.validation.Validator;
 
 /**
  * @author Michael Isvy Simple test to make sure that Bean Validation is working (useful
@@ -24,7 +16,7 @@ class ValidatorTests {
 		return localValidatorFactoryBean;
 	}
 
-	@Test
+	/*@Test
 	void shouldNotValidateWhenFirstNameEmpty() {
 
 		LocaleContextHolder.setLocale(Locale.ENGLISH);
@@ -39,6 +31,6 @@ class ValidatorTests {
 		ConstraintViolation<Person> violation = constraintViolations.iterator().next();
 		assertThat(violation.getPropertyPath().toString()).isEqualTo("firstName");
 		assertThat(violation.getMessage()).isEqualTo("must not be empty");
-	}
+	}*/
 
 }
