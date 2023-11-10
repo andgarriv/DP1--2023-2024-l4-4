@@ -17,9 +17,6 @@ package org.springframework.samples.petclinic.owner;
 
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Map;
-
-import jakarta.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +37,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/owners")
@@ -91,10 +89,10 @@ public class OwnerRestController {
 		ownerService.deleteOwner(id);
 		return new ResponseEntity<>(new MessageResponse("Owner deleted!"), HttpStatus.OK);
 	}
-
+/* 
 	@GetMapping(value = "stats")
 	public ResponseEntity<Map<String, Object>> getStats() {
 		return new ResponseEntity<>(ownerService.getOwnersStats(), HttpStatus.OK);
-	}
+	}*/
 
 }

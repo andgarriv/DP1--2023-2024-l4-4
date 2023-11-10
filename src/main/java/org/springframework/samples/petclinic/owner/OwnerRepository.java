@@ -17,7 +17,6 @@ package org.springframework.samples.petclinic.owner;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
@@ -58,8 +57,8 @@ public interface OwnerRepository extends CrudRepository<Owner, Integer> {
 
 	@Query("SELECT COUNT(o) FROM Owner o")
 	public Integer countAll();
-
+/*
 	@Query("SELECT NEW MAP(v.pet.owner.id as userId, cast(COUNT(v) as integer) as visits) FROM  Visit v GROUP BY v.pet.owner")
-	public List<Map<String, Integer>> getOwnersWithMostVisits();
+	public List<Map<String, Integer>> getOwnersWithMostVisits();*/
 
 }

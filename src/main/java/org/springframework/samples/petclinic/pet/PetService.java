@@ -103,13 +103,13 @@ public class PetService {
 		BeanUtils.copyProperties(pet, toUpdate, "id");
 		return savePet(toUpdate);
 	}
-
+/* 
 	@Transactional
 	public void deletePet(int id) throws DataAccessException {
 		Pet toDelete = findPetById(id);
 		petRepository.deleteVisitsByPet(toDelete.getId());
 		petRepository.delete(toDelete);
-	}
+	}*/
 
 	public boolean underLimit(Owner owner) {
 		Integer petCount = this.petRepository.countPetsByOwner(owner.getId());

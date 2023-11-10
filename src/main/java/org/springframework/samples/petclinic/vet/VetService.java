@@ -15,13 +15,10 @@
  */
 package org.springframework.samples.petclinic.vet;
 
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -140,7 +137,7 @@ public class VetService {
 //		return vet;
 //	}
 
-	public Map<String, Object> getVetsStats() {
+	/*public Map<String, Object> getVetsStats() {
 		Map<String, Object> res = new HashMap<>();
 		Integer countAll = this.vetRepository.countAll();
 		Map<String, Integer> visitsByVet = getVisitsByVet();
@@ -153,7 +150,7 @@ public class VetService {
 		res.put("vetsBySpecialty", vetsBySpecialty);
 
 		return res;
-	}
+	}*/
 
 	private Map<String, Integer> getVetsBySpecialty() {
 		Map<String, Integer> res = new HashMap<>();
@@ -172,7 +169,7 @@ public class VetService {
 		return res;
 	}
 
-	private Map<String, Integer> getVisitsByVet() {
+	/*private Map<String, Integer> getVisitsByVet() {
 		Map<String, Integer> unsortedVisitsByVet = new HashMap<>();
 		this.vetRepository.countVisitsGroupedByVet().forEach(m -> {
 			String key = m.get("firstName") + " " + m.get("lastName");
@@ -182,7 +179,7 @@ public class VetService {
 		return unsortedVisitsByVet.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
 				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (oldValue, newValue) -> oldValue,
 						LinkedHashMap::new));
-	}
+	}*/
 
 	private Map<String, Integer> getVetsByCity() {
 		Map<String, Integer> unsortedVetsByCity = new HashMap<>();

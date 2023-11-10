@@ -2,9 +2,6 @@ package org.springframework.samples.petclinic.vet;
 
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Map;
-
-import jakarta.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/vets")
@@ -78,9 +76,9 @@ public class VetRestController {
 		return new ResponseEntity<>(new MessageResponse("Vet deleted!"), HttpStatus.OK);
 	}
 
-	@GetMapping(value = "stats")
+	/*@GetMapping(value = "stats")
 	public ResponseEntity<Map<String, Object>> getStats() {
 		return new ResponseEntity<>(this.vetService.getVetsStats(), HttpStatus.OK);
-	}
+	}*/
 
 }

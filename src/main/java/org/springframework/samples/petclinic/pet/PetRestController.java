@@ -18,14 +18,11 @@ package org.springframework.samples.petclinic.pet;
 import java.util.List;
 import java.util.Map;
 
-import jakarta.validation.Valid;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.samples.petclinic.auth.payload.response.MessageResponse;
 import org.springframework.samples.petclinic.exceptions.AccessDeniedException;
 import org.springframework.samples.petclinic.exceptions.LimitReachedException;
 import org.springframework.samples.petclinic.exceptions.ResourceNotOwnedException;
@@ -35,7 +32,6 @@ import org.springframework.samples.petclinic.user.User;
 import org.springframework.samples.petclinic.user.UserService;
 import org.springframework.samples.petclinic.util.RestPreconditions;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,6 +45,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/pets")
@@ -150,7 +147,7 @@ public class PetRestController {
 			return new ResponseEntity<>(this.petService.findPetById(petId), HttpStatus.OK);
 		}
 	}
-
+/*
 	@DeleteMapping("{petId}")
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<MessageResponse> delete(@PathVariable("petId") int petId) {
@@ -168,7 +165,7 @@ public class PetRestController {
 			petService.deletePet(petId);
 			return new ResponseEntity<>(new MessageResponse("Pet deleted!"), HttpStatus.OK);
 		}
-	}
+	}*/
 
 	@GetMapping(value = "stats")
 	public ResponseEntity<Map<String, Object>> getStats() {

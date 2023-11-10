@@ -15,14 +15,10 @@
  */
 package org.springframework.samples.petclinic.vet;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Collection;
-import java.util.Map;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -215,7 +211,7 @@ class VetServiceTests {
 		Integer lastCount = ((Collection<Specialty>) this.vetService.findSpecialties()).size();
 		assertEquals(firstCount, lastCount);
 	}
-
+/* 
 	@SuppressWarnings("unchecked")
 	@Test
 	@Transactional
@@ -229,6 +225,6 @@ class VetServiceTests {
 		assertEquals(3, ((Map<String, Integer>) stats.get("vetsByCity")).get("Sevilla"));
 		assertTrue(stats.containsKey("visitsByVet"));
 		assertEquals(3, ((Map<String, Integer>) stats.get("visitsByVet")).get("James Carter"));
-	}
+	}*/
 
 }

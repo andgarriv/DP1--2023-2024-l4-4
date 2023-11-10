@@ -20,10 +20,8 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.dao.DataAccessException;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.query.Param;
 
 public interface PetRepository extends CrudRepository<Pet, Integer> {
 
@@ -35,10 +33,10 @@ public interface PetRepository extends CrudRepository<Pet, Integer> {
 
 	@Query(("SELECT p FROM Pet p WHERE p.owner.id = :id"))
 	List<Pet> findAllPetsByOwnerId(int id) throws DataAccessException;
-
+/* 
 	@Modifying
 	@Query("DELETE FROM Visit v WHERE v.pet.id = :petId")
-	public void deleteVisitsByPet(@Param("petId") int petId);
+	public void deleteVisitsByPet(@Param("petId") int petId);*/
 
 	@Query(("SELECT COUNT(p) FROM Pet p WHERE p.owner.id = :id"))
 	public Integer countPetsByOwner(int id);

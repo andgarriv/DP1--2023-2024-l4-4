@@ -20,11 +20,9 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -169,7 +167,7 @@ public class OwnerServiceTests {
 		owner.setUser(user);
 		return this.ownerService.saveOwner(owner);
 	}
-
+/*
 	@Test
 	@Transactional
 	void shouldReturnStatsForAdmin() {
@@ -183,6 +181,6 @@ public class OwnerServiceTests {
 		assertTrue(stats.containsKey("platinumOwners"));
 		assertEquals(4, stats.get("platinumOwners"));
 		assertTrue(stats.containsKey("ownersVisits"));
-	}
+	}*/
 
 }

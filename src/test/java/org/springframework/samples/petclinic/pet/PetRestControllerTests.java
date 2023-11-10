@@ -1,17 +1,11 @@
 package org.springframework.samples.petclinic.pet;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -488,7 +482,7 @@ class PetRestControllerTests {
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof ResourceNotOwnedException))
 				.andExpect(result -> assertEquals("Pet not owned.", result.getResolvedException().getMessage()));
 	}
-
+/* 
 	@Test
 	@WithMockUser(username = "admin", authorities = "ADMIN")
 	  void adminOrVetShouldDeletePet() throws Exception {
@@ -526,7 +520,7 @@ class PetRestControllerTests {
 		mockMvc.perform(delete(BASE_URL + "/{id}", TEST_PET_ID).with(csrf())).andExpect(status().isBadRequest())
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof ResourceNotOwnedException))
 				.andExpect(result -> assertEquals("Pet not owned.", result.getResolvedException().getMessage()));
-	}
+	}*/
 
 	@Test
 	@WithMockUser(username = "owner", authorities = "OWNER")

@@ -16,18 +16,12 @@
 package org.springframework.samples.petclinic.owner;
 
 import java.util.Collection;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.samples.petclinic.clinic.PricingPlan;
 import org.springframework.samples.petclinic.exceptions.ResourceNotFoundException;
 import org.springframework.samples.petclinic.pet.PetService;
 import org.springframework.stereotype.Service;
@@ -83,7 +77,7 @@ public class OwnerService {
 		Owner toDelete = findOwnerById(id);
 		ownerRepository.delete(toDelete);
 	}
-
+/* 
 	@Transactional(readOnly = true)
 	public Map<String, Object> getOwnersStats() {
 		Map<String, Object> res = new HashMap<>();
@@ -103,7 +97,7 @@ public class OwnerService {
 
 		return res;
 
-	}
+	}*/
 
 	private Integer getOwnersWithMoreThanOnePet() {
 		Integer res = 0;
@@ -114,7 +108,7 @@ public class OwnerService {
 		}
 		return res;
 	}
-
+/*
 	private Map<String, Integer> getOwnersVisits() {
 		Map<String, Integer> unsortedOwnersVisits = new HashMap<>();
 		this.ownerRepository.getOwnersWithMostVisits().forEach(m -> {
@@ -125,6 +119,6 @@ public class OwnerService {
 		return unsortedOwnersVisits.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
 				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (oldValue, newValue) -> oldValue,
 						LinkedHashMap::new));
-	}
+	}*/
 
 }
