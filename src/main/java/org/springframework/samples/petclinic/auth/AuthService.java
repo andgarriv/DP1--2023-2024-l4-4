@@ -1,14 +1,13 @@
 package org.springframework.samples.petclinic.auth;
 
+import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.auth.payload.request.SignupRequest;
 import org.springframework.samples.petclinic.player.Player;
 import org.springframework.samples.petclinic.player.PlayerService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 
 @Service
 public class AuthService {
