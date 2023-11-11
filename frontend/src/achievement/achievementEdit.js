@@ -64,7 +64,7 @@ export default function AchievementEdit() {
         setAchievement({ ...achievement, [name]: value });
     }
     return (
-        <div className="achievements-page-container">
+        <div className="home-page-container">
             <h2 className="text-center">
                 {achievement.id ? "Edit Consultation" : "Add Consultation"}
             </h2>
@@ -147,12 +147,12 @@ export default function AchievementEdit() {
                         />
                     </div>
                     <div className="custom-button-row">
-                        <button className="auth-button-achievements">
+                        <button className="auth-button-eol">
                             Save
                         </button>
                         <Link
                             to={`/achievements`}
-                            className="auth-button-achievements"
+                            className="auth-button-eol"
                             style={{ textDecoration: "none" }}
                         >
                             Cancel

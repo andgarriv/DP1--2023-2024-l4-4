@@ -23,14 +23,15 @@ export default function AchievementList() {
     const achievementList =
     achievements.map((a) => {
         return (
-            <tr key={a.id}>
-                <td className="text-center">{a.name}</td>
-                <td className="text-center"> {a.description} </td>
-                <td className="text-center">
+            <tr key={a.id} >
+                 <td className="text-center">
                     <img src={a.badgeImage ? a.badgeImage : imgnotfound} alt={a.name} width="50px" />
                 </td>
-                <td className="text-center"> {a.threshold} </td>
-                <td className="text-center"> {a.metric} </td>
+                <td className="text-center" colSpan="2">
+                        {a.name}
+                         <br />
+                     {a.description}
+                    </td>
                 <td className="text-center">
                     <Button outline color="warning" >
                         <Link
@@ -58,23 +59,11 @@ export default function AchievementList() {
     });
     const modal = getErrorModal(setVisible, visible, message);
     return (
-        <div>
-            <div className="admin-page-container">
+        <div className="home-page-container">
+            <div className="hero-div">
                 <h1 className="text-center">Achievements</h1>
-                <div>
-                    <Table aria-label="achievements" className="mt-4">
-                        <thead>
-                            <tr>
-                                <th className="text-center">Name</th>
-                                <th className="text-center">Description</th>
-                                <th className="text-center">Image</th>
-                                <th className="text-center">Threshold</th>
-                                <th className="text-center">Metric</th>
-                                <th className="text-center">Actions</th>
-                            </tr>
-                        </thead>
+                <div >
                         <tbody>{achievementList}</tbody>
-                    </Table>
                     <Button outline color="success">
                         <Link to="/achievements/new" className="btn sm" style={{ textDecoration: "none" }}>
                             Create Achievement
