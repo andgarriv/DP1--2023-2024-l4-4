@@ -1,17 +1,22 @@
 package org.springframework.samples.petclinic.player;
 
-import java.util.List;
+
 
 import org.hibernate.validator.constraints.Range;
-import org.springframework.samples.petclinic.card.Card;
-import org.springframework.samples.petclinic.game.Color;
 
+import org.springframework.samples.petclinic.game.Color;
+import org.springframework.samples.petclinic.model.BaseEntity;
+
+import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.ManyToOne;
+
 import jakarta.validation.constraints.NotNull;
 
-public class GamePlayer {
+
+@Entity
+public class GamePlayer extends BaseEntity {
 
     /*TO DO. Arreglar la relación ya que no sólo hay que incluir las IDs de las dos entidades sino que también
      * hay que incluir dos propiedades más: el color y la energía. llamar a la tabla "game_players" y 
@@ -27,6 +32,8 @@ public class GamePlayer {
     Integer energy;
 
     @NotNull
-    @OneToMany
-    List<Card> cards;
+    @ManyToOne
+    Player player;
+
+
 }
