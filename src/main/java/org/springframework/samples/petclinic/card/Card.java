@@ -1,4 +1,6 @@
 package org.springframework.samples.petclinic.card;
+import java.util.List;
+
 import org.hibernate.validator.constraints.Range;
 import org.springframework.samples.petclinic.game.Color;
 import org.springframework.samples.petclinic.model.BaseEntity;
@@ -7,6 +9,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,4 +31,18 @@ public class Card extends BaseEntity{
     @NotNull
     @Range(min = 0, max = 6)
     Integer column;
+
+    @NotNull
+    @Range(min = 0, max = 5)
+    Integer iniciative;
+
+    @NotNull
+    @Range(min = 0, max = 0)
+    Integer entry;
+
+    @NotEmpty
+    List<Boolean> exit;
+
+
+
 }
