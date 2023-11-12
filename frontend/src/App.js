@@ -30,6 +30,7 @@ import Register from "./auth/register";
 import Home from "./home";
 import PlayerGamesList from "./games/PlayerGamesList";
 import AdminGamesList from "./games/AdminGamesList";
+import PlayerProfile from "./player/playerProfile";
 
 import PrivateRoute from "./privateRoute";
 import PlanList from "./public/plan";
@@ -97,7 +98,7 @@ function App() {
         <>
           {/* <Route path="/dashboard" element={<PrivateRoute><OwnerDashboard /></PrivateRoute>} /> */}
           <Route path="/games" exact={true} element={<PrivateRoute><PlayerGamesList /></PrivateRoute>} />
-
+          <Route path="/profile" exact={true} element={<PrivateRoute><PlayerProfile /></PrivateRoute>} />
           <Route path="/achievements" exact={true} element={<PrivateRoute><AchievementList /></PrivateRoute>} />
         </>)
     }
