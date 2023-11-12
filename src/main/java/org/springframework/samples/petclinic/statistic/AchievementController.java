@@ -26,12 +26,12 @@ import jakarta.validation.Valid;
 @RequestMapping("/api/v1/achievements")
 @Tag(name = "Achievements", description = "The Achievements management API")
 @SecurityRequirement(name = "bearerAuth")
-public class AchievementRestController {
+public class AchievementController {
 
     private final AchievementService achievementService;
 
     @Autowired
-	public AchievementRestController(AchievementService achievementService) {
+	public AchievementController(AchievementService achievementService) {
 		this.achievementService = achievementService;
 	}
 
