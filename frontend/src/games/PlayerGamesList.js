@@ -14,7 +14,7 @@ const jwt = tokenService.getLocalAccessToken();
 export default function AchievementList() {
     const [achievements, setAchievements] = useFetchState(
         [],
-        `/api/v1/games/player`,
+        `/api/v1/achievements`,
         jwt
     );
     const [message, setMessage] = useState(null);
@@ -66,7 +66,7 @@ export default function AchievementList() {
                         <tbody>{achievementList}</tbody>
                     <Button outline color="success">
                         <Link to="/achievements/new" className="btn sm" style={{ textDecoration: "none" }}>
-                        Prueba
+                            Return
                         </Link>
                     </Button>
                 </div>

@@ -28,6 +28,8 @@ import Login from "./auth/login";
 import Logout from "./auth/logout";
 import Register from "./auth/register";
 import Home from "./home";
+import PlayerGamesList from "./games/PlayerGamesList";
+import AdminGamesList from "./games/AdminGamesList";
 
 import PrivateRoute from "./privateRoute";
 import PlanList from "./public/plan";
@@ -87,13 +89,14 @@ function App() {
           <Route path="/consultations/:consultationId/tickets" exact={true} element={<PrivateRoute><TicketListAdmin /></PrivateRoute>} />
           <Route path="/achievements" exact={true} element={<PrivateRoute><AchievementList /></PrivateRoute>} />
           <Route path="/achievements/:achievementId" exact={true} element={<PrivateRoute><AchievementEdit/></PrivateRoute>} />
+          <Route path="/games" exact={true} element={<PrivateRoute><AdminGamesList /></PrivateRoute>} />
         </>)
     }
     if (role === "PLAYER") {
       vetRoutes = (
         <>
           {/* <Route path="/dashboard" element={<PrivateRoute><OwnerDashboard /></PrivateRoute>} /> */}
-          <Route path="/games" exact={true} element={<PrivateRoute><AchievementList /></PrivateRoute>} />
+          <Route path="/games" exact={true} element={<PrivateRoute><PlayerGamesList /></PrivateRoute>} />
 
           <Route path="/achievements" exact={true} element={<PrivateRoute><AchievementList /></PrivateRoute>} />
         </>)

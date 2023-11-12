@@ -15,3 +15,7 @@ INSERT INTO players(id,name,surname,password,email,birth_date,authority,nickname
 INSERT INTO achievements(id,name,description,threshold,badge_image,metric,achieve_at) VALUES (1,'Basic expirence','Play 10 games',10.0,'https://cdn-icons-png.flaticon.com/512/5243/5243423.png','GAMES_PLAYED','2022-01-01');
 INSERT INTO achievements(id,name,description,threshold,badge_image,metric,achieve_at) VALUES (2,'Explorer','Play 25 games',25.0,'https://cdn-icons-png.flaticon.com/512/603/603855.png','GAMES_PLAYED','2022-01-01');
 INSERT INTO achievements(id,name,description,threshold,metric,achieve_at) VALUES (3,'Expert','Win 20 games',20.0,'VICTORIES','2022-01-01');
+
+
+-- Games 
+INSERT INTO games(id,rounds,winner,ended,started) VALUES (1,16,1,'2021-09-02','2021-09-01');
