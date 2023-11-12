@@ -32,7 +32,7 @@ public class GameController {
         return gameService.getGamesByPlayerId(id);
     }
 
-    @GetMapping()
+    @GetMapping("/admin")
     public List<Game> getGames(int id) {
         return gameService.getAllGames();
     }
