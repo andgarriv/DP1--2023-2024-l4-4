@@ -25,8 +25,4 @@ public class Player extends User{
     @NotBlank
     @URL
     String avatar;
-    
-    //@NotNull
-    //@ManyToMany(mappedBy = "players")
-    //List<Game> game;
 }

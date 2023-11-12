@@ -33,7 +33,7 @@ public class User extends BaseEntity{
     @Column(unique = true)
     protected String email;
 
-    @NotBlank
+    @NotNull
     protected LocalDate birthDate;
 
     @NotNull
