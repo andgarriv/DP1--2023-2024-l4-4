@@ -2,13 +2,8 @@ package org.springframework.samples.petclinic.configuration.jwt;
 
 import java.io.IOException;
 
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.samples.petclinic.configuration.services.UserDetailsServiceImpl;
+import org.springframework.samples.petclinic.configuration.services.PlayerDetailsServiceImpl;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,13 +11,18 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
 public class AuthTokenFilter extends OncePerRequestFilter {
 
 	@Autowired
 	private JwtUtils jwtUtils;
 
 	@Autowired
-	private UserDetailsServiceImpl userDetailsService;
+	private PlayerDetailsServiceImpl playerDetailsService;
 
 //	private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
 
@@ -33,7 +33,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 			String jwt = parseJwt(request);
 			if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
 				String username = jwtUtils.getUserNameFromJwtToken(jwt);
-				UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+				UserDetails userDetails = playerDetailsService.loadUserByUsername(username);
 				UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
 						userDetails, null, userDetails.getAuthorities());
 				authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
