@@ -8,8 +8,8 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.samples.petclinic.authorities.Authorities;
 import org.springframework.samples.petclinic.configuration.services.PlayerDetailsImpl;
-import org.springframework.samples.petclinic.user.Authorities;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 

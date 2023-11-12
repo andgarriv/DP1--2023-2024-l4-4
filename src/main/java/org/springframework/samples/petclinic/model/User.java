@@ -2,7 +2,7 @@ package org.springframework.samples.petclinic.model;
 
 import java.time.LocalDate;
 
-import org.springframework.samples.petclinic.user.Authorities;
+import org.springframework.samples.petclinic.authorities.Authorities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.JoinColumn;

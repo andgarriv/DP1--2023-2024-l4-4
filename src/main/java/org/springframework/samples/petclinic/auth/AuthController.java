@@ -12,7 +12,6 @@ import org.springframework.samples.petclinic.auth.payload.response.MessageRespon
 import org.springframework.samples.petclinic.configuration.jwt.JwtUtils;
 import org.springframework.samples.petclinic.configuration.services.PlayerDetailsImpl;
 import org.springframework.samples.petclinic.player.PlayerService;
-import org.springframework.samples.petclinic.user.UserService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -40,7 +39,7 @@ public class AuthController {
 	private final PlayerService playerService;
 
 	@Autowired
-	public AuthController(AuthenticationManager authenticationManager, UserService userService, JwtUtils jwtUtils,
+	public AuthController(AuthenticationManager authenticationManager, JwtUtils jwtUtils,
 			AuthService authService, PlayerService playerService) {
 		this.jwtUtils = jwtUtils;
 		this.authenticationManager = authenticationManager;
