@@ -13,7 +13,8 @@ public interface GameRepository extends CrudRepository<Game, Integer>{
     @Query("SELECT g FROM Game g WHERE g.id = ?1")
     List<Game> findById(int id);
 
-        @Query("SELECT g FROM Game g WHERE g.id = ?1")
+    //TODO: cuando se termine el uml pensar la query
+    @Query("SELECT g FROM Game g WHERE g.id = ?1")
     List<Game> findByPlayerId(int id);
 
     Game save(Game game);
