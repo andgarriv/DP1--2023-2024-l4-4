@@ -8,10 +8,11 @@ import getErrorModal from "../util/getErrorModal";
 const imgNotFound = "https://cdn-icons-png.flaticon.com/512/5778/5778223.png";
 const user = tokenService.getUser();
 
+
 export default function PlayerProfile() {
   const jwt = tokenService.getLocalAccessToken();
   const [player, setPlayer] = useFetchState(null, `/api/v1/player/{id}`, jwt);
-  const [message, setMessage] = useState(null);
+  const [message, setMessage] = useState("");
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -25,7 +26,7 @@ export default function PlayerProfile() {
         const data = await response.json();
         setPlayer(data);
       } catch (error) {
-        setMessage("Error fetching player data"); 
+        setMessage("Error fetching player data");
         setVisible(true);
       }
     };

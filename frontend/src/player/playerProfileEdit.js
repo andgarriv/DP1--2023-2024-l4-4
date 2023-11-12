@@ -1,76 +1,70 @@
-import {
-    Table, Button
-} from "reactstrap";
+import React, { useEffect, useState } from "react";
+import { Button } from "reactstrap";
 import { Link } from "react-router-dom";
 import tokenService from "../services/token.service";
 import useFetchState from "../util/useFetchState";
-import deleteFromList from "../util/deleteFromList";
-import { useState } from "react";
 import getErrorModal from "../util/getErrorModal";
 
-const imgnotfound = "https://cdn-icons-png.flaticon.com/512/5778/5778223.png";
-const jwt = tokenService.getLocalAccessToken();
+const imgNotFound = "https://cdn-icons-png.flaticon.com/512/5778/5778223.png";
+const user = tokenService.getUser();
 
-export default function AchievementList() {
-    const [achievements, setAchievements] = useFetchState(
-        [],
-        `/api/v1/achievements`,
-        jwt
-    );
-    const [message, setMessage] = useState(null);
-    const [visible, setVisible] = useState(false);
-    const [alerts, setAlerts] = useState([]);
-    const achievementList =
-        achievements.map((a) => {
-            return (
-                <tr key={a.id} >
-                    <td className="text-center">
-                        <img src={a.badgeImage ? a.badgeImage : imgnotfound} alt={a.name} width="50px" />
-                    </td>
-                    <td className="text-center" colSpan="2">
-                        {a.name}
-                        <br />
-                        {a.description}
-                    </td>
-                    <td className="text-center">
-                        <Button outline color="warning" >
-                            <Link
-                                to={`/achievements/` + a.id} className="btn sm"
-                                style={{ textDecoration: "none" }}>Edit</Link>
-                        </Button>
-                    </td>
-                    <td className="text-center">
-                        <Button outline color="danger"
-                            onClick={() =>
-                                deleteFromList(
-                                    `/api/v1/achievements/${a.id}`,
-                                    a.id,
-                                    [achievements, setAchievements],
-                                    [alerts, setAlerts],
-                                    setMessage,
-                                    setVisible
-                                )}>
-                            Delete
-                        </Button>
-                    </td>
+export default function PlayerProfile() {
+  const jwt = tokenService.getLocalAccessToken();
+  const [player, setPlayer] = useFetchState(null, `/api/v1/player/{id}`, jwt);
+  const [message, setMessage] = useState(null);
+  const [visible, setVisible] = useState(false);
 
-                </tr>
-            );
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`/api/v1/player/${user.id}`, {
+          headers: {
+            Authorization: `Bearer ${jwt}`,
+          },
         });
-    const modal = getErrorModal(setVisible, visible, message);
-    return (
-        <div className="home-page-container">
-            <div className="hero-div">
-                <h1 className="text-center">Edit My Profile</h1>
-                <div >
-                    <tbody>{achievementList}</tbody>
-                    <Button outline color="success">
-                        <Link to="/profile/edit" className="btn sm" style={{ textDecoration: "none", color:"white"}}>
-                            Edit Profile
-                        </Link>
-                    </Button>
-                </div>
-            </div>
-        </div>
-    );
+        const data = await response.json();
+        setPlayer(data);
+      } catch (error) {
+        setMessage("Error fetching player data"); 
+        setVisible(true);
+      }
+    };
+    fetchData();
+  }, [jwt, setPlayer]);
+
+  const modal = getErrorModal(setVisible, visible, message);
+
+  const date_format = (date) => {
+    const d = new String(date);
+    const year = d.substring(0, 4);
+    const month = d.substring(5, 7);
+    const day = d.substring(8, 10);
+    return `${day}/${month}/${year}`;
+    };
+
+  return (
+    <div className="home-page-container">
+      <div className="hero-div">
+        <h1 className="text-center">My Profile</h1>
+        {player ? (
+          <div>
+            <img src={player.avatar || imgNotFound} alt="avatar" className="avatar" width="100px" />
+            <p style={{ color: "white" }}>Name: {player.name}</p>
+            <p style={{ color: "white" }}>Surname: {player.surname}</p>
+            <p style={{ color: "white" }}>Nickname: {player.nickname}</p>
+            <p style={{ color: "white" }}>Email: {player.email}</p>
+            <p style={{ color: "white" }}>Birth Date: {date_format(player.birthDate)}</p>
+          </div>
+        ) : (
+          <p style={{color: "white"}}>Loading player data...</p>
+        )}
+        <Button outline color="success">
+          <Link to="/profile/edit" className="btn sm" style={{ textDecoration: "none", color: "white"}}>
+            Edit Profile
+          </Link>
+        </Button>
+        {modal}
+      </div>
+    </div>
+  );
 }
