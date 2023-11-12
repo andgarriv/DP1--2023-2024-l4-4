@@ -54,6 +54,8 @@ function AppNavbar() {
                     <NavItem>
                         <NavLink className="fuente" style={{ color: "#75FBFD" }} tag={Link} to="/play">Play Now!</NavLink>
                     </NavItem>
+
+
                     <NavItem>
                         <NavLink className="fuente" style={{ color: "#75FBFD" }} tag={Link} to="/rules">Rules</NavLink>
                     </NavItem>
@@ -69,6 +71,12 @@ function AppNavbar() {
                             <DropdownItem style={{ borderBottom: '1px solid gray', padding: '10px' }}>
                             <NavItem>
                                 <NavLink className="fuente" style={{ color: "#EF87E0" }} tag={Link} to="/achievements">Achievements</NavLink>
+                            </NavItem>
+                            </DropdownItem>
+
+                             <DropdownItem style={{ borderBottom: '1px solid gray', padding: '10px' }}>
+                            <NavItem>
+                                <NavLink className="fuente" style={{ color: "#EF87E0" }} tag={Link} to="/games">My games</NavLink>
                             </NavItem>
                             </DropdownItem>
                             <DropdownItem>

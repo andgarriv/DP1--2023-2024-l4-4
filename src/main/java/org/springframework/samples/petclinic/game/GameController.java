@@ -1,7 +1,10 @@
 package org.springframework.samples.petclinic.game;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,5 +26,17 @@ public class GameController {
         gameService.save(game);
         return game;
     }
+
+    @GetMapping("/player/{id}")
+    public List<Game> getGamesByPlayerId(int id) {
+        return gameService.getGamesByPlayerId(id);
+    }
+
+    @GetMapping()
+    public List<Game> getGames(int id) {
+        return gameService.getAllGames();
+    }
+
+
     
 }
