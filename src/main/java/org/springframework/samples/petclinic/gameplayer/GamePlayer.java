@@ -2,7 +2,10 @@ package org.springframework.samples.petclinic.gameplayer;
 
 
 
+import java.util.List;
+
 import org.hibernate.validator.constraints.Range;
+import org.springframework.samples.petclinic.card.Card;
 import org.springframework.samples.petclinic.game.Color;
 import org.springframework.samples.petclinic.model.BaseEntity;
 import org.springframework.samples.petclinic.player.Player;
@@ -11,6 +14,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -34,11 +38,7 @@ public class GamePlayer extends BaseEntity {
     @ManyToOne(optional = false)
     Player player;
 
-    /*@NotNull
-    @ManyToOne(optional = false)
-    Game game;*/
-
-    /*@NotNull
+    @NotNull
     @OneToMany
-    List<Card> cards;*/
+    List<Card> cards;
 }
