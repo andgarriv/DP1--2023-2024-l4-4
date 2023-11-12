@@ -1,14 +1,20 @@
 package org.springframework.samples.petclinic.game;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
+import org.springframework.samples.petclinic.card.Card;
+import org.springframework.samples.petclinic.gameplayer.GamePlayer;
 import org.springframework.samples.petclinic.model.BaseEntity;
 import org.springframework.samples.petclinic.player.Player;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.validation.constraints.Max;
@@ -49,7 +55,11 @@ public class Game extends BaseEntity {
     @Max(6)
     private Effect effect;
 
-    /*@NotNull
+    @NotNull
+    @OneToMany 
+    private Set<GamePlayer> gamePlayers;
+
+    @NotNull
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    List<Card> cards;*/
+    List<Card> cards;
 }
