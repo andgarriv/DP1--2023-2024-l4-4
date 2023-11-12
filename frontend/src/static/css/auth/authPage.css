@@ -23,6 +23,7 @@
 }
 
 .auth-form-container{
+    text-align: center;
     max-height: 800px;
     max-width: 500px;
     height: 90%;
