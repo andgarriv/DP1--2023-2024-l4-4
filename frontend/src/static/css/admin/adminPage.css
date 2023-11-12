@@ -53,14 +53,19 @@
 .custom-input{
   border: none !important;
   border-bottom: 1px solid #c4239c !important;
+  color: white !important;
 }
 
 .custom-input:disabled{
   background-color: rgb(239, 239, 239) !important;
 }
+.custom-input:focus {
+  background-color: black !important;
+}
 
 .custom-textarea{
   border: 1px solid var(--main-button-hover-dark-color) !important;
+  background-color: black !important;
 }
 
 .custom-button-row{
