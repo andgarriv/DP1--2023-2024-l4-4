@@ -1,4 +1,4 @@
-package org.springframework.samples.petclinic.user;
+package org.springframework.samples.petclinic.authorities;
 
 import java.util.Optional;
 
