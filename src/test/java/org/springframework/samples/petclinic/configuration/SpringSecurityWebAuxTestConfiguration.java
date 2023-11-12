@@ -5,7 +5,7 @@ import java.util.Arrays;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
-import org.springframework.samples.petclinic.configuration.services.UserDetailsImpl;
+import org.springframework.samples.petclinic.configuration.services.PlayerDetailsImpl;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
@@ -16,23 +16,18 @@ public class SpringSecurityWebAuxTestConfiguration {
     @Bean
     @Primary
     public UserDetailsService userDetailsService() {
-        UserDetailsImpl ownerActiveUser = new UserDetailsImpl(1, "owner", "password",
+        PlayerDetailsImpl playerActiveUser = new PlayerDetailsImpl(1, "player", "password",
         		Arrays.asList(
-                        new SimpleGrantedAuthority("OWNER"))
+                        new SimpleGrantedAuthority("PLAYER"))
         );
 
-        UserDetailsImpl adminActiveUser = new UserDetailsImpl(1, "admin", "password",
+        PlayerDetailsImpl adminActiveUser = new PlayerDetailsImpl(1, "admin", "password",
         		Arrays.asList(
                         new SimpleGrantedAuthority("ADMIN"))
         );
-        
-        UserDetailsImpl vetActiveUser = new UserDetailsImpl(1, "vet", "password",
-        		Arrays.asList(
-                        new SimpleGrantedAuthority("VET"))
-        );
 
         return new InMemoryUserDetailsManager(Arrays.asList(
-        		ownerActiveUser, adminActiveUser, vetActiveUser
+        		playerActiveUser, adminActiveUser
         ));
     }
 }

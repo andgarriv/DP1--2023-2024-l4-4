@@ -4,7 +4,10 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.exceptions.ResourceNotFoundException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,12 +22,18 @@ public class PlayerService {
 	}
 
 	@Transactional
-	public Boolean existsPlayerByNickname(String nickname) {
+	public Player savePlayer(Player player) throws DataAccessException {
+		playerRepository.save(player);
+		return player;
+	}
+
+	@Transactional
+	public Boolean existsByNickname(String nickname) {
 		return playerRepository.existsByNickname(nickname);
 	}
 
 	@Transactional
-	public Boolean existsPlayerByEmail(String email) {
+	public Boolean existsByEmail(String email) {
 		return playerRepository.existsByEmail(email);
 	}
 
@@ -39,11 +48,17 @@ public class PlayerService {
 	}
 
 	@Transactional(readOnly = true)
-	public Player findPlayerByNickname(String nickname){
-		if(nickname == null){
-			throw new ResourceNotFoundException("nickname");
+	public Player findByNickname(String nickname){
+		return playerRepository.findByNickname(nickname)
+		.orElseThrow(() -> new ResourceNotFoundException("Player", "nickname", nickname));	
+	}
+
+	@Transactional(readOnly = true)
+	public Player findPlayerById(Integer id){
+		if(id == null){
+			throw new ResourceNotFoundException("id");
 		}
-		return playerRepository.findPlayerByName(nickname);	
+		return playerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Player", "id", id));
 	}
 
 	@Transactional
@@ -53,11 +68,21 @@ public class PlayerService {
 
 	@Transactional
 	public Player updatePlayer(String nickname){
-		Player oldPlayer = findPlayerByNickname(nickname);
+		Player oldPlayer = findByNickname(nickname);
 		BeanUtils.copyProperties(nickname, oldPlayer, "id");
 		return playerRepository.save(oldPlayer);
 		}
-	}
 
+	@Transactional(readOnly = true)
+	public Player findCurrentPlayer() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if (auth == null)
+			throw new ResourceNotFoundException("Nobody authenticated!");
+		else
+			return playerRepository.findByNickname(auth.getName())
+					.orElseThrow(() -> new ResourceNotFoundException("User", "Username", auth.getName()));
+	
+	}
+}
 
 

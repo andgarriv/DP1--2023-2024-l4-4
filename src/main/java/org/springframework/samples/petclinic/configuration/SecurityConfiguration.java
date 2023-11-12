@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.samples.petclinic.configuration.jwt.AuthEntryPointJwt;
 import org.springframework.samples.petclinic.configuration.jwt.AuthTokenFilter;
-import org.springframework.samples.petclinic.configuration.services.UserDetailsServiceImpl;
+import org.springframework.samples.petclinic.configuration.services.PlayerDetailsServiceImpl;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -33,7 +33,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SecurityConfiguration {
 
 	@Autowired
-	UserDetailsServiceImpl userDetailsService;
+	PlayerDetailsServiceImpl playerDetailsService;
 
 	@Autowired
 	private AuthEntryPointJwt unauthorizedHandler;

@@ -1,42 +1,58 @@
 package org.springframework.samples.petclinic.configuration.services;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-import org.springframework.samples.petclinic.user.User;
+import org.springframework.samples.petclinic.player.Player;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class UserDetailsImpl implements UserDetails {
+public class PlayerDetailsImpl implements UserDetails {
 
 	private static final long serialVersionUID = 1L;
 
 	private Integer id;
 
-	private String username;
+	@JsonIgnore
+	private String name;
+
+	@JsonIgnore
+	private String surname;
 
 	@JsonIgnore
 	private String password;
 
+	@JsonIgnore
+	private String email;
+	
+	@JsonIgnore
+	private Date birthDate;
+
+	private String nickname;
+
+	@JsonIgnore
+	private String avatar;
+
 	private Collection<? extends GrantedAuthority> authorities;
 
-	public UserDetailsImpl(Integer id, String username, String password,
+	public PlayerDetailsImpl(Integer id, String nickname, String password,
 			Collection<? extends GrantedAuthority> authorities) {
 		this.id = id;
-		this.username = username;
+		this.nickname = nickname;
 		this.password = password;
 		this.authorities = authorities;
 	}
 
-	public static UserDetailsImpl build(User user) {
-		List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(user.getAuthority().getAuthority()));
+	public static PlayerDetailsImpl build(Player player) {
+		List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(player.getAuthority().getAuthority()));
 
-		return new UserDetailsImpl(user.getId(), user.getUsername(),
-				user.getPassword(),
+		return new PlayerDetailsImpl(player.getId(), player.getNickname(),
+				player.getPassword(),
 				authorities);
 	}
 
@@ -57,7 +73,7 @@ public class UserDetailsImpl implements UserDetails {
 
 	@Override
 	public String getUsername() {
-		return username;
+		return nickname;
 	}
 
 	@Override
@@ -93,7 +109,7 @@ public class UserDetailsImpl implements UserDetails {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		UserDetailsImpl other = (UserDetailsImpl) obj;
+		PlayerDetailsImpl other = (PlayerDetailsImpl) obj;
 		return Objects.equals(id, other.id);
 	}
 

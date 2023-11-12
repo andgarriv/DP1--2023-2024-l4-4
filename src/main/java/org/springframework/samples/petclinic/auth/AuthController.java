@@ -10,7 +10,7 @@ import org.springframework.samples.petclinic.auth.payload.request.SignupRequest;
 import org.springframework.samples.petclinic.auth.payload.response.JwtResponse;
 import org.springframework.samples.petclinic.auth.payload.response.MessageResponse;
 import org.springframework.samples.petclinic.configuration.jwt.JwtUtils;
-import org.springframework.samples.petclinic.configuration.services.UserDetailsImpl;
+import org.springframework.samples.petclinic.configuration.services.PlayerDetailsImpl;
 import org.springframework.samples.petclinic.player.PlayerService;
 import org.springframework.samples.petclinic.user.UserService;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -35,7 +35,6 @@ import jakarta.validation.Valid;
 public class AuthController {
 
 	private final AuthenticationManager authenticationManager;
-	private final UserService userService;
 	private final JwtUtils jwtUtils;
 	private final AuthService authService;
 	private final PlayerService playerService;
@@ -43,7 +42,6 @@ public class AuthController {
 	@Autowired
 	public AuthController(AuthenticationManager authenticationManager, UserService userService, JwtUtils jwtUtils,
 			AuthService authService, PlayerService playerService) {
-		this.userService = userService;
 		this.jwtUtils = jwtUtils;
 		this.authenticationManager = authenticationManager;
 		this.authService = authService;
@@ -59,11 +57,11 @@ public class AuthController {
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 			String jwt = jwtUtils.generateJwtToken(authentication);
 
-			UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-			List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
+			PlayerDetailsImpl playerDetails = (PlayerDetailsImpl) authentication.getPrincipal();
+			List<String> roles = playerDetails.getAuthorities().stream().map(item -> item.getAuthority())
 				.collect(Collectors.toList());
 
-			return ResponseEntity.ok().body(new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), roles));
+			return ResponseEntity.ok().body(new JwtResponse(jwt, playerDetails.getId(), playerDetails.getUsername(), roles));
 		}catch(BadCredentialsException exception){
 			return ResponseEntity.badRequest().body("Bad Credentials!");
 		}
@@ -77,11 +75,11 @@ public class AuthController {
 
 	
 	@PostMapping("/signup")	
-	public ResponseEntity<MessageResponse> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-		if(playerService.existsPlayerByNickname(signUpRequest.getNickname()).equals(true)){
+	public ResponseEntity<MessageResponse> registerPlayer(@Valid @RequestBody SignupRequest signUpRequest) {
+		if(playerService.existsByNickname(signUpRequest.getNickname()).equals(true)){
 			return ResponseEntity.badRequest().body(new MessageResponse("Error: Nickname is already taken!"));
 		}
-		if(playerService.existsPlayerByEmail(signUpRequest.getEmail()).equals(true)){
+		if(playerService.existsByEmail(signUpRequest.getEmail()).equals(true)){
 			return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already taken!"));
 		}
 		authService.createUser(signUpRequest);
