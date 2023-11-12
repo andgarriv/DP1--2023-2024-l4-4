@@ -3,7 +3,7 @@ INSERT INTO authorities(id,authority) VALUES (1,'ADMIN');
 INSERT INTO authorities(id,authority) VALUES (2,'PLAYER');
 
 -- Admins
-INSERT INTO players(id,name,surname,password,email,birth_date,authority,nickname,avatar) VALUES (5,'Juancar','Fernandes','$2a$10$nMmTWAhPTqXqLDJTag3prumFrAJpsYtroxf0ojesFYq0k4PmcbWUS','admin@pm.me', '2003-07-12', 1, 'admin1', 'https://cdn-icons-png.flaticon.com/512/147/147144.png');
+INSERT INTO admins(id,name,surname,password,email,birth_date,authority,nickname) VALUES (5,'Juancar','Fernandes','$2a$10$nMmTWAhPTqXqLDJTag3prumFrAJpsYtroxf0ojesFYq0k4PmcbWUS','admin@pm.me', '2003-07-12', 1, 'admin1');
 
 --Players
 INSERT INTO players(id,name,surname,password,email,birth_date,authority,nickname,avatar) VALUES (1,'Angel','García','$2a$10$nMmTWAhPTqXqLDJTag3prumFrAJpsYtroxf0ojesFYq0k4PmcbWUS','angelgares6424@gmail.com', '2003-07-12', 2, 'Angelgares', 'https://cdn-icons-png.flaticon.com/512/147/147144.png');

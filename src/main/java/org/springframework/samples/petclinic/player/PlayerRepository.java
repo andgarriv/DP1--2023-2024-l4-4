@@ -28,6 +28,6 @@ public interface PlayerRepository extends CrudRepository<Player, Integer> {
     public Boolean existsByEmail(String email);
 
     @Query("SELECT p FROM Player p WHERE p.authority.authority = :auth")
-	Iterable<Player> findAllByAuthority(String auth);
+	List<Player> findAllByAuthority(String auth);
     
 }
