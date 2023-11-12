@@ -5,18 +5,35 @@ import { Link } from "react-router-dom";
 import tokenService from "../services/token.service";
 import useFetchState from "../util/useFetchState";
 import deleteFromList from "./../util/deleteFromList";
-import { useState } from "react";
+import { useState, useEffect} from "react";
 import getErrorModal from "./../util/getErrorModal";
+import jwt_decode from "jwt-decode";
+
+
 
 const imgnotfound = "https://cdn-icons-png.flaticon.com/512/5778/5778223.png";
 const jwt = tokenService.getLocalAccessToken();
 
+
 export default function AchievementList() {
+    const [roles, setRoles] = useState([]);
+    const [username, setUsername] = useState("");
+    const jwt = tokenService.getLocalAccessToken();
+    useEffect(() => {
+        if (jwt) {
+            setRoles(jwt_decode(jwt).authorities);
+            setUsername(jwt_decode(jwt).sub);
+        }
+    }, [jwt]);
+
+    
     const [achievements, setAchievements] = useFetchState(
         [],
         `/api/v1/achievements`,
         jwt
     );
+    
+
     const [message, setMessage] = useState(null);
     const [visible, setVisible] = useState(false);
     const [alerts, setAlerts] = useState([]);
@@ -25,22 +42,29 @@ export default function AchievementList() {
         return (
             <tr key={a.id} >
                  <td className="text-center">
+                    <div style={{marginRight: "40px", marginBottom:"15px"}} >
                     <img src={a.badgeImage ? a.badgeImage : imgnotfound} alt={a.name} width="50px" />
+                    </div>
                 </td>
                 <td className="text-center" colSpan="2">
+                    <div style={{marginRight: "40px", marginBottom:"15px"}}>
                         {a.name}
                          <br />
-                     {a.description}
+                         <span style={{ fontSize: "13px" }}>{a.description}</span>
+                     </div>
                     </td>
                 <td className="text-center">
-                    <Button outline color="warning" >
+                    <div style={{marginRight: "40px", marginBottom:"15px"}}>
+                    <Button outline color="" >
                         <Link
-                            to={`/achievements/` + a.id} className="btn sm"
+                            to={`/achievements/` + a.id} className="auth-button-eol-achievements-edit"
                             style={{ textDecoration: "none" }}>Edit</Link>
                     </Button>
+                    </div>
                 </td>
                 <td className="text-center">
-                    <Button outline color="danger"
+                    <div style={{marginRight: "40px", marginBottom:"15px"}} >
+                    <Button outline color="" 
                         onClick={() =>
                             deleteFromList(
                                 `/api/v1/achievements/${a.id}`,
@@ -50,13 +74,17 @@ export default function AchievementList() {
                                 setMessage,
                                 setVisible
                             )}>
+                                <div className="auth-button-eol-achievements-delete">
                         Delete
+                        </div>
                     </Button>
+                    </div>
                 </td>
 
             </tr>
         );
     });
+
     const modal = getErrorModal(setVisible, visible, message);
     return (
         <div className="home-page-container">
@@ -64,8 +92,8 @@ export default function AchievementList() {
                 <h1 className="text-center">Achievements</h1>
                 <div >
                         <tbody>{achievementList}</tbody>
-                    <Button outline color="success">
-                        <Link to="/achievements/new" className="btn sm" style={{ textDecoration: "none" }}>
+                    <Button outline color="">
+                        <Link to="/achievements/new" className="auth-button-eol-achievements-create" style={{ textDecoration: "none" }}>
                             Create Achievement
                         </Link>
                     </Button>

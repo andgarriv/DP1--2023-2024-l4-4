@@ -64,14 +64,14 @@ export default function AchievementEdit() {
         setAchievement({ ...achievement, [name]: value });
     }
     return (
-        <div className="home-page-container">
-            <h2 className="text-center">
+        <div className="home-page-container" style={{ display: "flex", justifyContent: "center", alignItems: "center"}}>
+            <h2 className="text-center" style={{color:'white'}}> 
                 {achievement.id ? "Edit Consultation" : "Add Consultation"}
             </h2>
-            <div className="auth-form-container">
+            <div className="hero-div">
                 {modal}
                 <Form onSubmit={handleSubmit}>
-                    <div className="custom-form-input">
+                    <div className="custom-form-input" >
                         <Label for="name" className="custom-form-input-label-achievements">
                             Name
                         </Label>
@@ -114,7 +114,7 @@ export default function AchievementEdit() {
                         />
                     </div>
                     <div className="custom-form-input">
-                        <Label for="metric" className="custom-form-input-label-achievements">
+                        <Label for="metric" className="custom-form-input-label-achievements" >
                             Metric
                         </Label>
                         <Input
