@@ -133,7 +133,9 @@ export default function EditPlayerProfile() {
   };
 
   return (
+    
     <div className="home-page-container">
+     <div className="scrollable-content" style={{ maxHeight: "900px", overflowY: "auto"}}> 
       <div className="hero-div">
         <h1 className="text-center">Edit Profile</h1>
         {player ? (
@@ -185,6 +187,7 @@ export default function EditPlayerProfile() {
         </Button>
         </div>
         {modal}
+        </div>
       </div>
     </div>
   );
