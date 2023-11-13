@@ -40,9 +40,10 @@ export default function PlayerList() {
                     display: 'flex',
                     justifyContent: 'space-between',
                 }}>
-                    <div style={{ flex: 1, textAlign: 'center', minWidth: '200px', margin: '0 10px' }}>Nickname</div>
-                    <div style={{ flex: 1, textAlign: 'center', minWidth: '200px', margin: '0 10px' }}>Email</div>
-                    <div style={{ flex: 1, textAlign: 'center', minWidth: '200px', margin: '0 10px' }}>Avatar</div>
+                    <div style={{ flex: 1, textAlign: 'right', minWidth: '200px', margin: '0 10px' }}>Nickname</div>
+                    <div style={{ flex: 1, textAlign: 'right', minWidth: '200px', margin: '0 10px' }}>Email</div>
+                    <div style={{ flex: 1, textAlign: 'right', minWidth: '200px', margin: '0 10px' }}>Avatar</div>
+                    <div style={{ flex: 1, textAlign: 'center', minWidth: '200px', margin: '0 10px' }}></div>
                 </div>
                 {players ? (
                     <div>
@@ -51,9 +52,9 @@ export default function PlayerList() {
                                 display: 'flex',
                                 justifyContent: 'space-between'
                             }}>
-                                <div style={{ flex: 1, textAlign: 'left', minWidth: '150px', margin: '0 10px' }}>{player.nickname}</div>
-                                <div style={{ flex: 1, textAlign: 'left', minWidth: '150px', margin: '0 10px' }}>{player.email}</div>
-                                <div style={{ flex: 1, textAlign: 'center', minWidth: '150px', margin: '0 10px' }}>
+                                <div style={{ flex: 1, textAlign: 'left', minWidth: '150px', margin: '10px' }}>{player.nickname}</div>
+                                <div style={{ flex: 1, textAlign: 'left', minWidth: '150px', margin: '10px' }}>{player.email}</div>
+                                <div style={{ flex: 1, textAlign: 'center', minWidth: '150px', margin: '10px' }}>
                                     <img
                                         src={player.avatar}
                                         alt="avatar"
@@ -61,7 +62,7 @@ export default function PlayerList() {
                                 </div>
                                 <Button
                                     aria-label={"delete-" + player.id}
-                                    size="sm"
+                                    size="xs"
                                     color="danger"
                                     onClick={() =>
                                         deleteFromList(
