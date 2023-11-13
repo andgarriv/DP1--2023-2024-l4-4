@@ -15,13 +15,37 @@ export default function EditPlayerProfile() {
   const [visible, setVisible] = useState(false);
 
   const [name, setName] = useState("");
+  const [nameError, setNameError] = useState("");
   const [surname, setSurname] = useState("");
+  const [surnameError, setSurnameError] = useState("");
   const [nickname, setNickname] = useState("");
   const [nicknameError, setNicknameError] = useState("");
   const [avatar, setAvatar] = useState("");
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
   const [avatarError, setAvatarError] = useState("");
+
+  const scrollbarStyles = {
+    maxHeight: "900px",
+    overflowY: "auto",
+    scrollbarWidth: "thin", 
+    scrollbarColor: "#222222",
+    WebkitOverflowScrolling: "touch",
+    "&::-webkit-scrollbar": {
+      width: "1px",
+    },
+    "&::-webkit-scrollbar-thumb": {
+      backgroundColor: "#222",
+      borderRadius: "1px",
+    },
+    "&::-webkit-scrollbar-thumb:hover": {
+      backgroundColor: "#555",
+    },
+    "&::-webkit-scrollbar-track": {
+      backgroundColor: "transparent",
+    },
+  };
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,6 +61,7 @@ export default function EditPlayerProfile() {
         setSurname(data.surname);
         setNickname(data.nickname);
         setAvatar(data.avatar);
+        setEmail(data.email);
       } catch (error) {
         setMessage("Error fetching player data");
         setVisible(true);
@@ -48,11 +73,26 @@ export default function EditPlayerProfile() {
   const modal = getErrorModal(setVisible, visible, message);
 
   const handleNameChange = (event) => {
-    setName(event.target.value);
+    const newName = event.target.value;
+    setName(newName);
+    // Verificación del rango de longitud del nombre
+    if (newName.length < 3 || newName.length > 15) {
+      setNameError("Name must be between 3 and 15 characters");
+    } else {
+      setNameError("");
+    }
   };
 
   const handleSurnameChange = (event) => {
-    setSurname(event.target.value);
+    const newSurname = event.target.value;
+    setSurname(newSurname);
+    // Verificación del rango de longitud del apellido
+    if (newSurname.length < 3 || newSurname.length > 15) {
+      setSurnameError("Surname must be between 3 and 15 characters");
+    }
+    else {
+      setSurnameError("");
+    }
   };
 
   const handleNicknameChange = (event) => {
@@ -82,6 +122,7 @@ export default function EditPlayerProfile() {
   const handleAvatarChange = (event) => {
     const newAvatar = event.target.value;
     setAvatar(newAvatar);
+    // Verificación de formato de URL de avatar
     const avatarPattern = /^https?:\/\/.*\.(jpg|png|jpeg)$/i;
     if(newAvatar.length > 0 && !avatarPattern.test(newAvatar)) {
       setAvatarError("Invalid avatar URL");
@@ -91,6 +132,11 @@ export default function EditPlayerProfile() {
   };
 
   const handleSaveChanges = async () => {
+    if (nicknameError || emailError || avatarError || nameError || surnameError) {
+      setMessage("Invalid data");
+      setVisible(true);
+      return;
+    }
     try {
       const response = await fetch(`/api/v1/player/${user.id}`, {
         method: "PUT",
@@ -109,7 +155,8 @@ export default function EditPlayerProfile() {
           birthDate: player.birthDate,
           authority: player.authority
         }),
-      });
+      }
+    );
 
       if (response.ok) {
         console.log("Player updated successfully");
@@ -126,20 +173,24 @@ export default function EditPlayerProfile() {
   };
 
   return (
+    
     <div className="home-page-container">
+     <div className="scrollable-content" style={scrollbarStyles}> 
       <div className="hero-div">
         <h1 className="text-center">Edit Profile</h1>
         {player ? (
           <div>
             <p style={{ marginBottom: "-2px", color: "white" }}>Name:</p>
             <Input style={{ marginBottom: "10px" }} type="text" value={name} onChange={handleNameChange} />
+            {nameError && <p style={{ color: "red" }}>{nameError}</p>}
             <p style={{ marginBottom: "-2px", color: "white" }}>Surname:</p>
             <Input style={{ marginBottom: "10px" }} type="text" value={surname} onChange={handleSurnameChange} />
+            {surnameError && <p style={{ color: "red" }}>{surnameError}</p>}
             <p style={{ marginBottom: "-2px", color: "white" }}>Nickname:</p>
             <Input style={{ marginBottom: "10px" }} type="text" value={nickname} onChange={handleNicknameChange} />
             {nicknameError && <p style={{ color: "red" }}>{nicknameError}</p>}
             <p style={{ marginBottom: "-2px", color: "white" }}>Email:</p>
-            <Input style={{ marginBottom: "10px" }} type="text" value={email?email:player.email} onChange={handleEmailChange} />
+            <Input style={{ marginBottom: "10px" }} type="text" value={email} onChange={handleEmailChange} />
             {emailError && <p style={{ color: "red" }}>{emailError}</p>}
             <p style={{ marginBottom: "-2px", color: "white" }}>Avatar:</p>
             <Input style={{ marginBottom: "20px" }} type="text" value={avatar?avatar:defaultImage} onChange={handleAvatarChange} />
@@ -178,6 +229,7 @@ export default function EditPlayerProfile() {
         </Button>
         </div>
         {modal}
+        </div>
       </div>
     </div>
   );

@@ -5,6 +5,7 @@ import { Route, Routes } from "react-router-dom";
 import AppNavbar from "./AppNavbar";
 import AchievementEdit from "./achievement/achievementEdit";
 import AchievementList from "./achievement/achievementList";
+import AchievementPlayer from "./achievement/achievementListPlayer";
 import ClinicOwnerEditAdmin from "./admin/clinicOwners/ClinicOwnerEditAdmin";
 import ClinicOwnerListAdmin from "./admin/clinicOwners/ClinicOwnerListAdmin";
 import ClinicEditAdmin from "./admin/clinics/ClinicEditAdmin";
@@ -103,7 +104,7 @@ function App() {
           <Route path="/games" exact={true} element={<PrivateRoute><PlayerGamesList /></PrivateRoute>} />
           <Route path="/profile" exact={true} element={<PrivateRoute><PlayerProfile /></PrivateRoute>} />
           <Route path="/profile/edit" exact={true} element={<PrivateRoute><PlayerProfileEdit /></PrivateRoute>} />
-          <Route path="/achievements" exact={true} element={<PrivateRoute><AchievementList /></PrivateRoute>} />
+          <Route path="/achievements" exact={true} element={<PrivateRoute><AchievementPlayer /></PrivateRoute>} />
         </>)
     }
   })
