@@ -119,8 +119,8 @@ export default function Register() {
   if (type) {
     return (
       <div className="auth-page-container">
-        <h1>Register</h1>
-        <div className="auth-form-container">
+        <h2>Register</h2>
+        <div style={{marginTop: "10px"}}>
           <FormGenerator
             ref={registerFormRef}
             inputs={
@@ -133,6 +133,7 @@ export default function Register() {
             listenEnterKey
             buttonText="Save"
             buttonClassName="auth-button"
+            onClickButton={handleSubmit}
           />
         </div>
       </div>

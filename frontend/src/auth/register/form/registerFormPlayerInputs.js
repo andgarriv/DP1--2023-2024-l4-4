@@ -15,7 +15,7 @@ export const registerFormPlayerInputs = [
     type: "text",
     defaultValue: "",
     isRequired: true,
-    validators: [formValidators.notEmptyValidator],
+   validators: [formValidators.notEmptyValidator],
   },
   {
     tag: "Password",
@@ -28,14 +28,22 @@ export const registerFormPlayerInputs = [
   {
     tag: "Birth Date",
     name: "birthDate",
-    type: "text",
+    type: "localdate",
     defaultValue: "",
     isRequired: true,
-    validators: []
+    validators: [formValidators.validDateValidator]
   },
   {
     tag: "Nickname",
     name: "nickname",
+    type: "text",
+    defaultValue: "",
+    isRequired: true,
+    validators: [formValidators.notEmptyValidator],
+  },
+  {
+    tag: "Email",
+    name: "email",
     type: "text",
     defaultValue: "",
     isRequired: true,
