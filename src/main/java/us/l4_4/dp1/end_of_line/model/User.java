@@ -1,6 +1,6 @@
 package us.l4_4.dp1.end_of_line.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.JoinColumn;
@@ -32,8 +32,8 @@ public class User extends BaseEntity{
     @Column(unique = true)
     protected String email;
 
-    //@NotBlank
-    protected Date birthDate;
+    @NotBlank
+    protected LocalDate birthDate;
 
 	@NotBlank
     @Column(unique = true)
