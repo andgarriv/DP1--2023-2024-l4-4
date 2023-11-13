@@ -59,7 +59,7 @@ export default function PlayerProfile() {
         ) : (
           <p style={{color: "white"}}>Loading player data...</p>
         )}
-        <Button outline color="success">
+        <Button outline color="warning">
           <Link to="/profile/edit" className="btn sm" style={{ textDecoration: "none", color: "white"}}>
             Edit Profile
           </Link>
