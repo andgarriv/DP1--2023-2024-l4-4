@@ -26,7 +26,7 @@ export default function PlayerProfile() {
         const data = await response.json();
         setPlayer(data);
       } catch (error) {
-        setMessage("Error fetching player data");
+        //setMessage("Error fetching player data");
         setVisible(true);
       }
     };
@@ -36,6 +36,7 @@ export default function PlayerProfile() {
   const modal = getErrorModal(setVisible, visible, message);
 
   const date_format = (date) => {
+    // eslint-disable-next-line no-new-wrappers
     const d = new String(date);
     const year = d.substring(0, 4);
     const month = d.substring(5, 7);
@@ -49,12 +50,30 @@ export default function PlayerProfile() {
         <h1 className="text-center">My Profile</h1>
         {player ? (
           <div>
-            <img src={player.avatar || imgNotFound} alt="avatar" className="avatar" width="100px" />
-            <p style={{ color: "white" }}>Name: {player.name}</p>
-            <p style={{ color: "white" }}>Surname: {player.surname}</p>
-            <p style={{ color: "white" }}>Nickname: {player.nickname}</p>
-            <p style={{ color: "white" }}>Email: {player.email}</p>
-            <p style={{ color: "white" }}>Birth Date: {date_format(player.birthDate)}</p>
+            <div style={{ textAlign: "center", marginBottom: "15px" }}>
+              <img 
+                src={player.avatar || imgNotFound} 
+                alt="avatar" 
+                className="avatar" 
+                style={{ borderRadius: "50%" }}
+                width="100px" />
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <div style={{ textAlign: "left" }}>
+              <p style={{ color: "white" }}>Name:</p>
+              <p style={{ color: "white" }}>Surname:</p>
+              <p style={{ color: "white" }}>Nickname:</p>
+              <p style={{ color: "white" }}>Email:</p>
+              <p style={{ color: "white" }}>Birth Date:</p>
+            </div>
+            <div style={{ textAlign: "center", marginInlineStart: "25px" } }>
+              <p style={{ color: "white" }}>{player.name}</p>
+              <p style={{ color: "white" }}>{player.surname}</p>
+              <p style={{ color: "white" }}>{player.nickname}</p>
+              <p style={{ color: "white" }}>{player.email}</p>
+              <p style={{ color: "white" }}>{date_format(player.birthDate)}</p>
+            </div>
+            </div>
           </div>
         ) : (
           <p style={{color: "white"}}>Loading player data...</p>

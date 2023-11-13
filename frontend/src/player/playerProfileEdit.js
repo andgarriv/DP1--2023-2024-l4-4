@@ -5,7 +5,6 @@ import tokenService from "../services/token.service";
 import useFetchState from "../util/useFetchState";
 import getErrorModal from "../util/getErrorModal";
 
-const imgNotFound = "https://cdn-icons-png.flaticon.com/512/5778/5778223.png";
 const user = tokenService.getUser();
 
 export default function EditPlayerProfile() {
@@ -14,7 +13,6 @@ export default function EditPlayerProfile() {
   const [message, setMessage] = useState("");
   const [visible, setVisible] = useState(false);
 
-  // Estados para campos editables
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
   const [nickname, setNickname] = useState("");
@@ -30,7 +28,6 @@ export default function EditPlayerProfile() {
         });
         const data = await response.json();
         setPlayer(data);
-        // Establecer los estados iniciales de los campos editables
         setName(data.name);
         setSurname(data.surname);
         setNickname(data.nickname);
@@ -45,7 +42,6 @@ export default function EditPlayerProfile() {
 
   const modal = getErrorModal(setVisible, visible, message);
 
-  // Funciones para manejar cambios en los campos editables
   const handleNameChange = (event) => {
     setName(event.target.value);
   };
@@ -62,7 +58,6 @@ export default function EditPlayerProfile() {
     setAvatar(event.target.value);
   };
 
-  // Función para enviar la actualización al servidor
   const handleSaveChanges = async () => {
     try {
       const response = await fetch(`/api/v1/player/${user.id}`, {
