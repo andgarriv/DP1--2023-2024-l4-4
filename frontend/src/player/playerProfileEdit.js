@@ -6,6 +6,7 @@ import useFetchState from "../util/useFetchState";
 import getErrorModal from "../util/getErrorModal";
 
 const user = tokenService.getUser();
+const defaultImage = "https://img.freepik.com/fotos-premium/adorable-bebe-buho-estilo-pixar-grandes-ojos-felices_804788-4862.jpg";
 
 export default function EditPlayerProfile() {
   const jwt = tokenService.getLocalAccessToken();
@@ -16,7 +17,11 @@ export default function EditPlayerProfile() {
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
   const [nickname, setNickname] = useState("");
+  const [nicknameError, setNicknameError] = useState("");
   const [avatar, setAvatar] = useState("");
+  const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [avatarError, setAvatarError] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -51,11 +56,38 @@ export default function EditPlayerProfile() {
   };
 
   const handleNicknameChange = (event) => {
-    setNickname(event.target.value);
+    const newNickname = event.target.value;
+    setNickname(newNickname);
+    // Verificación del rango de longitud del nickname
+    if (newNickname.length < 5 || newNickname.length > 15) {
+      setNicknameError("Nickname must be between 5 and 15 characters");
+    } else {
+      setNicknameError("");
+    }
+  };
+
+  const handleEmailChange = (event) => {
+    const newEmail = event.target.value;
+    setEmail(newEmail);
+
+    // Verificación de formato de correo electrónico
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(newEmail)) {
+      setEmailError("Invalid email address");
+    } else {
+      setEmailError("");
+    }
   };
 
   const handleAvatarChange = (event) => {
-    setAvatar(event.target.value);
+    const newAvatar = event.target.value;
+    setAvatar(newAvatar);
+    const avatarPattern = /^https?:\/\/.*\.(jpg|png|jpeg)$/i;
+    if(newAvatar.length > 0 && !avatarPattern.test(newAvatar)) {
+      setAvatarError("Invalid avatar URL");
+    } else {
+      setAvatarError("");
+    }
   };
 
   const handleSaveChanges = async () => {
@@ -73,7 +105,7 @@ export default function EditPlayerProfile() {
           nickname,
           avatar,
           password: player.password,
-          email: player.email,
+          email,
           birthDate: player.birthDate,
           authority: player.authority
         }),
@@ -105,13 +137,36 @@ export default function EditPlayerProfile() {
             <Input style={{ marginBottom: "10px" }} type="text" value={surname} onChange={handleSurnameChange} />
             <p style={{ marginBottom: "-2px", color: "white" }}>Nickname:</p>
             <Input style={{ marginBottom: "10px" }} type="text" value={nickname} onChange={handleNicknameChange} />
+            {nicknameError && <p style={{ color: "red" }}>{nicknameError}</p>}
+            <p style={{ marginBottom: "-2px", color: "white" }}>Email:</p>
+            <Input style={{ marginBottom: "10px" }} type="text" value={email?email:player.email} onChange={handleEmailChange} />
+            {emailError && <p style={{ color: "red" }}>{emailError}</p>}
             <p style={{ marginBottom: "-2px", color: "white" }}>Avatar:</p>
-            <Input style={{ marginBottom: "10px" }} type="text" value={avatar} onChange={handleAvatarChange} />
+            <Input style={{ marginBottom: "20px" }} type="text" value={avatar?avatar:defaultImage} onChange={handleAvatarChange} />
+            {avatarError && <p style={{ color: "red" }}>{avatarError}</p>}
+            {!avatarError && avatar && (
+            <div style={{ textAlign: "center", marginTop: "10px" }}>
+              <img
+                src={avatar}
+                alt="avatar"
+                style={{ width: "100px", height: "100px", borderRadius: "50%" }}
+              />
+            </div>
+          )}
+          {!avatarError && !avatar && (
+            <div style={{ textAlign: "center", marginTop: "10px" }}>
+              <img
+                src={defaultImage}
+                alt="avatar"
+                style={{ width: "100px", height: "100px", borderRadius: "50%" }}
+              />
+            </div>
+          )}
           </div>
         ) : (
           <p style={{ color: "white" }}>Loading player data...</p>
         )}
-        <div style={{ display: "flex", justifyContent: "space-between", marginTop: "10px" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", marginTop: "20px" }}>
         <Button outline color="danger">
           <Link to="/profile" className="btn sm" style={{ textDecoration: "none", color: "white" }}>
             Cancel

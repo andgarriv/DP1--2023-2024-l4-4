@@ -26,7 +26,7 @@ export default function PlayerProfile() {
         const data = await response.json();
         setPlayer(data);
       } catch (error) {
-        //setMessage("Error fetching player data");
+        setMessage("Error fetching player data");
         setVisible(true);
       }
     };
