@@ -41,3 +41,7 @@
 .NavbarBrand {
   margin-left: 20px;
 }
+.transparent-table {
+  background-color: transparent;
+  border: none;
+}
