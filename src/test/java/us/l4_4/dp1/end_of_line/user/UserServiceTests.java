@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 //import org.springframework.samples.petclinic.vet.VetService;
 import org.springframework.security.test.context.support.WithMockUser;
 
+import us.l4_4.dp1.end_of_line.admin.AdminService;
 import us.l4_4.dp1.end_of_line.authorities.AuthoritiesService;
 import us.l4_4.dp1.end_of_line.player.Player;
 import us.l4_4.dp1.end_of_line.player.PlayerService;
@@ -24,22 +25,26 @@ class UserServiceTests {
 	private PlayerService playerService;
 
 	@Autowired
+	private AdminService adminService;
+
+	@Autowired
 	private AuthoritiesService authService;
 
-	/*@Autowired
-	private VetService vetService;*/
-
-	/*@Autowired
-	private OwnerService ownerService;*/
-
 	@Test
-	@WithMockUser(username = "owner1", password = "0wn3r")
-	void shouldFindCurrentUser() {
+	@WithMockUser(username = "Angelgares", password = "4dm1n")
+	void shouldFindCurrentPlayer() {
 		Player player = this.playerService.findCurrentPlayer();
-		assertEquals("owner1", player.getNickname());
+		assertEquals("Angelgares", player.getNickname());
 	}
-/*
+/* 
 	@Test
+	@WithMockUser(username = "admin1", password = "4dm1n")
+	void shouldFindCurrentAdmin() {
+		Admin admin = this.adminService.findCurrentAdmin();
+		assertEquals("admin1", admin.getNickname());
+	}*/
+
+/*@Test
 	@WithMockUser(username = "prueba")
 	void shouldNotFindCorrectCurrentUser() {
 		assertThrows(ResourceNotFoundException.class, () -> this.userService.findCurrentUser());

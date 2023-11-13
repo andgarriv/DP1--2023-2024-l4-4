@@ -13,13 +13,6 @@ import us.l4_4.dp1.end_of_line.model.BaseEntity;
 @Table(name = "authorities")
 public class Authorities extends BaseEntity{
 	
-//	@ManyToOne
-//	@JoinColumn(name = "username")
-//	User user;
-	
-//	@Enumerated(EnumType.STRING)
 	@Column(length = 20)
 	String authority;
-	
-	
 }
