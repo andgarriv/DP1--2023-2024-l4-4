@@ -1,6 +1,6 @@
 package us.l4_4.dp1.end_of_line.model;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.JoinColumn;
@@ -32,8 +32,8 @@ public class User extends BaseEntity{
     @Column(unique = true)
     protected String email;
 
-    @NotBlank
-    protected LocalDate birthDate;
+    //@NotBlank
+    protected Date birthDate;
 
 	@NotBlank
     @Column(unique = true)
@@ -43,7 +43,7 @@ public class User extends BaseEntity{
     @NotNull
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "authority")
-	Authorities authority;
+	protected Authorities authority;
 
 	public Boolean hasAuthority(String auth) {
 		return authority.getAuthority().equals(auth);

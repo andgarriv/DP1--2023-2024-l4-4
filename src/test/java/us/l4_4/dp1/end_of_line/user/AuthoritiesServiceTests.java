@@ -23,8 +23,8 @@ import us.l4_4.dp1.end_of_line.exceptions.ResourceNotFoundException;
 @AutoConfigureTestDatabase
 class AuthoritiesServiceTests {
 
-//	@Autowired
-//	private UserService userService;
+	/*@Autowired
+	private UserService userService;*/
 
 	@Autowired
 	private AuthoritiesService authService;
@@ -32,13 +32,13 @@ class AuthoritiesServiceTests {
 	@Test
 	void shouldFindAllAuthorities() {
 		List<Authorities> auths = (List<Authorities>) this.authService.findAll();
-		assertEquals(4, auths.size());
+		assertEquals(2, auths.size());
 	}
 
 	@Test
 	void shouldFindAuthoritiesByAuthority() {
-		Authorities auth = this.authService.findByAuthority("VET");
-		assertEquals("VET", auth.getAuthority());
+		Authorities auth = this.authService.findByAuthority("ADMIN");
+		assertEquals("ADMIN", auth.getAuthority());
 	}
 
 	@Test
@@ -62,15 +62,15 @@ class AuthoritiesServiceTests {
 		assertEquals(count + 1, finalCount);
 	}
 
-//	@Test
-//	@Transactional
-//	void shouldAddAuthoritiesToUser() {
-//		User user = userService.findUser("owner1");
-//		assertEquals("OWNER" ,user.getAuthority().getAuthority());
-//		
-//		this.authService.saveAuthorities("owner1", "TEST");
-//		assertEquals("TEST" ,user.getAuthority().getAuthority());
-//
-//	}
+	/* @Test
+	@Transactional
+	void shouldAddAuthoritiesToUser() {
+		User user = userService.findUser("owner1");
+		assertEquals("OWNER" ,user.getAuthority().getAuthority());
+		
+		this.authService.saveAuthorities("owner1", "TEST");
+		assertEquals("TEST" ,user.getAuthority().getAuthority());
+
+	} */
 
 }

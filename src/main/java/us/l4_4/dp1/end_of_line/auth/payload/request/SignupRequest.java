@@ -1,6 +1,6 @@
 package us.l4_4.dp1.end_of_line.auth.payload.request;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 import org.hibernate.validator.constraints.URL;
 
@@ -28,7 +28,7 @@ public class SignupRequest {
 	private String email;
 	
 	@NotBlank
-	private LocalDate birthdate;
+	private Date birthdate;
 
 	@NotBlank
 	@Size(min = 5, max = 15)
