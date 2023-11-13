@@ -37,6 +37,7 @@ export default function EditPlayerProfile() {
         setSurname(data.surname);
         setNickname(data.nickname);
         setAvatar(data.avatar);
+        setEmail(data.email);
       } catch (error) {
         setMessage("Error fetching player data");
         setVisible(true);
@@ -91,6 +92,11 @@ export default function EditPlayerProfile() {
   };
 
   const handleSaveChanges = async () => {
+    if (nicknameError || emailError || avatarError) {
+      setMessage("Invalid data");
+      setVisible(true);
+      return;
+    }
     try {
       const response = await fetch(`/api/v1/player/${user.id}`, {
         method: "PUT",
@@ -109,7 +115,8 @@ export default function EditPlayerProfile() {
           birthDate: player.birthDate,
           authority: player.authority
         }),
-      });
+      }
+    );
 
       if (response.ok) {
         console.log("Player updated successfully");
@@ -139,7 +146,7 @@ export default function EditPlayerProfile() {
             <Input style={{ marginBottom: "10px" }} type="text" value={nickname} onChange={handleNicknameChange} />
             {nicknameError && <p style={{ color: "red" }}>{nicknameError}</p>}
             <p style={{ marginBottom: "-2px", color: "white" }}>Email:</p>
-            <Input style={{ marginBottom: "10px" }} type="text" value={email?email:player.email} onChange={handleEmailChange} />
+            <Input style={{ marginBottom: "10px" }} type="text" value={email} onChange={handleEmailChange} />
             {emailError && <p style={{ color: "red" }}>{emailError}</p>}
             <p style={{ marginBottom: "-2px", color: "white" }}>Avatar:</p>
             <Input style={{ marginBottom: "20px" }} type="text" value={avatar?avatar:defaultImage} onChange={handleAvatarChange} />
