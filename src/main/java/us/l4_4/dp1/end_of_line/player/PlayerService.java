@@ -63,8 +63,8 @@ public class PlayerService {
 	}
 
 	@Transactional
-	public void deletePlayer(String nickname){
-		playerRepository.deletePlayer(nickname);
+	public void deletePlayer(Integer id){
+		playerRepository.deletePlayer(id);
 	}
 
 	@Transactional
