@@ -11,7 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 //import org.springframework.samples.petclinic.vet.VetService;
 import org.springframework.security.test.context.support.WithMockUser;
 
-import us.l4_4.dp1.end_of_line.admin.AdminService;
 import us.l4_4.dp1.end_of_line.authorities.AuthoritiesService;
 import us.l4_4.dp1.end_of_line.player.Player;
 import us.l4_4.dp1.end_of_line.player.PlayerService;
@@ -24,8 +23,6 @@ class UserServiceTests {
 	@Autowired
 	private PlayerService playerService;
 
-	@Autowired
-	private AdminService adminService;
 
 	@Autowired
 	private AuthoritiesService authService;
