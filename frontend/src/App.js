@@ -32,6 +32,7 @@ import PlayerGamesList from "./games/PlayerGamesList";
 import AdminGamesList from "./games/AdminGamesList";
 import PlayerProfile from "./player/playerProfile";
 import PlayerProfileEdit from "./player/playerProfileEdit";
+import PlayerList from "./admin//player/PlayerList";
 
 import PrivateRoute from "./privateRoute";
 import PlanList from "./public/plan";
@@ -92,6 +93,7 @@ function App() {
           <Route path="/achievements" exact={true} element={<PrivateRoute><AchievementList /></PrivateRoute>} />
           <Route path="/achievements/:achievementId" exact={true} element={<PrivateRoute><AchievementEdit/></PrivateRoute>} />
           <Route path="/games" exact={true} element={<PrivateRoute><AdminGamesList /></PrivateRoute>} />
+          <Route path="/players" exact={true} element={<PrivateRoute><PlayerList /></PrivateRoute>} />
         </>)
     }
     if (role === "PLAYER") {

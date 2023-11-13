@@ -2,6 +2,7 @@ package us.l4_4.dp1.end_of_line.player;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -71,5 +72,11 @@ public class PlayerController {
     @ResponseStatus(HttpStatus.OK)
     public Iterable<Player> findAll(){
         return playerService.findAllPlayers();
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void delete(@PathVariable Integer id){
+        playerService.deletePlayer(id);
     }
 }
