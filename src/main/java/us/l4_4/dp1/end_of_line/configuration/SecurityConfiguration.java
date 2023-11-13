@@ -64,8 +64,10 @@ public class SecurityConfiguration {
 			.requestMatchers(HttpMethod.GET,"/api/v1/achievements").authenticated()
 			.requestMatchers(HttpMethod.POST,"/api/v1/achievements").hasAuthority("ADMIN")
 			.requestMatchers(HttpMethod.DELETE,"/api/v1/achievements").hasAuthority("ADMIN")
+			.requestMatchers(HttpMethod.GET,"/api/v1/games/admin").hasAuthority("ADMIN")
 			.requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/users/**")).hasAuthority(ADMIN)
 			.requestMatchers("/api/v1/player/**").authenticated()
+			.requestMatchers("/api/v1/games/player/**").authenticated()
 			//.requestMatchers("/api/v1/clinicOwners/all").hasAuthority(ADMIN)
 			//.requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/clinicOwners/**")).hasAnyAuthority(ADMIN, CLINIC_OWNER)
 			/*.requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.DELETE, "/api/v1/consultations/**")).hasAuthority(ADMIN)*/

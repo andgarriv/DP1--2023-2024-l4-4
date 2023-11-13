@@ -35,7 +35,7 @@ INSERT INTO game_players(id,energy,player_id,color) VALUES (8,3,6,'RED'); --play
 INSERT INTO games(id,rounds,winner,ended,started) VALUES (1,16,3,'2021-09-02','2021-09-01');
 INSERT INTO games(id,rounds,winner,ended,started) VALUES (2,18,5,'2021-09-02','2021-09-01');
 INSERT INTO games(id,rounds,winner,ended,started) VALUES (3,24,null,null,'2021-01-01');
---INSERT INTO games(id,rounds,winner,ended,started) VALUES (4,21,null,null,'2021-01-02');
+
 
 
 -- Games_Game_Players

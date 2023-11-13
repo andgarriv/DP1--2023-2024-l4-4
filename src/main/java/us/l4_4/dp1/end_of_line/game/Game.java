@@ -52,7 +52,7 @@ public class Game extends BaseEntity {
 
     @NotNull
     @OneToMany 
-    private Set<GamePlayer> gamePlayers;
+    private List<GamePlayer> gamePlayers;
 
     @NotNull
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
