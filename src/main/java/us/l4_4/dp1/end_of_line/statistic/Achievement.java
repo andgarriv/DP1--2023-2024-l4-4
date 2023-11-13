@@ -38,9 +38,6 @@ public class Achievement extends NamedEntity {
     @NotNull
     Metric metric;
 
-    @NotNull
-    Date achieveAt;
-
     public String getActualDescription(){
         return description.replace("<THRESHOLD>", String.valueOf(threshold));
     }

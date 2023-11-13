@@ -14,10 +14,23 @@ INSERT INTO players(id,name,surname,password,email,birth_date,authority,nickname
 INSERT INTO players(id,name,surname,password,email,birth_date,authority,nickname,avatar) VALUES (7,'Andres','Garcia','$2a$10$nMmTWAhPTqXqLDJTag3prumFrAJpsYtroxf0ojesFYq0k4PmcbWUS','andres@gmail.com', '2003-07-12', 2, 'andgarriv', 'https://cdn-icons-png.flaticon.com/512/147/147144.png');
 INSERT INTO players(id,name,surname,password,email,birth_date,authority,nickname,avatar) VALUES (8,'Alejandro','Perez','$2a$10$nMmTWAhPTqXqLDJTag3prumFrAJpsYtroxf0ojesFYq0k4PmcbWUS','alejandro@gmail.com', '2003-07-12', 2, 'alepersan', 'https://cdn-icons-png.flaticon.com/512/147/147144.png');
 
+
 -- Achievements
-INSERT INTO achievements(id,name,description,threshold,badge_image,metric,achieve_at) VALUES (1,'Basic expirence','Play 10 games',10.0,'https://cdn-icons-png.flaticon.com/512/5243/5243423.png','GAMES_PLAYED','2022-01-01');
-INSERT INTO achievements(id,name,description,threshold,badge_image,metric,achieve_at) VALUES (2,'Explorer','Play 25 games',25.0,'https://cdn-icons-png.flaticon.com/512/603/603855.png','GAMES_PLAYED','2022-01-01');
-INSERT INTO achievements(id,name,description,threshold,metric,achieve_at) VALUES (3,'Expert','Win 20 games',20.0,'VICTORIES','2022-01-01');
+INSERT INTO achievements(id,name,description,threshold,badge_image,metric) VALUES (1,'Basic expirence','Play 10 games',10.0,'https://cdn-icons-png.flaticon.com/512/5243/5243423.png','GAMES_PLAYED');
+INSERT INTO achievements(id,name,description,threshold,badge_image,metric) VALUES (2,'Explorer','Play 25 games',25.0,'https://cdn-icons-png.flaticon.com/512/603/603855.png','GAMES_PLAYED');
+INSERT INTO achievements(id,name,description,threshold,metric) VALUES (3,'Expert','Win 20 games',20.0,'VICTORIES');
+
+-- Player Achievements
+INSERT INTO player_achievements(id,achieve_at,achievement_id)VALUES(1,'2021-09-01',1);
+INSERT INTO player_achievements(id,achievement_id)VALUES(2,2);
+INSERT INTO player_achievements(id,achievement_id)VALUES(3,3);
+
+
+--Player PlayerAchievements
+INSERT INTO players_player_achievement(player_achievement_id, player_id)VALUES(1,6),(2,6),(3,5);
+
+
+
 
 -- GamePlayers
 
