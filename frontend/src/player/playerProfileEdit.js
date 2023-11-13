@@ -25,6 +25,28 @@ export default function EditPlayerProfile() {
   const [emailError, setEmailError] = useState("");
   const [avatarError, setAvatarError] = useState("");
 
+  const scrollbarStyles = {
+    maxHeight: "900px",
+    overflowY: "auto",
+    scrollbarWidth: "thin", 
+    scrollbarColor: "#222222",
+    WebkitOverflowScrolling: "touch",
+    "&::-webkit-scrollbar": {
+      width: "1px",
+    },
+    "&::-webkit-scrollbar-thumb": {
+      backgroundColor: "#222",
+      borderRadius: "1px",
+    },
+    "&::-webkit-scrollbar-thumb:hover": {
+      backgroundColor: "#555",
+    },
+    "&::-webkit-scrollbar-track": {
+      backgroundColor: "transparent",
+    },
+  };
+
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -153,7 +175,7 @@ export default function EditPlayerProfile() {
   return (
     
     <div className="home-page-container">
-     <div className="scrollable-content" style={{ maxHeight: "900px", overflowY: "auto"}}> 
+     <div className="scrollable-content" style={scrollbarStyles}> 
       <div className="hero-div">
         <h1 className="text-center">Edit Profile</h1>
         {player ? (
