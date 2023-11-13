@@ -67,11 +67,11 @@ export default function PlayerProfile() {
               <p style={{ color: "white" }}>Birth Date:</p>
             </div>
             <div style={{ textAlign: "center", marginInlineStart: "25px" } }>
-              <p style={{ color: "white" }}>{player.name}</p>
-              <p style={{ color: "white" }}>{player.surname}</p>
-              <p style={{ color: "white" }}>{player.nickname}</p>
-              <p style={{ color: "white" }}>{player.email}</p>
-              <p style={{ color: "white" }}>{date_format(player.birthDate)}</p>
+              <p style={{ color: "white" }}>{player.name || 'No name provided'}</p>
+              <p style={{ color: "white" }}>{player.surname || 'No surname provided'}</p>
+              <p style={{ color: "white" }}>{player.nickname || 'No nickname provided'}</p>
+              <p style={{ color: "white" }}>{player.email || 'No email provided'}</p>
+              <p style={{ color: "white" }}>{date_format(player.birthDate) || 'No birthdate provided'}</p>
             </div>
             </div>
           </div>
