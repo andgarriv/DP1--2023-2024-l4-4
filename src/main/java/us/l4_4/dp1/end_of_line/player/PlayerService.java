@@ -68,9 +68,16 @@ public class PlayerService {
 	}
 
 	@Transactional
-	public Player updatePlayer(String nickname){
-		Player oldPlayer = findByNickname(nickname);
+	public Player updatePlayer(Integer nickname){
+		Player oldPlayer = findPlayerById(null);
 		BeanUtils.copyProperties(nickname, oldPlayer, "id");
+		return playerRepository.save(oldPlayer);
+		}
+
+	@Transactional
+	public Player updatePlayer(Integer id, Player player){
+		Player oldPlayer = findPlayerById(id);
+		BeanUtils.copyProperties(player, oldPlayer, "id");
 		return playerRepository.save(oldPlayer);
 		}
 

@@ -3,6 +3,7 @@ package us.l4_4.dp1.end_of_line.model;
 import static org.assertj.core.api.Assertions.*;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Locale;
 import java.util.Set;
 
@@ -35,12 +36,13 @@ class ValidatorTests {
 		LocaleContextHolder.setLocale(Locale.ENGLISH);
 		Player player = new Player();
 		Authorities authorities = new Authorities();
+		LocalDate birthdate = LocalDate.of(1999, 12, 12);
 		authorities.setAuthority("PLAYER");
 		player.setName("");
 		player.setSurname("Garcia");
 		player.setPassword("123456789");
 		player.setEmail("angelgares@gmail.com");
-		player.setBirthDate(Date.valueOf("1999-01-01"));
+		player.setBirthDate(birthdate);
 		player.setNickname("Angelgares");
 		player.setAvatar("https://i.imgur.com/1.jpg");
 		player.setAuthority(authorities);
