@@ -33,7 +33,7 @@ public class GameController {
     }
 
     @GetMapping("/admin")
-    public List<Game> getGames(int id) {
+    public List<Game> getGames() {
         return gameService.getAllGames();
     }
 

@@ -19,6 +19,37 @@ INSERT INTO achievements(id,name,description,threshold,badge_image,metric,achiev
 INSERT INTO achievements(id,name,description,threshold,badge_image,metric,achieve_at) VALUES (2,'Explorer','Play 25 games',25.0,'https://cdn-icons-png.flaticon.com/512/603/603855.png','GAMES_PLAYED','2022-01-01');
 INSERT INTO achievements(id,name,description,threshold,metric,achieve_at) VALUES (3,'Expert','Win 20 games',20.0,'VICTORIES','2022-01-01');
 
+-- GamePlayers
+
+INSERT INTO game_players(id,energy,player_id,color) VALUES (3,3,3,'RED'); --player 3
+INSERT INTO game_players(id,energy,player_id,color) VALUES (4,3,4,'BLUE'); --player 4
+
+INSERT INTO game_players(id,energy,player_id,color) VALUES (5,3,5,'BLUE'); --player 5
+INSERT INTO game_players(id,energy,player_id,color) VALUES (6,3,6,'RED'); --player 6
+
+INSERT INTO game_players(id,energy,player_id,color) VALUES (7,3,5,'BLUE'); --player 5
+INSERT INTO game_players(id,energy,player_id,color) VALUES (8,3,6,'RED'); --player 6
+
 
 -- Games 
-INSERT INTO games(id,rounds,winner,ended,started) VALUES (1,16,1,'2021-09-02','2021-09-01');
+INSERT INTO games(id,rounds,winner,ended,started) VALUES (1,16,3,'2021-09-02','2021-09-01');
+INSERT INTO games(id,rounds,winner,ended,started) VALUES (2,18,5,'2021-09-02','2021-09-01');
+INSERT INTO games(id,rounds,winner,ended,started) VALUES (3,24,null,null,'2021-01-01');
+--INSERT INTO games(id,rounds,winner,ended,started) VALUES (4,21,null,null,'2021-01-02');
+
+
+-- Games_Game_Players
+INSERT INTO games_game_players(game_id,game_players_id) VALUES (1,3);
+INSERT INTO games_game_players(game_id,game_players_id) VALUES (1,4);
+--Player con id 3 y 4 juegan la partida 1 
+INSERT INTO games_game_players(game_id,game_players_id) VALUES (2,5);
+INSERT INTO games_game_players(game_id,game_players_id) VALUES (2,6);
+--Player con id 5 y 6 juegan la partida 1 
+INSERT INTO games_game_players(game_id,game_players_id) VALUES (3,7);
+INSERT INTO games_game_players(game_id,game_players_id) VALUES (3,8);
+
+
+
+
+
+

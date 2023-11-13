@@ -75,3 +75,27 @@
   color: black;
   transform: translateY(-7px);
 }
+.black-background-table {
+    background-color: transparent;
+    color: white;
+  }
+  
+  .transparent-cell {
+    background-color: transparent;
+  }
+  
+  .white-text {
+    color: white;
+  }
+  
+  .text-center {
+    text-align: center;
+  }
+  
+  .table-cell {
+    padding: 20px;
+  }
+  
+  
+  
+  
