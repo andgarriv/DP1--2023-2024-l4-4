@@ -15,7 +15,9 @@ export default function EditPlayerProfile() {
   const [visible, setVisible] = useState(false);
 
   const [name, setName] = useState("");
+  const [nameError, setNameError] = useState("");
   const [surname, setSurname] = useState("");
+  const [surnameError, setSurnameError] = useState("");
   const [nickname, setNickname] = useState("");
   const [nicknameError, setNicknameError] = useState("");
   const [avatar, setAvatar] = useState("");
@@ -49,11 +51,26 @@ export default function EditPlayerProfile() {
   const modal = getErrorModal(setVisible, visible, message);
 
   const handleNameChange = (event) => {
-    setName(event.target.value);
+    const newName = event.target.value;
+    setName(newName);
+    // Verificación del rango de longitud del nombre
+    if (newName.length < 3 || newName.length > 15) {
+      setNameError("Name must be between 3 and 15 characters");
+    } else {
+      setNameError("");
+    }
   };
 
   const handleSurnameChange = (event) => {
-    setSurname(event.target.value);
+    const newSurname = event.target.value;
+    setSurname(newSurname);
+    // Verificación del rango de longitud del apellido
+    if (newSurname.length < 3 || newSurname.length > 15) {
+      setSurnameError("Surname must be between 3 and 15 characters");
+    }
+    else {
+      setSurnameError("");
+    }
   };
 
   const handleNicknameChange = (event) => {
@@ -83,6 +100,7 @@ export default function EditPlayerProfile() {
   const handleAvatarChange = (event) => {
     const newAvatar = event.target.value;
     setAvatar(newAvatar);
+    // Verificación de formato de URL de avatar
     const avatarPattern = /^https?:\/\/.*\.(jpg|png|jpeg)$/i;
     if(newAvatar.length > 0 && !avatarPattern.test(newAvatar)) {
       setAvatarError("Invalid avatar URL");
@@ -92,7 +110,7 @@ export default function EditPlayerProfile() {
   };
 
   const handleSaveChanges = async () => {
-    if (nicknameError || emailError || avatarError) {
+    if (nicknameError || emailError || avatarError || nameError || surnameError) {
       setMessage("Invalid data");
       setVisible(true);
       return;
@@ -142,8 +160,10 @@ export default function EditPlayerProfile() {
           <div>
             <p style={{ marginBottom: "-2px", color: "white" }}>Name:</p>
             <Input style={{ marginBottom: "10px" }} type="text" value={name} onChange={handleNameChange} />
+            {nameError && <p style={{ color: "red" }}>{nameError}</p>}
             <p style={{ marginBottom: "-2px", color: "white" }}>Surname:</p>
             <Input style={{ marginBottom: "10px" }} type="text" value={surname} onChange={handleSurnameChange} />
+            {surnameError && <p style={{ color: "red" }}>{surnameError}</p>}
             <p style={{ marginBottom: "-2px", color: "white" }}>Nickname:</p>
             <Input style={{ marginBottom: "10px" }} type="text" value={nickname} onChange={handleNicknameChange} />
             {nicknameError && <p style={{ color: "red" }}>{nicknameError}</p>}
