@@ -40,7 +40,7 @@ export default function AchievementPlayer() {
     }, [jwt, user.id]);
 
     if (!player) {
-        return <div>Loading player data...</div>;
+        return <div className="loading">Loading player data...</div>;
     }
 
     return (
