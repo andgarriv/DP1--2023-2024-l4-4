@@ -3,17 +3,16 @@ import { formValidators } from "../../../validators/formValidators";
 export const loginFormInputs = [
   
  {
-    tag: "Username",
+    tag: "Nickname",
     name: "username",
     type: "text",
     defaultValue: "",
     isRequired: true,
-    validators: [formValidators.notEmptyValidator],
+    validators: [formValidators.notBlankValidator],
     style: {
       border: "1px solid #ccc",
       borderRadius: "5px",
       padding: "10px",
-      /* Otros estilos personalizados según tus necesidades */
     },
   },
   {
@@ -22,6 +21,6 @@ export const loginFormInputs = [
     type: "password",
     defaultValue: "",
     isRequired: true,
-    validators: [formValidators.notEmptyValidator],
+  validators: [formValidators.notBlankValidator, formValidators.validPasswordValidator],
   },
 ];
