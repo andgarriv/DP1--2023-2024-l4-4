@@ -1,3 +1,4 @@
+//const Player  = require ('../player/Player');
 export const formValidators = {
     notBlankValidator: {
         validate: (value) => {
@@ -20,14 +21,28 @@ export const formValidators = {
     },
     validDateValidator: {
         validate: (value) => {
-            const date = new Date(value);
+            const inputDate = new Date(value);
             const today = new Date();
-            const minDate = new Date();
-            minDate.setFullYear(minDate.getFullYear() - 7);
-            return date < today && date > minDate;
+            const sevenYearsAgo = new Date();
+            sevenYearsAgo.setFullYear(sevenYearsAgo.getFullYear() - 7);
+            return inputDate <= today && inputDate <= sevenYearsAgo;
         },
-        message: "The date must be in the past and the user must be at least 7 years old"
+        message: "The date must not be in the future and the user must be at least 7 years old"
     },
+    /* uniqueNicknameValidator: {
+        validate: async (nickname) => {
+            const player = await Player.findOne({ where: { nickname: nickname } });
+            return !player;
+        },
+        message: "The nickname must be unique"
+    },
+    uniqueEmailValidator: {
+        validate: async (email) => {
+            const player = await Player.findOne({ where: { email: email } });
+            return !player;
+        },
+        message: "The email must be unique"
+    }, */
     validPasswordValidator: {
         validate: (value) => {
             const hasLowercase = /[a-z]/.test(value);
@@ -38,7 +53,7 @@ export const formValidators = {
     
             return hasLowercase && hasUppercase && hasNumber && hasSpecialChar && isLongEnough;
         },
-        message: "The password must be at least 5 characters long and include a lowercase letter, an uppercase letter, a number, and a special character"
+        message: "The password must be at least 5 characters long and include a lowercase and uppercase letter, a number, and a special character"
     },
     validNicknameValidator: {
         validate: (value) => {

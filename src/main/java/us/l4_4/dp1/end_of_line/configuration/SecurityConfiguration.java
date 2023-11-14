@@ -1,12 +1,5 @@
 package us.l4_4.dp1.end_of_line.configuration;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-import static org.springframework.security.config.Customizer.*;
-
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,14 +36,12 @@ public class SecurityConfiguration {
 	DataSource dataSource;
 
 	private static final String ADMIN = "ADMIN";
-	//private static final String CLINIC_OWNER = "CLINIC_OWNER";
-	
 
 	@Bean
 	protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
 		
 		http
-			.cors(withDefaults())		
+			//.cors(withDefaults())		
 			.csrf(AbstractHttpConfigurer::disable)		
 			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))			
 			.headers((headers) -> headers.frameOptions((frameOptions) -> frameOptions.disable()))
@@ -59,7 +50,8 @@ public class SecurityConfiguration {
 			.authorizeHttpRequests(authorizeRequests ->	authorizeRequests
 			.requestMatchers("/resources/**", "/webjars/**", "/static/**", "/swagger-resources/**").permitAll()			
 			.requestMatchers( "/api/v1/clinics","/", "/oups","/api/v1/auth/**","/v3/api-docs/**","/swagger-ui.html","/swagger-ui/**").permitAll()												
-			.requestMatchers("/api/v1/developers").permitAll()												
+			.requestMatchers("/api/v1/developers").permitAll()	
+			.requestMatchers(HttpMethod.POST, "api/v1/player").permitAll()											
 			//.requestMatchers("/api/v1/plan").hasAuthority("OWNER")
 			.requestMatchers(HttpMethod.GET,"/api/v1/achievements").authenticated()
 			.requestMatchers(HttpMethod.POST,"/api/v1/achievements").hasAuthority("ADMIN")
