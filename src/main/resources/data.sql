@@ -46,11 +46,16 @@ INSERT INTO game_players(id,energy,player_id,color) VALUES (8,3,6,'RED'); --play
 INSERT INTO game_players(id,energy,player_id,color) VALUES (9,3,3,'BLUE'); --player 5
 INSERT INTO game_players(id,energy,player_id,color) VALUES (10,3,6,'RED'); --player 6
 
+INSERT INTO game_players(id,energy,player_id,color) VALUES (11,3,3,'BLUE'); --player 5
+INSERT INTO game_players(id,energy,player_id,color) VALUES (12,3,6,'RED'); --player 6
+
+
 -- Games 
 INSERT INTO games(id, rounds, winner, ended, started) VALUES (1, 16, 3, '2021-09-01 11:13:24', '2021-09-01 10:35:10');
 INSERT INTO games(id, rounds, winner, ended, started) VALUES (2, 18, 5, '2021-09-01 14:30:00', '2021-09-01 11:00:00');
 INSERT INTO games(id, rounds, winner, ended, started) VALUES (3, 24, null, null, '2021-01-01 15:45:00');
 INSERT INTO games(id, rounds, winner, ended, started) VALUES (4, 3, 6, '2021-01-01 10:15:00', '2021-01-01 10:00:00');
+INSERT INTO games(id, rounds, winner, ended, started) VALUES (5, 7, 6, '2021-01-01 10:14:00', '2021-01-01 10:00:00');
 
 
 -- Games_Game_Players
@@ -65,6 +70,9 @@ INSERT INTO games_game_players(game_id,game_players_id) VALUES (3,8);
 --Player con id 3 y 6 juegan la partida 4
 INSERT INTO games_game_players(game_id,game_players_id) VALUES (4,9);
 INSERT INTO games_game_players(game_id,game_players_id) VALUES (4,10);
+
+INSERT INTO games_game_players(game_id,game_players_id) VALUES (5,11);
+INSERT INTO games_game_players(game_id,game_players_id) VALUES (5,12);
 
 
 
