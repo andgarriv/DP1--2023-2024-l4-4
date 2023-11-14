@@ -38,7 +38,7 @@ public class User extends BaseEntity{
 
 	@NotBlank
     @Column(unique = true)
-    @Size(min = 5, max = 15)
+    @Size(min = 5, max = 15, message = "Nickname must be between 5 and 15 characters")
     protected String nickname;
 
     @NotNull
