@@ -34,7 +34,8 @@ export default function PlayerStats() {
           (game) => game.winner && game.winner.id === user.id
         ).length;
         const gamesPlayed = userGames.length;
-        const winRatio = gamesPlayed > 0 ? (gamesWon / gamesPlayed) * 100 : 0;
+        const winRatio =
+          gamesPlayed > 0 ? ((gamesWon / gamesPlayed) * 100).toFixed(0) : 0;
 
         let currentWinStreak = 0;
         let maxWinStreak = 0;
@@ -95,35 +96,30 @@ export default function PlayerStats() {
     return `${hours}h ${minutes}m ${seconds}s`;
   }
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (stats.gamesPlayed === 0) {
-    return (
-      <div className="home-page-container">
-        <div className="hero-div">
-          <h1 className="text-center">Stats</h1>
-          <p>You must play a game to see your stats</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="home-page-container">
       <div className="hero-div">
         <h1 className="text-center">Stats</h1>
 
-        <div>
-          <p>Games played: {stats.gamesPlayed}</p>
-          <p>Wins: {stats.gamesWon}</p>
-          <p>Winning ratio: {stats.winRatio}%</p>
-          <p>Winning streak: {stats.currentWinStreak}</p>
-          <p>Maximum winning streak: {stats.maxWinStreak}</p>
-          <p>Average duration: {stats.averageGameDuration}</p>
-          <p>Time played: {stats.totalTimePlayed}</p>
-        </div>
+        {!loading ? (
+          <div>
+            {stats.gamesPlayed === 0 ? (
+              <p>You must play a game to see your stats</p>
+            ) : (
+              <div>
+                <p>Games played: {stats.gamesPlayed}</p>
+                <p>Wins: {stats.gamesWon}</p>
+                <p>Winning ratio: {stats.winRatio}%</p>
+                <p>Winning streak: {stats.currentWinStreak}</p>
+                <p>Maximum winning streak: {stats.maxWinStreak}</p>
+                <p>Average duration: {stats.averageGameDuration}</p>
+                <p>Time played: {stats.totalTimePlayed}</p>
+              </div>
+            )}
+          </div>
+        ) : (
+          <p style={{ color: "white" }}>Loading player data...</p>
+        )}
       </div>
     </div>
   );
