@@ -1,4 +1,3 @@
-import { formValidators } from "../../../validators/formValidators";
 import { registerFormClinicOwnerInputs } from "./registerFormClinicOwnerInputs";
 
 export const registerFormVetInputs = [
@@ -9,7 +8,7 @@ export const registerFormVetInputs = [
     type: "text",
     defaultValue: "",
     isRequired: true,
-    validators: [formValidators.notEmptyValidator],
+    validators: [],
   },
   {
     tag: "Clinic",
@@ -18,6 +17,6 @@ export const registerFormVetInputs = [
     values: ["None"],
     defaultValue: "",
     isRequired: true,
-    validators: [formValidators.notEmptyValidator, formValidators.notNoneTypeValidator],
+    validators: [],
   },
 ];

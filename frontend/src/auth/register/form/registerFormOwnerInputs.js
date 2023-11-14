@@ -1,5 +1,4 @@
 import { registerFormVetInputs } from "./registerFormVetInputs";
-import { formValidators } from "../../../validators/formValidators";
 
 export const registerFormOwnerInputs = [
   ...registerFormVetInputs,
@@ -9,7 +8,7 @@ export const registerFormOwnerInputs = [
     type: "text",
     defaultValue: "",
     isRequired: true,
-    validators: [formValidators.notEmptyValidator],
+    validators: [],
   },
   {
     tag: "Telephone",
@@ -17,6 +16,6 @@ export const registerFormOwnerInputs = [
     type: "text",
     defaultValue: "",
     isRequired: true,
-    validators: [formValidators.notEmptyValidator, formValidators.telephoneValidator],
+    validators: [],
   },
 ];
