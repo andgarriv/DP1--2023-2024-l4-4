@@ -8,3 +8,5 @@ os.chdir("frontend")
 
 # Ejecutar npm start en cmd
 os.system("start /B start cmd.exe @cmd /k npm start")
+
+os.chdir("..")

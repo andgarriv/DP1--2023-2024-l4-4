@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -15,8 +16,8 @@ public interface GameRepository extends CrudRepository<Game, Integer>{
     @Query("SELECT g FROM Game g WHERE g.id = ?1")
     List<Game> findById(int id);
 
-    @Query("SELECT g FROM Game g")
-    List<Game> findByPlayerId(int id);
+    @Query("SELECT g FROM Game g JOIN g.gamePlayers gp WHERE gp.player.id = :playerId")
+    List<Game> findByPlayerId(@Param("playerId") Integer playerId);
 
     Game save(Game game);
 }
