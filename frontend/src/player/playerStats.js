@@ -97,28 +97,38 @@ export default function PlayerStats() {
   }
 
   return (
-    <div className="home-page-container">
+    <div className="home-page-container" style={{ color: 'white', backgroundColor: 'black', padding: '20px' }}>
       <div className="hero-div">
         <h1 className="text-center">Stats</h1>
-
         {!loading ? (
-          <div>
-            {stats.gamesPlayed === 0 ? (
-              <p>You must play a game to see your stats</p>
-            ) : (
-              <div>
-                <p>Games played: {stats.gamesPlayed}</p>
-                <p>Wins: {stats.gamesWon}</p>
-                <p>Winning ratio: {stats.winRatio}%</p>
-                <p>Winning streak: {stats.currentWinStreak}</p>
-                <p>Maximum winning streak: {stats.maxWinStreak}</p>
-                <p>Average duration: {stats.averageGameDuration}</p>
-                <p>Time played: {stats.totalTimePlayed}</p>
-              </div>
-            )}
-          </div>
+          stats.gamesPlayed === 0 ? (
+            <p>You must play a game to see your stats</p>
+          ) : (
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', textAlign: 'left', gap: '10px' }}>
+              <span>Games played:</span>
+              <span style={{ textAlign: 'right' }}>{stats.gamesPlayed}</span>
+
+              <span>Wins:</span>
+              <span style={{ textAlign: 'right' }}>{stats.gamesWon}</span>
+
+              <span>Winning ratio:</span>
+              <span style={{ textAlign: 'right' }}>{stats.winRatio}%</span>
+
+              <span>Winning streak:</span>
+              <span style={{ textAlign: 'right' }}>{stats.currentWinStreak}</span>
+
+              <span>Maximum winning streak:</span>
+              <span style={{ textAlign: 'right' }}>{stats.maxWinStreak}</span>
+
+              <span>Average duration:</span>
+              <span style={{ textAlign: 'right' }}>{stats.averageGameDuration}</span>
+
+              <span>Time played:</span>
+              <span style={{ textAlign: 'right' }}>{stats.totalTimePlayed}</span>
+            </div>
+          )
         ) : (
-          <p style={{ color: "white" }}>Loading player data...</p>
+          <p>Loading player data...</p>
         )}
       </div>
     </div>
