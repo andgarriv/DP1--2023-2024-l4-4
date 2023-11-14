@@ -10,4 +10,6 @@ public interface AuthoritiesRepository extends  CrudRepository<Authorities, Stri
 	@Query("SELECT DISTINCT auth FROM Authorities auth WHERE auth.authority LIKE :authority%")
 	Optional<Authorities> findByName(String authority);
 	
+	@Query("SELECT DISTINCT auth FROM Authorities auth WHERE auth.id = :id")
+	Optional<Authorities> findById(Integer id);
 }

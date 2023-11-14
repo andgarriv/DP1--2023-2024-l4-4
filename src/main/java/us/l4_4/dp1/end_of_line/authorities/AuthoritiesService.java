@@ -26,12 +26,10 @@ import us.l4_4.dp1.end_of_line.exceptions.ResourceNotFoundException;
 public class AuthoritiesService {
 
 	private AuthoritiesRepository authoritiesRepository;
-//	private UserService userService;
 
 	@Autowired
 	public AuthoritiesService(AuthoritiesRepository authoritiesRepository) {
 		this.authoritiesRepository = authoritiesRepository;
-//		this.userService = userService;
 	}
 
 	@Transactional(readOnly = true)
@@ -50,12 +48,10 @@ public class AuthoritiesService {
 		authoritiesRepository.save(authorities);
 	}
 
-//	@Transactional
-//	public void saveAuthorities(String role) throws ResourceNotFoundException {
-//		Authorities authority = new Authorities();
-//		authority.setAuthority(role);
-//		//user.get().getAuthorities().add(authority);
-//		authoritiesRepository.save(authority);
-//	}
+	@Transactional(readOnly = true)
+	public Authorities findAuthoritieById(Integer id) {
+		return this.authoritiesRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Authority", "Id", id));
+	}
 
 }
