@@ -13,13 +13,17 @@ import us.l4_4.dp1.end_of_line.player.PlayerService;
 @Service
 public class AuthService {
 
-	private final PasswordEncoder encoder;
-	private final PlayerService playerService;
+	public final PasswordEncoder encoder;
+	public final PlayerService playerService;
 
 	@Autowired
 	public AuthService(PasswordEncoder encoder, PlayerService playerService) {
 		this.encoder = encoder;
 		this.playerService = playerService;
+	}
+
+	public String encodePassword(String password) {
+		return encoder.encode(password);
 	}
 
 	@Transactional
@@ -32,6 +36,19 @@ public class AuthService {
 		player.setBirthDate(request.getBirthdate());
 		player.setNickname(request.getNickname());
 		player.setAvatar(request.getAvatar());
+		playerService.createPlayer(player);
+		}
+
+	@Transactional
+	public void createUser2(Player player) {
+		Player newPlayer = new Player();
+		newPlayer.setName(player.getName());
+		newPlayer.setSurname(player.getSurname());
+		newPlayer.setPassword(player.getPassword());
+		newPlayer.setEmail(player.getEmail());
+		newPlayer.setBirthDate(player.getBirthDate());
+		newPlayer.setNickname(player.getNickname());
+		newPlayer.setAvatar(player.getAvatar());
 		playerService.createPlayer(player);
 		}
 	}
