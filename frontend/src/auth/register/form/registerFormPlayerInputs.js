@@ -7,7 +7,7 @@ export const registerFormPlayerInputs = [
     type: "text",
     defaultValue: "",
     isRequired: true,
-    validators: [formValidators.notBlankyValidator],
+    validators: [formValidators.notBlankValidator],
   },
   {
     tag: "Surname",
@@ -23,7 +23,7 @@ export const registerFormPlayerInputs = [
     type: "password",
     defaultValue: "",
     isRequired: true,
-    validators: [formValidators.notBlankValidator, formValidators.validPassword],
+    validators: [formValidators.notBlankValidator, formValidators.validPasswordValidator],
   },
   {
     tag: "Birth Date",
@@ -39,7 +39,8 @@ export const registerFormPlayerInputs = [
     type: "text",
     defaultValue: "",
     isRequired: true,
-    validators: [formValidators.notBlankValidator, formValidators.validNicknameValidator],
+    validators: [formValidators.notBlankValidator, 
+      formValidators.validNicknameValidator/*, formValidators.uniqueNicknameValidator*/],
   },
   {
     tag: "Email",
@@ -47,7 +48,7 @@ export const registerFormPlayerInputs = [
     type: "text",
     defaultValue: "",
     isRequired: true,
-    validators: [formValidators.validEmailValidator],
+    validators: [formValidators.validEmailValidator/*, formValidators.uniqueEmailValidator*/],
   },
   {
     tag: "Avatar",
