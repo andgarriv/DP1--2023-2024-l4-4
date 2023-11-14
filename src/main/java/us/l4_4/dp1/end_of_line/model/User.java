@@ -2,6 +2,7 @@ package us.l4_4.dp1.end_of_line.model;
 
 import java.time.LocalDate;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -37,11 +38,11 @@ public class User extends BaseEntity{
 
 	@NotBlank
     @Column(unique = true)
-    @Size(min = 5, max = 15)
+    @Size(min = 5, max = 15, message = "Nickname must be between 5 and 15 characters")
     protected String nickname;
 
     @NotNull
-	@ManyToOne(optional = false)
+	@ManyToOne(optional = false, cascade = CascadeType.ALL)
 	@JoinColumn(name = "authority")
 	protected Authorities authority;
 

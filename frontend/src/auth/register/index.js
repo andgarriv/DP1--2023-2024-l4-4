@@ -1,169 +1,51 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import FormGenerator from "../../components/formGenerator/formGenerator";
-import tokenService from "../../services/token.service";
 import "../../static/css/auth/authButton.css";
 import "../../static/css/auth/authPage.css";
-import { registerFormClinicOwnerInputs } from "./form/registerFormClinicOwnerInputs";
-import { registerFormOwnerInputs } from "./form/registerFormOwnerInputs";
 import { registerFormPlayerInputs } from "./form/registerFormPlayerInputs";
 
 export default function Register() {
-  let [type, setType] = useState(null);
-  let [authority, setAuthority] = useState(null);
-  let [clinics, setClinics] = useState([]);
-
   const registerFormRef = useRef();
 
-  function handleButtonClick(event) {
-    const target = event.target;
-    let value = target.value;
-    if (value === "Back") value = null;
-    else setAuthority(value);
-    setType(value);
-  }
-
   function handleSubmit({ values }) {
+    if (!registerFormRef.current.validate()) return;
+    const playerData = values;
+    console.log("Player data:", playerData);
+    playerData["authority"] = { type: "PLAYER"};
 
-    if(!registerFormRef.current.validate()) return;
-
-    const request = values;
-    request.clinic = clinics.filter((clinic) => clinic.name === request.clinic)[0];
-    request["authority"] = authority;
-    let state = "";
-
-    fetch("/api/v1/auth/signup", {
-      headers: { "Content-Type": "application/json" },
+    fetch("/api/v1/player", { 
       method: "POST",
-      body: JSON.stringify(request),
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(playerData),
     })
-      .then(function (response) {
-        if (response.status === 200) {
-          const loginRequest = {
-            username: request.username,
-            password: request.password,
-          };
-
-          fetch("/api/v1/auth/signin", {
-            headers: { "Content-Type": "application/json" },
-            method: "POST",
-            body: JSON.stringify(loginRequest),
-          })
-            .then(function (response) {
-              if (response.status === 200) {
-                state = "200";
-                return response.json();
-              } else {
-                state = "";
-                return response.json();
-              }
-            })
-            .then(function (data) {
-              if (state !== "200") alert(data.message);
-              else {
-                tokenService.setUser(data);
-                tokenService.updateLocalAccessToken(data.token);
-                window.location.href = "/"; //Cuando te registras vas a la pagina home. 
-              }
-            })
-            .catch((message) => {
-              alert(message);
-            });
-        }
-      })
-      .catch((message) => {
-        alert(message);
-      });
+    .then(response => {
+      if (!response.ok) throw new Error(response.status);
+      return response.json();
+    })
+    .then(data => {
+      console.log("Player created:", data);
+      window.location.href = "/login";
+    })
+    .catch(error => {
+      console.error("Error creating player:", error);
+    });
   }
-
-  useEffect(() => {
-    if (type === "Owner") {
-      if (registerFormOwnerInputs[5].values.length === 1){
-        fetch("/api/v1/clinics")
-        .then(function (response) {
-          if (response.status === 200) {
-            return response.json();
-          } else {
-            return response.json();
-          }
-        })
-        .then(function (data) {
-          setClinics(data);
-          if (data.length !== 0) {
-            let clinicNames = data.map((clinic) => {
-              return clinic.name;
-            });
-
-            registerFormOwnerInputs[5].values = ["None", ...clinicNames];
-          }
-        })
-        .catch((message) => {
-          alert(message);
-        });
-      }
-    }else if (type === "Player") {
-      fetch("/api/v1/player")
-      .then(function (response) {
-        if (response.status === 200) {
-          return response.json();
-        } else {
-          return response.json();
-        }
-      })
-      .catch((message) => {
-        alert(message);
-      });
-    }
-
-  }, [type]);
-
-  if (type) {
     return (
       <div className="auth-page-container">
+        <div className="hero-div">
         <h2>Register</h2>
         <div style={{marginTop: "10px"}}>
           <FormGenerator
             ref={registerFormRef}
-            inputs={
-              type === "Owner" ? registerFormOwnerInputs 
-              : type === "Player" ? registerFormPlayerInputs
-              : registerFormClinicOwnerInputs
-            }
+            inputs={registerFormPlayerInputs}
             onSubmit={handleSubmit}
             numberOfColumns={1}
             listenEnterKey
             buttonText="Save"
             buttonClassName="auth-button"
-            onClickButton={handleSubmit}
           />
         </div>
-      </div>
-    );
-  } else {
-    return (
-      <div className="auth-page-container">
-        <div className="auth-form-container">
-          <h1 style={{color:"white"}}>Register</h1>
-          <h2 style={{color:"white"}} className="text-center text-md">
-            What type of user will you be?
-          </h2>
-          <div className="options-row">
-            <button
-              className="auth-button"
-              value="Owner"
-              onClick={handleButtonClick}
-            >
-              Owner
-            </button>
-            <button
-              className="auth-button"
-              value="Player"
-              onClick={handleButtonClick}
-            >
-              Player
-            </button>
-          </div>
         </div>
       </div>
     );
-  }
 }

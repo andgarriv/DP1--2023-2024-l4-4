@@ -27,6 +27,10 @@ public class GameController {
         gameService.save(game);
         return game;
     }
+    @GetMapping("/player")
+    public List<Game> getGamesByPlayerId() {
+        return gameService.getAllGames();
+    }
 
     @GetMapping("/player/{playerId}")
     public List<Game> getGamesByPlayerId(@PathVariable Integer playerId) {

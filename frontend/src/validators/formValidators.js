@@ -1,39 +1,64 @@
+//const Player  = require ('../player/Player');
 export const formValidators = {
-    notEmptyValidator: {
+    notBlankValidator: {
         validate: (value) => {
             return value.trim().length > 0;
         },
         message: "The field cannot be empty"
     },
-    telephoneValidator: {
+    notNullValidator: {
         validate: (value) => {
-            return value.trim().length === 9 && /^\d+$/.test(value);
+            return value !== null;
         },
-        message: "The telephone number must be 9 digits long and contain only numbers"
+        message: "The field cannot be null"
     },
-    notNoneTypeValidator: {
+    validEmailValidator: {
         validate: (value) => {
-            return value !== "None";
+            const parts = value.split('@');
+            return parts.length === 2 && parts[1].includes('.');
         },
-        message: "Please, select a type"
-    },
-    validPhoneNumberValidator: {
-        validate: (value) => {
-            return value.trim().length === 9 && /^\d+$/.test(value);
-        },
-        message: "The phone number must be 9 digits long and contain only numbers"
+        message: "The email must contain @ and a domain"
     },
     validDateValidator: {
-        // Fecha anterior a la actual y mayor de 7 años
         validate: (value) => {
-            const date = new Date(value);
+            const inputDate = new Date(value);
             const today = new Date();
-            const minDate = new Date();
-            minDate.setFullYear(minDate.getFullYear() - 7);
-            return date < today && date > minDate;
+            const sevenYearsAgo = new Date();
+            sevenYearsAgo.setFullYear(sevenYearsAgo.getFullYear() - 7);
+            return inputDate <= today && inputDate <= sevenYearsAgo;
         },
-        message: "The date must be before today and greater than 7 years"
+        message: "The date must not be in the future and the user must be at least 7 years old"
     },
-
-
+    /* uniqueNicknameValidator: {
+        validate: async (nickname) => {
+            const player = await Player.findOne({ where: { nickname: nickname } });
+            return !player;
+        },
+        message: "The nickname must be unique"
+    },
+    uniqueEmailValidator: {
+        validate: async (email) => {
+            const player = await Player.findOne({ where: { email: email } });
+            return !player;
+        },
+        message: "The email must be unique"
+    }, */
+    validPasswordValidator: {
+        validate: (value) => {
+            const hasLowercase = /[a-z]/.test(value);
+            const hasUppercase = /[A-Z]/.test(value);
+            const hasNumber = /\d/.test(value);
+            const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(value);
+            const isLongEnough = value.length >= 5;
+    
+            return hasLowercase && hasUppercase && hasNumber && hasSpecialChar && isLongEnough;
+        },
+        message: "The password must be at least 5 characters long and include a lowercase and uppercase letter, a number, and a special character"
+    },
+    validNicknameValidator: {
+        validate: (value) => {
+            return value.trim().length >= 5 && value.trim().length <= 15;
+        },
+        message: "The nickname must be between 5 and 15 characters long"
+    }
 }

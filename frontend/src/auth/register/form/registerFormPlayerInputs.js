@@ -7,7 +7,7 @@ export const registerFormPlayerInputs = [
     type: "text",
     defaultValue: "",
     isRequired: true,
-    validators: [formValidators.notEmptyValidator],
+    validators: [formValidators.notBlankValidator],
   },
   {
     tag: "Surname",
@@ -15,7 +15,7 @@ export const registerFormPlayerInputs = [
     type: "text",
     defaultValue: "",
     isRequired: true,
-   validators: [formValidators.notEmptyValidator],
+   validators: [formValidators.notBlankValidator],
   },
   {
     tag: "Password",
@@ -23,7 +23,7 @@ export const registerFormPlayerInputs = [
     type: "password",
     defaultValue: "",
     isRequired: true,
-    validators: [formValidators.notEmptyValidator],
+    validators: [formValidators.notBlankValidator, formValidators.validPasswordValidator],
   },
   {
     tag: "Birth Date",
@@ -31,7 +31,7 @@ export const registerFormPlayerInputs = [
     type: "localdate",
     defaultValue: "",
     isRequired: true,
-    validators: [formValidators.validDateValidator]
+    validators: [formValidators.notNullValidator, formValidators.validDateValidator]
   },
   {
     tag: "Nickname",
@@ -39,7 +39,8 @@ export const registerFormPlayerInputs = [
     type: "text",
     defaultValue: "",
     isRequired: true,
-    validators: [formValidators.notEmptyValidator],
+    validators: [formValidators.notBlankValidator, 
+      formValidators.validNicknameValidator/*, formValidators.uniqueNicknameValidator*/],
   },
   {
     tag: "Email",
@@ -47,7 +48,7 @@ export const registerFormPlayerInputs = [
     type: "text",
     defaultValue: "",
     isRequired: true,
-    validators: [formValidators.notEmptyValidator],
+    validators: [formValidators.validEmailValidator/*, formValidators.uniqueEmailValidator*/],
   },
   {
     tag: "Avatar",
@@ -55,6 +56,6 @@ export const registerFormPlayerInputs = [
     type: "text",
     defaultValue: "https://cdn-icons-png.flaticon.com/512/5556/5556468.png",
     isRequired: false,
-    validators: [],
+    validators: [formValidators.notBlankValidator],
   },
 ];
