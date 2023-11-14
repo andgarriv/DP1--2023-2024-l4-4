@@ -6,6 +6,7 @@ import AppNavbar from "./AppNavbar";
 import AchievementEdit from "./achievement/achievementEdit";
 import AchievementList from "./achievement/achievementList";
 import AchievementPlayer from "./achievement/achievementListPlayer";
+import PlayerList from "./admin//player/PlayerList";
 import ClinicOwnerEditAdmin from "./admin/clinicOwners/ClinicOwnerEditAdmin";
 import ClinicOwnerListAdmin from "./admin/clinicOwners/ClinicOwnerListAdmin";
 import ClinicEditAdmin from "./admin/clinics/ClinicEditAdmin";
@@ -28,12 +29,12 @@ import VisitListAdmin from "./admin/visits/VisitListAdmin";
 import Login from "./auth/login";
 import Logout from "./auth/logout";
 import Register from "./auth/register";
-import Home from "./home";
-import PlayerGamesList from "./games/PlayerGamesList";
 import AdminGamesList from "./games/AdminGamesList";
+import PlayerGamesList from "./games/PlayerGamesList";
+import Home from "./home";
 import PlayerProfile from "./player/playerProfile";
 import PlayerProfileEdit from "./player/playerProfileEdit";
-import PlayerList from "./admin//player/PlayerList";
+import PlayerStats from "./player/playerStats";
 
 import PrivateRoute from "./privateRoute";
 import PlanList from "./public/plan";
@@ -105,6 +106,7 @@ function App() {
           <Route path="/profile" exact={true} element={<PrivateRoute><PlayerProfile /></PrivateRoute>} />
           <Route path="/profile/edit" exact={true} element={<PrivateRoute><PlayerProfileEdit /></PrivateRoute>} />
           <Route path="/achievements" exact={true} element={<PrivateRoute><AchievementPlayer /></PrivateRoute>} />
+          <Route path="/stats" exact={true} element={<PrivateRoute><PlayerStats /></PrivateRoute>} />
         </>)
     }
   })

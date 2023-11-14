@@ -1,6 +1,5 @@
 package us.l4_4.dp1.end_of_line.game;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -27,9 +26,5 @@ public class GameService {
     public List<Game> getAllGames(){
         return gameRepository.findAll();
     }
-
-    @Transactional(readOnly = true)
-    public List<Game> getGamesByPlayerId(int id){
-        return gameRepository.findByPlayerId(id);
-    }
+    
 }
