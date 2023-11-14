@@ -43,23 +43,28 @@ INSERT INTO game_players(id,energy,player_id,color) VALUES (6,3,6,'RED'); --play
 INSERT INTO game_players(id,energy,player_id,color) VALUES (7,3,5,'BLUE'); --player 5
 INSERT INTO game_players(id,energy,player_id,color) VALUES (8,3,6,'RED'); --player 6
 
+INSERT INTO game_players(id,energy,player_id,color) VALUES (9,3,3,'BLUE'); --player 5
+INSERT INTO game_players(id,energy,player_id,color) VALUES (10,3,6,'RED'); --player 6
 
 -- Games 
-INSERT INTO games(id,rounds,winner,ended,started) VALUES (1,16,3,'2021-09-02','2021-09-01');
-INSERT INTO games(id,rounds,winner,ended,started) VALUES (2,18,5,'2021-09-02','2021-09-01');
-INSERT INTO games(id,rounds,winner,ended,started) VALUES (3,24,null,null,'2021-01-01');
-
+INSERT INTO games(id, rounds, winner, ended, started) VALUES (1, 16, 3, '2021-09-01 11:13:24', '2021-09-01 10:35:10');
+INSERT INTO games(id, rounds, winner, ended, started) VALUES (2, 18, 5, '2021-09-01 14:30:00', '2021-09-01 11:00:00');
+INSERT INTO games(id, rounds, winner, ended, started) VALUES (3, 24, null, null, '2021-01-01 15:45:00');
+INSERT INTO games(id, rounds, winner, ended, started) VALUES (4, 3, 6, '2021-01-01 10:15:00', '2021-01-01 10:00:00');
 
 
 -- Games_Game_Players
 INSERT INTO games_game_players(game_id,game_players_id) VALUES (1,3);
 INSERT INTO games_game_players(game_id,game_players_id) VALUES (1,4);
---Player con id 3 y 4 juegan la partida 1 
+--Player con id 3 y 4 juegan la partida 2
 INSERT INTO games_game_players(game_id,game_players_id) VALUES (2,5);
 INSERT INTO games_game_players(game_id,game_players_id) VALUES (2,6);
---Player con id 5 y 6 juegan la partida 1 
+--Player con id 5 y 6 juegan la partida 3
 INSERT INTO games_game_players(game_id,game_players_id) VALUES (3,7);
 INSERT INTO games_game_players(game_id,game_players_id) VALUES (3,8);
+--Player con id 3 y 6 juegan la partida 4
+INSERT INTO games_game_players(game_id,game_players_id) VALUES (4,9);
+INSERT INTO games_game_players(game_id,game_players_id) VALUES (4,10);
 
 
 

@@ -5,9 +5,11 @@ export default function PlayerStats() {
   const [stats, setStats] = useState({
     gamesPlayed: 0,
     gamesWon: 0,
-    winStreak: 0,
+    currentWinStreak: 0,
+    maxWinStreak: 0,
     totalTimePlayed: "",
-    winRatio: 0.0,
+    averageGameDuration: "",
+    winRatio: 0,
   });
   const [loading, setLoading] = useState(true);
 
@@ -32,15 +34,16 @@ export default function PlayerStats() {
           (game) => game.winner && game.winner.id === user.id
         ).length;
         const gamesPlayed = userGames.length;
-        const winRatio =
-          gamesPlayed > 0 ? (gamesWon / gamesPlayed).toFixed(2) : 0;
+        const winRatio = gamesPlayed > 0 ? (gamesWon / gamesPlayed) * 100 : 0;
 
-        let winStreak = 0;
-        for (let i = userGames.length - 1; i >= 0; i--) {
+        let currentWinStreak = 0;
+        let maxWinStreak = 0;
+        for (let i = 0; i < userGames.length; i++) {
           if (userGames[i].winner && userGames[i].winner.id === user.id) {
-            winStreak++;
+            currentWinStreak++;
+            maxWinStreak = Math.max(maxWinStreak, currentWinStreak);
           } else {
-            break;
+            currentWinStreak = 0;
           }
         }
 
@@ -53,13 +56,21 @@ export default function PlayerStats() {
           }
         });
 
+        const averageGameDurationMillis =
+          gamesPlayed > 0 ? totalTimePlayedMillis / gamesPlayed : 0;
+
         let totalTimePlayed = convertMillisToTime(totalTimePlayedMillis);
+        let averageGameDuration = convertMillisToTime(
+          averageGameDurationMillis
+        );
 
         setStats({
           gamesPlayed,
           gamesWon,
-          winStreak,
+          currentWinStreak,
+          maxWinStreak,
           totalTimePlayed,
+          averageGameDuration,
           winRatio,
         });
 
@@ -103,12 +114,15 @@ export default function PlayerStats() {
     <div className="home-page-container">
       <div className="hero-div">
         <h1 className="text-center">Stats</h1>
+
         <div>
           <p>Games played: {stats.gamesPlayed}</p>
           <p>Wins: {stats.gamesWon}</p>
-          <p>Winning streak: {stats.winStreak}</p>
+          <p>Winning ratio: {stats.winRatio}%</p>
+          <p>Winning streak: {stats.currentWinStreak}</p>
+          <p>Maximum winning streak: {stats.maxWinStreak}</p>
+          <p>Average duration: {stats.averageGameDuration}</p>
           <p>Time played: {stats.totalTimePlayed}</p>
-          <p>Winning ratio: {stats.winRatio}</p>
         </div>
       </div>
     </div>
