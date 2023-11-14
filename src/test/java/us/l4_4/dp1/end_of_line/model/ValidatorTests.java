@@ -2,7 +2,6 @@ package us.l4_4.dp1.end_of_line.model;
 
 import static org.assertj.core.api.Assertions.*;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Locale;
 import java.util.Set;
@@ -29,7 +28,6 @@ class ValidatorTests {
 		return localValidatorFactoryBean;
 	}
 
-	
   @Test
 	void shouldNotValidateWhenFirstNameEmpty() {
 
@@ -43,17 +41,17 @@ class ValidatorTests {
 		player.setPassword("123456789");
 		player.setEmail("angelgares@gmail.com");
 		player.setBirthDate(birthdate);
-		player.setNickname("Angelgares");
+		player.setNickname("Angelgares122003");
 		player.setAvatar("https://i.imgur.com/1.jpg");
 		player.setAuthority(authorities);
 
 		Validator validator = createValidator();
 		Set<ConstraintViolation<Player>> constraintViolations = validator.validate(player);
 
-		assertThat(constraintViolations.size()).isEqualTo(1);
+		assertThat(constraintViolations.size()).isEqualTo(2);
 		ConstraintViolation<Player> violation = constraintViolations.iterator().next();
-		assertThat(violation.getPropertyPath().toString()).isEqualTo("name");
-		assertThat(violation.getMessage()).isEqualTo("must not be blank");
+		assertThat(violation.getPropertyPath().toString()).isEqualTo("nickname");
+		assertThat(violation.getMessage()).isEqualTo("Nickname must be between 5 and 15 characters");
 	}
 
 }
