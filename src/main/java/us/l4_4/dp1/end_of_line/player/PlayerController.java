@@ -1,5 +1,7 @@
 package us.l4_4.dp1.end_of_line.player;
 
+import java.io.Console;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.method.P;
@@ -18,6 +20,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import us.l4_4.dp1.end_of_line.auth.AuthService;
+import us.l4_4.dp1.end_of_line.authorities.AuthoritiesService;
 
 
 @RestController
@@ -29,12 +32,14 @@ public class PlayerController {
     private PlayerService playerService;
     private AuthService authService;
     public final PasswordEncoder encoder;
+    private AuthoritiesService authoritiesService;
 
     @Autowired
-    public PlayerController(PlayerService playerService, AuthService authService, PasswordEncoder encoder) {
+    public PlayerController(PlayerService playerService, AuthService authService, PasswordEncoder encoder, AuthoritiesService authoritiesService) {
         this.playerService = playerService;
         this.authService = authService;
         this.encoder = encoder;
+        this.authoritiesService = authoritiesService;
     }
 
 
@@ -43,18 +48,9 @@ public class PlayerController {
     public Player create(@RequestBody @Valid Player player){
         String password2 = authService.encodePassword(player.getPassword());
         player.setPassword(password2);
-        Player newPlayer = new Player();
-        newPlayer.setName(player.getName());
-        newPlayer.setSurname(player.getSurname());
-        newPlayer.setPassword(password2);
-        newPlayer.setEmail(player.getEmail());
-        newPlayer.setBirthDate(player.getBirthDate());
-        newPlayer.setNickname(player.getNickname());
-        newPlayer.setAvatar(player.getAvatar());
-        // authService.createUser2(player);
-        // return player;
+        player.setAuthority(authoritiesService.findByAuthority("PLAYER"));
         playerService.createPlayer(player);   
-        return newPlayer;
+        return player;
     }
 
     @GetMapping("/{id}")
