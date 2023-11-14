@@ -13,28 +13,28 @@ export default function Register() {
     console.log("Player data:", playerData);
     playerData["authority"] = { id: 2, authority: "PLAYER" };
 
-    fetch("/api/v1/player", { 
+    fetch("/api/v1/player", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(playerData),
     })
-    .then(response => {
-      if (!response.ok) throw new Error(response.status);
-      return response.json();
-    })
-    .then(data => {
-      console.log("Player created:", data);
-      window.location.href = "/login";
-    })
-    .catch(error => {
-      console.error("Error creating player:", error);
-    });
+      .then(response => {
+        if (!response.ok) throw new Error(response.status);
+        return response.json();
+      })
+      .then(data => {
+        console.log("Player created:", data);
+        window.location.href = "/login";
+      })
+      .catch(error => {
+        console.error("Error creating player:", error);
+      });
   }
-    return (
-      <div className="auth-page-container">
-        <div className="hero-div">
+  return (
+    <div className="auth-page-container">
+      <div className="hero-div">
         <h2>Register</h2>
-        <div style={{marginTop: "10px"}}>
+        <div style={{ marginTop: "10px" }}>
           <FormGenerator
             ref={registerFormRef}
             inputs={registerFormPlayerInputs}
@@ -45,7 +45,7 @@ export default function Register() {
             buttonClassName="auth-button"
           />
         </div>
-        </div>
       </div>
-    );
+    </div>
+  );
 }

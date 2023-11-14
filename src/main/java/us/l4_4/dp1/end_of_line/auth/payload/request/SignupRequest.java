@@ -19,6 +19,10 @@ public class SignupRequest {
 
 	@NotBlank
 	private String surname;
+
+	@NotBlank
+	@Size(min = 5, max = 15)
+	private String nickname;
 	
 	@NotBlank
 	@Size(min=5, max = 40)
@@ -29,10 +33,6 @@ public class SignupRequest {
 	
 	@NotBlank
 	private LocalDate birthdate;
-
-	@NotBlank
-	@Size(min = 5, max = 15)
-	private String nickname;
 
 	@NotBlank
 	@URL
