@@ -37,8 +37,8 @@ class ValidatorTests {
 		LocalDate birthdate = LocalDate.of(1999, 12, 12);
 		authorities.setAuthority("PLAYER");
 		player.setName("");
-		player.setSurname("Garcia");
-		player.setPassword("123456789");
+		player.setSurname("Garcia Escudero");
+		player.setPassword("Adm1n*");
 		player.setEmail("angelgares@gmail.com");
 		player.setBirthDate(birthdate);
 		player.setNickname("Angelgares122003");
@@ -49,9 +49,9 @@ class ValidatorTests {
 		Set<ConstraintViolation<Player>> constraintViolations = validator.validate(player);
 
 		assertThat(constraintViolations.size()).isEqualTo(2);
-		ConstraintViolation<Player> violation = constraintViolations.iterator().next();
-		assertThat(violation.getPropertyPath().toString()).isEqualTo("nickname");
-		assertThat(violation.getMessage()).isEqualTo("Nickname must be between 5 and 15 characters");
+		ConstraintViolation<Player> violation2 = constraintViolations.iterator().next();
+		assertThat(violation2.getPropertyPath().toString()).isEqualTo("nickname");
+		assertThat(violation2.getMessage()).isEqualTo("Nickname must be between 5 and 15 characters");
 	}
 
 }

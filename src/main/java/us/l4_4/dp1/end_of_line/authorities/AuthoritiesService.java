@@ -15,23 +15,24 @@
  */
 package us.l4_4.dp1.end_of_line.authorities;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import us.l4_4.dp1.end_of_line.exceptions.ResourceNotFoundException;
+import us.l4_4.dp1.end_of_line.player.Player;
 
 @Service
 public class AuthoritiesService {
 
 	private AuthoritiesRepository authoritiesRepository;
-//	private UserService userService;
 
 	@Autowired
 	public AuthoritiesService(AuthoritiesRepository authoritiesRepository) {
 		this.authoritiesRepository = authoritiesRepository;
-//		this.userService = userService;
 	}
 
 	@Transactional(readOnly = true)
@@ -43,6 +44,11 @@ public class AuthoritiesService {
 	public Authorities findByAuthority(String authority) {
 		return this.authoritiesRepository.findByName(authority)
 				.orElseThrow(() -> new ResourceNotFoundException("Authority", "Name", authority));
+	}
+
+	@Transactional(readOnly = true)
+	public List<Player> findAllByAuthority(String authority) {
+		return this.authoritiesRepository.findAllByAuthority(authority);
 	}
 
 	@Transactional
