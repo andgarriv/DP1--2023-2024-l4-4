@@ -1,14 +1,39 @@
 import React from "react";
-import { Table } from "reactstrap";
 import tokenService from "../services/token.service";
-import useFetchState from "../util/useFetchState";
-
-const imgnotfound = "https://cdn-icons-png.flaticon.com/512/5778/5778223.png";
+import { useState,useEffect } from "react";
 const jwt = tokenService.getLocalAccessToken();
 
 export default function AdminGamesList() {
-    const [games, setGames] = useFetchState([], `/api/v1/games/admin`, jwt);
-    console.log(games);
+    const [games, setGames] = useState([]);
+    const [loading, setLoading] = useState(true); 
+
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                setTimeout(async () => {
+                    const playerResponse = await fetch(`/api/v1/games/admin`, {
+                        headers: { Authorization: `Bearer ${jwt}` },
+                    });
+                    if (!playerResponse.ok) {
+                        throw new Error(`HTTP error! status: ${playerResponse.status}`);
+                    }
+                    const playerData = await playerResponse.json();
+                    setGames(playerData);
+                    setLoading(false); 
+                }, 1000);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                setLoading(false); 
+            }
+        }
+
+        fetchData();
+    }, [jwt]);
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
 
     const gameList = games.map((game) => (
 
@@ -41,33 +66,6 @@ export default function AdminGamesList() {
 
 
         </tr>
-
-    ));
-    const headerList = (() => (
-        
-        <tr>
-            <td className="text-center" colSpan="2">
-                <div style={{ color: "magenta", marginRight: "35px", marginLeft: "0px", marginBottom: "15px" }}>
-                    {"Game"}
-                    <br />
-                </div>
-            </td>
-
-            <td className="text-center" colSpan="2">
-                <div style={{ color: "magenta", marginRight: "70px", marginLeft: "1px", marginBottom: "15px" }}>
-                    {"Winner"}
-                    <br />
-                </div>
-            </td>
-
-            <td className="text-center" colSpan="2">
-                <div style={{ color: "magenta", marginRight: "25px", marginBottom: "15px" }}>
-                    {"Players"}
-                    <br />
-                </div>
-            </td>
-        </tr>
-
 
     ));
     return (

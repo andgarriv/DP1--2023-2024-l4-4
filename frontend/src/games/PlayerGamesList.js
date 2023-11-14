@@ -1,20 +1,53 @@
-import React from "react";
-import { Table } from "reactstrap";
-import tokenService from "../services/token.service";
-import useFetchState from "../util/useFetchState";
+import React, { useState, useEffect } from 'react';
+import tokenService from '../services/token.service';
 
-const imgnotfound = "https://cdn-icons-png.flaticon.com/512/5778/5778223.png";
+
 const jwt = tokenService.getLocalAccessToken();
 const user = tokenService.getUser();
 
 export default function AdminGamesList() {
-    const [games, setGames] = useFetchState([], `/api/v1/games/player/${user.id}`, jwt);
-    console.log(games);
-    console.log(user.id);
+    const [playerGames, setPlayerGames] = useState([]);
+    const [loading, setLoading] = useState(true); 
 
-    const gameList = games.map((game) => (
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                setTimeout(async () => {
+                    const playerResponse = await fetch(`/api/v1/games/player`, {
+                        headers: { Authorization: `Bearer ${jwt}` },
+                    });
+                    if (!playerResponse.ok) {
+                        throw new Error(`HTTP error! status: ${playerResponse.status}`);
+                    }
+                    const playerData = await playerResponse.json();
+                    setPlayerGames(playerData);
+                    let res = []
+                    for(var i = 0; i < playerData.length; i++){
+                        if(playerData[i].gamePlayers[0].player.id === user.id || playerData[i].gamePlayers[1].player.id === user.id){
+                                res.push(playerData[i]);
+
+                        }
+                    }
+                    setPlayerGames(res);
+                    setLoading(false); 
+                }, 1000);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                setLoading(false); 
+            }
+        }
+
+        fetchData();
+    }, [jwt, user.id]);
+
+    console.log(playerGames);
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
 
 
+    const gameList = playerGames.map((game) => (
         <tr key={game.id}>
             <td className="text-center" colSpan="2">
                 <div style={{ marginRight: "50px", marginBottom: "15px" }}>
@@ -45,6 +78,9 @@ export default function AdminGamesList() {
         </tr>
 
     ));
+
+    
+
     return (
         <div className="home-page-container">
             <div className="hero-div">
@@ -74,7 +110,7 @@ export default function AdminGamesList() {
 
 
 
-                {games.length > 0 ? <tbody>{gameList}</tbody>:"There are no games to show"}
+                {playerGames.length > 0 ? <tbody>{gameList}</tbody>:"There are no games to show"}
                 
             </div>
         </div>
