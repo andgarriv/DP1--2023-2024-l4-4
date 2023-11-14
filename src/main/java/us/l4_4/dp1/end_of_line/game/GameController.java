@@ -31,16 +31,9 @@ public class GameController {
         return gameService.getAllGames();
     }
 
-    @GetMapping("/player/{id}")
-    public List<Game> getGamesByPlayerId(int id) {
-        return gameService.getGamesByPlayerId(id);
-    }
-
     @GetMapping("/admin")
     public List<Game> getGames() {
         return gameService.getAllGames();
     }
-
-
     
 }
