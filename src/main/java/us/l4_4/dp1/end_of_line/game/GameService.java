@@ -26,9 +26,5 @@ public class GameService {
     public List<Game> getAllGames(){
         return gameRepository.findAll();
     }
-
-    @Transactional(readOnly = true)
-    public List<Game> findGamesByPlayerId(Integer playerId) {
-        return gameRepository.findByPlayerId(playerId);
-    }
+    
 }

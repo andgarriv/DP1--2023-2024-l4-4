@@ -2,7 +2,6 @@ package us.l4_4.dp1.end_of_line.game;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -51,7 +50,7 @@ public class Game extends BaseEntity {
     private Effect effect;
 
     @NotNull
-    @OneToMany 
+    @OneToMany
     private List<GamePlayer> gamePlayers;
 
     @NotNull
