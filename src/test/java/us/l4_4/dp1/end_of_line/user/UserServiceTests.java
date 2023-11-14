@@ -2,6 +2,9 @@ package us.l4_4.dp1.end_of_line.user;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.List;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -11,7 +14,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 //import org.springframework.samples.petclinic.vet.VetService;
 import org.springframework.security.test.context.support.WithMockUser;
 
+import us.l4_4.dp1.end_of_line.authorities.Authorities;
 import us.l4_4.dp1.end_of_line.authorities.AuthoritiesService;
+import us.l4_4.dp1.end_of_line.model.User;
 import us.l4_4.dp1.end_of_line.player.Player;
 import us.l4_4.dp1.end_of_line.player.PlayerService;
 
@@ -23,15 +28,45 @@ class UserServiceTests {
 	@Autowired
 	private PlayerService playerService;
 
-
 	@Autowired
 	private AuthoritiesService authService;
+
+	private User admin;
+	private User player;
+
+	@BeforeEach
+	void setup() {
+		Authorities adminAuth = new Authorities();
+		adminAuth.setId(1);
+		adminAuth.setAuthority("ADMIN");
+
+		Authorities playerAuth = new Authorities();
+		playerAuth.setId(2);
+		playerAuth.setAuthority("PLAYER");
+
+		admin = new User();
+		admin.setNickname("admin1");
+		admin.setPassword("4dm1n");
+		admin.setAuthority(adminAuth);
+		player = new User();
+		player.setNickname("Angelgares");
+		player.setPassword("4dm1n");
+		player.setAuthority(playerAuth);
+		
+	}
 
 	@Test
 	@WithMockUser(username = "Angelgares", password = "4dm1n")
 	void shouldFindCurrentPlayer() {
 		Player player = this.playerService.findCurrentPlayer();
 		assertEquals("Angelgares", player.getNickname());
+	}
+
+	@Test
+	@WithMockUser(username = "admin1", password = "4dm1n")
+	void shouldListAllPlayers() {
+		List<Player> players = this.playerService.findAllPlayers();
+		assertEquals(List.of(admin, player), players);
 	}
 /* 
 	@Test
