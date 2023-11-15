@@ -28,7 +28,7 @@ export const registerFormPlayerInputs = [
   {
     tag: "Birth Date",
     name: "birthDate",
-    type: "localdate",
+    type: "date",
     defaultValue: "",
     isRequired: true,
     validators: [formValidators.notNullValidator, formValidators.validDateValidator]

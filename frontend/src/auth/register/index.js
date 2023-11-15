@@ -11,7 +11,7 @@ export default function Register() {
     if (!registerFormRef.current.validate()) return;
     const playerData = values;
     console.log("Player data:", playerData);
-    playerData["authority"] = { type: "PLAYER"};
+    playerData["authority"] = { id: 2, authority: "PLAYER" };
 
     fetch("/api/v1/player", { 
       method: "POST",

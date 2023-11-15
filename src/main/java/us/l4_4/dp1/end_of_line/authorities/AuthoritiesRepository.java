@@ -16,4 +16,6 @@ public interface AuthoritiesRepository extends  CrudRepository<Authorities, Stri
 	@Query("SELECT p FROM Player p WHERE p.authority.authority = :authority")
 	List<Player> findAllByAuthority(String authority);
 	
+	@Query("SELECT DISTINCT auth FROM Authorities auth WHERE auth.id = :id")
+	Optional<Authorities> findById(Integer id);
 }
