@@ -37,21 +37,21 @@ class ValidatorTests {
 		LocalDate birthdate = LocalDate.of(1999, 12, 12);
 		authorities.setAuthority("PLAYER");
 		player.setName("");
-		player.setSurname("Garcia");
-		player.setPassword("123456789");
+		player.setSurname("Garcia Escudero");
+		player.setPassword("Adm1n*");
 		player.setEmail("angelgares@gmail.com");
 		player.setBirthDate(birthdate);
-		player.setNickname("Angelgares122003");
+		player.setNickname("Angelgares");
 		player.setAvatar("https://i.imgur.com/1.jpg");
 		player.setAuthority(authorities);
 
 		Validator validator = createValidator();
 		Set<ConstraintViolation<Player>> constraintViolations = validator.validate(player);
 
-		assertThat(constraintViolations.size()).isEqualTo(2);
+		assertThat(constraintViolations.size()).isEqualTo(1);
 		ConstraintViolation<Player> violation = constraintViolations.iterator().next();
-		assertThat(violation.getPropertyPath().toString()).isEqualTo("nickname");
-		assertThat(violation.getMessage()).isEqualTo("Nickname must be between 5 and 15 characters");
+		assertThat(violation.getPropertyPath().toString()).isEqualTo("name");
+		assertThat(violation.getMessage()).isEqualTo("must not be blank");
 	}
 
 }
