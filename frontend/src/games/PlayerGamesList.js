@@ -30,7 +30,7 @@ export default function AdminGamesList() {
                     }
                     setPlayerGames(res);
                     setLoading(false); 
-                }, 1000);
+                }, 250);
             } catch (error) {
                 console.error('Error fetching data:', error);
                 setLoading(false); 
@@ -43,8 +43,18 @@ export default function AdminGamesList() {
     console.log(playerGames);
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <div className="loading">Loading...</div>;
     }
+
+    const GameListContainer = ({ children }) => (
+        <div style={{
+            maxHeight: '470px', 
+            overflowY: 'auto',
+            width: '40%',
+        }}>
+            {children}
+        </div>
+    );
 
 
     const gameList = playerGames.map((game) => (
@@ -53,12 +63,16 @@ export default function AdminGamesList() {
                 <div style={{ marginRight: "50px", marginBottom: "15px" }}>
                     {game.id}
                     <br />
+                    <br />
+                    <br />
                 </div>
             </td>
 
             <td className="text-center" colSpan="2">
                 <div style={{ marginRight: "40px", marginBottom: "15px" }}>
                     {game.winner ? game.winner.nickname : "----"}
+                    <br />
+                    <br />
                     <br />
                 </div>
             </td>
@@ -71,11 +85,14 @@ export default function AdminGamesList() {
                 <div style={{ marginRight: "0px", marginBottom: "15px" }}>
                     {game.gamePlayers[1].player.nickname}
                     <br />
+                    <br />
+                    <br />
                 </div>
             </td>
 
 
         </tr>
+        
 
     ));
 
@@ -83,6 +100,7 @@ export default function AdminGamesList() {
 
     return (
         <div className="home-page-container">
+            <GameListContainer>
             <div className="hero-div">
                 <h1 className="text-center">Games</h1>
                 <tr>
@@ -94,7 +112,7 @@ export default function AdminGamesList() {
                     </td>
 
                     <td className="text-center" colSpan="2">
-                        <div style={{ color: "magenta", marginRight: "70px", marginLeft: "1px", marginBottom: "15px" }}>
+                        <div style={{ color: "magenta", marginRight: "55px", marginLeft: "1px", marginBottom: "15px" }}>
                             {"Winner"}
                             <br />
                         </div>
@@ -113,6 +131,7 @@ export default function AdminGamesList() {
                 {playerGames.length > 0 ? <tbody>{gameList}</tbody>:"There are no games to show"}
                 
             </div>
+            </GameListContainer>
         </div>
     );
 }

@@ -2,9 +2,10 @@ package us.l4_4.dp1.end_of_line.user;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -14,9 +15,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 //import org.springframework.samples.petclinic.vet.VetService;
 import org.springframework.security.test.context.support.WithMockUser;
 
-import us.l4_4.dp1.end_of_line.authorities.Authorities;
+import jakarta.transaction.Transactional;
 import us.l4_4.dp1.end_of_line.authorities.AuthoritiesService;
-import us.l4_4.dp1.end_of_line.model.User;
+import us.l4_4.dp1.end_of_line.exceptions.ResourceNotFoundException;
 import us.l4_4.dp1.end_of_line.player.Player;
 import us.l4_4.dp1.end_of_line.player.PlayerService;
 
@@ -29,7 +30,7 @@ class UserServiceTests {
 	private PlayerService playerService;
 
 	@Autowired
-	private AuthoritiesService authService;
+	private AuthoritiesService authoritiesService;
 
 	private User admin;
 	private User player;
@@ -56,222 +57,156 @@ class UserServiceTests {
 	}
 
 	@Test
-	@WithMockUser(username = "Angelgares", password = "4dm1n")
+	@WithMockUser(username = "admin1", password = "Adm1n!")
+	void shouldFindCurrentAdmin() {
+		Player player = this.playerService.findCurrentPlayer();
+		assertEquals("admin1", player.getNickname());
+	}
+  
+	@Test
+	@WithMockUser(username = "Angelgares", password = "Own3r!")
 	void shouldFindCurrentPlayer() {
 		Player player = this.playerService.findCurrentPlayer();
 		assertEquals("Angelgares", player.getNickname());
 	}
 
 	@Test
-	@WithMockUser(username = "admin1", password = "4dm1n")
-	void shouldListAllPlayers() {
-		List<Player> players = this.playerService.findAllPlayers();
-		assertEquals(List.of(admin, player), players);
-	}
-/* 
-	@Test
-	@WithMockUser(username = "admin1", password = "4dm1n")
-	void shouldFindCurrentAdmin() {
-		Admin admin = this.adminService.findCurrentAdmin();
-		assertEquals("admin1", admin.getNickname());
-	}*/
-
-/*@Test
 	@WithMockUser(username = "prueba")
-	void shouldNotFindCorrectCurrentUser() {
-		assertThrows(ResourceNotFoundException.class, () -> this.userService.findCurrentUser());
+	void shouldNotFindCorrectCurrentPlayer() {
+		assertThrows(ResourceNotFoundException.class, () -> this.playerService.findCurrentPlayer());
 	}
 
 	@Test
 	void shouldNotFindAuthenticated() {
-		assertThrows(ResourceNotFoundException.class, () -> this.userService.findCurrentUser());
+		assertThrows(ResourceNotFoundException.class, () -> this.playerService.findCurrentPlayer());
 	}
 
 	@Test
-	void shouldFindAllUsers() {
-		List<User> users = (List<User>) this.userService.findAll();
-		assertEquals(19, users.size());
+	void shouldFindAllPlayers() {
+		List<Player> players = (List<Player>) this.playerService.findAllPlayers();
+		assertEquals(6, players.size());
 	}
-
+ 
 	@Test
-	void shouldFindUsersByUsername() {
-		User user = this.userService.findUser("owner1");
-		assertEquals("owner1", user.getUsername());
+	void shouldFindPlayersByUsername() {
+		Player player = this.playerService.findByNickname("Angelgares");
+		assertEquals("Angelgares", player.getNickname());
 	}
 
 	@Test
 	void shouldFindUsersByAuthority() {
-		List<User> owners = (List<User>) this.userService.findAllByAuthority("OWNER");
-		assertEquals(10, owners.size());
+		List<Player> players = this.authoritiesService.findAllByAuthority("PLAYER");
+		assertEquals(6, players.size());
 
-		List<User> admins = (List<User>) this.userService.findAllByAuthority("ADMIN");
-		assertEquals(1, admins.size());
-
-		List<User> vets = (List<User>) this.userService.findAllByAuthority("VET");
-		assertEquals(6, vets.size());
+		List<Player> admins = this.authoritiesService.findAllByAuthority("PLAYER");
+		assertEquals(6, admins.size());
+	}
+ 
+	@Test
+	void shouldNotFindPlayerByIncorrectUsername() {
+		assertThrows(ResourceNotFoundException.class, () -> this.playerService.findByNickname("usernotexists"));
+	}
+ 
+	@Test
+	void shouldFindSinglePlayerByUsername() {
+		Player player = this.playerService.findByNickname("Angelgares");
+		assertEquals("Angelgares", player.getNickname());
 	}
 
 	@Test
-	void shouldNotFindUserByIncorrectUsername() {
-		assertThrows(ResourceNotFoundException.class, () -> this.userService.findUser("usernotexists"));
+	void shouldNotFindSinglePlayerWithBadUsername() {
+		assertThrows(ResourceNotFoundException.class, () -> this.playerService.findByNickname("badusername"));
 	}
-
-	/*@Test
-	void shouldFindSingleOwnerByUsername() {
-		Owner owner = this.userService.findOwnerByUser("owner1");
-		assertEquals("owner1", owner.getUser().getUsername());
-	}*/
-
-	/*@Test
-	void shouldNotFindSingleOwnerWithBadUsername() {
-		assertThrows(ResourceNotFoundException.class, () -> this.userService.findOwnerByUser("badusername"));
-	}*/
-
-	/*@Test
-	void shouldFindSingleOwnerByUserId() {
-		Owner owner = this.userService.findOwnerByUser(4);
-		assertEquals("owner1", owner.getUser().getUsername());
-	}*/
-
-	/*@Test
+ 
+	@Test
+	void shouldFindPlayerById() {
+		Player player = this.playerService.findUserById(4);
+		assertEquals("Jorge_ADD", player.getNickname());
+	}
+ 
+	@Test
 	void shouldNotFindSingleUserOwnerWithBadUserId() {
-		assertThrows(ResourceNotFoundException.class, () -> this.userService.findOwnerByUser(100));
+		assertThrows(ResourceNotFoundException.class, () -> this.playerService.findUserById(100));
 	}
 
 	@Test
-	void shouldFindSingleUser() {
-		User user = this.userService.findUser(4);
-		assertEquals("owner1", user.getUsername());
+	void shouldExistUserByNickname() {
+		assertEquals(true, this.playerService.existsByNickname("Angelgares"));
 	}
 
 	@Test
-	void shouldNotFindSingleUserWithBadID() {
-		assertThrows(ResourceNotFoundException.class, () -> this.userService.findUser(100));
+	void shouldNotExistUserByNickname() {
+		assertEquals(false, this.playerService.existsByNickname("UserNotExists"));
 	}
 
 	@Test
-	void shouldExistUser() {
-		assertEquals(true, this.userService.existsUser("owner1"));
+	void shouldExistsUserByEmail() {
+		assertEquals(true, this.playerService.existsByEmail("angelgares6424@gmail.com"));
 	}
 
 	@Test
-	void shouldNotExistUser() {
-		assertEquals(false, this.userService.existsUser("owner10000"));
+	void shouldNotExistsUserByEmail() {
+		assertEquals(false, this.playerService.existsByEmail("notexists@gmail.com"));
 	}
-
+ 
 	@Test
 	@Transactional
 	void shouldUpdateUser() {
-		User user = this.userService.findUser(2);
-		user.setUsername("Change");
-		userService.updateUser(user, 2);
-		user = this.userService.findUser(2);
-		assertEquals("Change", user.getUsername());
+		Player player = this.playerService.findUserById(4);
+		player.setNickname("Change");
+		playerService.updatePlayer(4, player);
+		player = this.playerService.findUserById(4);
+		assertEquals("Change", player.getNickname());
 	}
-
-	@Test
+ 
+	/* @Test
 	@Transactional
 	void shouldInsertUser() {
-		int count = ((Collection<User>) this.userService.findAll()).size();
+		int count = ((Collection<Player>) this.playerService.findAllPlayers()).size();
+		LocalDate birthDate = LocalDate.of(1999, 01, 01);
+		String avatar = "https://cdn-icons-png.flaticon.com/512/147/147144.png";
 
-		User user = new User();
-		user.setUsername("Sam");
-		user.setPassword("password");
-		user.setAuthority(authService.findByAuthority("ADMIN"));
+		Player player = new Player();
+		player.setName("Sam");
+		player.setSurname("Winter");
+		player.setNickname("Samer");
+		player.setPassword("Sam3r!");
+		player.setEmail("sam@gmail.com");
+		player.setBirthDate(birthDate);
+		player.setAuthority(authoritiesService.findByAuthority("ADMIN"));
+		player.setAvatar(avatar);
+		this.playerService.savePlayer(player);
+		assertNotEquals(0, player.getId().longValue());
+		assertNotNull(player.getId());
 
-		this.userService.saveUser(user);
-		assertNotEquals(0, user.getId().longValue());
-		assertNotNull(user.getId());
-
-		int finalCount = ((Collection<User>) this.userService.findAll()).size();
+		int finalCount = ((Collection<Player>) this.playerService.findAllPlayers()).size();
 		assertEquals(count + 1, finalCount);
-	}
+	} */
 	
-
+ 
 	@Test
 	@Transactional
 	void shouldDeleteUserWithoutOwner() {
-		Integer firstCount = ((Collection<User>) userService.findAll()).size();
-		User user = new User();
-		user.setUsername("Sam");
-		user.setPassword("password");
-		Authorities auth = authService.findByAuthority("OWNER");
-		user.setAuthority(auth);
-		this.userService.saveUser(user);
+		Integer firstCount = ((Collection<Player>) playerService.findAllPlayers()).size();
+		LocalDate birthDate = LocalDate.of(1999, 01, 01);
+		String avatar = "https://cdn-icons-png.flaticon.com/512/147/147144.png";
 
-		Integer secondCount = ((Collection<User>) userService.findAll()).size();
-		assertEquals(firstCount + 1, secondCount);
-		userService.deleteUser(user.getId());
-		Integer lastCount = ((Collection<User>) userService.findAll()).size();
+		Player player = new Player();
+		player.setName("Sam");
+		player.setSurname("Winter");
+		player.setNickname("Samer");
+		player.setPassword("Sam3r!");
+		player.setEmail("sam@gmail.com");
+		player.setBirthDate(birthDate);
+		player.setAuthority(authoritiesService.findByAuthority("ADMIN"));
+		player.setAvatar(avatar);
+		this.playerService.savePlayer(player);
+
+		/*Integer secondCount = ((Collection<Player>) playerService.findAllPlayers()).size();
+		assertEquals(firstCount + 1, secondCount);*/
+
+		playerService.deletePlayer(player.getId());
+		Integer lastCount = ((Collection<Player>) playerService.findAllPlayers()).size();
 		assertEquals(firstCount, lastCount);
-	}*/
-
-//	@Test
-//	@Transactional
-//	void shouldDeleteUserWithOwner() {
-//		Integer firstCount = ((Collection<User>) userService.findAll()).size();
-//		User user = new User();
-//		user.setUsername("Sam");
-//		user.setPassword("password");
-//		Authorities auth = authService.findByAuthority("OWNER");
-//		user.setAuthority(auth);
-//		Owner owner = new Owner();
-//		owner.setAddress("Test");
-//		owner.setFirstName("Test");
-//		owner.setLastName("Test");
-//		owner.setPlan(PricingPlan.BASIC);
-//		owner.setTelephone("999999999");
-//		owner.setUser(user);
-//		owner.setCity("Test");
-//		this.ownerService.saveOwner(owner);
-//
-//		Integer secondCount = ((Collection<User>) userService.findAll()).size();
-//		assertEquals(firstCount + 1, secondCount);
-//		userService.deleteUser(user.getId());
-//		Integer lastCount = ((Collection<User>) userService.findAll()).size();
-//		assertEquals(firstCount, lastCount);
-//	}
-/*
-	@Test
-	@Transactional
-	void shouldDeleteUserWithoutVet() {
-		Integer firstCount = ((Collection<User>) userService.findAll()).size();
-		User user = new User();
-		user.setUsername("Sam");
-		user.setPassword("password");
-		Authorities auth = authService.findByAuthority("VET");
-		user.setAuthority(auth);
-		this.userService.saveUser(user);
-
-		Integer secondCount = ((Collection<User>) userService.findAll()).size();
-		assertEquals(firstCount + 1, secondCount);
-		userService.deleteUser(user.getId());
-		Integer lastCount = ((Collection<User>) userService.findAll()).size();
-		assertEquals(firstCount, lastCount);
-	}*/
-
-//	@Test
-//	@Transactional
-//	void shouldDeleteUserWithVet() {
-//		Integer firstCount = ((Collection<User>) userService.findAll()).size();
-//		User user = new User();
-//		user.setUsername("Sam");
-//		user.setPassword("password");
-//		Authorities auth = authService.findByAuthority("VET");
-//		user.setAuthority(auth);
-//		userService.saveUser(user);
-//		Vet vet = new Vet();
-//		vet.setFirstName("Test");
-//		vet.setLastName("Test");
-//		vet.setUser(user);
-//		vet.setCity("Test");
-//		this.vetService.saveVet(vet);
-//
-//		Integer secondCount = ((Collection<User>) userService.findAll()).size();
-//		assertEquals(firstCount + 1, secondCount);
-//		userService.deleteUser(user.getId());
-//		Integer lastCount = ((Collection<User>) userService.findAll()).size();
-//		assertEquals(firstCount, lastCount);
-//	}
-
+	}
 }

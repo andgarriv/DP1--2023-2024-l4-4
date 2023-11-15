@@ -74,7 +74,7 @@ function AppNavbar() {
                             </NavItem>
                             </DropdownItem>
 
-                             <DropdownItem style={{ borderBottom: '1px solid gray', padding: '10px' }}>
+                            <DropdownItem style={{ borderBottom: '1px solid gray', padding: '10px' }}>
                             <NavItem>
                                 <NavLink className="fuente" style={{ color: "#EF87E0" }} tag={Link} to="/games">My games</NavLink>
                             </NavItem>

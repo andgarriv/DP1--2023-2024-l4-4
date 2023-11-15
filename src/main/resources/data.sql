@@ -11,7 +11,7 @@ INSERT INTO players(id,name,surname,password,email,birth_date,authority,nickname
 INSERT INTO players(id,name,surname,password,email,birth_date,authority,nickname,avatar) VALUES (4,'Jorge','Muñoz','$2b$12$EB6dhGe96Fx1dt4CMxkF/ONMXHMNGLwSD9vhOWMwhLqKNRU2IvoCa','jorgemr@pm.me', '2003-07-12', 2, 'Jorge_ADD', 'https://images.squarespace-cdn.com/content/v1/5e45d3a8e509f61738454469/81e0d83b-0fa6-48d0-801b-1f0c1515d786/logo+arus+cuadrado+web.png');
 INSERT INTO players(id,name,surname,password,email,birth_date,authority,nickname,avatar) VALUES (5,'Javier','Rodriguez','$2b$12$EB6dhGe96Fx1dt4CMxkF/ONMXHMNGLwSD9vhOWMwhLqKNRU2IvoCa','java@pm.me', '2003-07-12', 2, 'javrodrei', 'https://cdn-icons-png.flaticon.com/512/147/147144.png');
 INSERT INTO players(id,name,surname,password,email,birth_date,authority,nickname,avatar) VALUES (6,'Isaac','Solis','$2b$12$EB6dhGe96Fx1dt4CMxkF/ONMXHMNGLwSD9vhOWMwhLqKNRU2IvoCa','princesita@pm.me', '2003-07-12', 2, 'isasolpad', 'https://cdn-icons-png.flaticon.com/512/147/147144.png');
-INSERT INTO players(id,name,surname,password,email,birth_date,authority,nickname,avatar) VALUES (7,'Andres','Garcia','$2b$12$EB6dhGe96Fx1dt4CMxkF/ONMXHMNGLwSD9vhOWMwhLqKNRU2IvoCa','andres@gmail.com', '2003-07-12', 2, 'andgarriv', 'https://images.squarespace-cdn.com/content/v1/5e45d3a8e509f61738454469/81e0d83b-0fa6-48d0-801b-1f0c1515d786/logo+arus+cuadrado+web.png');
+INSERT INTO players(id,name,surname,password,email,birth_date,authority,nickname,avatar) VALUES (7,'Andres','Garcia','$2b$12$EB6dhGe96Fx1dt4CMxkF/ONMXHMNGLwSD9vhOWMwhLqKNRU2IvoCa','andres7212@gmail.com', '2003-07-12', 2, 'Andresisco', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHRfYlqLUzoJjY4CQnv2yIOwS7WAFuBZrs9w&usqp=CAU');
 INSERT INTO players(id,name,surname,password,email,birth_date,authority,nickname,avatar) VALUES (8,'Alejandro','Perez','$2b$12$EB6dhGe96Fx1dt4CMxkF/ONMXHMNGLwSD9vhOWMwhLqKNRU2IvoCa','alejandro@gmail.com', '2003-07-12', 2, 'alepersan', 'https://cdn-icons-png.flaticon.com/512/147/147144.png');
 
 
@@ -46,11 +46,16 @@ INSERT INTO game_players(id,energy,player_id,color) VALUES (8,3,6,'RED'); --play
 INSERT INTO game_players(id,energy,player_id,color) VALUES (9,3,3,'BLUE'); --player 5
 INSERT INTO game_players(id,energy,player_id,color) VALUES (10,3,6,'RED'); --player 6
 
+INSERT INTO game_players(id,energy,player_id,color) VALUES (11,3,3,'BLUE'); --player 5
+INSERT INTO game_players(id,energy,player_id,color) VALUES (12,3,6,'RED'); --player 6
+
+
 -- Games 
 INSERT INTO games(id, rounds, winner, ended, started) VALUES (1, 16, 3, '2021-09-01 11:13:24', '2021-09-01 10:35:10');
 INSERT INTO games(id, rounds, winner, ended, started) VALUES (2, 18, 5, '2021-09-01 14:30:00', '2021-09-01 11:00:00');
 INSERT INTO games(id, rounds, winner, ended, started) VALUES (3, 24, null, null, '2021-01-01 15:45:00');
 INSERT INTO games(id, rounds, winner, ended, started) VALUES (4, 3, 6, '2021-01-01 10:15:00', '2021-01-01 10:00:00');
+INSERT INTO games(id, rounds, winner, ended, started) VALUES (5, 7, 6, '2021-01-01 10:14:00', '2021-01-01 10:00:00');
 
 
 -- Games_Game_Players
@@ -65,6 +70,9 @@ INSERT INTO games_game_players(game_id,game_players_id) VALUES (3,8);
 --Player con id 3 y 6 juegan la partida 4
 INSERT INTO games_game_players(game_id,game_players_id) VALUES (4,9);
 INSERT INTO games_game_players(game_id,game_players_id) VALUES (4,10);
+
+INSERT INTO games_game_players(game_id,game_players_id) VALUES (5,11);
+INSERT INTO games_game_players(game_id,game_players_id) VALUES (5,12);
 
 
 
