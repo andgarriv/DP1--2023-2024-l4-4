@@ -53,8 +53,8 @@ public class PlayerController {
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Player findById(@PathVariable Integer id){
-        if (playerService.findPlayerById(id) != null) {
-            return playerService.findPlayerById(id);
+        if (playerService.findUserById(id) != null) {
+            return playerService.findUserById(id);
         }
         else{
             return null;
@@ -64,7 +64,7 @@ public class PlayerController {
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Player update(@PathVariable Integer id, @RequestBody @Valid Player player){
-        if (playerService.findPlayerById(id) != null) {
+        if (playerService.findUserById(id) != null) {
             return playerService.updatePlayer(id, player);
         }
         else{

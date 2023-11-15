@@ -24,8 +24,7 @@ public class PlayerService {
 
 	@Transactional
 	public Player savePlayer(Player player) throws DataAccessException {
-		playerRepository.save(player);
-		return player;
+		return playerRepository.save(player);
 	}
 
 	@Transactional
@@ -55,7 +54,7 @@ public class PlayerService {
 	}
 
 	@Transactional(readOnly = true)
-	public Player findPlayerById(Integer id){
+	public Player findUserById(Integer id){
 		if(id == null){
 			throw new ResourceNotFoundException("id");
 		}
@@ -69,14 +68,14 @@ public class PlayerService {
 
 	@Transactional
 	public Player updatePlayer(Integer nickname){
-		Player oldPlayer = findPlayerById(null);
+		Player oldPlayer = findUserById(null);
 		BeanUtils.copyProperties(nickname, oldPlayer, "id");
 		return playerRepository.save(oldPlayer);
 		}
 
 	@Transactional
 	public Player updatePlayer(Integer id, Player player){
-		Player oldPlayer = findPlayerById(id);
+		Player oldPlayer = findUserById(id);
 		BeanUtils.copyProperties(player, oldPlayer, "id");
 		return playerRepository.save(oldPlayer);
 		}
