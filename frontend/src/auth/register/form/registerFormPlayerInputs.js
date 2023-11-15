@@ -18,22 +18,6 @@ export const registerFormPlayerInputs = [
    validators: [formValidators.notBlankValidator],
   },
   {
-    tag: "Password",
-    name: "password",
-    type: "password",
-    defaultValue: "",
-    isRequired: true,
-    validators: [formValidators.notBlankValidator, formValidators.validPasswordValidator],
-  },
-  {
-    tag: "Birth Date",
-    name: "birthDate",
-    type: "date",
-    defaultValue: "",
-    isRequired: true,
-    validators: [formValidators.notNullValidator, formValidators.validDateValidator]
-  },
-  {
     tag: "Nickname",
     name: "nickname",
     type: "text",
@@ -49,6 +33,22 @@ export const registerFormPlayerInputs = [
     defaultValue: "",
     isRequired: true,
     validators: [formValidators.validEmailValidator/*, formValidators.uniqueEmailValidator*/],
+  },
+  {
+    tag: "Password",
+    name: "password",
+    type: "password",
+    defaultValue: "",
+    isRequired: true,
+    validators: [formValidators.notBlankValidator, formValidators.validPasswordValidator],
+  },
+  {
+    tag: "Birth Date",
+    name: "birthDate",
+    type: "date",
+    defaultValue: "",
+    isRequired: true,
+    validators: [formValidators.notNullValidator, formValidators.validDateValidator]
   },
   {
     tag: "Avatar",

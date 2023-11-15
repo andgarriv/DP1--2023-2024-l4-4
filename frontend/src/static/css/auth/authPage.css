@@ -31,12 +31,13 @@
 }
 
 .custom-container {
-  width: 400px;
+  width: auto;
   background-color: black; /* Fondo blanco dentro del fondo negro */
   border: 5px solid lightskyblue; /* Borde azul claro */
   border-radius: 50px; /* Bordes redondeados */
-  padding: 50px; /* Espacio interno para los elementos */
+  padding: 80px; /* Espacio interno para los elementos */
   text-align: center; /* Alinea el contenido al centro */
+  height: auto;
 }
 
 .auth-page-container h1 {
