@@ -1,0 +1,14 @@
+.progress-bar-container {
+    background-color: #ddd; /* color de fondo de la barra de progreso */
+    border-radius: 5px; /* bordes redondeados */
+    width: 100%; /* la barra de progreso ocupa el ancho total del contenedor */
+    height: 20px; /* altura de la barra de progreso */
+    margin: 20px 0; /* margen arriba y abajo */
+}
+
+.progress-bar {
+    background-color: #4caf50; /* color de la barra de progreso completada */
+    height: 100%; /* la altura es la misma que la del contenedor */
+    border-radius: 5px; /* bordes redondeados */
+    transition: width 0.5s ease-in-out; /* transición suave al cambiar el ancho */
+}
