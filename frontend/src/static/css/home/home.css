@@ -101,10 +101,29 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh; /* Ajusta la altura según necesites */
-    font-size: 24px; /* Ajusta el tamaño del texto según necesites */
+    height: 100vh; 
+    font-size: 24px; 
 }
 
-  
+  /* Estilo para todos los navegadores */
+.scrollbar-minimalista {
+  scrollbar-width: thin;
+  scrollbar-color: magenta #ffffff;
+}
+
+.scrollbar-minimalista::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollbar-minimalista::-webkit-scrollbar-track {
+  background: #d23eb0;
+}
+
+.scrollbar-minimalista::-webkit-scrollbar-thumb {
+  background-color: rgb(38, 50, 60);
+  border-radius: 20px;
+  border: none;
+}
+
   
   

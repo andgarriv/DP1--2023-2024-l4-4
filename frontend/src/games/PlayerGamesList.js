@@ -46,15 +46,17 @@ export default function AdminGamesList() {
         return <div className="loading">Loading...</div>;
     }
 
+
     const GameListContainer = ({ children }) => (
         <div style={{
             maxHeight: '470px', 
             overflowY: 'auto',
             width: '40%',
-        }}>
+        }} className="scrollbar-minimalista">
             {children}
         </div>
     );
+    
 
 
     const gameList = playerGames.map((game) => (

@@ -35,14 +35,15 @@ export default function AdminGamesList() {
     }
 
     const GameListContainer = ({ children }) => (
-        <div style={{
-            maxHeight: '470px', 
-            overflowY: 'auto',
-            width: '40%',
-        }}>
-            {children}
-        </div>
-    );
+    <div style={{
+        maxHeight: '470px', 
+        overflowY: 'auto',
+        width: '40%',
+    }} className="scrollbar-minimalista">
+        {children}
+    </div>
+);
+
     
 
 
