@@ -102,9 +102,10 @@ export default function AdminGamesList() {
 
     return (
         <div className="home-page-container">
+            <h1 className="title">Games</h1>
             <GameListContainer>
             <div className="hero-div">
-                <h1 className="text-center">Games</h1>
+                
                 <tr>
                     <td className="text-center" colSpan="2">
                         <div style={{ color: "magenta", marginRight: "35px", marginLeft: "0px", marginBottom: "15px" }}>
