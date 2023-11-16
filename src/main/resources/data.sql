@@ -74,6 +74,8 @@ INSERT INTO games_game_players(game_id,game_players_id) VALUES (4,10);
 INSERT INTO games_game_players(game_id,game_players_id) VALUES (5,11);
 INSERT INTO games_game_players(game_id,game_players_id) VALUES (5,12);
 
+--INSERT INTO cards (id,card_column,card_row,iniciative,color,exit) VALUES(1,null,null,1,'RED','EXIT_001');
+
 
 
 
