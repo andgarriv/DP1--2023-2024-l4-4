@@ -1,5 +1,13 @@
 # End Of Line
 
+## EOL UML
+![UML of END OF LINE](https://i.ibb.co/YWWbvjc/UML-EOL-drawio.png)
+
+If UML doesn't view correctly, you can view it [here](https://i.ibb.co/rvQmCbT/UML-EOL.png).
+
+
+
+
 ## Running EOL backend locally
 EOL is a [Spring Boot](https://spring.io/guides/gs/spring-boot) application built using [Maven](https://spring.io/guides/gs/maven/). You can build a jar file and run it from the command line:
 
@@ -10,7 +18,7 @@ cd DP1--2023-2024-l4-4
 java -jar target/*.jar
 ```
 
-You can then access petclinic backend here: [http://localhost:8080/](http://localhost:8080/swagger-ui/index.html)
+You can then access EOL backend here: [http://localhost:8080/](http://localhost:8080/swagger-ui/index.html)
 
 
 
@@ -21,7 +29,7 @@ Or you can run it from Maven directly using the Spring Boot Maven plugin. If you
 ```
 ## Database configuration
 
-In its default configuration, Petclinic uses an in-memory database (H2) which
+In its default configuration, EOL uses an in-memory database (H2) which
 gets populated at startup with data. The INSERTs are specified in the file data.sql.
 
 ## Working with EOL in your IDE
@@ -56,11 +64,11 @@ Then either build on the command line `./mvnw generate-resources` or using the E
 In the main menu, choose `File -> Open` and select the Petclinic [pom.xml](pom.xml). Click on the `Open` button.
 
 CSS files are generated from the Maven build. You can either build them on the command line `./mvnw generate-resources`
-or right click on the `spring-petclinic` project then `Maven -> Generates sources and Update Folders`.
+or right click on the `EndOfLine` project then `Maven -> Generates sources and Update Folders`.
 
-A run configuration named `PetClinicApplication` should have been created for you if you're using a recent Ultimate
-version. Otherwise, run the application by right clicking on the `PetClinicApplication` main class and choosing
-`Run 'PetClinicApplication'`.
+A run configuration named `EndOfLineApplication` should have been created for you if you're using a recent Ultimate
+version. Otherwise, run the application by right clicking on the `EndOfLineApplication` main class and choosing
+`Run 'EndOfLineApplication'`.
 
 4) Navigate to EOL
 Visit [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html) in your browser.
@@ -72,4 +80,4 @@ You can start the development server to see frontend using the command (maybe yo
 ```
 npm start
 ```
-You can then access the PetClinic frontend at [http://localhost:3000](http://localhost:3000)
+You can then access the EOL frontend at [http://localhost:3000](http://localhost:3000)
