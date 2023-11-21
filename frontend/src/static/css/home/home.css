@@ -121,6 +121,7 @@
 .scrollbar-minimalista {
   scrollbar-width: thin;
   scrollbar-color: magenta #ffffff;
+  overflow: auto;
 }
 
 .scrollbar-minimalista::-webkit-scrollbar {

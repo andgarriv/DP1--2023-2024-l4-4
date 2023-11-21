@@ -51,6 +51,7 @@ export default function AdminGamesList() {
         <div style={{
             maxHeight: '470px', 
             overflowY: 'auto',
+            marginBottom: 'auto',
             width: '40%',
         }} className="scrollbar-minimalista">
             {children}
