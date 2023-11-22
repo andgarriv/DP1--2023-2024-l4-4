@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import tokenService from '../services/token.service';
 import jwt_decode from "jwt-decode";
-import '../App.css';
-import '../static/css/home/home.css';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import '../App.css';
+import tokenService from '../services/token.service';
+import '../static/css/home/home.css';
 
 export default function Home() {
     const [roles, setRoles] = useState([]);
@@ -19,8 +19,8 @@ export default function Home() {
 
     let indexNotLogged = null;
     let indexLogged = null;
-    roles.forEach((role)=>{ 
-        if(role === 'OWNER'){
+    roles.forEach((role)=>{
+        if(role === 'PLAYER'){
         indexLogged = (
             <div className="home-page-container">
                 <div className="hero-div">
@@ -58,8 +58,7 @@ export default function Home() {
                 </div>
             </div>
         );
-    } 
-   
+    }
 
     return jwt ? indexLogged : indexNotLogged;
 }

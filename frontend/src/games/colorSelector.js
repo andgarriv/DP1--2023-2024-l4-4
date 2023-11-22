@@ -1,41 +1,48 @@
 import React, { useState } from "react";
+import { Link } from 'react-router-dom';
 import { gamePlayerFormInputs } from "./form/gamePlayerFormInputs";
 
-export default function ColorSelector({ onSelectColor }) {
+export default function ColorSelector() {
   const [selectedColor, setSelectedColor] = useState("");
+  const [selectedText, setSelectedText] = useState("");
 
-  const handleSelectColor = (color) => {
+  const handleSelectColor = (color, label) => {
     setSelectedColor(color);
-    onSelectColor(color);
+    setSelectedText(label);
   };
 
   return (
     <div className="home-page-container">
-      {/* Ajusta el contenedor principal para que utilice flexbox */}
       <div className="hero-div" style={{
         display: 'flex',
-        flexWrap: 'wrap',
-        maxHeight: '30%', // Ajusta la altura máxima del contenedor
-        justifyContent: 'center', // centra las imágenes en el contenedor
-        alignItems: 'center', // centra las imágenes verticalmente
-        gap: '10px', // establece un espacio entre las imágenes
+        maxHeight: '80%',
+        maxWidth: '50%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: '10px',
       }}>
-              <h1 className="title">SELECT COLOR</h1>
-        {gamePlayerFormInputs.map((choice) => (
-          // Ajusta el estilo del contenedor de la imagen para 4 columnas
-          <div key={choice.color} className="color-image-container" style={{ 
-            flex: '1 0 11%', // Permite que cada imagen ocupe aproximadamente el 25% del contenedor, ajustado para el espacio
-            maxWidth: '11%', // Esto asegura que el contenido no exceda el 25% del ancho
-          }}>
+        <h1 className="title">SELECT COLOR</h1>
+        <div className="colors">
+          {gamePlayerFormInputs.map((choice) => (
+            <div key={choice.color} className={`color-image-container ${selectedColor === choice.color ? "selected-container" : ""}`}>
             <img
-              src={choice.image}
-              alt={choice.label}
-              className={`color-image ${selectedColor === choice.color ? "selected" : ""}`}
-              onClick={() => handleSelectColor(choice.color)}
-              style={{ width: '100%', height: 'auto' }} // Hace que la imagen sea responsive dentro de su contenedor
-            />
-          </div>
-        ))}
+                src={choice.image}
+                alt={choice.label}
+                className={`color-image ${selectedColor === choice.color ? "selected" : ""}`}
+                onClick={() => handleSelectColor(choice.color, choice.label)}
+                style={{ width: '100%', height: 'auto' }}
+              />
+            </div>
+          ))}
+        </div>
+        <div className="selected-text">
+          Currently: {selectedText}
+        </div>
+        <div className="button-container">
+                    <Link to={'/game'}>
+                    <button className="fuente button-style">Continue</button>
+                    </Link>
+                </div>
       </div>
     </div>
   );
