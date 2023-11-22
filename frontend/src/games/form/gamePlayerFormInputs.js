@@ -15,21 +15,6 @@ export const gamePlayerFormInputs = [
         image: redImage,
     },
     {
-        color: 'blue',
-        label: 'Blue',
-        image: blueImage,
-    },
-    {
-        color: 'green',
-        label: 'Green',
-        image: greenImage,
-    },
-    {
-        color: 'purple',
-        label: 'Purple',
-        image: purpleImage,
-    },
-    {
         color: 'orange',
         label: 'Orange',
         image: orangeImage,
@@ -40,14 +25,30 @@ export const gamePlayerFormInputs = [
         image: yellowImage,
     },
     {
-        color: 'white',
-        label: 'White',
-        image: whiteImage,
+        color: 'green',
+        label: 'Green',
+        image: greenImage,
+    },
+    {
+        color: 'blue',
+        label: 'Blue',
+        image: blueImage,
     },
     {
         color: 'magenta',
         label: 'Magenta',
         image: magImage,
     },
+    {
+        color: 'purple',
+        label: 'Purple',
+        image: purpleImage,
+    },
+    {
+        color: 'white',
+        label: 'White',
+        image: whiteImage,
+    },
+
 
 ];

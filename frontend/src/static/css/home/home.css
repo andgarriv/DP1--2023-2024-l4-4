@@ -138,5 +138,14 @@
   border: none;
 }
 
-  
-  
+.colors {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.color-image-container {
+  flex: 1 0 22%;
+  max-width: 20%;
+  margin: 2%;
+}
