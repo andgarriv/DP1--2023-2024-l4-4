@@ -58,8 +58,7 @@ export default function Home() {
                 </div>
             </div>
         );
-    } 
-   
+    }
 
     return jwt ? indexLogged : indexNotLogged;
 }

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from 'react-router-dom';
 import { gamePlayerFormInputs } from "./form/gamePlayerFormInputs";
 
 export default function ColorSelector() {
@@ -23,8 +24,8 @@ export default function ColorSelector() {
         <h1 className="title">SELECT COLOR</h1>
         <div className="colors">
           {gamePlayerFormInputs.map((choice) => (
-            <div key={choice.color} className="color-image-container">
-              <img
+            <div key={choice.color} className={`color-image-container ${selectedColor === choice.color ? "selected-container" : ""}`}>
+            <img
                 src={choice.image}
                 alt={choice.label}
                 className={`color-image ${selectedColor === choice.color ? "selected" : ""}`}
@@ -35,8 +36,13 @@ export default function ColorSelector() {
           ))}
         </div>
         <div className="selected-text">
-          {selectedText}
+          Currently: {selectedText}
         </div>
+        <div className="button-container">
+                    <Link to={'/game'}>
+                    <button className="fuente button-style">Continue</button>
+                    </Link>
+                </div>
       </div>
     </div>
   );
