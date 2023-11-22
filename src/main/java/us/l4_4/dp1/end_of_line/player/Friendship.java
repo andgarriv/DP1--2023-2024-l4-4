@@ -10,6 +10,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import us.l4_4.dp1.end_of_line.enums.FriendStatus;
 import us.l4_4.dp1.end_of_line.model.BaseEntity;
 
 @Getter
