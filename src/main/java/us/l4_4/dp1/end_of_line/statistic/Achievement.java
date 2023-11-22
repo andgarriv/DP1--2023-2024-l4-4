@@ -1,7 +1,5 @@
 package us.l4_4.dp1.end_of_line.statistic;
 
-import java.sql.Date;
-
 import org.hibernate.validator.constraints.URL;
 
 import jakarta.persistence.Entity;
@@ -14,6 +12,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import us.l4_4.dp1.end_of_line.enums.Category;
 import us.l4_4.dp1.end_of_line.model.NamedEntity;
 
 @Getter
@@ -36,7 +35,7 @@ public class Achievement extends NamedEntity {
 
     @Enumerated(EnumType.STRING)
     @NotNull
-    Metric metric;
+    Category metric;
 
     public String getActualDescription(){
         return description.replace("<THRESHOLD>", String.valueOf(threshold));

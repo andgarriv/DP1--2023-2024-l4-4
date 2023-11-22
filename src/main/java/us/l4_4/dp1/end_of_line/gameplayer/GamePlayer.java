@@ -14,7 +14,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import us.l4_4.dp1.end_of_line.card.Card;
-import us.l4_4.dp1.end_of_line.game.Color;
+import us.l4_4.dp1.end_of_line.enums.Color;
 import us.l4_4.dp1.end_of_line.model.BaseEntity;
 import us.l4_4.dp1.end_of_line.player.Player;
 

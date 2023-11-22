@@ -1,11 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import tokenService from "../services/token.service";
-import { useState,useEffect } from "react";
 const jwt = tokenService.getLocalAccessToken();
 
 export default function AdminGamesList() {
     const [games, setGames] = useState([]);
-    const [loading, setLoading] = useState(true); 
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         async function fetchData() {
@@ -19,11 +18,11 @@ export default function AdminGamesList() {
                     }
                     const playerData = await playerResponse.json();
                     setGames(playerData);
-                    setLoading(false); 
+                    setLoading(false);
                 }, 250);
             } catch (error) {
                 console.error('Error fetching data:', error);
-                setLoading(false); 
+                setLoading(false);
             }
         }
 
