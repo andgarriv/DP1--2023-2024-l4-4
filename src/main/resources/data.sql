@@ -82,6 +82,6 @@ INSERT INTO messages(id, color, reaction) VALUES (2, null, 'WHAT_A_PITY');
 INSERT INTO messages(id, color, reaction) VALUES (3, null, 'SORRY');
 INSERT INTO messages(id, color, reaction) VALUES (4, null, 'THANKS');
 INSERT INTO messages(id, color, reaction) VALUES (5, null, 'NICE');
-INSERT INTO messages(id, color, reaction) VALUES (6, null, 'JAHAJAHA');
+INSERT INTO messages(id, color, reaction) VALUES (6, null, 'JAJAJAJA');
 INSERT INTO messages(id, color, reaction) VALUES (7, null, 'GG');
 INSERT INTO messages(id, color, reaction) VALUES (8, null, 'GOOD_LUCK');
