@@ -46,7 +46,7 @@ public class PlayerController {
         String password2 = authService.encodePassword(player.getPassword());
         player.setPassword(password2);
         player.setAuthority(authoritiesService.findByAuthority("PLAYER"));
-        playerService.createPlayer(player);   
+        playerService.savePlayer(player);   
         return player;
     }
 

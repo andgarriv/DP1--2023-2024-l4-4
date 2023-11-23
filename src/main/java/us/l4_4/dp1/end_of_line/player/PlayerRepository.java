@@ -11,8 +11,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PlayerRepository extends CrudRepository<Player, Integer> {
-    @Query("SELECT p FROM Player p WHERE p.authority.authority = 'PLAYER'")
-    public List<Player> findAllPlayers();
+    /*@Query("SELECT p FROM Player p WHERE p.authority.authority = 'PLAYER'")
+    public List<Player> findAllPlayers();*/
 
     @Query("SELECT p FROM Player p WHERE p.nickname = :nickname")
     Optional<Player> findByNickname(String nickname);
