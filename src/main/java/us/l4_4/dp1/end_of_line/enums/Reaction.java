@@ -6,7 +6,7 @@ public enum Reaction {
     SORRY("sorry"),
     THANKS("thanks"),
     NICE("nice"),
-    JAHAJAHA("jajajaja"),
+    JAJAJAJA("jajajaja"),
     GG("gg"),
     GOOD_LUCK("good luck");
 
