@@ -32,6 +32,22 @@ class UserServiceTests {
 	@Autowired
 	private AuthoritiesService authoritiesService;
 
+	private Player createPlayer(){
+		LocalDate birthDate = LocalDate.of(1999, 01, 01);
+		String avatar = "https://cdn-icons-png.flaticon.com/512/147/147144.png";
+
+		Player player = new Player();
+		player.setName("Sam");
+		player.setSurname("Winter");
+		player.setNickname("Samer");
+		player.setPassword("Sam3r!");
+		player.setEmail("sam@gmail.com");
+		player.setBirthDate(birthDate);
+		player.setAuthority(authoritiesService.findByAuthority("ADMIN"));
+		player.setAvatar(avatar);
+		return this.playerService.savePlayer(player);
+	}
+
 	@Test
 	@WithMockUser(username = "admin1", password = "Adm1n!")
 	void shouldFindCurrentAdmin() {
@@ -135,29 +151,17 @@ class UserServiceTests {
 		assertEquals("Change", player.getNickname());
 	}
  
-	/* @Test
+	@Test
 	@Transactional
 	void shouldInsertUser() {
 		int count = ((Collection<Player>) this.playerService.findAllPlayers()).size();
-		LocalDate birthDate = LocalDate.of(1999, 01, 01);
-		String avatar = "https://cdn-icons-png.flaticon.com/512/147/147144.png";
-
-		Player player = new Player();
-		player.setName("Sam");
-		player.setSurname("Winter");
-		player.setNickname("Samer");
-		player.setPassword("Sam3r!");
-		player.setEmail("sam@gmail.com");
-		player.setBirthDate(birthDate);
-		player.setAuthority(authoritiesService.findByAuthority("ADMIN"));
-		player.setAvatar(avatar);
-		this.playerService.savePlayer(player);
+		
+		Player player = createPlayer();
 		assertNotEquals(0, player.getId().longValue());
-		assertNotNull(player.getId());
 
 		int finalCount = ((Collection<Player>) this.playerService.findAllPlayers()).size();
 		assertEquals(count + 1, finalCount);
-	} */
+	}
 	
  
 	@Test

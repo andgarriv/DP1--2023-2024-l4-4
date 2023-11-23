@@ -1,7 +1,5 @@
 package us.l4_4.dp1.end_of_line.player;
 
-import java.util.List;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -24,7 +22,8 @@ public class PlayerService {
 
 	@Transactional
 	public Player savePlayer(Player player) throws DataAccessException {
-		return playerRepository.save(player);
+		playerRepository.save(player);
+		return player;
 	}
 
 	@Transactional
@@ -37,14 +36,9 @@ public class PlayerService {
 		return playerRepository.existsByEmail(email);
 	}
 
-	@Transactional
-	public Player createPlayer(Player player){
-		return playerRepository.save(player);
-	}
-
 	@Transactional(readOnly = true)
-	public List<Player> findAllPlayers(){
-		return playerRepository.findAllPlayers();
+	public Iterable<Player> findAllPlayers() throws DataAccessException{
+		return playerRepository.findAll();
 	}
 
 	@Transactional(readOnly = true)
