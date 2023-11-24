@@ -97,3 +97,10 @@ INSERT INTO cards (id,card_column,card_row,iniciative,color,exit,orientation) VA
 
 INSERT INTO cards (id,card_column,card_row,iniciative,color,exit,orientation) VALUES(9,null,null,2,'BLUE','EXIT_001','S');
 
+
+--Effects
+
+INSERT INTO effects(id, color, hability)VALUES(1,null,'SPEED_UP');
+INSERT INTO effects(id, color, hability)VALUES(2,null,'BRAKE');
+INSERT INTO effects(id, color, hability)VALUES(3,null,'REVERSE');
+INSERT INTO effects(id, color, hability)VALUES(4,null,'EXTRA_GAS');
