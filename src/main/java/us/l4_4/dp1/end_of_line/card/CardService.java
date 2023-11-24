@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import jakarta.validation.Valid;
 import us.l4_4.dp1.end_of_line.enums.Color;
 
 @Service
@@ -31,6 +32,15 @@ public class CardService {
 
         return cardRepository.findAll();
     }
+
+    
+    @Transactional(readOnly = true)
+    public Card saveCard(@Valid Card c ){
+
+        return cardRepository.save(c);
+    }
+
+    
 
 
     
