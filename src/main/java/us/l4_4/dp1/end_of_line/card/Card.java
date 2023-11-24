@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.Setter;
 import us.l4_4.dp1.end_of_line.enums.Color;
 import us.l4_4.dp1.end_of_line.enums.Exit;
+import us.l4_4.dp1.end_of_line.enums.Orientation;
 import us.l4_4.dp1.end_of_line.model.BaseEntity;
 
 
@@ -32,6 +33,10 @@ public class Card extends BaseEntity{
     @NotNull
     @Enumerated(EnumType.STRING)
     Exit exit;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    Orientation orientation;
 
     
     @Range(min = 0, max = 6)

@@ -85,3 +85,13 @@ INSERT INTO messages(id, color, reaction) VALUES (5, null, 'NICE');
 INSERT INTO messages(id, color, reaction) VALUES (6, null, 'JAJAJAJA');
 INSERT INTO messages(id, color, reaction) VALUES (7, null, 'GG');
 INSERT INTO messages(id, color, reaction) VALUES (8, null, 'GOOD_LUCK');
+
+INSERT INTO cards (id,card_column,card_row,iniciative,color,exit,orientation) VALUES(1,null,null,2,'RED','EXIT_001','S');
+INSERT INTO cards (id,card_column,card_row,iniciative,color,exit,orientation) VALUES(2,null,null,1,'RED','EXIT_010','S');
+INSERT INTO cards (id,card_column,card_row,iniciative,color,exit,orientation) VALUES(3,null,null,3,'RED','EXIT_011','S');
+INSERT INTO cards (id,card_column,card_row,iniciative,color,exit,orientation) VALUES(4,null,null,2,'RED','EXIT_100','S');
+INSERT INTO cards (id,card_column,card_row,iniciative,color,exit,orientation) VALUES(5,null,null,4,'RED','EXIT_101','S');
+INSERT INTO cards (id,card_column,card_row,iniciative,color,exit,orientation) VALUES(6,null,null,3,'RED','EXIT_110','S');
+INSERT INTO cards (id,card_column,card_row,iniciative,color,exit,orientation) VALUES(7,null,null,0,'RED','EXIT_111','S');
+INSERT INTO cards (id,card_column,card_row,iniciative,color,exit,orientation) VALUES(8,null,null,5,'RED','EXIT_111','S');
+
