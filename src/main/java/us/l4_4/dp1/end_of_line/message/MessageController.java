@@ -46,6 +46,12 @@ public class MessageController {
         if(messageToUpdate == null) {
             throw new BadRequestException("messageToUpdate is null");
         }
+        if(messageToUpdate.getColor() == null) {
+            throw new BadRequestException("messageToUpdate.getColor() is null");
+        }
+        if(messageToUpdate.getReaction() == null) {
+            throw new BadRequestException("messageToUpdate.getReaction() is null");
+        }
         messageToUpdate.setColor(message.getColor());
         messageToUpdate.setReaction(message.getReaction());
         messageService.save(messageToUpdate);
