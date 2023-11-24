@@ -10,9 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
-//import org.springframework.samples.petclinic.owner.Owner;
-//import org.springframework.samples.petclinic.owner.OwnerService;
-//import org.springframework.samples.petclinic.vet.VetService;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import jakarta.transaction.Transactional;
@@ -32,35 +29,87 @@ class UserServiceTests {
 	@Autowired
 	private AuthoritiesService authoritiesService;
 
-	private User admin;
-	private User player;
+	private Player createPlayer(){
+		LocalDate birthDate = LocalDate.of(1999, 01, 01);
+		String avatar = "https://cdn-icons-png.flaticon.com/512/147/147144.png";
 
-	@BeforeEach
-	void setup() {
-		Authorities adminAuth = new Authorities();
-		adminAuth.setId(1);
-		adminAuth.setAuthority("ADMIN");
+		Player player = new Player();
+		player.setName("Sam");
+		player.setSurname("Winter");
+		player.setNickname("Samer");
+		player.setPassword("Sam3r!");
+		player.setEmail("sam@gmail.com");
+		player.setBirthDate(birthDate);
+		player.setAuthority(authoritiesService.findByAuthority("ADMIN"));
+		player.setAvatar(avatar);
+		return this.playerService.savePlayer(player);
+	}
 
-		Authorities playerAuth = new Authorities();
-		playerAuth.setId(2);
-		playerAuth.setAuthority("PLAYER");
+	@Test
+	void shouldFindAllUsers() {
+		List<Player> users = (List<Player>) this.playerService.findAll();
+		assertEquals(8, users.size());
+	}
 
-		admin = new User();
-		admin.setNickname("admin1");
-		admin.setPassword("4dm1n");
-		admin.setAuthority(adminAuth);
-		player = new User();
-		player.setNickname("Angelgares");
-		player.setPassword("4dm1n");
-		player.setAuthority(playerAuth);
-		
+	@Test
+	void shouldFindAllAdmins() {
+		List<Player> admins = this.authoritiesService.findAllByAuthority("ADMIN");
+		assertEquals(2, admins.size());
+	}
+
+	@Test
+	void shouldFindAllPlayers() {
+		List<Player> players = this.authoritiesService.findAllByAuthority("PLAYER");
+		assertEquals(6, players.size());
+	}
+
+	@Test
+	void shouldFindPlayerById() {
+		Player player = this.playerService.findById(4);
+		assertEquals("Jorge_ADD", player.getNickname());
+	}
+
+	@Test
+	void shouldNotFindUserWithBadUserId() {
+		assertThrows(ResourceNotFoundException.class, () -> this.playerService.findById(404));
+	}
+
+	@Test
+	void shouldExistUserByNickname() {
+		assertEquals(true, this.playerService.existsByNickname("Angelgares"));
+	}
+
+	@Test
+	void shouldNotExistUserByNickname() {
+		assertEquals(false, this.playerService.existsByNickname("UserNotExists"));
+	}
+
+	@Test
+	void shouldFindPlayerByNickname() {
+		Player player = this.playerService.findByNickname("Angelgares");
+		assertEquals("Angelgares", player.getNickname());
+	}
+
+	@Test
+	void shouldNotFindUserWithBadUserNickname() {
+		assertThrows(ResourceNotFoundException.class, () -> this.playerService.findByNickname("usernotexists"));
+	}
+
+	@Test
+	void shouldExistsUserByEmail() {
+		assertEquals(true, this.playerService.existsByEmail("angelgares6424@gmail.com"));
+	}
+
+	@Test
+	void shouldNotExistsUserByEmail() {
+		assertEquals(false, this.playerService.existsByEmail("notexists@gmail.com"));
 	}
 
 	@Test
 	@WithMockUser(username = "admin1", password = "Adm1n!")
 	void shouldFindCurrentAdmin() {
-		Player player = this.playerService.findCurrentPlayer();
-		assertEquals("admin1", player.getNickname());
+		Player admin = this.playerService.findCurrentPlayer();
+		assertEquals("admin1", admin.getNickname());
 	}
   
 	@Test
@@ -77,136 +126,50 @@ class UserServiceTests {
 	}
 
 	@Test
+	void shouldFindUsersByAuthority() {
+		List<Player> admins = this.authoritiesService.findAllByAuthority("ADMIN");
+		List<Player> players = this.authoritiesService.findAllByAuthority("PLAYER");
+		assertEquals(2, admins.size());
+		assertEquals(6, players.size());
+	}
+
+	@Test
 	void shouldNotFindAuthenticated() {
 		assertThrows(ResourceNotFoundException.class, () -> this.playerService.findCurrentPlayer());
 	}
-
-	@Test
-	void shouldFindAllPlayers() {
-		List<Player> players = (List<Player>) this.playerService.findAllPlayers();
-		assertEquals(6, players.size());
-	}
  
 	@Test
-	void shouldFindPlayersByUsername() {
-		Player player = this.playerService.findByNickname("Angelgares");
-		assertEquals("Angelgares", player.getNickname());
+	@Transactional
+	void shouldInsertUser() {
+		int count = ((Collection<Player>) this.playerService.findAll()).size();
+		
+		Player player = createPlayer();
+		assertNotEquals(0, player.getId().longValue());
+
+		int finalCount = ((Collection<Player>) this.playerService.findAll()).size();
+		assertEquals(count + 1, finalCount);
 	}
 
-	@Test
-	void shouldFindUsersByAuthority() {
-		List<Player> players = this.authoritiesService.findAllByAuthority("PLAYER");
-		assertEquals(6, players.size());
-
-		List<Player> admins = this.authoritiesService.findAllByAuthority("PLAYER");
-		assertEquals(6, admins.size());
-	}
- 
-	@Test
-	void shouldNotFindPlayerByIncorrectUsername() {
-		assertThrows(ResourceNotFoundException.class, () -> this.playerService.findByNickname("usernotexists"));
-	}
- 
-	@Test
-	void shouldFindSinglePlayerByUsername() {
-		Player player = this.playerService.findByNickname("Angelgares");
-		assertEquals("Angelgares", player.getNickname());
-	}
-
-	@Test
-	void shouldNotFindSinglePlayerWithBadUsername() {
-		assertThrows(ResourceNotFoundException.class, () -> this.playerService.findByNickname("badusername"));
-	}
- 
-	@Test
-	void shouldFindPlayerById() {
-		Player player = this.playerService.findUserById(4);
-		assertEquals("Jorge_ADD", player.getNickname());
-	}
- 
-	@Test
-	void shouldNotFindSingleUserOwnerWithBadUserId() {
-		assertThrows(ResourceNotFoundException.class, () -> this.playerService.findUserById(100));
-	}
-
-	@Test
-	void shouldExistUserByNickname() {
-		assertEquals(true, this.playerService.existsByNickname("Angelgares"));
-	}
-
-	@Test
-	void shouldNotExistUserByNickname() {
-		assertEquals(false, this.playerService.existsByNickname("UserNotExists"));
-	}
-
-	@Test
-	void shouldExistsUserByEmail() {
-		assertEquals(true, this.playerService.existsByEmail("angelgares6424@gmail.com"));
-	}
-
-	@Test
-	void shouldNotExistsUserByEmail() {
-		assertEquals(false, this.playerService.existsByEmail("notexists@gmail.com"));
-	}
- 
 	@Test
 	@Transactional
 	void shouldUpdateUser() {
-		Player player = this.playerService.findUserById(4);
+		Player player = this.playerService.findById(4);
 		player.setNickname("Change");
 		playerService.updatePlayer(4, player);
-		player = this.playerService.findUserById(4);
 		assertEquals("Change", player.getNickname());
 	}
- 
-	/* @Test
-	@Transactional
-	void shouldInsertUser() {
-		int count = ((Collection<Player>) this.playerService.findAllPlayers()).size();
-		LocalDate birthDate = LocalDate.of(1999, 01, 01);
-		String avatar = "https://cdn-icons-png.flaticon.com/512/147/147144.png";
 
-		Player player = new Player();
-		player.setName("Sam");
-		player.setSurname("Winter");
-		player.setNickname("Samer");
-		player.setPassword("Sam3r!");
-		player.setEmail("sam@gmail.com");
-		player.setBirthDate(birthDate);
-		player.setAuthority(authoritiesService.findByAuthority("ADMIN"));
-		player.setAvatar(avatar);
-		this.playerService.savePlayer(player);
-		assertNotEquals(0, player.getId().longValue());
-		assertNotNull(player.getId());
-
-		int finalCount = ((Collection<Player>) this.playerService.findAllPlayers()).size();
-		assertEquals(count + 1, finalCount);
-	} */
-	
- 
 	@Test
 	@Transactional
-	void shouldDeleteUserWithoutOwner() {
-		Integer firstCount = ((Collection<Player>) playerService.findAllPlayers()).size();
-		LocalDate birthDate = LocalDate.of(1999, 01, 01);
-		String avatar = "https://cdn-icons-png.flaticon.com/512/147/147144.png";
+	void shouldDeleteUser() {
+		Integer firstCount = ((Collection<Player>) playerService.findAll()).size();
+		Player player = createPlayer();
 
-		Player player = new Player();
-		player.setName("Sam");
-		player.setSurname("Winter");
-		player.setNickname("Samer");
-		player.setPassword("Sam3r!");
-		player.setEmail("sam@gmail.com");
-		player.setBirthDate(birthDate);
-		player.setAuthority(authoritiesService.findByAuthority("ADMIN"));
-		player.setAvatar(avatar);
-		this.playerService.savePlayer(player);
-
-		/*Integer secondCount = ((Collection<Player>) playerService.findAllPlayers()).size();
-		assertEquals(firstCount + 1, secondCount);*/
+		Integer secondCount = ((Collection<Player>) playerService.findAll()).size();
+		assertEquals(firstCount + 1, secondCount);
 
 		playerService.deletePlayer(player.getId());
-		Integer lastCount = ((Collection<Player>) playerService.findAllPlayers()).size();
+		Integer lastCount = ((Collection<Player>) playerService.findAll()).size();
 		assertEquals(firstCount, lastCount);
 	}
 }

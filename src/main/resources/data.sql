@@ -76,8 +76,12 @@ INSERT INTO games_game_players(game_id,game_players_id) VALUES (5,12);
 
 --INSERT INTO cards (id,card_column,card_row,iniciative,color,exit) VALUES(1,null,null,1,'RED','EXIT_001');
 
-
-
-
-
-
+-- Message
+INSERT INTO messages(id, color, reaction) VALUES (1, null, 'HI');
+INSERT INTO messages(id, color, reaction) VALUES (2, null, 'WHAT_A_PITY');
+INSERT INTO messages(id, color, reaction) VALUES (3, null, 'SORRY');
+INSERT INTO messages(id, color, reaction) VALUES (4, null, 'THANKS');
+INSERT INTO messages(id, color, reaction) VALUES (5, null, 'NICE');
+INSERT INTO messages(id, color, reaction) VALUES (6, null, 'JAJAJAJA');
+INSERT INTO messages(id, color, reaction) VALUES (7, null, 'GG');
+INSERT INTO messages(id, color, reaction) VALUES (8, null, 'GOOD_LUCK');

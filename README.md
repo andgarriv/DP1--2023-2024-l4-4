@@ -1,9 +1,9 @@
 # End Of Line
 
 ## EOL UML
-![UML of END OF LINE](https://i.ibb.co/YWWbvjc/UML-EOL-drawio.png)
+![UML of END OF LINE](https://github.com/gii-is-DP1/DP1--2023-2024-l4-4/assets/91957427/dedf74c3-6aa0-439c-94c8-4c3737b0379e)
 
-If UML doesn't view correctly, you can view it [here](https://i.ibb.co/rvQmCbT/UML-EOL.png).
+If UML doesn't view correctly, you can view it [here](https://ibb.co/0DMfSrC).
 
 
 

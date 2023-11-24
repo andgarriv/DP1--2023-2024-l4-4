@@ -17,7 +17,9 @@ import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
 import us.l4_4.dp1.end_of_line.card.Card;
+import us.l4_4.dp1.end_of_line.effect.Effect;
 import us.l4_4.dp1.end_of_line.gameplayer.GamePlayer;
+import us.l4_4.dp1.end_of_line.message.Message;
 import us.l4_4.dp1.end_of_line.model.BaseEntity;
 import us.l4_4.dp1.end_of_line.player.Player;
 
@@ -42,8 +44,8 @@ public class Game extends BaseEntity {
     @Column(name = "ended")
     private Date endedAt;
 
-    @Transient
-    private Message message;
+    @OneToMany
+    private List<Message> message;
 
     @Transient
     @Max(6)

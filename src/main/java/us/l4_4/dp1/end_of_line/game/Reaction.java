@@ -1,4 +1,4 @@
-package us.l4_4.dp1.end_of_line.enums;
+package us.l4_4.dp1.end_of_line.game;
 
 public enum Reaction {
     HI("hi"),
@@ -6,7 +6,7 @@ public enum Reaction {
     SORRY("sorry"),
     THANKS("thanks"),
     NICE("nice"),
-    JAJAJAJA("jajajaja"),
+    JAHAJAHA("jajajaja"),
     GG("gg"),
     GOOD_LUCK("good luck");
 
