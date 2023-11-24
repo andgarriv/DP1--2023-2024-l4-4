@@ -95,3 +95,5 @@ INSERT INTO cards (id,card_column,card_row,iniciative,color,exit,orientation) VA
 INSERT INTO cards (id,card_column,card_row,iniciative,color,exit,orientation) VALUES(7,null,null,0,'RED','EXIT_111','S');
 INSERT INTO cards (id,card_column,card_row,iniciative,color,exit,orientation) VALUES(8,null,null,5,'RED','EXIT_111','S');
 
+INSERT INTO cards (id,card_column,card_row,iniciative,color,exit,orientation) VALUES(9,null,null,2,'BLUE','EXIT_001','S');
+
