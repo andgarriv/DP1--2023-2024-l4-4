@@ -2,6 +2,7 @@ package us.l4_4.dp1.end_of_line.message;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import us.l4_4.dp1.end_of_line.model.User;
+import us.l4_4.dp1.end_of_line.player.Player;
 
 @RestController
 @RequestMapping("/api/v1/games/messages")
@@ -60,6 +63,27 @@ public class MessageController {
         messageService.deleteById(id);
     }
 
+      private Message convertToEntity(MessageDTO messageDTO) {
+        Message message = new Message();
+        message.setColor(messageDTO.getColor());
+        message.setReaction(messageDTO.getReaction());
+        message.setSenderId(messageDTO.getSenderId());
+        message.setReceiverId(messageDTO.getReceiverId());
+        message.setGameId(messageDTO.getGameId());
+        messageService.save(message);
+        return message;
+    }
+
+    @PostMapping("/send")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Message sendMessage(@RequestBody @Valid MessageDTO messageDTO, @AuthenticationPrincipal Player player) {
+        Integer sendId = player.getId(); //me dice que el player es null
+        messageDTO.setSenderId(sendId);
+        Message message = convertToEntity(messageDTO);   
+        return message;
+    }
+
+  
 
 
     
