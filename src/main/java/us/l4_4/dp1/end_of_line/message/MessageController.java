@@ -1,7 +1,8 @@
 package us.l4_4.dp1.end_of_line.message;
-
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import us.l4_4.dp1.end_of_line.exceptions.BadRequestException;
 
 @RestController
 @RequestMapping("/api/v1/games/messages")
@@ -35,27 +35,28 @@ public class MessageController {
         return message;
     }
 
+    @GetMapping
+    public List<Message> getAllMessages() {
+        return messageService.getMessages();
+    }
+
     @GetMapping("/{id}")
     public Message getMessageById(@PathVariable int id) {
         return messageService.findMessageById(id);
     }
 
     @PutMapping("/{id}")
-    public Message updateMessage(@PathVariable int id, Message message) {
+    public Message updateMessage(@PathVariable int id,  @RequestBody Message message) {
         Message messageToUpdate = messageService.findMessageById(id);
-        if(messageToUpdate == null) {
-            throw new BadRequestException("messageToUpdate is null");
-        }
-        if(messageToUpdate.getColor() == null) {
-            throw new BadRequestException("messageToUpdate.getColor() is null");
-        }
-        if(messageToUpdate.getReaction() == null) {
-            throw new BadRequestException("messageToUpdate.getReaction() is null");
-        }
         messageToUpdate.setColor(message.getColor());
         messageToUpdate.setReaction(message.getReaction());
         messageService.save(messageToUpdate);
         return messageToUpdate;
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteMessage(@PathVariable int id) {
+        messageService.deleteById(id);
     }
 
 

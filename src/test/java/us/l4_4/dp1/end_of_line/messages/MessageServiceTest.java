@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import us.l4_4.dp1.end_of_line.enums.Color;
@@ -13,6 +14,7 @@ import us.l4_4.dp1.end_of_line.message.Message;
 import us.l4_4.dp1.end_of_line.message.MessageRepository;
 import us.l4_4.dp1.end_of_line.message.MessageService;
 
+@SpringBootTest
 public class MessageServiceTest {
 
     
@@ -48,18 +50,26 @@ public class MessageServiceTest {
         assertEquals(newMessage, savedMessage);
     }
 
-    @Test  
+    @Test
     @Transactional
     public void shouldEditMessage() {
-        // Crear un mensaje de prueba
+        // Asegurarse de que el mensaje exista
         Message existingMessage = new Message();
-        existingMessage.setId(1); 
         existingMessage.setColor(Color.RED);
         existingMessage.setReaction(Reaction.GG);
+        Message savedMessage = messageRepository.save(existingMessage);
+
+        // Modificar el mensaje
+        savedMessage.setColor(Color.BLUE); // Cambiar a un nuevo color
+        savedMessage.setReaction(Reaction.NICE); // Cambiar a una nueva reacción
+
         // Llamada al método que se está probando
-        Message savedMessage = messageService.save(existingMessage);
+        Message updatedMessage = messageService.save(savedMessage);
+
         // Verificación
-        assertEquals(existingMessage, savedMessage);
+        assertEquals(savedMessage.getId(), updatedMessage.getId());
+        assertEquals(Color.BLUE, updatedMessage.getColor());
+        assertEquals(Reaction.NICE, updatedMessage.getReaction());
     }
 
     @Test
