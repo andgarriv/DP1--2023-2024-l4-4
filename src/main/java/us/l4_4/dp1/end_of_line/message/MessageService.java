@@ -1,5 +1,7 @@
 package us.l4_4.dp1.end_of_line.message;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +14,11 @@ public class MessageService {
     @Autowired
     public MessageService(MessageRepository messageRepository) {
         this.messageRepository = messageRepository;
+    }
+
+    @Transactional(readOnly = true)
+    public List<Message> getMessages() {
+        return messageRepository.findAll();
     }
 
     @Transactional

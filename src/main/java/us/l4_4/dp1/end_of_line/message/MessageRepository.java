@@ -1,5 +1,7 @@
 package us.l4_4.dp1.end_of_line.message;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -15,5 +17,8 @@ public interface MessageRepository extends CrudRepository<Message, Integer>{
 
     @Query("SELECT m FROM Message m WHERE m.id = ?1")
     public Message findMessageById(int id);
+
+    @Query("SELECT m FROM Message m")
+    public List<Message> findAll();
     
 } 
