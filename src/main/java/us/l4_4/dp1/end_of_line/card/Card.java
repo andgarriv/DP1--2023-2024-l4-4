@@ -10,6 +10,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import us.l4_4.dp1.end_of_line.enums.CardStatus;
 import us.l4_4.dp1.end_of_line.enums.Color;
 import us.l4_4.dp1.end_of_line.enums.Exit;
 import us.l4_4.dp1.end_of_line.enums.Orientation;
@@ -38,7 +39,9 @@ public class Card extends BaseEntity{
     @Enumerated(EnumType.STRING)
     Orientation orientation;
 
-    
+    @Enumerated(EnumType.STRING)
+    CardStatus card_Status;
+
     @Range(min = 0, max = 6)
     @Column(name = "card_row")
     Integer row;
@@ -46,4 +49,6 @@ public class Card extends BaseEntity{
     @Range(min = 0, max = 6)
     @Column(name = "card_column")
     Integer column;
+
+
 }
