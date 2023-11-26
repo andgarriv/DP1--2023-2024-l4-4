@@ -22,12 +22,12 @@ public class GameController {
     @Autowired
     GameService gameService;
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Game creatGame(@RequestBody @Valid Game game) {
-        gameService.save(game);
-        return game;
-    }
+    // @PostMapping
+    // @ResponseStatus(HttpStatus.CREATED)
+    // public Game creatGame(@RequestBody @Valid Game game) {
+    //     gameService.save(game);
+    //     return game;
+    // }
     @GetMapping("/player")
     public List<Game> getGamesByPlayerId() {
         return gameService.getAllGames();
@@ -36,6 +36,12 @@ public class GameController {
     @GetMapping("/admin")
     public List<Game> getGames() {
         return gameService.getAllGames();
+    }
+
+    @PostMapping()
+    @ResponseStatus(HttpStatus.CREATED)
+    public Game createGame(@RequestBody @Valid GameDTO gameDTO) {
+        return gameService.createGame(gameDTO);
     }
     
 }

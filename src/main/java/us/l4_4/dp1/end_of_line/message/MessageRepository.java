@@ -20,5 +20,6 @@ public interface MessageRepository extends CrudRepository<Message, Integer>{
 
     @Query("SELECT m FROM Message m")
     public List<Message> findAll();
+
     
 } 
