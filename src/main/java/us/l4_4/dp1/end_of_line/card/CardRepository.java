@@ -17,4 +17,7 @@ public interface CardRepository extends CrudRepository<Card, Integer>{
 
         @Query("SELECT c FROM Card c")
         List<Card> findAll();
+
+        @Query("SELECT c FROM Card c WHERE c.color = ?1 AND c.is_Template = true")
+        List<Card> findCardsByColorAndTemplate(Color color);
 }
