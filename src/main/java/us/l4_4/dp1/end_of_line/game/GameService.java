@@ -147,5 +147,41 @@ public class GameService {
     public List<Game> getAllGames(){
         return gameRepository.findAll();
     }
+
+    @Transactional
+    public Game updateGame(Integer id, GameDTO gameDTO){
+        Game game = gameRepository.findById(id).get();
+        game.setRounds(gameDTO.getRounds());
+        if(gameDTO.getWinner_id() != null){
+            game.setWinner(playerRepository.findById(gameDTO.getWinner_id()).get());
+        }
+        game.setStartedAt(gameDTO.getStartedAt());
+        if(gameDTO.getEndedAt() != null){
+            game.setEndedAt(gameDTO.getEndedAt());
+        }
+        if(gameDTO.getMessage_id() != null){
+            List<Message> messages = gameDTO.getMessage_id()
+                .stream()
+                .map(messageId -> messageRepository.findMessageById(messageId))
+                .collect(Collectors.toList());
+            game.setMessage(messages);
+        }
+        if(gameDTO.getEffect_id() != null){
+            game.setEffect(effectRepository.findById(gameDTO.getEffect_id()).get());
+        }
+        List<GamePlayer> gamePlayers = gameDTO.getGamePlayers_ids()
+            .stream()
+            .map(gamePlayerId -> gamePlayerRepository.findById(gamePlayerId).get())
+            .collect(Collectors.toList());
+        game.setGamePlayers(gamePlayers);
+        
+        List<Card> cards = gamePlayers.stream()
+            .map(gamePlayer -> gamePlayer.getCards())
+            .flatMap(cardsList -> cardsList.stream())
+            .collect(Collectors.toList());
+        game.setCards(cards);
+        
+        return gameRepository.save(game);
+    }
     
 }
