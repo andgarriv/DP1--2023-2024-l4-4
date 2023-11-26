@@ -43,19 +43,11 @@ public class GameServiceTest {
 
     @Test
     public void shouldCreateNewGame() {
-        GameDTO gameDTO = new GameDTO();
-        gameDTO.setRounds(0);
-        gameDTO.setStartedAt(Date.valueOf("2021-01-01"));
-        gameDTO.setEndedAt(null);
-        gameDTO.setWinner_id(null);
-        gameDTO.setMessage_id(null);
-        gameDTO.setEffect_id(null);
-        gameDTO.setGamePlayers_ids(List.of(3,4));
         Integer player1_id = 3;
         Integer player2_id = 4;
         Color player1_color = Color.RED;
         Color player2_color = Color.RED;
-        Game game = gs.createNewGame(gameDTO, player1_id, player2_id, player1_color, player2_color);
+        Game game = gs.createNewGame(player1_id, player2_id, player1_color, player2_color);
         assertNotEquals(null, game);
     }
         
