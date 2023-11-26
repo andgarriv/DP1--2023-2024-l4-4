@@ -54,7 +54,7 @@ public class Card extends BaseEntity{
     Integer column;
 
     @Column(name = "is_template")
-    Boolean isTemplate;
+    Boolean is_Template;
 
 
 }
