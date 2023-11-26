@@ -24,8 +24,6 @@ public class CardService {
 
     @Transactional(readOnly = true)
     public List<Card> getAllColorCards(String color){
-
-
         return cardRepository.findCardsByColor(Color.valueOf(color));
     }
     @Transactional(readOnly = true)
@@ -47,8 +45,6 @@ public class CardService {
             cardRepository.deleteById(id);
     }
 
-
-    
     @Transactional(readOnly = true)
     public Card saveCard(@Valid Card c ){
 
