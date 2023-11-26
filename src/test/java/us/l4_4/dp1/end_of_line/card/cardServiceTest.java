@@ -34,7 +34,7 @@ public class cardServiceTest {
         Card c = new Card();
         c.setIniciative(2);
         c.setColor(Color.GREEN);
-        c.setExit(Exit.EXIT_011);
+        c.setExit(Exit.EXIT_011_A);
         c.setOrientation(Orientation.S);
 
         cs.saveCard(c);
@@ -49,7 +49,7 @@ public class cardServiceTest {
     public void shouldEditCard(){
          Card c = new Card();
         c.setIniciative(2);
-        c.setExit(Exit.EXIT_011);
+        c.setExit(Exit.EXIT_011_A);
         c.setColor(Color.MAGENTA);
         c.setOrientation(Orientation.S);
 
@@ -57,14 +57,14 @@ public class cardServiceTest {
 
         created.setIniciative(4);
         created.setColor(Color.GREEN);
-        created.setExit(Exit.EXIT_001);
+        created.setExit(Exit.EXIT_001_A);
         created.setOrientation(Orientation.E);
 
         Card updated = cs.saveCard(created);
 
         assertEquals(updated.getIniciative(),4);
         assertEquals(updated.getColor(), Color.GREEN);
-        assertEquals(updated.getExit(), Exit.EXIT_001);
+        assertEquals(updated.getExit(), Exit.EXIT_001_A);
         assertEquals(updated.getOrientation(), Orientation.E);
     }
 
@@ -75,7 +75,7 @@ public class cardServiceTest {
 
         Card c = new Card();
         c.setIniciative(2);
-        c.setExit(Exit.EXIT_011);
+        c.setExit(Exit.EXIT_011_A);
         c.setColor(Color.MAGENTA);
         c.setOrientation(Orientation.S);
 
