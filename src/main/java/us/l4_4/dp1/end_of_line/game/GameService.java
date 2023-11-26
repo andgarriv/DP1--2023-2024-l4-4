@@ -95,6 +95,7 @@ public class GameService {
         p1.setEnergy(3);
         p1.setPlayer(playerRepository.findById(playerID1).get());
         // Duplicar las cartas del color c1 y asignarlas a p1
+        // TODO: Coger solo las cartas que tienen is_template a true
         List<Card> cardsC1 = cardRepository.findCardsByColor(c1);
         List<Card> cardsC1Duplicated = new ArrayList<>();
         for(Card card : cardsC1){
@@ -102,7 +103,7 @@ public class GameService {
             newCard.setColumn(null);
             newCard.setRow(null);
             newCard.setIniciative(card.getIniciative());
-            newCard.setCard_Status(CardStatus.MANO);
+            newCard.setCard_Status(CardStatus.IN_HAND);
             newCard.setColor(card.getColor());
             newCard.setExit(card.getExit());
             newCard.setOrientation(card.getOrientation());
@@ -123,7 +124,7 @@ public class GameService {
             newCard.setColumn(null);
             newCard.setRow(null);
             newCard.setIniciative(card.getIniciative());
-            newCard.setCard_Status(CardStatus.MANO);
+            newCard.setCard_Status(CardStatus.IN_HAND);
             newCard.setColor(card.getColor());
             newCard.setExit(card.getExit());
             newCard.setOrientation(card.getOrientation());
