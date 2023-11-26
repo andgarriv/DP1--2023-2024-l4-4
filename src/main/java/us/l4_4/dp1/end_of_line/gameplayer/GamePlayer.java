@@ -18,9 +18,9 @@ import us.l4_4.dp1.end_of_line.enums.Color;
 import us.l4_4.dp1.end_of_line.model.BaseEntity;
 import us.l4_4.dp1.end_of_line.player.Player;
 
+@Entity
 @Getter
 @Setter
-@Entity
 @Table(name = "game_players")
 public class GamePlayer extends BaseEntity {
 

@@ -3,6 +3,7 @@ package us.l4_4.dp1.end_of_line.game;
 
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
+import java.sql.Date;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -22,6 +23,20 @@ public class GameServiceTest {
     public void shouldFindAllGames() {
         List<Game> allGames = this.gs.getAllGames();
         assertNotEquals(0, allGames.size());
+    }
+
+    @Test
+    public void shouldCreateGame() {
+        GameDTO gameDTO = new GameDTO();
+        gameDTO.setRounds(0);
+        gameDTO.setStartedAt(Date.valueOf("2021-01-01"));
+        gameDTO.setEndedAt(null);
+        gameDTO.setWinner_id(null);
+        gameDTO.setMessage_id(null);
+        gameDTO.setEffect_id(null);
+        gameDTO.setGamePlayers_ids(List.of(3,4));
+        Game game = gs.createGame(gameDTO);
+        assertNotEquals(null, game);
     }
         
 }
