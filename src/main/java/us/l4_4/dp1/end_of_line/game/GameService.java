@@ -82,7 +82,7 @@ public class GameService {
     }
 
     @Transactional
-    public Game createNewGame(GameDTO gameDTO, Integer playerID1, Integer playerID2, Color c1, Color c2){
+    public Game createNewGame(Integer playerID1, Integer playerID2, Color c1, Color c2){
         Game game = new Game();
         game.setRounds(0);
         game.setWinner(null);

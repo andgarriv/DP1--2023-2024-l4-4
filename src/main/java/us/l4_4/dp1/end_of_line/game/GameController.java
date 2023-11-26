@@ -48,12 +48,11 @@ public class GameController {
 
     @PostMapping("/new/{player1_id}/{player2_id}/{player1_color}/{player2_color}")
     @ResponseStatus(HttpStatus.CREATED)
-    public Game createNewGame(@RequestBody @Valid GameDTO gameDTO,
-    @PathVariable Integer player1_id, @PathVariable Integer player2_id,
+    public Game createNewGame(@PathVariable Integer player1_id, @PathVariable Integer player2_id,
     @PathVariable String player1_color, @PathVariable String player2_color) {
         Color player1_color_enum = Color.valueOf(player1_color);
         Color player2_color_enum = Color.valueOf(player2_color);
-        return gameService.createNewGame(gameDTO, player1_id, player2_id, player1_color_enum, player2_color_enum);
+        return gameService.createNewGame(player1_id, player2_id, player1_color_enum, player2_color_enum);
     }
     
 }
