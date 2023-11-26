@@ -10,6 +10,12 @@ import org.springframework.data.repository.CrudRepository;
 @Repository
 public interface GamePlayerRepository extends CrudRepository<GamePlayer, Integer>{
 
+    @Query("SELECT gp FROM GamePlayer gp WHERE gp.id = ?1")
+    GamePlayer findById(int id);
+
+    // @Query("SELECT gp FROM GamePlayer gp WHERE gp.game.id = ?1")
+    // List<GamePlayer> findByGameId(int gameId);
+
 
 
 

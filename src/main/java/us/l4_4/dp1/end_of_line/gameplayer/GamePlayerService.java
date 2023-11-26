@@ -45,4 +45,24 @@ public class GamePlayerService {
         return gamePlayer;
     }
 
+    public GamePlayer getGamePlayerById(int id) {
+        return gamePlayerRepository.findById(id);
+    }
+
+    public GamePlayer updateGamePlayer(GamePlayerDTO newGamePlayerDTO, int id) {
+        GamePlayer gamePlayer = gamePlayerRepository.findById(id);
+        gamePlayer.setColor(newGamePlayerDTO.getColor());
+        gamePlayer.setEnergy(newGamePlayerDTO.getEnergy());
+        Player player = PlayerRepository.findById(newGamePlayerDTO.getPlayer_id()).orElseThrow();
+        gamePlayer.setPlayer(player);
+        List<Card> cards = newGamePlayerDTO.getCards_ids()
+                .stream()
+                .map(cardId -> cardRepository.findById(cardId)
+                        .orElseThrow())
+                .collect(Collectors.toList());
+        gamePlayer.setCards(cards);
+        gamePlayerRepository.save(gamePlayer);
+        return gamePlayer;
+    }
+
 }
