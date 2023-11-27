@@ -4,25 +4,22 @@ import java.util.List;
 
 import org.hibernate.validator.constraints.Range;
 
-import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
-import us.l4_4.dp1.end_of_line.card.Card;
+import jakarta.validation.constraints.Size;
 import us.l4_4.dp1.end_of_line.enums.Color;
 import us.l4_4.dp1.end_of_line.model.BaseEntity;
-import us.l4_4.dp1.end_of_line.player.Player;
+import lombok.Getter;
+import lombok.Setter;
 
-@Entity
 @Getter
 @Setter
-@Table(name = "game_players")
-public class GamePlayer extends BaseEntity {
+public class GamePlayerDTO{
+
+    @Id
+    Integer id;
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -33,10 +30,11 @@ public class GamePlayer extends BaseEntity {
     Integer energy;
 
     @NotNull
-    @ManyToOne(optional = false)
-    Player player;
+    Integer player_id;
 
-    @NotNull
-    @OneToMany
-    List<Card> cards;
+    //@NotNull
+    //@Size(min = 23, max = 25)
+    //TODO: Necesitamos que al crear un gameplayer se le asignen todas las cartas de su color
+    List<Integer> cards_ids;
+
 }

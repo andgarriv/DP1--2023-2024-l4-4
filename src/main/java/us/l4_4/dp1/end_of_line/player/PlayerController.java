@@ -39,6 +39,12 @@ public class PlayerController {
         this.authoritiesService = authoritiesService;
     }
 
+    @GetMapping("/all")
+    @ResponseStatus(HttpStatus.OK)
+    public Iterable<Player> findAll(){
+        return playerService.findAll();
+    }
+
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
@@ -46,30 +52,8 @@ public class PlayerController {
         String password2 = authService.encodePassword(player.getPassword());
         player.setPassword(password2);
         player.setAuthority(authoritiesService.findByAuthority("PLAYER"));
-        playerService.createPlayer(player);   
+        playerService.savePlayer(player);   
         return player;
-    }
-
-    @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public Player findById(@PathVariable Integer id){
-        if (playerService.findUserById(id) != null) {
-            return playerService.findUserById(id);
-        }
-        else{
-            return null;
-        }
-    }
-
-    @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public Player update(@PathVariable Integer id, @RequestBody @Valid Player player){
-        if (playerService.findUserById(id) != null) {
-            return playerService.updatePlayer(id, player);
-        }
-        else{
-            return null;
-        }
     }
 
     @GetMapping("/nickname/{nickname}")
@@ -83,10 +67,26 @@ public class PlayerController {
         }
     }
 
-    @GetMapping("/all")
+    @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Iterable<Player> findAll(){
-        return playerService.findAllPlayers();
+    public Player findById(@PathVariable Integer id){
+        if (playerService.findById(id) != null) {
+            return playerService.findById(id);
+        }
+        else{
+            return null;
+        }
+    }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Player update(@PathVariable Integer id, @RequestBody @Valid Player player){
+        if (playerService.findById(id) != null) {
+            return playerService.updatePlayer(id, player);
+        }
+        else{
+            return null;
+        }
     }
 
     @DeleteMapping("/{id}")

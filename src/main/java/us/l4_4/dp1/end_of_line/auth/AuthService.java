@@ -36,19 +36,6 @@ public class AuthService {
 		player.setBirthDate(request.getBirthdate());
 		player.setNickname(request.getNickname());
 		player.setAvatar(request.getAvatar());
-		playerService.createPlayer(player);
-		}
-
-	@Transactional
-	public void createUser2(Player player) {
-		Player newPlayer = new Player();
-		newPlayer.setName(player.getName());
-		newPlayer.setSurname(player.getSurname());
-		newPlayer.setPassword(player.getPassword());
-		newPlayer.setEmail(player.getEmail());
-		newPlayer.setBirthDate(player.getBirthDate());
-		newPlayer.setNickname(player.getNickname());
-		newPlayer.setAvatar(player.getAvatar());
-		playerService.createPlayer(player);
+		playerService.savePlayer(player);
 		}
 	}

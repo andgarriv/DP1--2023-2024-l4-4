@@ -38,6 +38,26 @@ public class AchievementsServiceTests {
 
     @Test
     @Transactional
+    public void shouldFindAchievementById() {
+        // Crear un logro de prueba
+        Achievement existingAchievement = new Achievement();
+        existingAchievement.setId(1); 
+        existingAchievement.setName("Original Name");
+        existingAchievement.setDescription("Original Description");
+        existingAchievement.setBadgeImage("https://example.com/originalBadgeImage.jpg");
+        existingAchievement.setThreshold(100.0);
+        existingAchievement.setMetric(Category.GAMES_PLAYED);
+        achievementService.saveAchievement(existingAchievement);
+
+        // Llamada al método que se está probando
+        Achievement result = achievementService.getById(existingAchievement.getId());
+
+        // Verificación
+        assertEquals(existingAchievement.getName(), result.getName());
+    }
+
+    @Test
+    @Transactional
     public void shouldCreateAchievement() {
         // Crear un logro de prueba con propiedades válidas
         Achievement newAchievement = new Achievement();
@@ -62,7 +82,7 @@ public class AchievementsServiceTests {
         existingAchievement.setDescription("Original Description");
         existingAchievement.setBadgeImage("https://example.com/originalBadgeImage.jpg");
         existingAchievement.setThreshold(100.0);
-        existingAchievement.setMetric(Category.GAMES_PLAYED); // Reemplazar SOME_METRIC con un valor válido de tu Enum Metric
+        existingAchievement.setMetric(Category.GAMES_PLAYED);
 
         // Suponer que este es el logro actualizado
         Achievement updatedAchievement = new Achievement();
@@ -81,6 +101,45 @@ public class AchievementsServiceTests {
         assertEquals(updatedAchievement.getBadgeImage(), result.getBadgeImage());
         assertEquals(updatedAchievement.getThreshold(), result.getThreshold(), 0.01);
         assertEquals(updatedAchievement.getMetric(), result.getMetric());
+    }
+
+    @Test
+    @Transactional
+    public void shouldDeleteAchievement() {
+        // Crear un logro de prueba
+        Achievement existingAchievement = new Achievement();
+        existingAchievement.setId(1); 
+        existingAchievement.setName("Original Name");
+        existingAchievement.setDescription("Original Description");
+        existingAchievement.setBadgeImage("https://example.com/originalBadgeImage.jpg");
+        existingAchievement.setThreshold(100.0);
+        existingAchievement.setMetric(Category.GAMES_PLAYED);
+
+        // Llamada al método que se está probando
+        achievementService.deleteAchievementById(existingAchievement.getId());
+
+        // Verificación
+        assertNull(achievementRepository.findById(existingAchievement.getId()).orElse(null));
+    }
+
+    @Test
+    @Transactional
+    public void shouldFindAchievementByName() {
+        // Crear un logro de prueba
+        Achievement existingAchievement = new Achievement();
+        existingAchievement.setId(1); 
+        existingAchievement.setName("Original Name");
+        existingAchievement.setDescription("Original Description");
+        existingAchievement.setBadgeImage("https://example.com/originalBadgeImage.jpg");
+        existingAchievement.setThreshold(100.0);
+        existingAchievement.setMetric(Category.GAMES_PLAYED);
+        achievementService.saveAchievement(existingAchievement);
+
+        // Llamada al método que se está probando
+        Achievement result = achievementService.getAchievementByName(existingAchievement.getName());
+
+        // Verificación
+        assertEquals(existingAchievement.getName(), result.getName());
     }
     
 }

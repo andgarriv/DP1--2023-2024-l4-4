@@ -12,6 +12,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Getter;
@@ -30,7 +31,7 @@ import us.l4_4.dp1.end_of_line.player.Player;
 public class Game extends BaseEntity {
 
     @NotNull
-    @Positive
+    @Min(0)
     private Integer rounds;
 
     @ManyToOne
@@ -48,7 +49,6 @@ public class Game extends BaseEntity {
     private List<Message> message;
 
     @Transient
-    @Max(6)
     private Effect effect;
 
     @NotNull
