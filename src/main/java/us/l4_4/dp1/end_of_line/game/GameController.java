@@ -1,7 +1,5 @@
 package us.l4_4.dp1.end_of_line.game;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.service.annotation.PutExchange;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -27,12 +24,12 @@ public class GameController {
     GameService gameService;
 
     @GetMapping("/player")
-    public List<Game> getGamesByPlayerId() {
+    public Iterable<Game> getGamesByPlayerId() {
         return gameService.getAllGames();
     }
 
     @GetMapping("/admin")
-    public List<Game> getGames() {
+    public Iterable<Game> getGames() {
         return gameService.getAllGames();
     }
 
@@ -56,5 +53,4 @@ public class GameController {
     public Game updateGame(@PathVariable Integer id, @RequestBody @Valid GameDTO gameDTO) {
         return gameService.updateGame(id, gameDTO);
     }
-    
 }

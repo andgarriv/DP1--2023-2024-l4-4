@@ -1,4 +1,4 @@
-package us.l4_4.dp1.end_of_line.player;
+package us.l4_4.dp1.end_of_line.friendship;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.Setter;
 import us.l4_4.dp1.end_of_line.enums.FriendStatus;
 import us.l4_4.dp1.end_of_line.model.BaseEntity;
+import us.l4_4.dp1.end_of_line.player.Player;
 
 @Getter
 @Setter

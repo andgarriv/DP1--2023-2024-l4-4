@@ -1,8 +1,6 @@
 package us.l4_4.dp1.end_of_line.card;
 
-import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.validator.constraints.Range;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,13 +10,11 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.Builder.Default;
 import us.l4_4.dp1.end_of_line.enums.CardStatus;
 import us.l4_4.dp1.end_of_line.enums.Color;
 import us.l4_4.dp1.end_of_line.enums.Exit;
 import us.l4_4.dp1.end_of_line.enums.Orientation;
 import us.l4_4.dp1.end_of_line.model.BaseEntity;
-
 
 @Getter
 @Setter
@@ -55,6 +51,4 @@ public class Card extends BaseEntity{
 
     @Column(name = "is_template")
     Boolean is_Template;
-
-
 }

@@ -1,13 +1,11 @@
 package us.l4_4.dp1.end_of_line.statistic;
 
-import java.util.List;
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.validation.Valid;
+import us.l4_4.dp1.end_of_line.exceptions.ResourceNotFoundException;
 
 @Service
 public class AchievementService {
@@ -20,14 +18,13 @@ public class AchievementService {
     }
 
     @Transactional(readOnly = true)    
-    public List<Achievement> getAchievements(){
+    public Iterable<Achievement> findAllAchievements(){
         return achievementRepository.findAll();
     }
 
     @Transactional(readOnly = true)    
-    public Achievement getById(int id){
-        Optional<Achievement> result=achievementRepository.findById(id);
-        return result.isPresent()?result.get():null;
+    public Achievement findAchiviementById(Integer id){
+        return achievementRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Achievement", "id", id));
     }
 
     @Transactional
@@ -41,7 +38,7 @@ public class AchievementService {
     }
 
     @Transactional(readOnly = true)
-    public Achievement getAchievementByName(String name){
+    public Achievement findAchievementByName(String name){
         return achievementRepository.findByName(name);
     }
 }

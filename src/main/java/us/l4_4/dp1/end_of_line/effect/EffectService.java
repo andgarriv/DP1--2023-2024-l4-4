@@ -1,10 +1,11 @@
 package us.l4_4.dp1.end_of_line.effect;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import us.l4_4.dp1.end_of_line.exceptions.ResourceNotFoundException;
 
 @Service
 public class EffectService {
@@ -17,7 +18,7 @@ public class EffectService {
     }
 
     @Transactional(readOnly = true)
-    public List<Effect> getEffects() {
+    public Iterable<Effect> getEffects() {
         return effectRepository.findAll();
     }
     @Transactional
@@ -26,13 +27,12 @@ public class EffectService {
     }
 
     @Transactional
-    public void deleteById(int id) {
+    public void deleteById(Integer id) {
         effectRepository.deleteById(id);
     }
 
     @Transactional(readOnly = true)
-    public Effect findEffectById(int id) {
-        return effectRepository.findEffectById(id);
+    public Effect findEffectById(Integer id) throws DataAccessException{
+        return effectRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Effect","id", id));
     }
-    
 }

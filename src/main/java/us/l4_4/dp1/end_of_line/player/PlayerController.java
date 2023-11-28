@@ -19,7 +19,6 @@ import jakarta.validation.Valid;
 import us.l4_4.dp1.end_of_line.auth.AuthService;
 import us.l4_4.dp1.end_of_line.authorities.AuthoritiesService;
 
-
 @RestController
 @RequestMapping("/api/v1/player")
 @Tag(name = "Player", description = "API for the management of Player")
@@ -45,7 +44,6 @@ public class PlayerController {
         return playerService.findAll();
     }
 
-
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public Player create(@RequestBody @Valid Player player){
@@ -59,34 +57,28 @@ public class PlayerController {
     @GetMapping("/nickname/{nickname}")
     @ResponseStatus(HttpStatus.OK)
     public Player findByNickname(@PathVariable String nickname){
-        if (playerService.findByNickname(nickname) != null) {
+        if (playerService.findByNickname(nickname) != null) 
             return playerService.findByNickname(nickname);
-        }
-        else{
+        else
             return null;
-        }
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Player findById(@PathVariable Integer id){
-        if (playerService.findById(id) != null) {
+        if (playerService.findById(id) != null) 
             return playerService.findById(id);
-        }
-        else{
+        else
             return null;
-        }
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Player update(@PathVariable Integer id, @RequestBody @Valid Player player){
-        if (playerService.findById(id) != null) {
+        if (playerService.findById(id) != null) 
             return playerService.updatePlayer(id, player);
-        }
-        else{
+        else
             return null;
-        }
     }
 
     @DeleteMapping("/{id}")

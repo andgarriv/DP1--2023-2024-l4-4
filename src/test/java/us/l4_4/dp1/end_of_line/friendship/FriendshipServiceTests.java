@@ -6,8 +6,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 
 import us.l4_4.dp1.end_of_line.enums.FriendStatus;
-import us.l4_4.dp1.end_of_line.player.Friendship;
-import us.l4_4.dp1.end_of_line.player.FriendshipService;
 
 @SpringBootTest
 @AutoConfigureTestDatabase

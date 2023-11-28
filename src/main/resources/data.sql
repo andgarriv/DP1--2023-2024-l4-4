@@ -16,9 +16,9 @@ INSERT INTO players(id,name,surname,password,email,birth_date,authority,nickname
 
 
 -- Achievements
-INSERT INTO achievements(id,name,description,threshold,badge_image,metric) VALUES (1,'Basic expirence','Play 10 games',10.0,'https://cdn-icons-png.flaticon.com/512/5243/5243423.png','GAMES_PLAYED');
-INSERT INTO achievements(id,name,description,threshold,badge_image,metric) VALUES (2,'Explorer','Play 25 games',25.0,'https://cdn-icons-png.flaticon.com/512/603/603855.png','GAMES_PLAYED');
-INSERT INTO achievements(id,name,description,threshold,metric) VALUES (3,'Expert','Win 20 games',20.0,'VICTORIES');
+INSERT INTO achievements(id,name,description,threshold,badge_image,category) VALUES (1,'Basic expirence','Play 10 games',10.0,'https://cdn-icons-png.flaticon.com/512/5243/5243423.png','GAMES_PLAYED');
+INSERT INTO achievements(id,name,description,threshold,badge_image,category) VALUES (2,'Explorer','Play 25 games',25.0,'https://cdn-icons-png.flaticon.com/512/603/603855.png','GAMES_PLAYED');
+INSERT INTO achievements(id,name,description,threshold,category) VALUES (3,'Expert','Win 20 games',20.0,'VICTORIES');
 
 -- Player Achievements
 INSERT INTO player_achievements(id,achieve_at,achievement_id)VALUES(1,'2021-09-01',1);

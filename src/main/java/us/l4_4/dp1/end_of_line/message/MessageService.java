@@ -1,10 +1,11 @@
 package us.l4_4.dp1.end_of_line.message;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import us.l4_4.dp1.end_of_line.exceptions.ResourceNotFoundException;
 
 @Service
 public class MessageService {
@@ -17,12 +18,12 @@ public class MessageService {
     }
 
     @Transactional(readOnly = true)
-    public List<Message> getMessages() {
+    public Iterable<Message> findAllMessages() throws DataAccessException{
         return messageRepository.findAll();
     }
 
     @Transactional
-    public Message save(Message message) {
+    public Message save(Message message) throws DataAccessException{
         return messageRepository.save(message);
     }
 
@@ -32,7 +33,7 @@ public class MessageService {
     }
 
     @Transactional(readOnly = true)
-    public Message findMessageById(int id) {
-        return messageRepository.findMessageById(id);
+    public Message findMessageById(int id) throws DataAccessException{
+        return messageRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Message", "id", id));
     }
 }
