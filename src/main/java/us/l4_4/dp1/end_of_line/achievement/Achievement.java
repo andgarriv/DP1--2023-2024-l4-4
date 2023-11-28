@@ -1,4 +1,4 @@
-package us.l4_4.dp1.end_of_line.statistic;
+package us.l4_4.dp1.end_of_line.achievement;
 
 import org.hibernate.validator.constraints.URL;
 
