@@ -9,31 +9,31 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class PlayerAchievementService {
 
-    PlayerAchievementRepository repo;
+    PlayerAchievementRepository playerAchievementRepository;
 
     @Autowired
-    public PlayerAchievementService(PlayerAchievementRepository repo){
-        this.repo=repo;
+    public PlayerAchievementService(PlayerAchievementRepository playerAchievementRepository){
+        this.playerAchievementRepository=playerAchievementRepository;
     }
 
     @Transactional(readOnly = true)
     public List<PlayerAchievement> getPlayerAchievements(){
-        return repo.findAll();
+        return playerAchievementRepository.findAll();
     }
 
     @Transactional(readOnly = true)
     public PlayerAchievement getPlayerAchievementById(int id){
-        return repo.findById(id);
+        return playerAchievementRepository.findById(id);
     }
 
     @Transactional
     public PlayerAchievement savePlayerAchievement(PlayerAchievement newPlayerAchievement) {
-        return repo.save(newPlayerAchievement);
+        return playerAchievementRepository.save(newPlayerAchievement);
     }
 
     @Transactional
     public void deletePlayerAchievementById(int id){
-        repo.deleteById(id);
+        playerAchievementRepository.deleteById(id);
     }
     
 }

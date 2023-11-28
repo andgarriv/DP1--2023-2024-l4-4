@@ -12,36 +12,36 @@ import jakarta.validation.Valid;
 @Service
 public class AchievementService {
 
-    AchievementRepository repo;
+    AchievementRepository achievementRepository;
 
     @Autowired
-    public AchievementService(AchievementRepository repo){
-        this.repo=repo;
+    public AchievementService(AchievementRepository achievementRepository){
+        this.achievementRepository=achievementRepository;
     }
 
     @Transactional(readOnly = true)    
     public List<Achievement> getAchievements(){
-        return repo.findAll();
+        return achievementRepository.findAll();
     }
 
     @Transactional(readOnly = true)    
     public Achievement getById(int id){
-        Optional<Achievement> result=repo.findById(id);
+        Optional<Achievement> result=achievementRepository.findById(id);
         return result.isPresent()?result.get():null;
     }
 
     @Transactional
     public Achievement saveAchievement(@Valid Achievement newAchievement) {
-        return repo.save(newAchievement);
+        return achievementRepository.save(newAchievement);
     }
 
     @Transactional
     public void deleteAchievementById(int id){
-        repo.deleteById(id);
+        achievementRepository.deleteById(id);
     }
 
     @Transactional(readOnly = true)
     public Achievement getAchievementByName(String name){
-        return repo.findByName(name);
+        return achievementRepository.findByName(name);
     }
 }
