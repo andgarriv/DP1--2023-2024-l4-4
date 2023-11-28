@@ -13,8 +13,18 @@ export default function NewGame() {
   const [message, setMessage] = useState("");
   const [visible, setVisible] = useState(false);
   const [p2, setP2] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const playersPerPage = 4;
 
   const modal = getErrorModal(setVisible, visible, message);
+
+  const indexOfLastPlayer = currentPage * playersPerPage;
+  const indexOfFirstPlayer = indexOfLastPlayer - playersPerPage;
+  const currentPlayers = players ? players.slice(indexOfFirstPlayer, indexOfLastPlayer) : [];
+
+  // Cambiar página
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
 
   const handleSelectColor1 = (color) => {
     if (color === selectedColor2) {
@@ -38,6 +48,10 @@ export default function NewGame() {
 
   const handlePlayerSelect = (playerId) => {
     setP2(playerId);
+  };
+
+  const deletePlayerSelect = () => {
+    setP2(null);
   };
 
   const handleStartGame = async () => {
@@ -92,11 +106,12 @@ export default function NewGame() {
 
   return (
     <div className="home-page-container">
-      <div className="hero-div">
+      <div className="hero-div"
+      style={{ width: '80%' }}>
         <h1>NEW GAME</h1>
         {players ? (
           <div>
-            {players.map((player) => (
+            {currentPlayers.map((player) => (
               <div
                 key={player.id}
                 style={{
@@ -104,6 +119,23 @@ export default function NewGame() {
                   justifyContent: "space-between",
                 }}
               >
+                <img
+                  src={player.avatar}
+                  alt="avatar"
+                  style={{
+                    borderRadius: "40%",
+                    width: "40px",
+                    height: "40px",
+                  }}
+                />
+                <div
+                  style={{
+                    flex: 1,
+                    textAlign: "center",
+                    minWidth: "150px",
+                    margin: "10px",
+                  }}
+                ></div>
                 <div
                   style={{
                     flex: 1,
@@ -114,85 +146,115 @@ export default function NewGame() {
                 >
                   {player.nickname}
                 </div>
-                <div
-                  style={{
-                    flex: 1,
-                    textAlign: "center",
-                    minWidth: "150px",
-                    margin: "10px",
-                  }}
-                >
-                  <img
-                    src={player.avatar}
-                    alt="avatar"
-                    style={{
-                      borderRadius: "40%",
-                      width: "40px",
-                      height: "40px",
-                    }}
-                  />
-                </div>
                 <Button
                   size="xs"
                   style={{
                     marginTop: "10px",
-                    backgroundColor: "green",
+                    backgroundColor: "#2C2C2C",
+                    color: player.id === p2 ? "#e21c24" : "#4bb25b",
                     borderRadius: "40%",
                     width: "40px",
                     height: "40px",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
+                    border:
+                      player.id === p2
+                        ? "2px solid #e21c24"
+                        : "2px solid #4bb25b",
                   }}
-                  onClick={() => handlePlayerSelect(player.id)}
+                  onClick={() =>
+                    player.id === p2
+                      ? deletePlayerSelect()
+                      : handlePlayerSelect(player.id)
+                  }
                 >
-                  +
+                  {player.id === p2 ? "x" : "+"}
                 </Button>
               </div>
             ))}
-            <div className="colors">
-              {gamePlayerFormInputs.map((choice) => (
-                <div
-                  key={choice.color}
-                  className={`color-image-container ${
-                    selectedColor1 === choice.color ? "selected-container" : ""
-                  }`}
-                >
-                  <img
-                    src={choice.image}
-                    alt={choice.label}
-                    className={`color-image ${
-                      selectedColor1 === choice.color ? "selected" : ""
-                    }`}
-                    onClick={() =>
-                      handleSelectColor1(choice.color, choice.label)
-                    }
-                    style={{ width: "100%", height: "auto" }}
-                  />
-                </div>
-              ))}
+            <br />
+            <div className="pagination" style={{
+              display: "flex",
+              justifyContent: "flex-end",
+            }}>
+            {[...Array(Math.ceil(players.length / playersPerPage)).keys()].map(number => (
+              <button
+                key={number}
+                onClick={() => paginate(number + 1)}
+                style={{
+                  backgroundColor: number + 1 === currentPage ? '#2596be' : '#2C2C2C',
+                  color: number + 1 === currentPage ? '#2C2C2C' : '#2596be',
+                  borderRadius: "10%",
+                    width: "40px",
+                    height: "40px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    margin: "5px",
+                    border:
+                    number + 1 === currentPage ? "2px solid #2C2C2C"
+                        : "2px solid #2596be",
+                }}
+              >
+                {number + 1}
+              </button>
+            ))}
+          </div>
+            <div className="row">
+              <div className="colors">Player 1</div>
+              <div className="colors">Player 2</div>
             </div>
-            <div className="colors">
-              {gamePlayerFormInputs.map((choice) => (
-                <div
-                  key={choice.color}
-                  className={`color-image-container ${
-                    selectedColor2 === choice.color ? "selected-container" : ""
-                  }`}
-                >
-                  <img
-                    src={choice.image}
-                    alt={choice.label}
-                    className={`color-image ${
-                      selectedColor2 === choice.color ? "selected" : ""
+
+            <div className="row">
+              <div className="colors">
+                {gamePlayerFormInputs.map((choice) => (
+                  <div
+                    key={choice.color}
+                    className={`color-image-container ${
+                      selectedColor1 === choice.color
+                        ? "selected-container"
+                        : ""
                     }`}
-                    onClick={() =>
-                      handleSelectColor2(choice.color, choice.label)
-                    }
-                    style={{ width: "100%", height: "auto" }}
-                  />
-                </div>
-              ))}
+                  >
+                    <img
+                      src={choice.image}
+                      alt={choice.label}
+                      className={`color-image ${
+                        selectedColor1 === choice.color ? "selected" : ""
+                      }`}
+                      onClick={() =>
+                        handleSelectColor1(choice.color, choice.label)
+                      }
+                      style={{ width: "100%", height: "auto" }}
+                    />
+                  </div>
+                ))}
+              </div>
+              <div className="colors">
+                {gamePlayerFormInputs.map((choice) => (
+                  <div
+                    key={choice.color}
+                    className={`color-image-container ${
+                      selectedColor2 === choice.color
+                        ? "selected-container"
+                        : ""
+                    }`}
+                  >
+                    <img
+                      src={choice.image}
+                      alt={choice.label}
+                      className={`color-image ${
+                        selectedColor2 === choice.color ? "selected" : ""
+                      }`}
+                      onClick={() =>
+                        handleSelectColor2(choice.color, choice.label)
+                      }
+                      style={{ width: "100%", height: "auto" }}
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
             {modal}
             <div className="button-container">
