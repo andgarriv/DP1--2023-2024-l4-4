@@ -28,6 +28,6 @@ public interface PlayerRepository extends CrudRepository<Player, Integer> {
     @Query("DELETE FROM Player p WHERE p.id = :id")
     public void deletePlayer(@Param("id")Integer id);
 
-    @Query("SELECT p FROM Player p WHERE p.id <> :id")
+    @Query("SELECT p FROM Player p WHERE p.id <> :id ORDER BY p.nickname")
     List<Player> findAllExceptWithId(@Param("id") Integer id);
 }
