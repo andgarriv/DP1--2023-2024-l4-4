@@ -1,5 +1,7 @@
 package us.l4_4.dp1.end_of_line.player;
 
+import java.util.List;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -57,14 +59,19 @@ public class PlayerService {
 		Player playerToUpdate = findById(nickname);
 		BeanUtils.copyProperties(nickname, playerToUpdate, "id");
 		return playerRepository.save(playerToUpdate);
-	}	
+	}
 
 	@Transactional
 	public Player updatePlayer(Integer id, Player player){
 		Player playerToUpdate = findById(id);
 		BeanUtils.copyProperties(player, playerToUpdate, "id");
 		return playerRepository.save(playerToUpdate);
-	} 
+	}
+
+	@Transactional(readOnly = true)
+	public List<Player> findAllPlayersExceptWithId(Integer id) {
+        return playerRepository.findAllExceptWithId(id);
+    }
 
 	@Transactional
 	public void deletePlayer(Integer id) throws DataAccessException{

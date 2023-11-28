@@ -22,9 +22,12 @@ public interface PlayerRepository extends CrudRepository<Player, Integer> {
     public Boolean existsByEmail(String email);
 
     @Query("SELECT p FROM Player p WHERE p.authority.authority = :auth")
-	List<Player> findAllByAuthority(String auth); 
+	List<Player> findAllByAuthority(String auth);
     
     @Modifying
     @Query("DELETE FROM Player p WHERE p.id = :id")
     public void deletePlayer(@Param("id")Integer id);
+
+    @Query("SELECT p FROM Player p WHERE p.id <> :id")
+    List<Player> findAllExceptWithId(@Param("id") Integer id);
 }

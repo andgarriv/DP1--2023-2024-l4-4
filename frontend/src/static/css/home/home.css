@@ -141,17 +141,17 @@
 .colors {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
+  justify-content: space-evenly;
 }
 
 .color-image-container {
-  flex: 1 0 22%;
-  max-width: 20%;
-  margin: 2%;
+  flex: 1 0 0%;
+  max-width: 5%;
+  margin: 1%;
 }
 
 .selected-container {
   background-color: rgba(0, 0, 0, 0.2);
   padding: 10px;
-  border-radius: 25px;
+  border-radius: 5px;
 }
