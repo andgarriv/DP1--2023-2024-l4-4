@@ -14,7 +14,7 @@ export default function NewGame() {
   const [visible, setVisible] = useState(false);
   const [p2, setP2] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const playersPerPage = 4;
+  const playersPerPage = 5;
 
   const modal = getErrorModal(setVisible, visible, message);
 
@@ -109,14 +109,24 @@ export default function NewGame() {
       <div className="hero-div"
       style={{ width: '80%' }}>
         <h1>NEW GAME</h1>
+        <br />
         {players ? (
           <div>
+          <div style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-evenly",
+                }} >
             {currentPlayers.map((player) => (
               <div
                 key={player.id}
                 style={{
                   display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
                   justifyContent: "space-between",
+                  margin: "10px",
+                
                 }}
               >
                 <img
@@ -130,16 +140,7 @@ export default function NewGame() {
                 />
                 <div
                   style={{
-                    flex: 1,
                     textAlign: "center",
-                    minWidth: "150px",
-                    margin: "10px",
-                  }}
-                ></div>
-                <div
-                  style={{
-                    flex: 1,
-                    textAlign: "left",
                     minWidth: "150px",
                     margin: "10px",
                   }}
@@ -149,7 +150,6 @@ export default function NewGame() {
                 <Button
                   size="xs"
                   style={{
-                    marginTop: "10px",
                     backgroundColor: "#2C2C2C",
                     color: player.id === p2 ? "#e21c24" : "#4bb25b",
                     borderRadius: "40%",
@@ -173,6 +173,8 @@ export default function NewGame() {
                 </Button>
               </div>
             ))}
+                        </div>
+
             <br />
             <div className="pagination" style={{
               display: "flex",
