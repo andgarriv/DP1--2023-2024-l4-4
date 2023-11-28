@@ -1,7 +1,10 @@
 package us.l4_4.dp1.end_of_line.player;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,7 +34,8 @@ public class PlayerController {
     private AuthoritiesService authoritiesService;
 
     @Autowired
-    public PlayerController(PlayerService playerService, AuthService authService, PasswordEncoder encoder, AuthoritiesService authoritiesService) {
+    public PlayerController(PlayerService playerService, AuthService authService, PasswordEncoder encoder,
+            AuthoritiesService authoritiesService) {
         this.playerService = playerService;
         this.authService = authService;
         this.encoder = encoder;
@@ -40,24 +44,24 @@ public class PlayerController {
 
     @GetMapping("/all")
     @ResponseStatus(HttpStatus.OK)
-    public Iterable<Player> findAll(){
+    public Iterable<Player> findAll() {
         return playerService.findAll();
     }
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public Player create(@RequestBody @Valid Player player){
+    public Player create(@RequestBody @Valid Player player) {
         String password2 = authService.encodePassword(player.getPassword());
         player.setPassword(password2);
         player.setAuthority(authoritiesService.findByAuthority("PLAYER"));
-        playerService.savePlayer(player);   
+        playerService.savePlayer(player);
         return player;
     }
 
     @GetMapping("/nickname/{nickname}")
     @ResponseStatus(HttpStatus.OK)
-    public Player findByNickname(@PathVariable String nickname){
-        if (playerService.findByNickname(nickname) != null) 
+    public Player findByNickname(@PathVariable String nickname) {
+        if (playerService.findByNickname(nickname) != null)
             return playerService.findByNickname(nickname);
         else
             return null;
@@ -65,17 +69,26 @@ public class PlayerController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Player findById(@PathVariable Integer id){
-        if (playerService.findById(id) != null) 
+    public Player findById(@PathVariable Integer id) {
+        if (playerService.findById(id) != null)
             return playerService.findById(id);
         else
             return null;
     }
 
+    @GetMapping("/allExcept/{id}")
+    public ResponseEntity<List<Player>> getAllPlayersExceptWithId(@PathVariable Integer id) {
+        List<Player> players = playerService.findAllPlayersExceptWithId(id);
+        if (players.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(players, HttpStatus.OK);
+    }
+
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Player update(@PathVariable Integer id, @RequestBody @Valid Player player){
-        if (playerService.findById(id) != null) 
+    public Player update(@PathVariable Integer id, @RequestBody @Valid Player player) {
+        if (playerService.findById(id) != null)
             return playerService.updatePlayer(id, player);
         else
             return null;
@@ -83,7 +96,7 @@ public class PlayerController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void delete(@PathVariable Integer id){
+    public void delete(@PathVariable Integer id) {
         playerService.deletePlayer(id);
     }
 }

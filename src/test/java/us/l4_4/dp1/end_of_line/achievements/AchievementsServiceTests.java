@@ -10,10 +10,10 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import us.l4_4.dp1.end_of_line.achievement.Achievement;
+import us.l4_4.dp1.end_of_line.achievement.AchievementRepository;
+import us.l4_4.dp1.end_of_line.achievement.AchievementService;
 import us.l4_4.dp1.end_of_line.enums.Category;
-import us.l4_4.dp1.end_of_line.statistic.Achievement;
-import us.l4_4.dp1.end_of_line.statistic.AchievementRepository;
-import us.l4_4.dp1.end_of_line.statistic.AchievementService;
 
 @SpringBootTest
 @AutoConfigureTestDatabase
