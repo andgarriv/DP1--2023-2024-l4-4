@@ -347,3 +347,8 @@ INSERT INTO effects(id, color, hability)VALUES(1,null,'SPEED_UP');
 INSERT INTO effects(id, color, hability)VALUES(2,null,'BRAKE');
 INSERT INTO effects(id, color, hability)VALUES(3,null,'REVERSE');
 INSERT INTO effects(id, color, hability)VALUES(4,null,'EXTRA_GAS');
+
+INSERT INTO friendships(id, sender, receiver, friend_state) VALUES (1, 3, 4, 'ACCEPTED'),
+                                                                    (2, 3, 5, 'ACCEPTED'),
+                                                                    (3, 3, 6, 'PENDING'),
+                                                                    (4, 5, 6, 'REJECTED');

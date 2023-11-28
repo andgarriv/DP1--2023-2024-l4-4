@@ -21,9 +21,6 @@ public interface PlayerRepository extends CrudRepository<Player, Integer> {
     @Query("SELECT COUNT(*) > 0 FROM Player p WHERE p.email = ?1")
     public Boolean existsByEmail(String email);
 
-     @Query("SELECT p FROM Player p WHERE p.id = :id")
-    public Optional<Player> findById(Integer id);
-
     @Query("SELECT p FROM Player p WHERE p.authority.authority = :auth")
 	List<Player> findAllByAuthority(String auth); 
     
