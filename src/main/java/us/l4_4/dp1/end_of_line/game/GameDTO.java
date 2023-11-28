@@ -33,12 +33,4 @@ public class GameDTO {
 
     @NotNull
     List<Integer> gamePlayers_ids;
-
-    
-    // List<Integer> cards_ids;
-
-    
-
-
-    
 }

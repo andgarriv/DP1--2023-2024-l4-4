@@ -1,4 +1,4 @@
-package us.l4_4.dp1.end_of_line.player;
+package us.l4_4.dp1.end_of_line.friendship;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -1,10 +1,11 @@
 package us.l4_4.dp1.end_of_line.game;
 
 
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.stream.StreamSupport;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,16 +16,16 @@ import us.l4_4.dp1.end_of_line.enums.Color;
 
 @SpringBootTest
 @AutoConfigureTestDatabase
-public class GameServiceTest {
+class GameServiceTest {
 
     @Autowired
-    private GameService gs;
-
+    private GameService gameService;
 
     @Test
     public void shouldFindAllGames() {
-        List<Game> allGames = this.gs.getAllGames();
-        assertNotEquals(0, allGames.size());
+        Iterable<Game> allGames = this.gameService.getAllGames();
+        long count = StreamSupport.stream(allGames.spliterator(), false).count();
+        assertNotEquals(0, count);
     }
 
     @Test
@@ -37,7 +38,7 @@ public class GameServiceTest {
         gameDTO.setMessage_id(null);
         gameDTO.setEffect_id(null);
         gameDTO.setGamePlayers_ids(List.of(3,4));
-        Game game = gs.createGame(gameDTO);
+        Game game = gameService.createGame(gameDTO);
         assertNotEquals(null, game);
     }
 
@@ -47,8 +48,7 @@ public class GameServiceTest {
         Integer player2_id = 4;
         Color player1_color = Color.RED;
         Color player2_color = Color.RED;
-        Game game = gs.createNewGame(player1_id, player2_id, player1_color, player2_color);
+        Game game = gameService.createNewGame(player1_id, player2_id, player1_color, player2_color);
         assertNotEquals(null, game);
-    }
-        
+    }    
 }
