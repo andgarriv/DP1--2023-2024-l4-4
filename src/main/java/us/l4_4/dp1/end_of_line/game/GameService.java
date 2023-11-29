@@ -16,6 +16,7 @@ import us.l4_4.dp1.end_of_line.card.CardService;
 import us.l4_4.dp1.end_of_line.effect.EffectRepository;
 import us.l4_4.dp1.end_of_line.enums.CardStatus;
 import us.l4_4.dp1.end_of_line.enums.Color;
+import us.l4_4.dp1.end_of_line.exceptions.BadRequestException;
 import us.l4_4.dp1.end_of_line.exceptions.ResourceNotFoundException;
 import us.l4_4.dp1.end_of_line.gameplayer.GamePlayer;
 import us.l4_4.dp1.end_of_line.gameplayer.GamePlayerRepository;
@@ -87,6 +88,10 @@ public class GameService {
 
     @Transactional
     public Game createNewGame(Integer playerID1, Integer playerID2, Color c1, Color c2) throws DataAccessException{
+
+        if(checkOnlyOneGameForEachPlayer(playerID1)){
+            throw new BadRequestException("No se puede crear una partida ya que el jugador tiene una en curso");
+        }
         Game game = new Game();
         game.setRounds(0);
         game.setWinner(null);
@@ -105,7 +110,7 @@ public class GameService {
             newCard.setColumn(null);
             newCard.setRow(null);
             newCard.setIniciative(card.getIniciative());
-            newCard.setCard_Status(CardStatus.IN_HAND);
+            newCard.setCard_Status(CardStatus.IN_DECK);
             newCard.setColor(card.getColor());
             newCard.setExit(card.getExit());
             newCard.setOrientation(card.getOrientation());
@@ -150,6 +155,16 @@ public class GameService {
     @Transactional(readOnly = true)
     public Iterable<Game> getAllGames() throws DataAccessException{
         return gameRepository.findAll();
+    }
+
+
+
+    private Boolean checkOnlyOneGameForEachPlayer(Integer id1){
+        Boolean res = false;
+            if(!gameRepository.findNotEndedGamesByPlayerId(id1).isEmpty()){
+                    res= true;
+            }
+            return res;
     }
 
     @Transactional
