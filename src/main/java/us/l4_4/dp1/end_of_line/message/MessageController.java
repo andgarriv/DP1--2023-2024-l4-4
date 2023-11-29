@@ -61,29 +61,4 @@ public class MessageController {
     public void deleteMessage(@PathVariable int id) {
         messageService.deleteById(id);
     }
-
-      private Message convertToEntity(MessageDTO messageDTO) {
-        Message message = new Message();
-        message.setColor(messageDTO.getColor());
-        message.setReaction(messageDTO.getReaction());
-        message.setSenderId(messageDTO.getSenderId());
-        message.setReceiverId(messageDTO.getReceiverId());
-        message.setGameId(messageDTO.getGameId());
-        messageService.save(message);
-        return message;
-    }
-
-    @PostMapping("/send")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Message sendMessage(@RequestBody @Valid MessageDTO messageDTO, @AuthenticationPrincipal Player player) {
-        Integer sendId = player.getId(); //me dice que el player es null
-        messageDTO.setSenderId(sendId);
-        Message message = convertToEntity(messageDTO);   
-        return message;
-    }
-
-  
-
-
-    
 }
