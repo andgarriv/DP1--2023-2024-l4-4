@@ -2,6 +2,7 @@ package us.l4_4.dp1.end_of_line.game;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -246,6 +247,42 @@ public class GameService {
         game.setCards(cards);
 
         return gameRepository.save(game);
+    }
+
+    private Integer whoIsNext(Integer id1, Integer id2) {
+        Integer res = null;
+        Integer maxSize = null;
+
+        if (gamePlayerRepository.findById(id1) == null) {
+            throw new ResourceNotFoundException("GamePlayer", "id", id1);
+        } else if (gamePlayerRepository.findById(id2) == null) {
+            throw new ResourceNotFoundException("GamePlayer", "id", id2);
+        }
+        List<Card> player1Cards = gamePlayerRepository.findById(id1).get().getCards().stream()
+                .filter(card -> card.getCard_Status() == CardStatus.IN_DECK)
+                .sorted(Comparator.comparing(Card::getTimeStamp).reversed())
+                .collect(Collectors.toList());
+
+        List<Card> player2Cards = gamePlayerRepository.findById(id1).get().getCards().stream()
+                .filter(card -> card.getCard_Status() == CardStatus.IN_DECK)
+                .sorted(Comparator.comparing(Card::getTimeStamp).reversed())
+                .collect(Collectors.toList());
+
+        if(player1Cards.size() < player2Cards.size())maxSize = player1Cards.size();
+        else maxSize = player2Cards.size();
+        
+            for (int i = 0; i < maxSize; i++) {
+                if (player1Cards.get(i).getIniciative() > player2Cards.get(i).getIniciative()) {
+                    res = id2;
+                } else if (player1Cards.get(i).getIniciative() < player2Cards.get(i).getIniciative()) {
+                   res = id1;
+                }
+            }
+            if(res == null) {
+                 if(player1Cards.size() < player2Cards.size()){res= id1;}
+                 else {res = id2;}
+            }
+        return res;
     }
 
     @Transactional(readOnly = true)

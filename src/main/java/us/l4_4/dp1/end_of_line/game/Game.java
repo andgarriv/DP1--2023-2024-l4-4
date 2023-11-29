@@ -56,4 +56,8 @@ public class Game extends BaseEntity {
     @NotNull
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     List<Card> cards;
+
+    Integer gamePlayerTurnId;
+
+
 }
