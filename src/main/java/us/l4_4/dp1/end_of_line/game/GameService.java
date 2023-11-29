@@ -161,7 +161,7 @@ public class GameService {
 
     private Boolean checkOnlyOneGameForEachPlayer(Integer id1){
         Boolean res = false;
-            if(gameRepository.findNotEndedGamesByPlayerId(id1).isEmpty()){
+            if(!gameRepository.findNotEndedGamesByPlayerId(id1).isEmpty()){
                     res= true;
             }
             return res;
