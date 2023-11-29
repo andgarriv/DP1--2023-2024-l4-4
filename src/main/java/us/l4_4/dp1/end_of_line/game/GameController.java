@@ -37,15 +37,8 @@ public class GameController {
         return gameService.getNotEndedGamesByPlayerId(id);
     }
 
-    // TODO
     @GetMapping("/admin")
     public Iterable<Game> getGames() {
-        return gameService.getAllGames();
-    }
-
-    // TODO
-    @GetMapping("/player")
-    public Iterable<Game> getGamesByPlayerId() {
         return gameService.getAllGames();
     }
 

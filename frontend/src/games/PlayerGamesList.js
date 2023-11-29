@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import tokenService from '../services/token.service';
 
 
@@ -13,7 +13,7 @@ export default function AdminGamesList() {
         async function fetchData() {
             try {
                 setTimeout(async () => {
-                    const playerResponse = await fetch(`/api/v1/games/player`, {
+                    const playerResponse = await fetch(`/api/v1/games/admin`, {
                         headers: { Authorization: `Bearer ${jwt}` },
                     });
                     if (!playerResponse.ok) {
