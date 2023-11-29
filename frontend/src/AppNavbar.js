@@ -2,6 +2,7 @@ import jwt_decode from "jwt-decode";
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Collapse, DropdownItem, DropdownMenu, DropdownToggle, Nav, NavItem, NavLink, Navbar, NavbarBrand, NavbarToggler, UncontrolledDropdown } from 'reactstrap';
+import handlePlayNowClick from "./games/PlayNowHandler";
 import tokenService from './services/token.service';
 import './static/css/home/home.css';
 
@@ -52,7 +53,7 @@ function AppNavbar() {
             playerLinks = (
                 <>
                     <NavItem>
-                        <NavLink className="fuente" style={{ color: "#75FBFD" }} tag={Link} to="/play">Play Now!</NavLink>
+                        <NavLink className="fuente" style={{ color: "#75FBFD" }} tag={Link} onClick={handlePlayNowClick}>Play Now!</NavLink>
                     </NavItem>
 
 

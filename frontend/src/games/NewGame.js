@@ -22,9 +22,7 @@ export default function NewGame() {
   const indexOfFirstPlayer = indexOfLastPlayer - playersPerPage;
   const currentPlayers = players ? players.slice(indexOfFirstPlayer, indexOfLastPlayer) : [];
 
-  // Cambiar página
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
 
   const handleSelectColor1 = (color) => {
     if (color === selectedColor2) {
@@ -275,3 +273,4 @@ export default function NewGame() {
     </div>
   );
 }
+
