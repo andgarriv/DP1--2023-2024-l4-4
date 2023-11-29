@@ -1,5 +1,7 @@
 package us.l4_4.dp1.end_of_line.card;
 
+import java.util.Date;
+
 import org.hibernate.validator.constraints.Range;
 
 import jakarta.persistence.Column;
@@ -7,6 +9,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -51,4 +54,8 @@ public class Card extends BaseEntity{
 
     @Column(name = "is_template")
     Boolean is_Template;
+
+        @Transient
+    Date timeStamp;
+
 }
