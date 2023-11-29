@@ -11,7 +11,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 import us.l4_4.dp1.end_of_line.model.User;
-import us.l4_4.dp1.end_of_line.statistic.PlayerAchievement;
+import us.l4_4.dp1.end_of_line.playerachievement.PlayerAchievement;
 
 @Getter
 @Setter

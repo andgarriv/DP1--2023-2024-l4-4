@@ -30,8 +30,8 @@ import Login from "./auth/login";
 import Logout from "./auth/logout";
 import Register from "./auth/register";
 import AdminGamesList from "./games/AdminGamesList";
+import NewGame from "./games/NewGame";
 import PlayerGamesList from "./games/PlayerGamesList";
-import ColorSelector from "./games/colorSelector";
 import Home from "./home";
 import PlayerProfile from "./player/playerProfile";
 import PlayerProfileEdit from "./player/playerProfileEdit";
@@ -108,7 +108,7 @@ function App() {
           <Route path="/profile/edit" exact={true} element={<PrivateRoute><PlayerProfileEdit /></PrivateRoute>} />
           <Route path="/achievements" exact={true} element={<PrivateRoute><AchievementPlayer /></PrivateRoute>} />
           <Route path="/stats" exact={true} element={<PrivateRoute><PlayerStats /></PrivateRoute>} />
-          <Route path="/play" exact={true} element={<PrivateRoute><ColorSelector /></PrivateRoute>} />
+          <Route path="/play" exact={true} element={<PrivateRoute><NewGame /></PrivateRoute>} />
         </>)
     }
   })

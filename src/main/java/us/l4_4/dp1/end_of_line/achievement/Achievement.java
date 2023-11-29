@@ -1,4 +1,4 @@
-package us.l4_4.dp1.end_of_line.statistic;
+package us.l4_4.dp1.end_of_line.achievement;
 
 import org.hibernate.validator.constraints.URL;
 
@@ -35,7 +35,7 @@ public class Achievement extends NamedEntity {
 
     @Enumerated(EnumType.STRING)
     @NotNull
-    Category metric;
+    Category category;
 
     public String getActualDescription(){
         return description.replace("<THRESHOLD>", String.valueOf(threshold));

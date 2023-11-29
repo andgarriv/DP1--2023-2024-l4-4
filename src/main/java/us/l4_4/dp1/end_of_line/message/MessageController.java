@@ -1,5 +1,5 @@
 package us.l4_4.dp1.end_of_line.message;
-import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import us.l4_4.dp1.end_of_line.model.User;
 import us.l4_4.dp1.end_of_line.player.Player;
 
 @RestController
@@ -40,8 +39,8 @@ public class MessageController {
     }
 
     @GetMapping
-    public List<Message> getAllMessages() {
-        return messageService.getMessages();
+    public Iterable<Message> getAllMessages() {
+        return messageService.findAllMessages();
     }
 
     @GetMapping("/{id}")

@@ -1,4 +1,4 @@
-package us.l4_4.dp1.end_of_line.statistic;
+package us.l4_4.dp1.end_of_line.playerachievement;
 
 import java.time.LocalDate;
 
@@ -7,6 +7,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
+import us.l4_4.dp1.end_of_line.achievement.Achievement;
 import us.l4_4.dp1.end_of_line.model.BaseEntity;
 
 @Entity
@@ -15,7 +16,7 @@ import us.l4_4.dp1.end_of_line.model.BaseEntity;
 @Table(name = "player_achievements")
 public class PlayerAchievement extends BaseEntity{
 
-       LocalDate achieveAt;  
+       LocalDate achieveAt;
        
        @ManyToOne(optional = false)
        Achievement achievement;

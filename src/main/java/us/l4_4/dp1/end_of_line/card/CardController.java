@@ -33,9 +33,10 @@ public class CardController {
     public CardController(CardService cardService){
         this.cardService = cardService;
     }
+    
     @GetMapping
-    public List<Card> findAll(){
-        List<Card> cards = cardService.getAll();
+    public Iterable<Card> findAll(){
+        Iterable<Card> cards = cardService.getAll();
             return cards;
     }
 
@@ -45,61 +46,39 @@ public class CardController {
             return cards;
     }
 
-
     @GetMapping("/color/{color}")
     public List<Card> findAllColorcard(@PathVariable("color") String color){
         List<Card> cards = cardService.getAllColorCards(color);
-
-        if(cards == null){
+        if(cards == null)
             throw new ResourceNotFoundException(color);
-        }
         return cards;
     }
+
      @PostMapping
      @ResponseStatus(HttpStatus.CREATED)
      public Card createCard(@RequestBody @Valid CardDTO newCard ){
-        Card c = new Card();
-        c.setId(newCard.getId());
-        c.setIniciative(newCard.getInitiative());
-        c.setExit(Exit.valueOf(newCard.getExit()));
-        c.setRow(newCard.getCard_row());
-        c.setColumn(newCard.getCard_column());
-        c.setOrientation(Orientation.valueOf(newCard.getOrientation()));
-        c.setCard_Status(CardStatus.valueOf(newCard.getCard_statu()));
-        Card res = cardService.saveCard(c);
-        return res;
+        Card card = new Card();
+        card.setId(newCard.getId());
+        card.setIniciative(newCard.getInitiative());
+        card.setExit(Exit.valueOf(newCard.getExit()));
+        card.setRow(newCard.getCard_row());
+        card.setColumn(newCard.getCard_column());
+        card.setOrientation(Orientation.valueOf(newCard.getOrientation()));
+        card.setCard_Status(CardStatus.valueOf(newCard.getCard_statu()));
+        return cardService.saveCard(card);
      }
-
-
 
      @PutMapping("/{id}")
      public Card updateCard(@PathVariable int id,@RequestBody @Valid CardDTO newCard ){
-        Card c = cardService.getCardById(id);
-        if(c == null){
+        Card card = cardService.getCardById(id);
+        if(card == null)
             throw new ResourceNotFoundException("Cards not found");
-        }
-
-        c.setIniciative(newCard.getInitiative());
-        c.setExit(Exit.valueOf(newCard.getExit()));
-        c.setRow(newCard.getCard_row());
-        c.setColumn(newCard.getCard_column());
-        c.setOrientation(Orientation.valueOf(newCard.getOrientation()));
-        c.setCard_Status(CardStatus.valueOf(newCard.getCard_statu()));
-        Card res = cardService.saveCard(c);
-        return res;
+        card.setIniciative(newCard.getInitiative());
+        card.setExit(Exit.valueOf(newCard.getExit()));
+        card.setRow(newCard.getCard_row());
+        card.setColumn(newCard.getCard_column());
+        card.setOrientation(Orientation.valueOf(newCard.getOrientation()));
+        card.setCard_Status(CardStatus.valueOf(newCard.getCard_statu()));
+        return cardService.saveCard(card);
      }
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
 }

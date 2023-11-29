@@ -1,12 +1,10 @@
-package us.l4_4.dp1.end_of_line.statistic;
-
-import java.util.List;
+package us.l4_4.dp1.end_of_line.playerachievement;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -26,8 +24,8 @@ public class PlayerAchievementController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PlayerAchievement>> findAll() {
-        return new ResponseEntity<>((List<PlayerAchievement>) playerAchievementService.getPlayerAchievements(), HttpStatus.OK);
+    @ResponseStatus(HttpStatus.OK)
+    public Iterable<PlayerAchievement> getAllPlayerAchievements() {
+        return playerAchievementService.findAllPlayerAchievements();
     }
-    
 }

@@ -23,6 +23,8 @@ public class Message extends BaseEntity{
     private Reaction reaction;
 
     private Integer senderId;
+
     private Integer receiverId;
+    
     private Integer gameId;
 }

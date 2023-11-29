@@ -140,18 +140,31 @@
 
 .colors {
   display: flex;
+  flex: 1;
   flex-wrap: wrap;
-  justify-content: space-around;
+  width: 10%;
+  justify-content: space-evenly;
 }
 
 .color-image-container {
-  flex: 1 0 22%;
-  max-width: 20%;
-  margin: 2%;
+  flex: 1 0 80%;
+  max-width: 12%;
+  margin-bottom: 2%;
+  margin-top: 2%;
+  margin-left: 4%;
+  margin-right: 7%;
 }
 
 .selected-container {
   background-color: rgba(0, 0, 0, 0.2);
-  padding: 10px;
-  border-radius: 25px;
+  padding: 1%;
+  border-radius: 10%;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+  justify-content: space-evenly;
 }

@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.service.annotation.PutExchange;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -38,9 +37,15 @@ public class GameController {
         return gameService.getNotEndedGamesByPlayerId(id);
     }
 
-
+    // TODO
     @GetMapping("/admin")
-    public List<Game> getGames() {
+    public Iterable<Game> getGames() {
+        return gameService.getAllGames();
+    }
+
+    // TODO
+    @GetMapping("/player")
+    public Iterable<Game> getGamesByPlayerId() {
         return gameService.getAllGames();
     }
 
@@ -64,9 +69,4 @@ public class GameController {
     public Game updateGame(@PathVariable Integer id, @RequestBody @Valid GameDTO gameDTO) {
         return gameService.updateGame(id, gameDTO);
     }
-
-   
-
-
-    
 }

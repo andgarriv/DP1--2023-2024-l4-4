@@ -14,11 +14,25 @@ INSERT INTO players(id,name,surname,password,email,birth_date,authority,nickname
 INSERT INTO players(id,name,surname,password,email,birth_date,authority,nickname,avatar) VALUES (7,'Andres','Garcia','$2b$12$EB6dhGe96Fx1dt4CMxkF/ONMXHMNGLwSD9vhOWMwhLqKNRU2IvoCa','andres7212@gmail.com', '2003-07-12', 2, 'Andresisco', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHRfYlqLUzoJjY4CQnv2yIOwS7WAFuBZrs9w&usqp=CAU');
 INSERT INTO players(id,name,surname,password,email,birth_date,authority,nickname,avatar) VALUES (8,'Alejandro','Perez','$2b$12$EB6dhGe96Fx1dt4CMxkF/ONMXHMNGLwSD9vhOWMwhLqKNRU2IvoCa','alejandro@gmail.com', '2003-07-12', 2, 'alepersan', 'https://cdn-icons-png.flaticon.com/512/147/147144.png');
 
+INSERT INTO players(id, name, surname, password, email, birth_date, authority, nickname, avatar)
+VALUES
+(9, 'Maria', 'Gonzalez', '$2a$12$uniqueHashHere1234', 'maria.gonzalez@example.com', '1990-01-15', 1, 'mariagonz', 'https://cdn-icons-png.flaticon.com/512/147/147140.png'),
+
+(10, 'Juan', 'Fernandez', '$2a$12$anotherUniqueHashHere', 'juan.fernandez@example.com', '1985-05-20', 1, 'juanfer', 'https://cdn-icons-png.flaticon.com/512/147/147142.png'),
+
+(11, 'Lucia', 'Martinez', '$2a$12$differentUniqueHash', 'lucia.martinez@example.com', '1995-03-30', 2, 'luciamart', 'https://cdn-icons-png.flaticon.com/512/147/147146.png'),
+
+(12, 'Carlos', 'Garcia', '$2a$12$uniquePasswordHashHere', 'carlos.garcia@example.com', '1992-07-25', 2, 'carlosgar', 'https://cdn-icons-png.flaticon.com/512/147/147143.png'),
+
+(13, 'Sofia', 'Lopez', '$2a$12$anotherPasswordHashHere', 'sofia.lopez@example.com', '1998-09-10', 1, 'sofialopez', 'https://cdn-icons-png.flaticon.com/512/147/147138.png'),
+
+(14, 'David', 'Sanchez', '$2a$12$uniqueHashValueHere', 'david.sanchez@example.com', '1988-12-05', 1, 'davidsan', 'https://cdn-icons-png.flaticon.com/512/147/147139.png');
+
 
 -- Achievements
-INSERT INTO achievements(id,name,description,threshold,badge_image,metric) VALUES (1,'Basic expirence','Play 10 games',10.0,'https://cdn-icons-png.flaticon.com/512/5243/5243423.png','GAMES_PLAYED');
-INSERT INTO achievements(id,name,description,threshold,badge_image,metric) VALUES (2,'Explorer','Play 25 games',25.0,'https://cdn-icons-png.flaticon.com/512/603/603855.png','GAMES_PLAYED');
-INSERT INTO achievements(id,name,description,threshold,metric) VALUES (3,'Expert','Win 20 games',20.0,'VICTORIES');
+INSERT INTO achievements(id,name,description,threshold,badge_image,category) VALUES (1,'Basic expirence','Play 10 games',10.0,'https://cdn-icons-png.flaticon.com/512/5243/5243423.png','GAMES_PLAYED');
+INSERT INTO achievements(id,name,description,threshold,badge_image,category) VALUES (2,'Explorer','Play 25 games',25.0,'https://cdn-icons-png.flaticon.com/512/603/603855.png','GAMES_PLAYED');
+INSERT INTO achievements(id,name,description,threshold,category) VALUES (3,'Expert','Win 20 games',20.0,'VICTORIES');
 
 -- Player Achievements
 INSERT INTO player_achievements(id,achieve_at,achievement_id)VALUES(1,'2021-09-01',1);
@@ -347,3 +361,8 @@ INSERT INTO effects(id, color, hability)VALUES(1,null,'SPEED_UP');
 INSERT INTO effects(id, color, hability)VALUES(2,null,'BRAKE');
 INSERT INTO effects(id, color, hability)VALUES(3,null,'REVERSE');
 INSERT INTO effects(id, color, hability)VALUES(4,null,'EXTRA_GAS');
+
+INSERT INTO friendships(id, sender, receiver, friend_state) VALUES (1, 3, 4, 'ACCEPTED'),
+                                                                    (2, 3, 5, 'ACCEPTED'),
+                                                                    (3, 3, 6, 'PENDING'),
+                                                                    (4, 5, 6, 'REJECTED');

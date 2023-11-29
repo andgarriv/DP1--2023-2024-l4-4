@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +16,7 @@ import us.l4_4.dp1.end_of_line.card.CardService;
 import us.l4_4.dp1.end_of_line.effect.EffectRepository;
 import us.l4_4.dp1.end_of_line.enums.CardStatus;
 import us.l4_4.dp1.end_of_line.enums.Color;
+import us.l4_4.dp1.end_of_line.exceptions.ResourceNotFoundException;
 import us.l4_4.dp1.end_of_line.gameplayer.GamePlayer;
 import us.l4_4.dp1.end_of_line.gameplayer.GamePlayerRepository;
 import us.l4_4.dp1.end_of_line.message.Message;
@@ -31,6 +34,7 @@ public class GameService {
     CardRepository cardRepository;
     CardService cardService;
 
+    @Autowired
     public GameService(GameRepository gameRepository, PlayerRepository playerRepository, MessageRepository messageRepository, EffectRepository effectRepository, GamePlayerRepository gamePlayerRepository, CardRepository cardRepository){
         this.gameRepository = gameRepository;
         this.playerRepository = playerRepository;
@@ -41,12 +45,12 @@ public class GameService {
     }
     
     @Transactional
-    public Game save(Game game){
+    public Game save(Game game) throws DataAccessException{
         return gameRepository.save(game);
     }
 
     @Transactional
-    public Game createGame(GameDTO gameDTO){
+    public Game createGame(GameDTO gameDTO) throws DataAccessException{
         Game game = new Game();
         game.setRounds(gameDTO.getRounds());
         if(gameDTO.getWinner_id() != null){
@@ -59,7 +63,7 @@ public class GameService {
         if(gameDTO.getMessage_id() != null){
             List<Message> messages = gameDTO.getMessage_id()
                 .stream()
-                .map(messageId -> messageRepository.findMessageById(messageId))
+                .map(messageId -> messageRepository.findById(messageId).orElseThrow(() -> new ResourceNotFoundException("Message", "id", messageId)))
                 .collect(Collectors.toList());
             game.setMessage(messages);
         }
@@ -82,7 +86,7 @@ public class GameService {
     }
 
     @Transactional
-    public Game createNewGame(Integer playerID1, Integer playerID2, Color c1, Color c2){
+    public Game createNewGame(Integer playerID1, Integer playerID2, Color c1, Color c2) throws DataAccessException{
         Game game = new Game();
         game.setRounds(0);
         game.setWinner(null);
@@ -94,7 +98,7 @@ public class GameService {
         p1.setColor(c1);
         p1.setEnergy(3);
         p1.setPlayer(playerRepository.findById(playerID1).get());
-        List<Card> cardsC1 = cardRepository.findCardsByColorAndTemplate(c1);
+        List<Card> cardsC1 = cardRepository.findTemplatedCardsByColor(c1);
         List<Card> cardsC1Duplicated = new ArrayList<>();
         for(Card card : cardsC1){
             Card newCard = new Card();
@@ -114,7 +118,7 @@ public class GameService {
         p2.setColor(c2);
         p2.setEnergy(3);
         p2.setPlayer(playerRepository.findById(playerID2).get());
-        List<Card> cardsC2 = cardRepository.findCardsByColorAndTemplate(c2);
+        List<Card> cardsC2 = cardRepository.findTemplatedCardsByColor(c2);
         List<Card> cardsC2Duplicated = new ArrayList<>();
         for(Card card : cardsC2){
             Card newCard = new Card();
@@ -144,12 +148,12 @@ public class GameService {
     }
 
     @Transactional(readOnly = true)
-    public List<Game> getAllGames(){
+    public Iterable<Game> getAllGames() throws DataAccessException{
         return gameRepository.findAll();
     }
 
     @Transactional
-    public Game updateGame(Integer id, GameDTO gameDTO){
+    public Game updateGame(Integer id, GameDTO gameDTO) throws DataAccessException{
         Game game = gameRepository.findById(id).get();
         game.setRounds(gameDTO.getRounds());
         if(gameDTO.getWinner_id() != null){
@@ -162,7 +166,7 @@ public class GameService {
         if(gameDTO.getMessage_id() != null){
             List<Message> messages = gameDTO.getMessage_id()
                 .stream()
-                .map(messageId -> messageRepository.findMessageById(messageId))
+                .map(messageId -> messageRepository.findById(messageId).orElseThrow(() -> new ResourceNotFoundException("Message", "id", messageId)))
                 .collect(Collectors.toList());
             game.setMessage(messages);
         }
