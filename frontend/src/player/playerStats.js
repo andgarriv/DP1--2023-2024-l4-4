@@ -19,7 +19,7 @@ export default function PlayerStats() {
         const jwt = tokenService.getLocalAccessToken();
         const user = tokenService.getUser();
 
-        const playerResponse = await fetch(`/api/v1/games/player`, {
+        const playerResponse = await fetch(`/api/v1/games/player/${user.id}`, {
           headers: { Authorization: `Bearer ${jwt}` },
         });
         if (!playerResponse.ok) {
@@ -27,20 +27,17 @@ export default function PlayerStats() {
         }
         const playerData = await playerResponse.json();
 
-        const userGames = playerData.filter((game) =>
-          game.gamePlayers.some((gp) => gp.player.id === user.id)
-        );
-        const gamesWon = userGames.filter(
+        const gamesWon = playerData.filter(
           (game) => game.winner && game.winner.id === user.id
         ).length;
-        const gamesPlayed = userGames.length;
+        const gamesPlayed = playerData.length;
         const winRatio =
           gamesPlayed > 0 ? ((gamesWon / gamesPlayed) * 100).toFixed(0) : 0;
 
         let currentWinStreak = 0;
         let maxWinStreak = 0;
-        for (let i = 0; i < userGames.length; i++) {
-          if (userGames[i].winner && userGames[i].winner.id === user.id) {
+        for (let i = 0; i < playerData.length; i++) {
+          if (playerData[i].winner && playerData[i].winner.id === user.id) {
             currentWinStreak++;
             maxWinStreak = Math.max(maxWinStreak, currentWinStreak);
           } else {
@@ -49,7 +46,7 @@ export default function PlayerStats() {
         }
 
         let totalTimePlayedMillis = 0;
-        userGames.forEach((game) => {
+        playerData.forEach((game) => {
           if (game.startedAt && game.endedAt) {
             totalTimePlayedMillis +=
               new Date(game.endedAt).getTime() -

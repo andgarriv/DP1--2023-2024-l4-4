@@ -5,7 +5,7 @@ const handlePlayNowClick = async (setMessage, setVisible) => {
         const jwt = tokenService.getLocalAccessToken();
         const user = tokenService.getUser();
         
-      const playerResponse = await fetch(`/api/v1/games/player`, {
+      const playerResponse = await fetch(`/api/v1/games/player/${user.id}/ended`, {
         headers: { Authorization: `Bearer ${jwt}` },
       });
 
@@ -15,11 +15,7 @@ const handlePlayNowClick = async (setMessage, setVisible) => {
 
       const playerData = await playerResponse.json();
 
-      const userGames = playerData.filter(game =>
-        game.gamePlayers.some(gp => gp.player.id === user.id)
-    );
-
-    const ongoingGame = userGames.find(game => game.endedAt === null);
+      const ongoingGame = playerData.find((game) => !game.endedAt);
 
       if (ongoingGame) {
         if (window.confirm("Do you want to join the ongoing game?")) {
@@ -29,8 +25,7 @@ const handlePlayNowClick = async (setMessage, setVisible) => {
         window.location.href = "/play";
       }
     } catch (error) {
-      setMessage("Error fetching player games");
-      setVisible(true);
+      console.error('Error fetching player games:', error);
     }
 };
 
