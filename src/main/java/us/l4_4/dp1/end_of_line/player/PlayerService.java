@@ -1,9 +1,11 @@
 package us.l4_4.dp1.end_of_line.player;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -50,6 +52,12 @@ public class PlayerService {
 
 	@Transactional
 	public Player savePlayer(Player player) throws DataAccessException {
+		LocalDate now = LocalDate.now();
+		LocalDate playerDate = player.getBirthDate();
+		LocalDate minDate = now.minusYears(7);
+		if(minDate.isBefore(playerDate)){
+			throw new IllegalArgumentException("You must be at least 7 years old to register");
+		}
 		playerRepository.save(player);
 		return player;
 	}
