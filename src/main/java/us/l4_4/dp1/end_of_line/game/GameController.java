@@ -1,5 +1,7 @@
 package us.l4_4.dp1.end_of_line.game;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,13 +25,27 @@ public class GameController {
     @Autowired
     GameService gameService;
 
-    @GetMapping("/player")
-    public Iterable<Game> getGamesByPlayerId() {
+    @GetMapping("/player/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Game> getGamesByPlayerId(@PathVariable Integer id) {
+        return gameService.getGamesByPlayerId(id);
+    }
+
+    @GetMapping("/player/{id}/ended")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Game> getEndedGamesByPlayerId(@PathVariable Integer id) {
+        return gameService.getNotEndedGamesByPlayerId(id);
+    }
+
+    // TODO
+    @GetMapping("/admin")
+    public Iterable<Game> getGames() {
         return gameService.getAllGames();
     }
 
-    @GetMapping("/admin")
-    public Iterable<Game> getGames() {
+    // TODO
+    @GetMapping("/player")
+    public Iterable<Game> getGamesByPlayerId() {
         return gameService.getAllGames();
     }
 
