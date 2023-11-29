@@ -80,8 +80,7 @@ export default function NewGame() {
   };
 
   useEffect(() => {
-    if (user && user.id) {
-      const fetchData = async () => {
+    async function fetchData() {
         try {
           const response = await fetch(`/api/v1/player/allExcept/${user.id}`, {
             headers: {
@@ -98,8 +97,8 @@ export default function NewGame() {
         }
       };
       fetchData();
-    }
-  }, [jwt, user]);
+    
+  }, [jwt, user.id]);
 
   return (
     <div className="home-page-container">
