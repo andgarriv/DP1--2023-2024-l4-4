@@ -184,4 +184,8 @@ public class GameService {
         return gameRepository.save(game);
     }
     
+    @Transactional(readOnly = true)
+    public List<Game> getNotEndedGamesByPlayerId(Integer playerId){
+        return gameRepository.findNotEndedGamesByPlayerId(playerId);
+    }
 }

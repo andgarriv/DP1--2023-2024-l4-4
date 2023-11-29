@@ -56,5 +56,11 @@ public class GameController {
     public Game updateGame(@PathVariable Integer id, @RequestBody @Valid GameDTO gameDTO) {
         return gameService.updateGame(id, gameDTO);
     }
+
+    @GetMapping("/ended/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Game> getEndedGamesByPlayerId(@PathVariable Integer id) {
+        return gameService.getNotEndedGamesByPlayerId(id);
+    }
     
 }
