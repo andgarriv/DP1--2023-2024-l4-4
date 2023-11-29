@@ -1,6 +1,7 @@
 package us.l4_4.dp1.end_of_line.game;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,6 +23,7 @@ import us.l4_4.dp1.end_of_line.gameplayer.GamePlayer;
 import us.l4_4.dp1.end_of_line.gameplayer.GamePlayerRepository;
 import us.l4_4.dp1.end_of_line.message.Message;
 import us.l4_4.dp1.end_of_line.message.MessageRepository;
+import us.l4_4.dp1.end_of_line.player.Player;
 import us.l4_4.dp1.end_of_line.player.PlayerRepository;
 
 @Service
@@ -36,7 +38,9 @@ public class GameService {
     CardService cardService;
 
     @Autowired
-    public GameService(GameRepository gameRepository, PlayerRepository playerRepository, MessageRepository messageRepository, EffectRepository effectRepository, GamePlayerRepository gamePlayerRepository, CardRepository cardRepository){
+    public GameService(GameRepository gameRepository, PlayerRepository playerRepository,
+            MessageRepository messageRepository, EffectRepository effectRepository,
+            GamePlayerRepository gamePlayerRepository, CardRepository cardRepository) {
         this.gameRepository = gameRepository;
         this.playerRepository = playerRepository;
         this.messageRepository = messageRepository;
@@ -44,52 +48,53 @@ public class GameService {
         this.gamePlayerRepository = gamePlayerRepository;
         this.cardRepository = cardRepository;
     }
-    
+
     @Transactional
-    public Game save(Game game) throws DataAccessException{
+    public Game save(Game game) throws DataAccessException {
         return gameRepository.save(game);
     }
 
     @Transactional
-    public Game createGame(GameDTO gameDTO) throws DataAccessException{
+    public Game createGame(GameDTO gameDTO) throws DataAccessException {
         Game game = new Game();
         game.setRounds(gameDTO.getRounds());
-        if(gameDTO.getWinner_id() != null){
+        if (gameDTO.getWinner_id() != null) {
             game.setWinner(playerRepository.findById(gameDTO.getWinner_id()).get());
         }
         game.setStartedAt(gameDTO.getStartedAt());
-        if(gameDTO.getEndedAt() != null){
+        if (gameDTO.getEndedAt() != null) {
             game.setEndedAt(gameDTO.getEndedAt());
         }
-        if(gameDTO.getMessage_id() != null){
+        if (gameDTO.getMessage_id() != null) {
             List<Message> messages = gameDTO.getMessage_id()
-                .stream()
-                .map(messageId -> messageRepository.findById(messageId).orElseThrow(() -> new ResourceNotFoundException("Message", "id", messageId)))
-                .collect(Collectors.toList());
+                    .stream()
+                    .map(messageId -> messageRepository.findById(messageId)
+                            .orElseThrow(() -> new ResourceNotFoundException("Message", "id", messageId)))
+                    .collect(Collectors.toList());
             game.setMessage(messages);
         }
-        if(gameDTO.getEffect_id() != null){
+        if (gameDTO.getEffect_id() != null) {
             game.setEffect(effectRepository.findById(gameDTO.getEffect_id()).get());
         }
         List<GamePlayer> gamePlayers = gameDTO.getGamePlayers_ids()
-            .stream()
-            .map(gamePlayerId -> gamePlayerRepository.findById(gamePlayerId).get())
-            .collect(Collectors.toList());
+                .stream()
+                .map(gamePlayerId -> gamePlayerRepository.findById(gamePlayerId).get())
+                .collect(Collectors.toList());
         game.setGamePlayers(gamePlayers);
-        
+
         List<Card> cards = gamePlayers.stream()
-            .map(gamePlayer -> gamePlayer.getCards())
-            .flatMap(cardsList -> cardsList.stream())
-            .collect(Collectors.toList());
+                .map(gamePlayer -> gamePlayer.getCards())
+                .flatMap(cardsList -> cardsList.stream())
+                .collect(Collectors.toList());
         game.setCards(cards);
-        
+
         return gameRepository.save(game);
     }
 
     @Transactional
-    public Game createNewGame(Integer playerID1, Integer playerID2, Color c1, Color c2) throws DataAccessException{
+    public Game createNewGame(Integer playerID1, Integer playerID2, Color c1, Color c2) throws DataAccessException {
 
-        if(checkOnlyOneGameForEachPlayer(playerID1)){
+        if (checkOnlyOneGameForEachPlayer(playerID1)) {
             throw new BadRequestException("No se puede crear una partida ya que el jugador tiene una en curso");
         }
         Game game = new Game();
@@ -105,7 +110,7 @@ public class GameService {
         p1.setPlayer(playerRepository.findById(playerID1).get());
         List<Card> cardsC1 = cardRepository.findTemplatedCardsByColor(c1);
         List<Card> cardsC1Duplicated = new ArrayList<>();
-        for(Card card : cardsC1){
+        for (Card card : cardsC1) {
             Card newCard = new Card();
             newCard.setColumn(null);
             newCard.setRow(null);
@@ -125,7 +130,7 @@ public class GameService {
         p2.setPlayer(playerRepository.findById(playerID2).get());
         List<Card> cardsC2 = cardRepository.findTemplatedCardsByColor(c2);
         List<Card> cardsC2Duplicated = new ArrayList<>();
-        for(Card card : cardsC2){
+        for (Card card : cardsC2) {
             Card newCard = new Card();
             newCard.setColumn(null);
             newCard.setRow(null);
@@ -140,76 +145,116 @@ public class GameService {
         p2.setCards(cardsC2Duplicated);
         gamePlayerRepository.save(p1);
         gamePlayerRepository.save(p2);
-        List<GamePlayer> gamePlayers = List.of(p1,p2);
+        List<GamePlayer> gamePlayers = List.of(p1, p2);
         game.setGamePlayers(gamePlayers);
-        
+
         List<Card> cards = gamePlayers.stream()
-            .map(gamePlayer -> gamePlayer.getCards())
-            .flatMap(cardsList -> cardsList.stream())
-            .collect(Collectors.toList());
+                .map(gamePlayer -> gamePlayer.getCards())
+                .flatMap(cardsList -> cardsList.stream())
+                .collect(Collectors.toList());
         game.setCards(cards);
         gameRepository.save(game);
         return game;
     }
 
     @Transactional(readOnly = true)
-    public Iterable<Game> getAllGames() throws DataAccessException{
+    public Iterable<Game> getAllGames() throws DataAccessException {
         return gameRepository.findAll();
     }
 
-
-
-    private Boolean checkOnlyOneGameForEachPlayer(Integer id1){
+    private Boolean checkOnlyOneGameForEachPlayer(Integer id1) {
         Boolean res = false;
-            if(!gameRepository.findNotEndedGamesByPlayerId(id1).isEmpty()){
-                    res= true;
-            }
-            return res;
+        if (!gameRepository.findNotEndedGamesByPlayerId(id1).isEmpty()) {
+            res = true;
+        }
+        return res;
+    }
+
+    public List<Card> getFiveRandomCards(Integer gamePlayerId) {
+        if (gamePlayerRepository.findById(gamePlayerId) == null) {
+            throw new ResourceNotFoundException("GamePlayer", "id", gamePlayerId);
+        }
+        List<Card> cards = gamePlayerRepository.findById(gamePlayerId).get().getCards();
+        // Mezclar la lista de cartas
+        Collections.shuffle(cards);
+        // Tomar las primeras cinco cartas
+        List<Card> randomCards = cards.subList(0, Math.min(5, cards.size()));
+        for(Card card : randomCards) {
+            card.setCard_Status(CardStatus.IN_HAND);
+            cardRepository.save(card);
+        }
+
+        return randomCards;
+    }
+
+    public List<Card> getNeedCardsToGetFive(Integer gamePlayerId){
+        if (gamePlayerRepository.findById(gamePlayerId) == null) {
+            throw new ResourceNotFoundException("GamePlayer", "id", gamePlayerId);
+        }
+        List<Card> cards = gamePlayerRepository.findById(gamePlayerId).get().getCards();
+
+        List<Card> cardsInDeck = cards.stream()
+                .filter(card -> card.getCard_Status() == CardStatus.IN_DECK)
+                .collect(Collectors.toList());
+        List<Card> cardsInHand = cards.stream()
+                .filter(card -> card.getCard_Status() == CardStatus.IN_HAND)
+                .collect(Collectors.toList());
+        
+         Collections.shuffle(cardsInDeck);
+         List<Card> randomCards = cardsInDeck.subList(0,5-cardsInHand.size()-1);
+
+        for(Card card : randomCards ) {
+            cardsInHand.add(card);
+            card.setCard_Status(CardStatus.IN_HAND);
+            cardRepository.save(card);
+        }
+        return cardsInHand;
     }
 
     @Transactional
-    public Game updateGame(Integer id, GameDTO gameDTO) throws DataAccessException{
+    public Game updateGame(Integer id, GameDTO gameDTO) throws DataAccessException {
         Game game = gameRepository.findById(id).get();
         game.setRounds(gameDTO.getRounds());
-        if(gameDTO.getWinner_id() != null){
+        if (gameDTO.getWinner_id() != null) {
             game.setWinner(playerRepository.findById(gameDTO.getWinner_id()).get());
         }
         game.setStartedAt(gameDTO.getStartedAt());
-        if(gameDTO.getEndedAt() != null){
+        if (gameDTO.getEndedAt() != null) {
             game.setEndedAt(gameDTO.getEndedAt());
         }
-        if(gameDTO.getMessage_id() != null){
+        if (gameDTO.getMessage_id() != null) {
             List<Message> messages = gameDTO.getMessage_id()
-                .stream()
-                .map(messageId -> messageRepository.findById(messageId).orElseThrow(() -> new ResourceNotFoundException("Message", "id", messageId)))
-                .collect(Collectors.toList());
+                    .stream()
+                    .map(messageId -> messageRepository.findById(messageId)
+                            .orElseThrow(() -> new ResourceNotFoundException("Message", "id", messageId)))
+                    .collect(Collectors.toList());
             game.setMessage(messages);
         }
-        if(gameDTO.getEffect_id() != null){
+        if (gameDTO.getEffect_id() != null) {
             game.setEffect(effectRepository.findById(gameDTO.getEffect_id()).get());
         }
         List<GamePlayer> gamePlayers = gameDTO.getGamePlayers_ids()
-            .stream()
-            .map(gamePlayerId -> gamePlayerRepository.findById(gamePlayerId).get())
-            .collect(Collectors.toList());
+                .stream()
+                .map(gamePlayerId -> gamePlayerRepository.findById(gamePlayerId).get())
+                .collect(Collectors.toList());
         game.setGamePlayers(gamePlayers);
-        
+
         List<Card> cards = gamePlayers.stream()
-            .map(gamePlayer -> gamePlayer.getCards())
-            .flatMap(cardsList -> cardsList.stream())
-            .collect(Collectors.toList());
+                .map(gamePlayer -> gamePlayer.getCards())
+                .flatMap(cardsList -> cardsList.stream())
+                .collect(Collectors.toList());
         game.setCards(cards);
-        
+
         return gameRepository.save(game);
     }
-    
+
     @Transactional(readOnly = true)
-    public List<Game> getNotEndedGamesByPlayerId(Integer playerId){
+    public List<Game> getNotEndedGamesByPlayerId(Integer playerId) {
         return gameRepository.findNotEndedGamesByPlayerId(playerId);
     }
 
     @Transactional(readOnly = true)
-    public List<Game> getGamesByPlayerId(Integer playerId){
+    public List<Game> getGamesByPlayerId(Integer playerId) {
         return gameRepository.findGamesByPlayerId(playerId);
     }
 }

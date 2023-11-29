@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import us.l4_4.dp1.end_of_line.card.Card;
 import us.l4_4.dp1.end_of_line.enums.Color;
 
 @RestController
@@ -62,4 +63,11 @@ public class GameController {
     public Game updateGame(@PathVariable Integer id, @RequestBody @Valid GameDTO gameDTO) {
         return gameService.updateGame(id, gameDTO);
     }
+
+    @GetMapping("/fivecards/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Card> getFiveCards(@PathVariable Integer id) {
+        return gameService.getFiveRandomCards(id);
+    }
+
 }
