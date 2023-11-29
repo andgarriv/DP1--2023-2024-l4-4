@@ -188,4 +188,9 @@ public class GameService {
     public List<Game> getNotEndedGamesByPlayerId(Integer playerId){
         return gameRepository.findNotEndedGamesByPlayerId(playerId);
     }
+
+    @Transactional(readOnly = true)
+    public List<Game> getGamesByPlayerId(Integer playerId){
+        return gameRepository.findGamesByPlayerId(playerId);
+    }
 }

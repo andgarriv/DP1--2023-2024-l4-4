@@ -26,10 +26,18 @@ public class GameController {
     @Autowired
     GameService gameService;
 
-    @GetMapping("/player")
-    public List<Game> getGamesByPlayerId() {
-        return gameService.getAllGames();
+    @GetMapping("/player/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Game> getGamesByPlayerId(@PathVariable Integer id) {
+        return gameService.getGamesByPlayerId(id);
     }
+
+    @GetMapping("/player/{id}/ended")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Game> getEndedGamesByPlayerId(@PathVariable Integer id) {
+        return gameService.getNotEndedGamesByPlayerId(id);
+    }
+
 
     @GetMapping("/admin")
     public List<Game> getGames() {
@@ -57,10 +65,8 @@ public class GameController {
         return gameService.updateGame(id, gameDTO);
     }
 
-    @GetMapping("/ended/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public List<Game> getEndedGamesByPlayerId(@PathVariable Integer id) {
-        return gameService.getNotEndedGamesByPlayerId(id);
-    }
+   
+
+
     
 }

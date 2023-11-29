@@ -17,5 +17,8 @@ public interface GameRepository extends CrudRepository<Game, Integer>{
 
     @Query("SELECT g FROM Game g JOIN g.gamePlayers gp WHERE gp.player.id = ?1 AND g.endedAt IS NULL")
     List<Game> findNotEndedGamesByPlayerId(int playerId);
+
+    @Query("SELECT g FROM Game g JOIN g.gamePlayers gp WHERE gp.player.id = ?1")
+    List<Game> findGamesByPlayerId(int playerId);
     
 }
