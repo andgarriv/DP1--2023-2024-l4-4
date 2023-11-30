@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import cardBackImage from '../static/images/GameCards/CB_BACK.png';
 import cardBackImage2 from '../static/images/GameCards/CG_BACK.png';
 import './styles/Board.css';
@@ -94,7 +94,7 @@ export default function Board() {
             <br />
             <div className="board">
                 {board.map((row, i) => (
-                    <div key={i} className="row">
+                    <div key={i} className="row2">
                         {row.map((boxContent, j) => (
                             <Box
                                 key={j}
