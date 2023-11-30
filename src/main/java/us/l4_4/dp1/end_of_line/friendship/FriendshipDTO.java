@@ -1,6 +1,5 @@
 package us.l4_4.dp1.end_of_line.friendship;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
@@ -17,12 +16,10 @@ public class FriendshipDTO {
     Integer id;
 
     @NotNull
-    @Column(name = "sender")
-    Integer sender_id;
+    Integer sender;
 
     @NotNull
-    @Column(name = "receiver")
-    Integer receiver_id;
+    Integer receiver;
 
     @NotNull
     @Enumerated(EnumType.STRING)
