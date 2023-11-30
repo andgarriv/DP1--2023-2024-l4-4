@@ -1,5 +1,8 @@
 package us.l4_4.dp1.end_of_line.friendship;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -26,16 +29,21 @@ public class FriendshipService {
     public Friendship findFriendshipById(Integer id) throws DataAccessException{
         return friendshipRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Friendship", "id", id));
     }
-    /*
+
     @Transactional(readOnly = true)
-    public List<Friendship> findAllFriendshipByPlayerId(Integer id) throws DataAccessException{
-        return friendshipRepository.findAllFriendshipsByPlayerId(id);
+    public Iterable<Friendship> findAllFriendshipsByPlayerId(Integer id) throws DataAccessException{
+        Set<Friendship> res = new HashSet<Friendship>();
+        for(Friendship friendship : friendshipRepository.findAll()){
+            if(friendship.getSender().getId() == id || friendship.getReceiver().getId() == id)
+                res.add(friendship);
+        }
+        return res;
     }
 
     @Transactional(readOnly = true)
     public Friendship findFriendshipBySenderAndReceiver(Integer sender_id, Integer receiver_id) throws DataAccessException{
         return friendshipRepository.findFriendshipBySenderAndReceiver(sender_id, receiver_id).orElseThrow(() -> new ResourceNotFoundException("Friendship", "sender_id and receiver_id", sender_id + " and " + receiver_id));
-    }*/
+    }
 
     @Transactional
     public Friendship createFriendship(FriendshipDTO friendshipDTO) throws DataAccessException{
