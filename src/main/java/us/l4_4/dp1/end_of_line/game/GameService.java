@@ -259,12 +259,12 @@ public class GameService {
             throw new ResourceNotFoundException("GamePlayer", "id", id2);
         }
         List<Card> player1Cards = gamePlayerRepository.findById(id1).get().getCards().stream()
-                .filter(card -> card.getCard_Status() == CardStatus.IN_DECK)
+                .filter(card -> card.getCard_Status() == CardStatus.ON_BOARD)
                 .sorted(Comparator.comparing(Card::getTimeStamp).reversed())
                 .collect(Collectors.toList());
 
         List<Card> player2Cards = gamePlayerRepository.findById(id1).get().getCards().stream()
-                .filter(card -> card.getCard_Status() == CardStatus.IN_DECK)
+                .filter(card -> card.getCard_Status() == CardStatus.ON_BOARD)
                 .sorted(Comparator.comparing(Card::getTimeStamp).reversed())
                 .collect(Collectors.toList());
 
