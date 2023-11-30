@@ -26,7 +26,7 @@ public class PlayerService {
 
 	@Transactional(readOnly = true)
 	public Iterable<Player> findAll() throws DataAccessException{
-		return playerRepository.findAll();
+		return playerRepository.findAllPlayers();
 	}
 
 	@Transactional(readOnly = true)
