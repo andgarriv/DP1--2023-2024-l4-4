@@ -11,15 +11,20 @@ import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.validation.Valid;
 import us.l4_4.dp1.end_of_line.enums.Color;
+import us.l4_4.dp1.end_of_line.game.Game;
+import us.l4_4.dp1.end_of_line.game.GameRepository;
+import us.l4_4.dp1.end_of_line.game.GameService;
 
 @Service
 public class CardService {
     
     CardRepository cardRepository;
+    GameService gameService;
 
     @Autowired
-    public CardService(CardRepository cardRepository){
+    public CardService(CardRepository cardRepository, GameService gameService ){
         this.cardRepository = cardRepository;
+        this.gameService = gameService;
     }
 
     @Transactional(readOnly = true)
@@ -38,13 +43,19 @@ public class CardService {
         return cardRepository.findAll();
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public void deleteCardById(Integer id) throws DataAccessException{
         cardRepository.deleteById(id);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public Card saveCard(@Valid Card card ) throws DataAccessException{
         return cardRepository.save(card);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Card> getCardsOfGame(Integer gameId) throws DataAccessException{
+        List<Card> cards = gameService.getGameById(gameId).getCards();
+        return cards;
     }
 }

@@ -12,6 +12,17 @@ function Box({ content }) {
     );
 }
 
+function importGameCard(color, exit){
+    let name = '';
+    if(exit == 'START'){
+        name = 'C'+color.touppperCase()[0]+'_START';
+    } else {
+        name = 'C'+color.touppperCase()[0]+'_'+exit.replace('EXIT_','').substring(0,2);
+    }
+    return import(`../static/images/GameCards/${name}.png`);
+}
+
+
 
 export default function Board() {
     const [board, setBoard] = useState(
@@ -24,6 +35,17 @@ export default function Board() {
         // const Card = { image: "../static/images/GameCards/CB_BACK.png" };
         const Card = { image: cardBackImage };
         const Card2 = { image: cardBackImage2 };
+
+        // Function to get the game cards
+        const fetchGameCards = async () => {
+            try {
+                const response = await fetch(`http://localhost:8000/api/games/${gameId}/cards`);
+                const data = await response.json();
+                console.log(data);
+            } catch (error) {
+                console.error('Error al cargar las cartas' + error);
+            }
+        }
 
 
         setBoard((oldBoard) => {
@@ -86,6 +108,7 @@ export default function Board() {
 
             return newBoard;
         });
+        fetchGameCards();
     }, []);
 
     return (

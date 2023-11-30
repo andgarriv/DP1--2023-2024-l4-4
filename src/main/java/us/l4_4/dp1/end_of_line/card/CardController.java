@@ -81,4 +81,13 @@ public class CardController {
         card.setCard_Status(CardStatus.valueOf(newCard.getCard_statu()));
         return cardService.saveCard(card);
      }
+
+    @GetMapping("/game/{gameId}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Card> findAllCardsOfGame(@PathVariable("gameId") Integer gameId){
+        List<Card> cards = cardService.getCardsOfGame(gameId);
+        if(cards.isEmpty())
+            throw new ResourceNotFoundException("No cards found for game with id: " + gameId);
+        return cards;
+    }
 }
