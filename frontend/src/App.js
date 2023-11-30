@@ -36,7 +36,7 @@ import Home from "./home";
 import PlayerProfile from "./player/playerProfile";
 import PlayerProfileEdit from "./player/playerProfileEdit";
 import PlayerStats from "./player/playerStats";
-
+import Board from "./games/Board"
 import PrivateRoute from "./privateRoute";
 import PlanList from "./public/plan";
 import SwaggerDocs from "./public/swagger";
@@ -109,6 +109,7 @@ function App() {
           <Route path="/achievements" exact={true} element={<PrivateRoute><AchievementPlayer /></PrivateRoute>} />
           <Route path="/stats" exact={true} element={<PrivateRoute><PlayerStats /></PrivateRoute>} />
           <Route path="/play" exact={true} element={<PrivateRoute><NewGame /></PrivateRoute>} />
+          <Route path="/game/:id" exact={true} element={<PrivateRoute><Board /></PrivateRoute>} />
         </>)
     }
   })
