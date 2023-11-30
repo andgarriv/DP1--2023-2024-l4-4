@@ -12,6 +12,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PlayerRepository extends CrudRepository<Player, Integer> {
 
+    @Query("SELECT p FROM Player p WHERE p.authority.authority = 'PLAYER'")
+    List<Player> findAllPlayers();
+
     @Query("SELECT COUNT(*) > 0 FROM Player p WHERE p.nickname = ?1")
     public Boolean existsByNickname(String nickname);
 
