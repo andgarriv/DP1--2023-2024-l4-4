@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import cardBackImage from '../static/images/GameCards/CB_BACK.png';
 import cardBackImage2 from '../static/images/GameCards/CG_BACK.png';
 import './styles/Board.css';
+import tokenService from "../services/token.service";
+
 
 
 function Box({ content }) {
@@ -12,8 +14,23 @@ function Box({ content }) {
     );
 }
 
+function importGameCard(color, exit){
+    let name = '';
+    if(exit == 'START'){
+        name = 'C'+color.touppperCase()[0]+'_START';
+    } else {
+        name = 'C'+color.touppperCase()[0]+'_'+exit.replace('EXIT_','').substring(0,2);
+    }
+    return import(`../static/images/GameCards/${name}.png`);
+}
+
+
 
 export default function Board() {
+    const jwt = tokenService.getLocalAccessToken();
+    
+    const user = tokenService.getUser();
+
     const [board, setBoard] = useState(
         Array(7).fill(null).map(() => Array(7).fill(null))
     );
@@ -24,6 +41,24 @@ export default function Board() {
         // const Card = { image: "../static/images/GameCards/CB_BACK.png" };
         const Card = { image: cardBackImage };
         const Card2 = { image: cardBackImage2 };
+
+        // Function to get the game cards
+        async function fetchGameCards() {
+            try {
+                const response = await fetch(
+                    `http://localhost:8080/api/v1/cards/game/${gameId}`,
+                    {
+                        method: 'GET',
+                        headers: {
+                            Authorization: `Bearer ${jwt}`,
+                            'Content-Type': 'application/json',
+                        }});
+                const data = await response.json();
+                console.log(data);
+            } catch (error) {
+                console.error('Error al cargar las cartas' + error);
+            }
+        }
 
 
         setBoard((oldBoard) => {
@@ -86,7 +121,8 @@ export default function Board() {
 
             return newBoard;
         });
-    }, []);
+        fetchGameCards();
+    }, [gameId, jwt, user.id]);
 
     return (
         <div className="background">

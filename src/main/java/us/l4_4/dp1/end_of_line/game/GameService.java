@@ -307,4 +307,9 @@ public class GameService {
     public List<Game> getGamesByPlayerId(Integer playerId) {
         return gameRepository.findGamesByPlayerId(playerId);
     }
+
+    @Transactional(readOnly = true)
+    public Game getGameById(Integer id) throws DataAccessException {
+        return gameRepository.findById(id).get();
+    }
 }
