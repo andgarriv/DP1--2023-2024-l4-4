@@ -1,28 +1,28 @@
 package us.l4_4.dp1.end_of_line.friendship;
 
-import java.util.HashSet;
 import java.util.Set;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import us.l4_4.dp1.end_of_line.enums.FriendStatus;
+import us.l4_4.dp1.end_of_line.exceptions.BadRequestException;
 import us.l4_4.dp1.end_of_line.exceptions.ResourceNotFoundException;
 import us.l4_4.dp1.end_of_line.player.PlayerRepository;
 
 @Service
 public class FriendshipService {
 
-    private FriendshipRepository friendshipRepository;
+    FriendshipRepository friendshipRepository;
 
-    private PlayerRepository playerRepository;
+    PlayerRepository playerRepository;
 
     @Autowired
-    public FriendshipService(FriendshipRepository friendshipRepository) {
+    public FriendshipService(FriendshipRepository friendshipRepository, PlayerRepository playerRepository) {    
         this.friendshipRepository = friendshipRepository;
+        this.playerRepository = playerRepository;
     }
 
     @Transactional(readOnly = true)
@@ -31,13 +31,8 @@ public class FriendshipService {
     }
 
     @Transactional(readOnly = true)
-    public Iterable<Friendship> findAllFriendshipsByPlayerId(Integer id) throws DataAccessException{
-        Set<Friendship> res = new HashSet<Friendship>();
-        for(Friendship friendship : friendshipRepository.findAll()){
-            if(friendship.getSender().getId() == id || friendship.getReceiver().getId() == id)
-                res.add(friendship);
-        }
-        return res;
+    public Set<Friendship> findAllFriendshipsByPlayerId(Integer id) throws DataAccessException{
+        return friendshipRepository.findAllFriendshipsByPlayerId(id);
     }
 
     @Transactional(readOnly = true)
@@ -45,11 +40,19 @@ public class FriendshipService {
         return friendshipRepository.findFriendshipBySenderAndReceiver(sender_id, receiver_id).orElseThrow(() -> new ResourceNotFoundException("Friendship", "sender_id and receiver_id", sender_id + " and " + receiver_id));
     }
 
+    private Boolean existsFriendship(Integer sender_id, Integer receiver_id) throws DataAccessException{
+        return friendshipRepository.findFriendshipBySenderAndReceiver(sender_id, receiver_id).isPresent();
+    }
+
     @Transactional
-    public Friendship createFriendship(FriendshipDTO friendshipDTO) throws DataAccessException{
+    public Friendship createFriendship(Integer sender_id, Integer receiver_id) throws DataAccessException{
+        if (existsFriendship(sender_id, receiver_id))
+            throw new BadRequestException("No se puede crear una amistad entre dos jugadores que ya son amigos");
+        if(!playerRepository.existsPlayerById(sender_id) || !playerRepository.existsPlayerById(receiver_id))
+            throw new BadRequestException("No existe el jugador con id " + sender_id + " o " + receiver_id);
         Friendship friendship = new Friendship();
-        friendship.setSender(playerRepository.findById(friendshipDTO.getSender_id()).get());
-        friendship.setReceiver(playerRepository.findById(friendshipDTO.getReceiver_id()).get());
+        friendship.setSender(playerRepository.findById(sender_id).get());
+        friendship.setReceiver(playerRepository.findById(receiver_id).get());
         friendship.setFriendState(FriendStatus.PENDING);
         friendshipRepository.save(friendship);
         return friendship;
@@ -64,7 +67,7 @@ public class FriendshipService {
     @Transactional
     public Friendship updateFriendship(Integer id, FriendshipDTO friendshipDTO) throws DataAccessException{
         Friendship friendshipToUpdate = findFriendshipById(id);
-        BeanUtils.copyProperties(friendshipDTO, friendshipToUpdate, "id");
+        friendshipToUpdate.setFriendState(friendshipDTO.getFriendship_state());
         return friendshipRepository.save(friendshipToUpdate);
     }
 
