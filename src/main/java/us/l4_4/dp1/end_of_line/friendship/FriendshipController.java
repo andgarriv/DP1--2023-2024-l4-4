@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/player/friendship")
@@ -24,18 +25,18 @@ public class FriendshipController {
     public Friendship getFriendshipById(@PathVariable Integer id) {
         return friendshipService.findFriendshipById(id);
     }
-/*
+
     @GetMapping("/all/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Iterable<Friendship> getAllFriendshipsByPlayerId(@PathVariable Integer id) {
-        return friendshipService.findAllFriendshipByPlayerId(id);
+    public Iterable<Friendship> getAllFriendshipsByPlayerId(@PathVariable @Valid Integer id) {
+        return friendshipService.findAllFriendshipsByPlayerId(id);
     }
 
     @GetMapping("/find/{sender_id}/{receiver_id}")
     @ResponseStatus(HttpStatus.OK)
     public Friendship getFriendshipBySenderAndReceiver(@PathVariable Integer sender_id, @PathVariable Integer receiver_id) {
         return friendshipService.findFriendshipBySenderAndReceiver(sender_id, receiver_id);
-    }*/
+    }
     /*
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
