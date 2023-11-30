@@ -68,7 +68,7 @@ export default function NewGame() {
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
-        window.location.href = "/game";
+        window.location.href = '/game/' + (await response.json()).id;
       } catch (error) {
         setMessage("Error starting new game");
         setVisible(true);
