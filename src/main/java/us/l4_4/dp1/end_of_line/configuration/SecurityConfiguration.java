@@ -59,7 +59,7 @@ public class SecurityConfiguration {
 			.requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/users/**")).hasAuthority(ADMIN)
 			.requestMatchers("/api/v1/player/**").authenticated()
 			.requestMatchers("/api/v1/games/admin/**").authenticated()
-			.requestMatchers(HttpMethod.GET,"/api/v1/cards**").authenticated()
+			.requestMatchers(HttpMethod.GET,"/api/v1/cards/**").authenticated()
 			.requestMatchers(HttpMethod.POST, "/api/v1/gameplayers/**").authenticated()
 			.requestMatchers(HttpMethod.POST, "/api/v1/games/**").authenticated()
 			//.requestMatchers("/api/v1/clinicOwners/all").hasAuthority(ADMIN)

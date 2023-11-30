@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import cardBackImage from '../static/images/GameCards/CB_BACK.png';
 import cardBackImage2 from '../static/images/GameCards/CG_BACK.png';
 import './styles/Board.css';
+import tokenService from "../services/token.service";
+
 
 
 function Box({ content }) {
@@ -25,6 +27,10 @@ function importGameCard(color, exit){
 
 
 export default function Board() {
+    const jwt = tokenService.getLocalAccessToken();
+    
+    const user = tokenService.getUser();
+
     const [board, setBoard] = useState(
         Array(7).fill(null).map(() => Array(7).fill(null))
     );
@@ -37,9 +43,16 @@ export default function Board() {
         const Card2 = { image: cardBackImage2 };
 
         // Function to get the game cards
-        const fetchGameCards = async () => {
+        async function fetchGameCards() {
             try {
-                const response = await fetch(`http://localhost:8000/api/games/${gameId}/cards`);
+                const response = await fetch(
+                    `http://localhost:8080/api/v1/cards/game/${gameId}`,
+                    {
+                        method: 'GET',
+                        headers: {
+                            Authorization: `Bearer ${jwt}`,
+                            'Content-Type': 'application/json',
+                        }});
                 const data = await response.json();
                 console.log(data);
             } catch (error) {
@@ -109,7 +122,7 @@ export default function Board() {
             return newBoard;
         });
         fetchGameCards();
-    }, []);
+    }, [gameId, jwt, user.id]);
 
     return (
         <div className="background">
