@@ -359,7 +359,16 @@ INSERT INTO cards (id, card_column, card_row, iniciative, color, exit, orientati
                                                                                                         (190, null, null, 3, 'ORANGE', 'EXIT_110_B', 'S', 1),
 
                                                                                                         (191, null, null, 0, 'ORANGE', 'EXIT_111_A', 'S', 1),
-                                                                                                        (192, null, null, 5, 'ORANGE', 'EXIT_111_B', 'S', 1);
+                                                                                                        (192, null, null, 5, 'ORANGE', 'EXIT_111_B', 'S', 1),
+
+                                                                                                        (193, null, null, 0, 'RED', 'START', 'S', 1),
+                                                                                                        (194, null, null, 0, 'BLUE', 'START', 'S', 1),
+                                                                                                        (195, null, null, 0, 'GREEN', 'START', 'S', 1),
+                                                                                                        (196, null, null, 0, 'YELLOW', 'START', 'S', 1),
+                                                                                                        (197, null, null, 0, 'GREY', 'START', 'S', 1),
+                                                                                                        (198, null, null, 0, 'VIOLET', 'START', 'S', 1),
+                                                                                                        (199, null, null, 0, 'MAGENTA', 'START', 'S', 1),
+                                                                                                        (200, null, null, 0, 'ORANGE', 'START', 'S', 1);
                                                         
 --Effects
 

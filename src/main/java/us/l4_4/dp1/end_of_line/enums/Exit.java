@@ -7,5 +7,6 @@ public enum Exit {
     EXIT_100_A, EXIT_100_B, EXIT_100_C, EXIT_100_D,
     EXIT_101_A, EXIT_101_B,
     EXIT_110_A, EXIT_110_B,
-    EXIT_111_A, EXIT_111_B;
+    EXIT_111_A, EXIT_111_B,
+    START;
 }

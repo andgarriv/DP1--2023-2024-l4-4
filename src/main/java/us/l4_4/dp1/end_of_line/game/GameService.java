@@ -18,6 +18,7 @@ import us.l4_4.dp1.end_of_line.card.CardService;
 import us.l4_4.dp1.end_of_line.effect.EffectRepository;
 import us.l4_4.dp1.end_of_line.enums.CardStatus;
 import us.l4_4.dp1.end_of_line.enums.Color;
+import us.l4_4.dp1.end_of_line.enums.Exit;
 import us.l4_4.dp1.end_of_line.exceptions.BadRequestException;
 import us.l4_4.dp1.end_of_line.exceptions.ResourceNotFoundException;
 import us.l4_4.dp1.end_of_line.gameplayer.GamePlayer;
@@ -113,10 +114,16 @@ public class GameService {
         List<Card> cardsC1Duplicated = new ArrayList<>();
         for (Card card : cardsC1) {
             Card newCard = new Card();
-            newCard.setColumn(null);
-            newCard.setRow(null);
+            if (card.getExit() == Exit.START){
+                newCard.setColumn(2);
+                newCard.setRow(3);
+                newCard.setCard_Status(CardStatus.ON_BOARD);
+            }else{
+                newCard.setColumn(null);
+                newCard.setRow(null);
+                newCard.setCard_Status(CardStatus.IN_DECK);
+            }
             newCard.setIniciative(card.getIniciative());
-            newCard.setCard_Status(CardStatus.IN_DECK);
             newCard.setColor(card.getColor());
             newCard.setExit(card.getExit());
             newCard.setOrientation(card.getOrientation());
@@ -133,10 +140,16 @@ public class GameService {
         List<Card> cardsC2Duplicated = new ArrayList<>();
         for (Card card : cardsC2) {
             Card newCard = new Card();
-            newCard.setColumn(null);
-            newCard.setRow(null);
+            if (card.getExit() == Exit.START){
+                newCard.setColumn(4);
+                newCard.setRow(3);
+                newCard.setCard_Status(CardStatus.ON_BOARD);
+            }else{
+                newCard.setColumn(null);
+                newCard.setRow(null);
+                newCard.setCard_Status(CardStatus.IN_DECK);
+            }
             newCard.setIniciative(card.getIniciative());
-            newCard.setCard_Status(CardStatus.IN_HAND);
             newCard.setColor(card.getColor());
             newCard.setExit(card.getExit());
             newCard.setOrientation(card.getOrientation());
