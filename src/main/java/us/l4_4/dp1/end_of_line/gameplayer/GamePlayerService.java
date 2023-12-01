@@ -49,6 +49,10 @@ public class GamePlayerService {
         return gamePlayer;
     }
 
+    public List<GamePlayer> getGamePlayersByGameId(int gameId) {
+        return gamePlayerRepository.findGamePlayersByGameId(gameId);
+    }
+
     public GamePlayer getGamePlayerById(int id) throws DataAccessException{
         return gamePlayerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("GamePlayer", "id", id));
     }
