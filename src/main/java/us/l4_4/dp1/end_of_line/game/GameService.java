@@ -109,7 +109,7 @@ public class GameService {
             Card newCard = new Card();
             if (card.getExit() == Exit.START){
                 newCard.setColumn(2);
-                newCard.setRow(3);
+                newCard.setRow(4);
                 newCard.setCard_Status(CardStatus.ON_BOARD);
             }else{
                 newCard.setColumn(null);
@@ -135,7 +135,7 @@ public class GameService {
             Card newCard = new Card();
             if (card.getExit() == Exit.START){
                 newCard.setColumn(4);
-                newCard.setRow(3);
+                newCard.setRow(4);
                 newCard.setCard_Status(CardStatus.ON_BOARD);
             }else{
                 newCard.setColumn(null);

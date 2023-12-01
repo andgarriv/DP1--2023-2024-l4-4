@@ -66,10 +66,10 @@ export default function Board() {
                     startCardImages.forEach(card => {
                         // Asumiendo posiciones fijas para las cartas de inicio
                         if (card.color === dataGamePlayer[0].color) {
-                            newBoard[4][2] = { image: card.image };
+                            newBoard[card.row][card.column] = { image: card.image };
                         }
                         if (card.color === dataGamePlayer[1].color) {
-                            newBoard[4][4] = { image: card.image };
+                            newBoard[card.row][card.column] = { image: card.image };
                         }
                     });
     
