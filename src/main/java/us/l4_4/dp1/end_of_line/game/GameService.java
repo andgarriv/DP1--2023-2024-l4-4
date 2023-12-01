@@ -25,7 +25,6 @@ import us.l4_4.dp1.end_of_line.gameplayer.GamePlayer;
 import us.l4_4.dp1.end_of_line.gameplayer.GamePlayerRepository;
 import us.l4_4.dp1.end_of_line.message.Message;
 import us.l4_4.dp1.end_of_line.message.MessageRepository;
-import us.l4_4.dp1.end_of_line.player.Player;
 import us.l4_4.dp1.end_of_line.player.PlayerRepository;
 
 @Service
@@ -83,12 +82,6 @@ public class GameService {
                 .map(gamePlayerId -> gamePlayerRepository.findById(gamePlayerId).get())
                 .collect(Collectors.toList());
         game.setGamePlayers(gamePlayers);
-
-        List<Card> cards = gamePlayers.stream()
-                .map(gamePlayer -> gamePlayer.getCards())
-                .flatMap(cardsList -> cardsList.stream())
-                .collect(Collectors.toList());
-        game.setCards(cards);
 
         return gameRepository.save(game);
     }
@@ -161,12 +154,6 @@ public class GameService {
         gamePlayerRepository.save(p2);
         List<GamePlayer> gamePlayers = List.of(p1, p2);
         game.setGamePlayers(gamePlayers);
-
-        List<Card> cards = gamePlayers.stream()
-                .map(gamePlayer -> gamePlayer.getCards())
-                .flatMap(cardsList -> cardsList.stream())
-                .collect(Collectors.toList());
-        game.setCards(cards);
         gameRepository.save(game);
         return game;
     }
@@ -252,13 +239,6 @@ public class GameService {
                 .map(gamePlayerId -> gamePlayerRepository.findById(gamePlayerId).get())
                 .collect(Collectors.toList());
         game.setGamePlayers(gamePlayers);
-
-        List<Card> cards = gamePlayers.stream()
-                .map(gamePlayer -> gamePlayer.getCards())
-                .flatMap(cardsList -> cardsList.stream())
-                .collect(Collectors.toList());
-        game.setCards(cards);
-
         return gameRepository.save(game);
     }
 

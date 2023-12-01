@@ -2,8 +2,6 @@ package us.l4_4.dp1.end_of_line.game;
 
 import java.util.Date;
 import java.util.List;
-
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -15,7 +13,6 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
-import us.l4_4.dp1.end_of_line.card.Card;
 import us.l4_4.dp1.end_of_line.effect.Effect;
 import us.l4_4.dp1.end_of_line.gameplayer.GamePlayer;
 import us.l4_4.dp1.end_of_line.message.Message;
@@ -52,10 +49,6 @@ public class Game extends BaseEntity {
     @NotNull
     @OneToMany
     private List<GamePlayer> gamePlayers;
-
-    @NotNull
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    List<Card> cards;
 
     Integer gamePlayerTurnId;
 
