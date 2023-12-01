@@ -18,7 +18,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/v1/player/friendship")
+@RequestMapping("/api/v1/friendship")
 @Tag(name = "Friendship", description = "API for the management of Friendships")
 public class FriendshipController {
     
@@ -29,6 +29,12 @@ public class FriendshipController {
     @ResponseStatus(HttpStatus.OK)
     public Friendship getFriendshipById(@PathVariable Integer id) {
         return friendshipService.findFriendshipById(id);
+    }
+
+    @GetMapping("/all")
+    @ResponseStatus(HttpStatus.OK)
+    public Iterable<Friendship> getAllFriendships() {
+        return friendshipService.findAllFriendships();
     }
 
     @GetMapping("/all/{id}")

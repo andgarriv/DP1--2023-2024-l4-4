@@ -31,6 +31,11 @@ public class FriendshipService {
     }
 
     @Transactional(readOnly = true)
+    public Iterable<Friendship> findAllFriendships() throws DataAccessException{
+        return friendshipRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
     public Set<Friendship> findAllFriendshipsByPlayerId(Integer id) throws DataAccessException{
         return friendshipRepository.findAllFriendshipsByPlayerId(id);
     }

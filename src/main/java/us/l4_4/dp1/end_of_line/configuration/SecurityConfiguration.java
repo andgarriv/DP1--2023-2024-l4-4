@@ -57,6 +57,8 @@ public class SecurityConfiguration {
 			.requestMatchers(HttpMethod.POST,"/api/v1/achievements").hasAuthority("ADMIN")
 			.requestMatchers(HttpMethod.DELETE,"/api/v1/achievements").hasAuthority("ADMIN")
 			.requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/users/**")).hasAuthority(ADMIN)
+			.requestMatchers(HttpMethod.GET,"/api/v1/friendship/all").hasAuthority(ADMIN)
+			.requestMatchers(HttpMethod.GET,"/api/v1/friendship/**").authenticated()
 			.requestMatchers("/api/v1/player/**").authenticated()
 			.requestMatchers("/api/v1/games/admin/**").authenticated()
 			.requestMatchers(HttpMethod.GET,"/api/v1/cards/**").authenticated()
