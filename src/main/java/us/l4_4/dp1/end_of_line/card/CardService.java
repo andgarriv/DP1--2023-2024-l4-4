@@ -14,6 +14,7 @@ import us.l4_4.dp1.end_of_line.enums.Color;
 import us.l4_4.dp1.end_of_line.game.Game;
 import us.l4_4.dp1.end_of_line.game.GameRepository;
 import us.l4_4.dp1.end_of_line.game.GameService;
+import us.l4_4.dp1.end_of_line.gameplayer.GamePlayer;
 
 @Service
 public class CardService {
@@ -55,7 +56,11 @@ public class CardService {
 
     @Transactional(readOnly = true)
     public List<Card> getCardsOfGame(Integer gameId) throws DataAccessException{
-        List<Card> cards = gameService.getGameById(gameId).getCards();
+        List<GamePlayer> gamePlayers = gameService.getGameById(gameId).getGamePlayers();
+        Integer gamePlayerId1 = gamePlayers.get(0).getId();
+        Integer gamePlayerId2 = gamePlayers.get(1).getId();
+        List<Card> cards = cardRepository.findCardsByGamePlayer(gamePlayerId1);
+        cards.addAll(cardRepository.findCardsByGamePlayer(gamePlayerId2));
         return cards;
     }
 }
