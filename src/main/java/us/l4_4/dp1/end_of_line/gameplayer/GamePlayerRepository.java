@@ -1,10 +1,17 @@
 package us.l4_4.dp1.end_of_line.gameplayer;
 
+import java.util.List;
+
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 
 @Repository
 public interface GamePlayerRepository extends CrudRepository<GamePlayer, Integer>{
+
+    @Query("SELECT g.gamePlayers FROM Game g WHERE g.id = :gameId")
+    List<GamePlayer> findGamePlayersByGameId(@Param("gameId") Integer gameId);
 
 }

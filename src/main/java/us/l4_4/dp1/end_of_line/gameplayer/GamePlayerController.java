@@ -1,5 +1,7 @@
 package us.l4_4.dp1.end_of_line.gameplayer;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +26,12 @@ public class GamePlayerController {
 
     public GamePlayerController(GamePlayerService gamePlayerService){
         this.gamePlayerService = gamePlayerService;
+    }
+
+    @GetMapping("/game/{gameId}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<GamePlayer> getGamePlayersByGameId(@PathVariable Integer gameId) {
+        return gamePlayerService.getGamePlayersByGameId(gameId);
     }
 
     @PostMapping
