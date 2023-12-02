@@ -43,16 +43,16 @@ INSERT INTO game_players(id, energy, player_id, color) VALUES  (3,3,3,'RED'), --
                                                                (4,3,4,'BLUE'), --player 4
 
                                                                (5,3,5,'BLUE'),--player 5
-                                                               (6,3,6,'RED'), --player 6
+                                                               (6,3,1,'RED'), --player 6
 
                                                                (7,3,5,'BLUE'), --player 5
-                                                               (8,3,6,'RED'), --player 6
+                                                               (8,3,1,'RED'), --player 6
 
                                                                (9,3,3,'BLUE'), --player 5
-                                                               (10,3,6,'RED'), --player 6
+                                                               (10,3,1,'RED'), --player 6
 
                                                                (11,3,3,'BLUE'), --player 5
-                                                               (12,3,6,'RED'); --player 6
+                                                               (12,3,1,'RED'); --player 6
 
 
 -- Games 
