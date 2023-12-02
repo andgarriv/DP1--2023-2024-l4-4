@@ -220,6 +220,12 @@ public class GameService {
         return cardsInHand;
     }
 
+    @Transactional(readOnly = true)
+    public Game getGame(Integer gameId) {
+        return gameRepository.findById(gameId)
+                .orElseThrow(() -> new ResourceNotFoundException("Game", "id", gameId));
+    }
+
     @Transactional
     public Game updateGame(Integer id, GameDTO gameDTO) throws DataAccessException {
         Game game = gameRepository.findById(id).get();

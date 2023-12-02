@@ -1,8 +1,9 @@
 import jwt_decode from "jwt-decode";
-import React from "react";
+import React, { useEffect, useState } from 'react';
 import { ErrorBoundary } from "react-error-boundary";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from 'react-router-dom';
 import AppNavbar from "./AppNavbar";
+import GameNavbar from "./GameNavbar";
 import AchievementEdit from "./achievement/achievementEdit";
 import AchievementList from "./achievement/achievementList";
 import AchievementPlayer from "./achievement/achievementListPlayer";
@@ -30,13 +31,13 @@ import Login from "./auth/login";
 import Logout from "./auth/logout";
 import Register from "./auth/register";
 import AdminGamesList from "./games/AdminGamesList";
+import Board from "./games/Board";
 import NewGame from "./games/NewGame";
 import PlayerGamesList from "./games/PlayerGamesList";
 import Home from "./home";
 import PlayerProfile from "./player/playerProfile";
 import PlayerProfileEdit from "./player/playerProfileEdit";
 import PlayerStats from "./player/playerStats";
-import Board from "./games/Board"
 import PrivateRoute from "./privateRoute";
 import PlanList from "./public/plan";
 import SwaggerDocs from "./public/swagger";
@@ -67,7 +68,8 @@ function App() {
   let adminRoutes = <></>;
   let ownerRoutes = <></>;
   let userRoutes = <></>;
-  let vetRoutes = <></>;
+  let playerRoutes = <></>;
+  let gameRoutes = <></>;
   let publicRoutes = <></>;
 
   roles.forEach((role) => {
@@ -100,7 +102,7 @@ function App() {
         </>)
     }
     if (role === "PLAYER") {
-      vetRoutes = (
+      playerRoutes = (
         <>
           {/* <Route path="/dashboard" element={<PrivateRoute><OwnerDashboard /></PrivateRoute>} /> */}
           <Route path="/games" exact={true} element={<PrivateRoute><PlayerGamesList /></PrivateRoute>} />
@@ -111,6 +113,11 @@ function App() {
           <Route path="/play" exact={true} element={<PrivateRoute><NewGame /></PrivateRoute>} />
           <Route path="/game/:id" exact={true} element={<PrivateRoute><Board /></PrivateRoute>} />
         </>)
+        gameRoutes = (
+          <>
+            <Route path="/game/:id" exact={true} element={<PrivateRoute><Board /></PrivateRoute>} />
+          </>
+        )
     }
   })
   if (!jwt) {
@@ -130,10 +137,19 @@ function App() {
     )
   }
 
+  const location = useLocation();
+    const [isGameRoute, setIsGameRoute] = useState(false);
+
+    useEffect(() => {
+        const gamePaths = ['/game/:id'];
+        const currentPath = location.pathname;
+        setIsGameRoute(gamePaths.some(path => currentPath.startsWith(path.replace(':id', ''))));
+    }, [location]);
+
   return (
     <div>
       <ErrorBoundary FallbackComponent={ErrorFallback} >
-        <AppNavbar />
+      {isGameRoute ? <GameNavbar /> : <AppNavbar />}
         <Routes>
           <Route path="/" exact={true} element={<Home />} />
           <Route path="/plans" element={<PlanList />} />
@@ -143,7 +159,8 @@ function App() {
           {userRoutes}
           {adminRoutes}
           {ownerRoutes}
-          {vetRoutes}
+          {playerRoutes}
+          {gameRoutes}
         </Routes>
       </ErrorBoundary>
     </div>

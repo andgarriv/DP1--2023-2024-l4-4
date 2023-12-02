@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -56,6 +57,12 @@ public class GameController {
         Color player1_color_enum = Color.valueOf(player1_color);
         Color player2_color_enum = Color.valueOf(player2_color);
         return gameService.createNewGame(player1_id, player2_id, player1_color_enum, player2_color_enum);
+    }
+
+    @GetMapping("/{gameId}")
+    public ResponseEntity<Game> getGame(@PathVariable Integer gameId) {
+        Game game = gameService.getGame(gameId);
+        return new ResponseEntity<>(game, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
