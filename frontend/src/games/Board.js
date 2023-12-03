@@ -55,87 +55,89 @@ export default function Board() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchGameCards() {
-      try {
-        const response = await fetch(`/api/v1/cards/game/${gameId}`, {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${jwt}`,
-            "Content-Type": "application/json",
-          },
-        });
-        const responseGamePlayer = await fetch(
-          `/api/v1/gameplayers/game/${gameId}`,
-          {
+    const interval = setInterval(() => {
+
+      async function fetchGameCards() {
+        try {
+          const response = await fetch(`/api/v1/cards/game/${gameId}`, {
+            method: "GET",
             headers: {
               Authorization: `Bearer ${jwt}`,
+              "Content-Type": "application/json",
             },
+          });
+          const responseGamePlayer = await fetch(
+            `/api/v1/gameplayers/game/${gameId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${jwt}`,
+              },
+            }
+          );
+
+          const dataGamePlayer = await responseGamePlayer.json();
+          setDataGamePlayer(dataGamePlayer);
+          const data = await response.json();
+
+          const handCardsPlayer1 = data.filter(
+            (card) =>
+              card.color === dataGamePlayer[0].color &&
+              card.card_Status === "IN_HAND"
+          );
+          const handCardsPlayer2 = data.filter(
+            (card) =>
+              card.color === dataGamePlayer[1].color &&
+              card.card_Status === "IN_HAND"
+          );
+
+          if (handCardsPlayer1.length === 0 && handCardsPlayer2.length === 0) {
+            // Obtener nuevas cartas y actualizar el estado
+            const [newHandCardsPlayer1, newHandCardsPlayer2] = await Promise.all([
+              fetch(`/api/v1/games/fivecards/${dataGamePlayer[0].id}`, { headers: { Authorization: `Bearer ${jwt}` } }).then(res => res.json()),
+              fetch(`/api/v1/games/fivecards/${dataGamePlayer[1].id}`, { headers: { Authorization: `Bearer ${jwt}` } }).then(res => res.json())
+            ]);
+
+            setHandCardsPlayer(newHandCardsPlayer1, setHandCardsPlayer1);
+            setHandCardsPlayer(newHandCardsPlayer2, setHandCardsPlayer2);
+          } else {
+            setHandCardsPlayer(handCardsPlayer1, setHandCardsPlayer1);
+            setHandCardsPlayer(handCardsPlayer2, setHandCardsPlayer2);
           }
-        );
 
-        const dataGamePlayer = await responseGamePlayer.json();
-        setDataGamePlayer(dataGamePlayer);
-        const data = await response.json();
-        
-        const handCardsPlayer1 = data.filter(
-          (card) =>
-            card.color === dataGamePlayer[0].color &&
-            card.card_Status === "IN_HAND"
-        );
-        const handCardsPlayer2 = data.filter(
-          (card) =>
-            card.color === dataGamePlayer[1].color &&
-            card.card_Status === "IN_HAND"
-        );
-    
-        if (handCardsPlayer1.length === 0 && handCardsPlayer2.length === 0) {
-          // Obtener nuevas cartas y actualizar el estado
-          const [newHandCardsPlayer1, newHandCardsPlayer2] = await Promise.all([
-            fetch(`/api/v1/games/fivecards/${dataGamePlayer[0].id}`, { headers: { Authorization: `Bearer ${jwt}` }}).then(res => res.json()),
-            fetch(`/api/v1/games/fivecards/${dataGamePlayer[1].id}`, { headers: { Authorization: `Bearer ${jwt}` }}).then(res => res.json())
-          ]);
-    
-          setHandCardsPlayer(newHandCardsPlayer1, setHandCardsPlayer1);
-          setHandCardsPlayer(newHandCardsPlayer2, setHandCardsPlayer2);
-        } else {
-          setHandCardsPlayer(handCardsPlayer1, setHandCardsPlayer1);
-          setHandCardsPlayer(handCardsPlayer2, setHandCardsPlayer2);
-        }
-        // Filtrar las cartas de inicio
-        const startCards = data.filter((card) => card.exit === "START");
+          const cardsOnBoard = data.filter((card) => card.card_Status === "ON_BOARD");
 
-        // Cargar imágenes para las cartas de inicio
-        const startCardImages = await Promise.all(
-          startCards.map((card) =>
-            importGameCard(card.color, card.exit, card.iniciative).then(
-              (module) => ({ ...card, image: module.default })
+          const cardsOnBoardImages = await Promise.all(
+            cardsOnBoard.map((card) =>
+              importGameCard(card.color, card.exit, card.iniciative).then(
+                (module) => ({ ...card, image: module.default })
+              )
             )
-          )
-        );
+          );
 
-        // Actualizar el tablero con las cartas de inicio
-        setBoard((oldBoard) => {
-          const newBoard = oldBoard.map((row) => row.slice());
+          // Actualizar el tablero con las cartas en el tablero
+          setBoard((oldBoard) => {
+            const newBoard = oldBoard.map((row) => row.slice());
 
-          startCardImages.forEach((card) => {
-            // Asumiendo posiciones fijas para las cartas de inicio
-            if (card.color === dataGamePlayer[0].color) {
-              newBoard[card.row][card.column] = { image: card.image };
-            }
-            if (card.color === dataGamePlayer[1].color) {
-              newBoard[card.row][card.column] = { image: card.image };
-            }
+            cardsOnBoardImages.forEach((card) => {
+              if (card.color === dataGamePlayer[0].color) {
+                newBoard[card.row][card.column] = { image: card.image };
+              }
+              if (card.color === dataGamePlayer[1].color) {
+                newBoard[card.row][card.column] = { image: card.image };
+              }
+            });
+
+            return newBoard;
           });
 
-          return newBoard;
-        });
-
-        setIsLoading(false);
-      } catch (error) {
-        console.error("Error al cargar las cartas", error);
+          setIsLoading(false);
+        } catch (error) {
+          console.error("Error al cargar las cartas", error);
+        }
       }
-    }
-    fetchGameCards();
+      fetchGameCards();
+    }, 1000); // Actualization every second
+    return () => clearInterval(interval);
   }, [gameId, jwt]);
 
   if (isLoading) {
