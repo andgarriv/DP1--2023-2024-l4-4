@@ -107,11 +107,11 @@ public class GameService {
         List<Card> cardsC1Duplicated = new ArrayList<>();
         for (Card card : cardsC1) {
             Card newCard = new Card();
-            if (card.getExit() == Exit.START){
+            if (card.getExit() == Exit.START) {
                 newCard.setColumn(2);
                 newCard.setRow(4);
                 newCard.setCard_Status(CardStatus.ON_BOARD);
-            }else{
+            } else {
                 newCard.setColumn(null);
                 newCard.setRow(null);
                 newCard.setCard_Status(CardStatus.IN_DECK);
@@ -133,11 +133,11 @@ public class GameService {
         List<Card> cardsC2Duplicated = new ArrayList<>();
         for (Card card : cardsC2) {
             Card newCard = new Card();
-            if (card.getExit() == Exit.START){
+            if (card.getExit() == Exit.START) {
                 newCard.setColumn(4);
                 newCard.setRow(4);
                 newCard.setCard_Status(CardStatus.ON_BOARD);
-            }else{
+            } else {
                 newCard.setColumn(null);
                 newCard.setRow(null);
                 newCard.setCard_Status(CardStatus.IN_DECK);
@@ -176,11 +176,19 @@ public class GameService {
             throw new ResourceNotFoundException("GamePlayer", "id", gamePlayerId);
         }
         List<Card> cards = gamePlayerRepository.findById(gamePlayerId).get().getCards();
+        // Si hay alguna carta en mano, no se puede pedir más
+        if (cards.stream().anyMatch(card -> card.getCard_Status() == CardStatus.IN_HAND)) {
+            return new ArrayList<>();
+        }
+        // Excluir las cartas con estado ON_BOARD
+        cards = cards.stream()
+                .filter(card -> card.getCard_Status() != CardStatus.ON_BOARD)
+                .collect(Collectors.toList());
         // Mezclar la lista de cartas
         Collections.shuffle(cards);
         // Tomar las primeras cinco cartas
         List<Card> randomCards = cards.subList(0, Math.min(5, cards.size()));
-        for(Card card : randomCards) {
+        for (Card card : randomCards) {
             card.setCard_Status(CardStatus.IN_HAND);
             cardRepository.save(card);
         }
@@ -188,7 +196,7 @@ public class GameService {
         return randomCards;
     }
 
-    public List<Card> getNeedCardsToGetFive(Integer gamePlayerId){
+    public List<Card> getNeedCardsToGetFive(Integer gamePlayerId) {
         if (gamePlayerRepository.findById(gamePlayerId) == null) {
             throw new ResourceNotFoundException("GamePlayer", "id", gamePlayerId);
         }
@@ -200,16 +208,22 @@ public class GameService {
         List<Card> cardsInHand = cards.stream()
                 .filter(card -> card.getCard_Status() == CardStatus.IN_HAND)
                 .collect(Collectors.toList());
-        
-         Collections.shuffle(cardsInDeck);
-         List<Card> randomCards = cardsInDeck.subList(0,5-cardsInHand.size()-1);
 
-        for(Card card : randomCards ) {
+        Collections.shuffle(cardsInDeck);
+        List<Card> randomCards = cardsInDeck.subList(0, 5 - cardsInHand.size() - 1);
+
+        for (Card card : randomCards) {
             cardsInHand.add(card);
             card.setCard_Status(CardStatus.IN_HAND);
             cardRepository.save(card);
         }
         return cardsInHand;
+    }
+
+    @Transactional(readOnly = true)
+    public Game getGame(Integer gameId) {
+        return gameRepository.findById(gameId)
+                .orElseThrow(() -> new ResourceNotFoundException("Game", "id", gameId));
     }
 
     @Transactional
@@ -261,20 +275,25 @@ public class GameService {
                 .sorted(Comparator.comparing(Card::getTimeStamp).reversed())
                 .collect(Collectors.toList());
 
-        if(player1Cards.size() < player2Cards.size())maxSize = player1Cards.size();
-        else maxSize = player2Cards.size();
-        
-            for (int i = 0; i < maxSize; i++) {
-                if (player1Cards.get(i).getIniciative() > player2Cards.get(i).getIniciative()) {
-                    res = id2;
-                } else if (player1Cards.get(i).getIniciative() < player2Cards.get(i).getIniciative()) {
-                   res = id1;
-                }
+        if (player1Cards.size() < player2Cards.size())
+            maxSize = player1Cards.size();
+        else
+            maxSize = player2Cards.size();
+
+        for (int i = 0; i < maxSize; i++) {
+            if (player1Cards.get(i).getIniciative() > player2Cards.get(i).getIniciative()) {
+                res = id2;
+            } else if (player1Cards.get(i).getIniciative() < player2Cards.get(i).getIniciative()) {
+                res = id1;
             }
-            if(res == null) {
-                 if(player1Cards.size() < player2Cards.size()){res= id1;}
-                 else {res = id2;}
+        }
+        if (res == null) {
+            if (player1Cards.size() < player2Cards.size()) {
+                res = id1;
+            } else {
+                res = id2;
             }
+        }
         return res;
     }
 
