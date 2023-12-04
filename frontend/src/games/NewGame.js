@@ -82,7 +82,7 @@ export default function NewGame() {
   useEffect(() => {
     async function fetchData() {
         try {
-          const response = await fetch(`/api/v1/player/allExcept/${user.id}`, {
+          const response = await fetch(`/api/v1/players/allExcept/${user.id}`, {
             headers: {
               Authorization: `Bearer ${jwt}`,
             },
