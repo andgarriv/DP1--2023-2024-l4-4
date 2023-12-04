@@ -47,17 +47,19 @@ const Pagination = ({ friendshipsPerPage, totalFriendships, paginate, currentPag
 
 export default function FriendshipList() {
     const jwt = tokenService.getLocalAccessToken();
-    const [friendships, setFriendships] = useFetchState(null, "/api/v1/friendships/all", jwt);
+    const user = tokenService.getUser();
+    const [friendships, setFriendships] = useFetchState(null, `/api/v1/friendships/friends/${user.id}`, jwt);
     const [currentPage, setCurrentPage] = useState(1);
     const [friendshipsPerPage] = useState(5);
 
     const [message, setMessage] = useState("");
     const [visible, setVisible] = useState(false);
+    const [alerts, setAlerts] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch("/api/v1/friendships/all", {
+                const response = await fetch(`/api/v1/friendships/friends/${user.id}`, {
                     headers: {
                         Authorization: `Bearer ${jwt}`,
                     },
@@ -70,12 +72,11 @@ export default function FriendshipList() {
             }
         };
         fetchData();
-    }, [jwt, setFriendships]);
+    }, [jwt, setFriendships, user.id]);
 
     const indexOfLastFriendship = currentPage * friendshipsPerPage;
     const indexOfFirstFriendship = indexOfLastFriendship - friendshipsPerPage;
     const currentFriendships = friendships ? friendships.slice(indexOfFirstFriendship, indexOfLastFriendship) : [];
-
     const paginate = pageNumber => setCurrentPage(pageNumber);
 
     const modal = getErrorModal(setVisible, visible, message);
@@ -91,37 +92,37 @@ export default function FriendshipList() {
         }
     };    
 
+    const displayUserDetails = (friendship) => {
+        const isSender = friendship.sender.id === user.id;
+        const otherUser = isSender ? friendship.receiver : friendship.sender;
+
+        return (
+            <div key={friendship.id} style={{ display: 'flex', width: '100%', padding: '10px', borderBottom: '1px solid #ddd' }}>
+                <span style={{ flex: 2, textAlign: 'left', paddingLeft: '10px' }}>{otherUser.nickname}</span>
+                <span style={{ flex: 2, textAlign: 'center' }}>
+                    <img src={otherUser.avatar} alt="avatar" style={{ borderRadius: "50%", width: "40px", height: "40px" }} />
+                </span>
+                <span style={{ flex: 2, textAlign: 'center', paddingLeft: '10px', ...getFriendStateStyle(friendship.friendState) }}>{friendship.friendState}
+                </span>
+            </div>
+        );
+    };
+
     return (
         <div className="home-page-container">
             <div className="hero-div">
             <h1 style={{ textAlign: 'center', color: "#EF87E0" }}>Friendships</h1>
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', marginBottom: '20px' }}>
                     <div style={{ display: 'flex', width: '100%', padding: '10px' }}>
-                        <span style={{ flex: 2, textAlign: 'center' }}>Sender's nickname</span>
-                        <span style={{ flex: 2, textAlign: 'left' }}>Sender's avatar</span>
-                        <span style={{ flex: 2, textAlign: 'left' }}>Receiver's nickname</span>
-                        <span style={{ flex: 2, textAlign: 'center' }}>Receiver's avatar</span>
+                        <span style={{ flex: 2, textAlign: 'left' }}>Nickname</span>
+                        <span style={{ flex: 2, textAlign: 'center' }}>Avatar</span>
                         <span style={{ flex: 2, textAlign: 'center' }}>Status</span>
                     </div>
                     {currentFriendships.length > 0 ? (
-                        currentFriendships.map((friendship) => (
-                            <div key={friendship.id} style={{ display: 'flex', width: '100%', padding: '10px', borderBottom: '1px solid #ddd' }}>
-                                <span style={{ flex: 2, textAlign: 'left', paddingLeft: '10px' }}>{friendship.sender.nickname}</span>
-                                <span style={{ flex: 2, textAlign: 'center' }}>
-                                    <img src={friendship.sender.avatar} alt="avatar" style={{ borderRadius: "50%", width: "40px", height: "40px" }} />
-                                </span>
-                                <span style={{ flex: 3, textAlign: 'left', paddingLeft: '10px' }}>{friendship.receiver.nickname}</span>
-                                <span style={{ flex: 2, textAlign: 'center' }}>
-                                    <img src={friendship.receiver.avatar} alt="avatar" style={{ borderRadius: "50%", width: "40px", height: "40px" }} />
-                                </span>
-                                <span style={{ flex: 2, textAlign: 'center', paddingLeft: '10px', ...getFriendStateStyle(friendship.friendState) }}>{friendship.friendState}
-                                </span>
-
-                            </div>
-                        ))
-                    ) : (
-                        <div style={{ textAlign: 'center', width: '100%' }}>Loading...</div>
-                    )}
+                    currentFriendships.map((friendship) => displayUserDetails(friendship))
+                ) : (
+                    <div style={{ textAlign: 'center', width: '100%' }}>You don´t have any friend yet</div>
+                )}
                 </div>
                 <Pagination
                     friendshipsPerPage={friendshipsPerPage}

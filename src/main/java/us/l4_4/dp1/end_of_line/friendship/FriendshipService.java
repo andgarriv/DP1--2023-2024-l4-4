@@ -1,6 +1,6 @@
 package us.l4_4.dp1.end_of_line.friendship;
 
-import java.util.Set;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -36,31 +36,41 @@ public class FriendshipService {
     }
 
     @Transactional(readOnly = true)
-    public Set<Friendship> findAllFriendshipsByPlayerId(Integer id) throws DataAccessException{
+    public Iterable<Friendship> findAllFriendshipsByPlayerId(Integer id) throws DataAccessException{
         return friendshipRepository.findAllFriendshipsByPlayerId(id);
     }
 
-    @Transactional(readOnly = true)
-    public Friendship findFriendshipBySenderAndReceiver(Integer sender_id, Integer receiver_id) throws DataAccessException{
-        return friendshipRepository.findFriendshipBySenderAndReceiver(sender_id, receiver_id).orElseThrow(() -> new ResourceNotFoundException("Friendship", "sender_id and receiver_id", sender_id + " and " + receiver_id));
+    private Boolean checkFriendship(Integer sender_id, Integer receiver_id) throws DataAccessException {
+        if (sender_id.equals(receiver_id)) 
+            throw new BadRequestException("You cannot create a friendship with yourself.");
+        
+        if (!playerRepository.existsPlayerById(sender_id) || !playerRepository.existsPlayerById(receiver_id)) 
+            throw new BadRequestException("Player with id " + sender_id + " or " + receiver_id + " does not exist.");
+        
+        Optional<Friendship> optionalFriendship = friendshipRepository.findFriendshipBySenderAndReceiver(sender_id, receiver_id);
+        if (optionalFriendship.isPresent()) {
+            FriendStatus friendStatus = optionalFriendship.get().getFriendState();
+            switch (friendStatus) {
+                case PENDING:
+                    throw new BadRequestException("There is already a pending friendship request with this player.");
+                case REJECTED:
+                    throw new BadRequestException("You cannot create a friendship with a player who has rejected you.");
+                default:
+                    throw new BadRequestException("You are already friends with this player.");
+            }
+        }
+        return true;
     }
-
-    private Boolean existsFriendship(Integer sender_id, Integer receiver_id) throws DataAccessException{
-        return friendshipRepository.findFriendshipBySenderAndReceiver(sender_id, receiver_id).isPresent();
-    }
+    
 
     @Transactional
-    public Friendship createFriendship(Integer sender_id, Integer receiver_id) throws DataAccessException{
-        if (existsFriendship(sender_id, receiver_id))
-            throw new BadRequestException("No se puede crear una amistad entre dos jugadores que ya son amigos");
-        if(!playerRepository.existsPlayerById(sender_id) || !playerRepository.existsPlayerById(receiver_id))
-            throw new BadRequestException("No existe el jugador con id " + sender_id + " o " + receiver_id);
+    public Friendship createFriendship(FriendshipDTO friendshipDTO) throws DataAccessException{
+        checkFriendship(friendshipDTO.sender, friendshipDTO.receiver);
         Friendship friendship = new Friendship();
-        friendship.setSender(playerRepository.findById(sender_id).get());
-        friendship.setReceiver(playerRepository.findById(receiver_id).get());
+        friendship.setSender(playerRepository.findById(friendshipDTO.sender).orElseThrow(() -> new BadRequestException("Player with id " + friendshipDTO.sender + " does not exist.")));
+        friendship.setReceiver(playerRepository.findById(friendshipDTO.receiver).orElseThrow(() -> new BadRequestException("Player with id " + friendshipDTO.receiver + " does not exist.")));
         friendship.setFriendState(FriendStatus.PENDING);
-        friendshipRepository.save(friendship);
-        return friendship;
+        return friendshipRepository.save(friendship);
     }
 
     @Transactional

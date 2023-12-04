@@ -108,7 +108,7 @@ export default function PlayerList() {
                                         size="sm"
                                         color="danger"
                                         onClick={() => deleteFromList(
-                                            `/api/v1/player/${player.id}`,
+                                            `/api/v1/players/${player.id}`,
                                             player.id,
                                             [players, setPlayers],
                                             [alerts, setAlerts],
