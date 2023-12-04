@@ -23,61 +23,62 @@ INSERT INTO players(id, name, surname, password, email, birth_date, authority, n
 
 -- Achievements
 INSERT INTO achievements(id, name, description, threshold, badge_image, category) VALUES (1,'Basic expirence','Play 10 games',10.0,'https://cdn-icons-png.flaticon.com/512/5243/5243423.png','GAMES_PLAYED'),
-                                                                                         (2,'Explorer','Play 25 games',25.0,'https://cdn-icons-png.flaticon.com/512/603/603855.png','GAMES_PLAYED');
-INSERT INTO achievements(id, name, description, threshold, category) VALUES (3,'Expert','Win 20 games',20.0,'VICTORIES');
+                                                                                         (2,'Explorer','Play 25 games',25.0,'https://cdn-icons-png.flaticon.com/512/603/603855.png','GAMES_PLAYED'),
+                                                                                         (3,'Expert','Win 20 games',20.0, null, 'VICTORIES');
 
 -- Player Achievements
-INSERT INTO player_achievements(id, achieve_at, achievement_id) VALUES (1,'2021-09-01', 1);
-INSERT INTO player_achievements(id, achievement_id) VALUES (2,2);
-INSERT INTO player_achievements(id, achievement_id) VALUES (3,3);
+INSERT INTO player_achievements(id, achieve_at, achievement_id) VALUES (1,'2021-09-01', 1),
+                                                                       (2, null, 2),
+                                                                       (3, null, 3);
 
 
 --Player PlayerAchievements
-INSERT INTO players_player_achievement(player_achievement_id, player_id) VALUES (1,6),
-                                                                                (2,6),
-                                                                                (3,5);
+INSERT INTO players_player_achievement(player_achievement_id, player_id) VALUES (1, 6),
+                                                                                (2, 6),
+                                                                                (3, 5);
 
 -- GamePlayers
 
-INSERT INTO game_players(id, energy, player_id, color) VALUES  (3,3,3,'RED'), --player 3
-                                                               (4,3,4,'BLUE'), --player 4
+INSERT INTO game_players(id, energy, player_id, color) VALUES (1, 3, 3,'RED'), 
+                                                              (2, 3, 4,'BLUE'), 
 
-                                                               (5,3,5,'BLUE'),--player 5
-                                                               (6,3,1,'RED'), --player 6
+                                                              (3, 3, 5,'BLUE'),
+                                                              (4, 3, 6,'RED'), 
 
-                                                               (7,3,5,'BLUE'), --player 5
-                                                               (8,3,1,'RED'), --player 6
+                                                              (5, 3, 3,'BLUE'), 
+                                                              (6, 3, 8,'RED'), 
 
-                                                               (9,3,3,'BLUE'), --player 5
-                                                               (10,3,1,'RED'), --player 6
+                                                              (7, 3, 9,'BLUE'), 
+                                                              (8, 3, 10,'RED'), 
 
-                                                               (11,3,3,'BLUE'), --player 5
-                                                               (12,3,1,'RED'); --player 6
+                                                              (9, 3, 11,'BLUE'), 
+                                                              (10, 3, 12,'RED'); 
 
 
 -- Games 
-INSERT INTO games(id, rounds, winner, ended, started) VALUES (1, 16, 3, '2021-09-01 11:13:24', '2021-09-01 10:35:10'),
-                                                             (2, 18, 5, '2021-09-01 14:30:00', '2021-09-01 11:00:00'),
-                                                             (3, 24, null, null, '2021-01-01 15:45:00'),
-                                                             (4, 3, 6, '2021-01-01 10:15:00', '2021-01-01 10:00:00'),
-                                                             (5, 7, 6, '2021-01-01 10:14:00', '2021-01-01 10:00:00');
+INSERT INTO games(id, rounds, winner, ended, started, game_player_turn_id) VALUES (1, 16, 3, '2021-09-01 11:13:24', '2021-09-01 10:35:10', 3),
+                                                                                  (2, 18, 5, '2021-09-01 14:30:00', '2021-09-01 11:00:00', 5),
+                                                                                  (3, 24, null, null, '2021-01-01 15:45:00', 3),
+                                                                                  (4, 3, 10, '2021-01-01 10:15:00', '2021-01-01 10:00:00', 10),
+                                                                                  (5, 7, 12, '2021-01-01 10:14:00', '2021-01-01 10:00:00', 12);
 
 
 -- Games_Game_Players
-INSERT INTO games_game_players(game_id, game_players_id) VALUES  (1,3),
-                                                                 (1,4),
-                                                                --Player con id 3 y 4 juegan la partida 2
-                                                                 (2,5),
-                                                                 (2,6),
-                                                                --Player con id 5 y 6 juegan la partida 3
-                                                                 (3,7),
-                                                                 (3,8),
-                                                                --Player con id 3 y 6 juegan la partida 4
-                                                                 (4,9),
-                                                                 (4,10),
-                                                                --Player con id 
-                                                                 (5,11),
-                                                                 (5,12);
+INSERT INTO games_game_players(game_id, game_players_id) VALUES --Player con id 3 y 4 juegan la partida 1
+                                                                (1, 1),
+                                                                (1, 2),
+                                                                --Player con id 5 y 6 juegan la partida 2
+                                                                (2, 3),
+                                                                (2, 4),
+                                                                --Player con id 3 y 8 juegan la partida 3
+                                                                (3, 5),
+                                                                (3, 6),
+                                                                --Player con id 9 y 10 juegan la partida 4
+                                                                (4, 7),
+                                                                (4, 8),
+                                                                --Player con id 11 y 12 juegan la partida 5
+                                                                (5, 9),
+                                                                (5, 10);
 
 -- Message
 INSERT INTO messages(id, color, reaction) VALUES (1, null, 'HI'),
@@ -372,7 +373,7 @@ INSERT INTO cards (id, card_column, card_row, iniciative, color, exit, orientati
                                                         
 --Effects
 
-INSERT INTO effects(id, color, hability) VALUES (1,null,'SPEED_UP'),
-                                                (2,null,'BRAKE'),
-                                                (3,null,'REVERSE'),
-                                                (4,null,'EXTRA_GAS');
+INSERT INTO effects(id, color, hability) VALUES (1, null,'SPEED_UP'),
+                                                (2, null,'BRAKE'),
+                                                (3, null,'REVERSE'),
+                                                (4, null,'EXTRA_GAS');
