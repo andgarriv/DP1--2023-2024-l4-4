@@ -44,18 +44,29 @@ public class GameController {
         return gameService.getAllGames();
     }
 
+    // @PostMapping()
+    // @ResponseStatus(HttpStatus.CREATED)
+    // public Game createGame(@RequestBody @Valid GameDTO gameDTO) {
+    //     return gameService.createGame(gameDTO);
+    // }
+
+    // @PostMapping("/new/{player1_id}/{player2_id}/{player1_color}/{player2_color}")
+    // @ResponseStatus(HttpStatus.CREATED)
+    // public Game createNewGame(@PathVariable Integer player1_id, @PathVariable Integer player2_id,
+    // @PathVariable String player1_color, @PathVariable String player2_color) {
+    //     Color player1_color_enum = Color.valueOf(player1_color);
+    //     Color player2_color_enum = Color.valueOf(player2_color);
+    //     return gameService.createNewGame(player1_id, player2_id, player1_color_enum, player2_color_enum);
+    // }
+
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public Game createGame(@RequestBody @Valid GameDTO gameDTO) {
-        return gameService.createGame(gameDTO);
-    }
+    public Game createGame(@RequestBody @Valid NewGameRequest newGameRequest) {
+        Integer player1_id = newGameRequest.getPlayer1Id();
+        Integer player2_id = newGameRequest.getPlayer2Id();
+        Color player1_color_enum = Color.valueOf(newGameRequest.getPlayer1Color());
+        Color player2_color_enum = Color.valueOf(newGameRequest.getPlayer2Color());
 
-    @PostMapping("/new/{player1_id}/{player2_id}/{player1_color}/{player2_color}")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Game createNewGame(@PathVariable Integer player1_id, @PathVariable Integer player2_id,
-    @PathVariable String player1_color, @PathVariable String player2_color) {
-        Color player1_color_enum = Color.valueOf(player1_color);
-        Color player2_color_enum = Color.valueOf(player2_color);
         return gameService.createNewGame(player1_id, player2_id, player1_color_enum, player2_color_enum);
     }
 
