@@ -50,17 +50,16 @@ public class FriendshipService {
     }
 
     @Transactional
-    public Friendship createFriendship(Integer sender_id, Integer receiver_id) throws DataAccessException{
-        if (existsFriendship(sender_id, receiver_id))
+    public Friendship createFriendship(FriendshipDTO friendshipDTO) throws DataAccessException{
+        if (existsFriendship(friendshipDTO.sender, friendshipDTO.receiver))
             throw new BadRequestException("No se puede crear una amistad entre dos jugadores que ya son amigos");
-        if(!playerRepository.existsPlayerById(sender_id) || !playerRepository.existsPlayerById(receiver_id))
-            throw new BadRequestException("No existe el jugador con id " + sender_id + " o " + receiver_id);
+        if(!playerRepository.existsPlayerById(friendshipDTO.sender) || !playerRepository.existsPlayerById(friendshipDTO.receiver))
+            throw new BadRequestException("No existe el jugador con id " + friendshipDTO.sender + " o " + friendshipDTO.receiver);
         Friendship friendship = new Friendship();
-        friendship.setSender(playerRepository.findById(sender_id).get());
-        friendship.setReceiver(playerRepository.findById(receiver_id).get());
+        friendship.setSender(playerRepository.findById(friendshipDTO.sender).get());
+        friendship.setReceiver(playerRepository.findById(friendshipDTO.receiver).get());
         friendship.setFriendState(FriendStatus.PENDING);
-        friendshipRepository.save(friendship);
-        return friendship;
+        return friendshipRepository.save(friendship);
     }
 
     @Transactional

@@ -37,23 +37,16 @@ public class FriendshipController {
         return friendshipService.findAllFriendships();
     }
 
-    
     @GetMapping("/friends/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Set<Friendship> getAllFriendshipsByPlayerId(@PathVariable @Valid Integer id) {
         return friendshipService.findAllFriendshipsByPlayerId(id);
     }
-
-    /* @GetMapping("/{sender_id}/{receiver_id}")
-    @ResponseStatus(HttpStatus.OK)
-    public Friendship getFriendshipBySenderAndReceiver(@PathVariable Integer sender_id, @PathVariable Integer receiver_id) {
-        return friendshipService.findFriendshipBySenderAndReceiver(sender_id, receiver_id);
-    } */
     
-    @PostMapping("/{sender_id}/{receiver_id}")
+    @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public Friendship createFriendship(@PathVariable Integer sender_id, @PathVariable Integer receiver_id) {
-        return friendshipService.createFriendship(sender_id, receiver_id);
+    public Friendship createFriendship(@RequestBody @Valid FriendshipDTO friendshipDTO) {
+        return friendshipService.createFriendship(friendshipDTO);
     }
 
     @PutMapping("/{id}")
