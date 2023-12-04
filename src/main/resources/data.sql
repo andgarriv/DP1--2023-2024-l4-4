@@ -9,11 +9,11 @@ INSERT INTO players(id, name, surname, password, email, birth_date, authority, n
                                                                                                         (13, 'Sofia', 'Lopez', '$2b$12$kjSsw.4pp2iBQn8PfwSmM.DiYv5r2d4.PwmpreyvPdZrvOJDzUjEK','admin3@gmail.com', '1998-09-10', 1, 'sofialopez', 'https://cdn-icons-png.flaticon.com/512/147/147138.png'),
                                                                                                         (14, 'David', 'Sanchez', '$2b$12$kjSsw.4pp2iBQn8PfwSmM.DiYv5r2d4.PwmpreyvPdZrvOJDzUjEK','admin4@gmail.com', '1988-12-05', 1, 'davidsan', 'https://cdn-icons-png.flaticon.com/512/147/147139.png'),
                                                                                                         -- Player Users
-                                                                                                        (3,'Angel','Garcia','$2b$12$EB6dhGe96Fx1dt4CMxkF/ONMXHMNGLwSD9vhOWMwhLqKNRU2IvoCa','angelgares6424@gmail.com', '2006-10-23', 2, 'Angelgares', 'https://i.pinimg.com/originals/09/69/c2/0969c2f8a87af926fcf912330b67206f.jpg'),
+                                                                                                        (3,'Ángel','García','$2b$12$EB6dhGe96Fx1dt4CMxkF/ONMXHMNGLwSD9vhOWMwhLqKNRU2IvoCa','angelgares6424@gmail.com', '2003-07-12', 2, 'Angelgares', 'https://i.pinimg.com/originals/09/69/c2/0969c2f8a87af926fcf912330b67206f.jpg'),
                                                                                                         (4,'Jorge','Muñoz','$2b$12$EB6dhGe96Fx1dt4CMxkF/ONMXHMNGLwSD9vhOWMwhLqKNRU2IvoCa','jorgemr@pm.me', '1999-09-11', 2, 'Jorge_ADD', 'https://images.squarespace-cdn.com/content/v1/5e45d3a8e509f61738454469/81e0d83b-0fa6-48d0-801b-1f0c1515d786/logo+arus+cuadrado+web.png'),
                                                                                                         (5,'Javier','Rodriguez','$2b$12$EB6dhGe96Fx1dt4CMxkF/ONMXHMNGLwSD9vhOWMwhLqKNRU2IvoCa','java@pm.me', '2006-11-30', 2, 'javrodrei', 'https://cdn-icons-png.flaticon.com/512/147/147144.png'),
                                                                                                         (6,'Isaac','Solis','$2b$12$EB6dhGe96Fx1dt4CMxkF/ONMXHMNGLwSD9vhOWMwhLqKNRU2IvoCa','princesita@pm.me', '2002-07-12', 2, 'isasolpad', 'https://cdn-icons-png.flaticon.com/512/147/147144.png'),
-                                                                                                        (7,'Andres','Garcia','$2b$12$EB6dhGe96Fx1dt4CMxkF/ONMXHMNGLwSD9vhOWMwhLqKNRU2IvoCa','andres7212@gmail.com', '2003-07-12', 2, 'Andresisco', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHRfYlqLUzoJjY4CQnv2yIOwS7WAFuBZrs9w&usqp=CAU'),
+                                                                                                        (7,'Andres','Garcia','$2b$12$EB6dhGe96Fx1dt4CMxkF/ONMXHMNGLwSD9vhOWMwhLqKNRU2IvoCa','andres7212@gmail.com', '2000-04-30', 2, 'Andresisco', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHRfYlqLUzoJjY4CQnv2yIOwS7WAFuBZrs9w&usqp=CAU'),
                                                                                                         (8,'Alejandro','Perez','$2b$12$EB6dhGe96Fx1dt4CMxkF/ONMXHMNGLwSD9vhOWMwhLqKNRU2IvoCa','alejandro@gmail.com', '2001-08-11', 2, 'alepersan', 'https://pbs.twimg.com/media/FTQBiYDXwAADvbp.jpg'),                                                                                          
                                                                                                         (9, 'Maria', 'Herrero', '$2b$12$EB6dhGe96Fx1dt4CMxkF/ONMXHMNGLwSD9vhOWMwhLqKNRU2IvoCa', 'maria.herrero@gmail.com', '2005-05-02', 2, 'Mariaa_hm', 'https://pbs.twimg.com/profile_images/1729861116203810816/bcN6IZ0H_400x400.jpg'),
                                                                                                         (10, 'Juan', 'Fernandez', '$2b$12$EB6dhGe96Fx1dt4CMxkF/ONMXHMNGLwSD9vhOWMwhLqKNRU2IvoCa', 'juan.fernandez@example.com', '1985-05-20', 2, 'juanfer', 'https://cdn-icons-png.flaticon.com/512/147/147142.png'),
@@ -52,7 +52,7 @@ INSERT INTO game_players(id, energy, player_id, color) VALUES (1, 3, 3,'RED'),
                                                               (8, 3, 10,'RED'), 
 
                                                               (9, 3, 11,'BLUE'), 
-                                                              (10, 3, 12,'RED'); 
+                                                              (10, 3, 6,'RED'); 
 
 
 -- Games 
@@ -60,7 +60,7 @@ INSERT INTO games(id, rounds, winner, ended, started, game_player_turn_id) VALUE
                                                                                   (2, 18, 5, '2021-09-01 14:30:00', '2021-09-01 11:00:00', 5),
                                                                                   (3, 24, null, null, '2021-01-01 15:45:00', 3),
                                                                                   (4, 3, 10, '2021-01-01 10:15:00', '2021-01-01 10:00:00', 10),
-                                                                                  (5, 7, 12, '2021-01-01 10:14:00', '2021-01-01 10:00:00', 12);
+                                                                                  (5, 7, 6, '2021-01-01 10:14:00', '2021-01-01 10:00:00', 6);
 
 
 -- Games_Game_Players
@@ -92,18 +92,18 @@ INSERT INTO messages(id, color, reaction) VALUES (1, null, 'HI'),
 
 -- Friendship
 INSERT INTO friendships(id, receiver, sender, friend_state) VALUES (1, 4, 3, 'ACCEPTED'),
-                                                                  (2, 5, 3, 'ACCEPTED'),
+                                                                  (2, 5, 3, 'PENDING'),
                                                                   (3, 6, 3, 'ACCEPTED'),
                                                                   (4, 7, 3, 'PENDING'),
                                                                   (5, 8, 3, 'ACCEPTED'),
-                                                                  (6, 9, 3, 'ACCEPTED'),
-                                                                  (7, 10, 3, 'ACCEPTED'),
-                                                                  (8, 11, 3, 'ACCEPTED'),
-                                                                  (9, 12, 3, 'ACCEPTED'),
-                                                                  (10, 8, 9, 'ACCEPTED'),
-                                                                  (11, 5, 6, 'REJECTED'),
-                                                                  (12, 5, 8, 'REJECTED'),
-                                                                  (13, 6, 8, 'ACCEPTED'),
+                                                                  (6, 3, 9, 'ACCEPTED'),
+                                                                  (7, 3, 10, 'PENDING'),
+                                                                  (8, 11, 3, 'REJECTED'),
+                                                                  (9, 4, 5, 'ACCEPTED'),
+                                                                  (10, 5, 6, 'ACCEPTED'),
+                                                                  (11, 5, 8, 'REJECTED'),
+                                                                  (12, 6, 8, 'REJECTED'),
+                                                                  (13, 8, 9, 'ACCEPTED'),
                                                                   (14, 9, 10, 'PENDING');
 
                                                                   
