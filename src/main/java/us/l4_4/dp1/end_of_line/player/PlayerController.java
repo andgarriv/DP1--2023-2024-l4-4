@@ -1,7 +1,10 @@
 package us.l4_4.dp1.end_of_line.player;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -73,14 +76,14 @@ public class PlayerController {
             return null;
     }
 
-    /* @GetMapping("/allExcept/{id}")
+    @GetMapping("/allExcept/{id}")
     public ResponseEntity<List<Player>> getAllPlayersExceptWithId(@PathVariable Integer id) {
         List<Player> players = playerService.findAllPlayersExceptWithId(id);
         if (players.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(players, HttpStatus.OK);
-    } */
+    }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)

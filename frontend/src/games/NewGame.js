@@ -55,14 +55,24 @@ export default function NewGame() {
   const handleStartGame = async () => {
     if (p2 && selectedColor1 && selectedColor2) {
       try {
+        const requestBody = {
+          player1Id: user.id,
+          player2Id: p2,
+          player1Color: selectedColor1,
+          player2Color: selectedColor2,
+        };
+
+
+
         const response = await fetch(
-          `/api/v1/games/new/${user.id}/${p2}/${selectedColor1}/${selectedColor2}`,
+          `/api/v1/games`,
           {
             method: "POST",
             headers: {
               Authorization: `Bearer ${jwt}`,
               "Content-Type": "application/json",
             },
+            body: JSON.stringify(requestBody),
           }
         );
         if (!response.ok) {
@@ -82,7 +92,7 @@ export default function NewGame() {
   useEffect(() => {
     async function fetchData() {
         try {
-          const response = await fetch(`/api/v1/player/allExcept/${user.id}`, {
+          const response = await fetch(`/api/v1/players/allExcept/${user.id}`, {
             headers: {
               Authorization: `Bearer ${jwt}`,
             },

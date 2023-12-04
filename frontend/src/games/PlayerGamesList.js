@@ -13,7 +13,7 @@ export default function AdminGamesList() {
         async function fetchData() {
             try {
                 setTimeout(async () => {
-                    const playerResponse = await fetch(`/api/v1/games/admin`, {
+                    const playerResponse = await fetch(`/api/v1/games/all`, {
                         headers: { Authorization: `Bearer ${jwt}` },
                     });
                     if (!playerResponse.ok) {
