@@ -1,7 +1,5 @@
 package us.l4_4.dp1.end_of_line.friendship;
 
-import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -39,7 +37,7 @@ public class FriendshipController {
 
     @GetMapping("/friends/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Set<Friendship> getAllFriendshipsByPlayerId(@PathVariable @Valid Integer id) {
+    public Iterable<Friendship> getAllFriendshipsByPlayerId(@PathVariable @Valid Integer id) {
         return friendshipService.findAllFriendshipsByPlayerId(id);
     }
     
