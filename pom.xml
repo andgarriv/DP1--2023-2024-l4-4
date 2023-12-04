@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.springframework.samples</groupId>
-	<artifactId>spring-petclinic</artifactId>
+	<groupId>org.dp1.l4.4</groupId>
+	<artifactId>EndOfLine</artifactId>
 	<version>2.2.0.BUILD-SNAPSHOT</version>
 
 	<parent>
@@ -36,9 +36,74 @@
 
 	<developers>
 		<developer>
-			<name>Angelgares</name>
+			<name>anggaresc</name>
 			<email>anggaresc1@alum.us.es</email>
 			<url>http://www.tmht.com/anggaresc1</url>
+			<roles>
+			    <role>developer</role>
+			</roles>
+			<properties>
+			    <picUrl> 
+                    https://i.pinimg.com/originals/09/69/c2/0969c2f8a87af926fcf912330b67206f.jpg
+			    </picUrl>
+            </properties>
+		</developer>
+		<developer>
+			<name>jormunrod</name>
+			<email>jormunrod@alum.us.es</email>
+			<url>http://www.tmht.com/jormunrod</url>
+			<roles>
+			    <role>developer</role>
+			</roles>
+			<properties>
+			    <picUrl> 
+                    https://i.pinimg.com/originals/09/69/c2/0969c2f8a87af926fcf912330b67206f.jpg
+			    </picUrl>
+            </properties>
+		</developer>
+		<developer>
+			<name>alepersan</name>
+			<email>alepersan@alum.us.es</email>
+			<url>http://www.tmht.com/alepersan</url>
+			<roles>
+			    <role>developer</role>
+			</roles>
+			<properties>
+			    <picUrl> 
+                    https://i.pinimg.com/originals/09/69/c2/0969c2f8a87af926fcf912330b67206f.jpg
+			    </picUrl>
+            </properties>
+		</developer>
+		<developer>
+			<name>isasolpad</name>
+			<email>isasolpad@alum.us.es</email>
+			<url>http://www.tmht.com/isasolpad</url>
+			<roles>
+			    <role>developer</role>
+			</roles>
+			<properties>
+			    <picUrl> 
+                    https://i.pinimg.com/originals/09/69/c2/0969c2f8a87af926fcf912330b67206f.jpg
+			    </picUrl>
+            </properties>
+		</developer>
+		<developer>
+			<name>andgarriv</name>
+			<email>andgarriv@alum.us.es</email>
+			<url>http://www.tmht.com/andgarriv</url>
+			<roles>
+			    <role>developer</role>
+			</roles>
+			<properties>
+			    <picUrl> 
+                    https://i.pinimg.com/originals/09/69/c2/0969c2f8a87af926fcf912330b67206f.jpg
+			    </picUrl>
+            </properties>
+		</developer>
+		<developer>
+			<name>javrodrei</name>
+			<email>javrodrei@alum.us.es</email>
+			<url>http://www.tmht.com/javrodrei</url>
 			<roles>
 			    <role>developer</role>
 			</roles>
