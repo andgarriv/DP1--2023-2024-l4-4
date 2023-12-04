@@ -13,7 +13,7 @@ export default function Register() {
     console.log("Player data:", playerData);
     playerData["authority"] = { id: 2, authority: "PLAYER" };
 
-    fetch("/api/v1/player", {
+    fetch("/api/v1/players", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(playerData),
