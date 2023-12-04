@@ -50,14 +50,22 @@ public class SecurityConfiguration {
 			.authorizeHttpRequests(authorizeRequests ->	authorizeRequests
 			.requestMatchers("/resources/**", "/webjars/**", "/static/**", "/swagger-resources/**").permitAll()			
 			.requestMatchers( "/api/v1/clinics","/", "/oups","/api/v1/auth/**","/v3/api-docs/**","/swagger-ui.html","/swagger-ui/**").permitAll()												
-			.requestMatchers("/api/v1/developers").permitAll()	
-			.requestMatchers(HttpMethod.POST, "api/v1/player").permitAll()											
-			//.requestMatchers("/api/v1/plan").hasAuthority("OWNER")
+			.requestMatchers("/api/v1/developers").hasAuthority("ADMIN")	
+
+			.requestMatchers(HttpMethod.GET, "api/v1/players/all").hasAuthority("ADMIN")
+			.requestMatchers(HttpMethod.POST, "api/v1/players").permitAll()	
+			.requestMatchers(HttpMethod.DELETE, "api/v1/players/**").hasAuthority("ADMIN")
+			.requestMatchers("/api/v1/players/**").authenticated()	
+
+			.requestMatchers(HttpMethod.GET,"/api/v1/friendships/all").hasAuthority(ADMIN)
+			.requestMatchers("/api/v1/friendships/**").authenticated()
+			
 			.requestMatchers(HttpMethod.GET,"/api/v1/achievements").authenticated()
 			.requestMatchers(HttpMethod.POST,"/api/v1/achievements").hasAuthority("ADMIN")
 			.requestMatchers(HttpMethod.DELETE,"/api/v1/achievements").hasAuthority("ADMIN")
-			.requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/users/**")).hasAuthority(ADMIN)
-			.requestMatchers("/api/v1/player/**").authenticated()
+			//.requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/users/**")).hasAuthority(ADMIN)
+			
+			
 			.requestMatchers("/api/v1/games/admin/**").authenticated()
 			.requestMatchers(HttpMethod.GET,"/api/v1/cards/**").authenticated()
 			.requestMatchers(HttpMethod.POST, "/api/v1/gameplayers/**").authenticated()

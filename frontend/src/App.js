@@ -15,6 +15,7 @@ import ClinicListAdmin from "./admin/clinics/ClinicListAdmin";
 import ConsultationEditAdmin from "./admin/consultations/ConsultationEditAdmin";
 import ConsultationListAdmin from "./admin/consultations/ConsultationListAdmin";
 import TicketListAdmin from "./admin/consultations/TicketListAdmin";
+import FriendshipList from "./admin/friendship/FriendshipList";
 import OwnerEditAdmin from "./admin/owners/OwnerEditAdmin";
 import OwnerListAdmin from "./admin/owners/OwnerListAdmin";
 import PetEditAdmin from "./admin/pets/PetEditAdmin";
@@ -99,6 +100,7 @@ function App() {
           <Route path="/achievements/:achievementId" exact={true} element={<PrivateRoute><AchievementEdit/></PrivateRoute>} />
           <Route path="/games" exact={true} element={<PrivateRoute><AdminGamesList /></PrivateRoute>} />
           <Route path="/players" exact={true} element={<PrivateRoute><PlayerList /></PrivateRoute>} />
+          <Route path="/friendships" exact={true} element={<PrivateRoute><FriendshipList /></PrivateRoute>} />
         </>)
     }
     if (role === "PLAYER") {
@@ -112,6 +114,7 @@ function App() {
           <Route path="/stats" exact={true} element={<PrivateRoute><PlayerStats /></PrivateRoute>} />
           <Route path="/play" exact={true} element={<PrivateRoute><NewGame /></PrivateRoute>} />
           <Route path="/game/:id" exact={true} element={<PrivateRoute><Board /></PrivateRoute>} />
+          <Route path="/friendships" exact={true} element={<PrivateRoute><FriendshipList /></PrivateRoute>} />
         </>)
         gameRoutes = (
           <>

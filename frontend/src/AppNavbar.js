@@ -45,6 +45,9 @@ function AppNavbar() {
                     <NavItem>
                         <NavLink className="fuente" style={{ color: "#75FBFD" }} tag={Link} to="/achievements">Achievements</NavLink>
                     </NavItem>
+                    <NavItem>
+                        <NavLink className="fuente" style={{ color: "#75FBFD" }} tag={Link} to="/friendships">Friendships</NavLink>
+                    </NavItem>
                     <span style={{ color: "gray", display: "inline-block", margin: "5px 10px" }}>|</span>
                 </>
             )
@@ -67,11 +70,8 @@ function AppNavbar() {
                         </DropdownToggle>
                         <DropdownMenu right style={{ backgroundColor: "#222222", textAlign: 'center' }}>
                             <DropdownItem style={{ borderBottom: '1px solid gray', padding: '10px' }}>
-                                <NavLink className="fuente" style={{ color: "#EF87E0" }} tag={Link} to="/profile">My Profile</NavLink>
-                            </DropdownItem>
-                            <DropdownItem style={{ borderBottom: '1px solid gray', padding: '10px' }}>
                             <NavItem>
-                                <NavLink className="fuente" style={{ color: "#EF87E0" }} tag={Link} to="/achievements">Achievements</NavLink>
+                                <NavLink className="fuente" style={{ color: "#EF87E0" }} tag={Link} to="/profile">My Profile</NavLink>
                             </NavItem>
                             </DropdownItem>
 
@@ -80,8 +80,23 @@ function AppNavbar() {
                                 <NavLink className="fuente" style={{ color: "#EF87E0" }} tag={Link} to="/games">My games</NavLink>
                             </NavItem>
                             </DropdownItem>
+
+                            <DropdownItem style={{ borderBottom: '1px solid gray', padding: '10px' }}>
+                            <NavItem>
+                                <NavLink className="fuente" style={{ color: "#EF87E0" }} tag={Link} to="/friendships">Friendships</NavLink>
+                            </NavItem>
+                            </DropdownItem>
+
+                            <DropdownItem style={{ borderBottom: '1px solid gray', padding: '10px' }}>
+                            <NavItem>
+                                <NavLink className="fuente" style={{ color: "#EF87E0" }} tag={Link} to="/achievements">Achievements</NavLink>
+                            </NavItem>
+                            </DropdownItem>
+
                             <DropdownItem>
+                            <NavItem>
                                 <NavLink className="fuente" style={{ color: "#EF87E0" }} tag={Link} to="/stats">Stats</NavLink>
+                            </NavItem>
                             </DropdownItem>
                         </DropdownMenu>
                     </UncontrolledDropdown>
