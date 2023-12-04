@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Button, Input } from "reactstrap";
 import { Link } from "react-router-dom";
+import { Button, Input } from "reactstrap";
 import tokenService from "../services/token.service";
-import useFetchState from "../util/useFetchState";
 import getErrorModal from "../util/getErrorModal";
+import useFetchState from "../util/useFetchState";
 
 const user = tokenService.getUser();
 const defaultImage = "https://img.freepik.com/fotos-premium/adorable-bebe-buho-estilo-pixar-grandes-ojos-felices_804788-4862.jpg";
 
 export default function EditPlayerProfile() {
   const jwt = tokenService.getLocalAccessToken();
-  const [player, setPlayer] = useFetchState(null, `/api/v1/player/${user.id}`, jwt);
+  const [player, setPlayer] = useFetchState(null, `/api/v1/players/${user.id}`, jwt);
   const [message, setMessage] = useState("");
   const [visible, setVisible] = useState(false);
 
@@ -19,11 +19,10 @@ export default function EditPlayerProfile() {
   const [surname, setSurname] = useState("");
   const [surnameError, setSurnameError] = useState("");
   const [nickname, setNickname] = useState("");
-  const [nicknameError, setNicknameError] = useState("");
   const [avatar, setAvatar] = useState("");
   const [email, setEmail] = useState("");
-  const [emailError, setEmailError] = useState("");
   const [avatarError, setAvatarError] = useState("");
+  const [birthDate, setBirthDate] = useState("");
 
   const scrollbarStyles = {
     maxHeight: "900px",
@@ -50,7 +49,7 @@ export default function EditPlayerProfile() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`/api/v1/player/${user.id}`, {
+        const response = await fetch(`/api/v1/players/${user.id}`, {
           headers: {
             Authorization: `Bearer ${jwt}`,
           },
@@ -62,6 +61,8 @@ export default function EditPlayerProfile() {
         setNickname(data.nickname);
         setAvatar(data.avatar);
         setEmail(data.email);
+        setBirthDate(data.birthDate);
+        
       } catch (error) {
         setMessage("Error fetching player data");
         setVisible(true);
@@ -71,6 +72,15 @@ export default function EditPlayerProfile() {
   }, [jwt, setPlayer]);
 
   const modal = getErrorModal(setVisible, visible, message);
+
+  const date_format = (date) => {
+    // eslint-disable-next-line no-new-wrappers
+    const d = new String(date);
+    const year = d.substring(0, 4);
+    const month = d.substring(5, 7);
+    const day = d.substring(8, 10);
+    return `${day}/${month}/${year}`;
+    };
 
   const handleNameChange = (event) => {
     const newName = event.target.value;
@@ -95,30 +105,6 @@ export default function EditPlayerProfile() {
     }
   };
 
-  const handleNicknameChange = (event) => {
-    const newNickname = event.target.value;
-    setNickname(newNickname);
-    // Verificación del rango de longitud del nickname
-    if (newNickname.length < 5 || newNickname.length > 15) {
-      setNicknameError("Nickname must be between 5 and 15 characters");
-    } else {
-      setNicknameError("");
-    }
-  };
-
-  const handleEmailChange = (event) => {
-    const newEmail = event.target.value;
-    setEmail(newEmail);
-
-    // Verificación de formato de correo electrónico
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailPattern.test(newEmail)) {
-      setEmailError("Invalid email address");
-    } else {
-      setEmailError("");
-    }
-  };
-
   const handleAvatarChange = (event) => {
     const newAvatar = event.target.value;
     setAvatar(newAvatar);
@@ -132,13 +118,13 @@ export default function EditPlayerProfile() {
   };
 
   const handleSaveChanges = async () => {
-    if (nicknameError || emailError || avatarError || nameError || surnameError) {
+    if (avatarError || nameError || surnameError) {
       setMessage("Invalid data");
       setVisible(true);
       return;
     }
     try {
-      const response = await fetch(`/api/v1/player/${user.id}`, {
+      const response = await fetch(`/api/v1/players/${user.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -187,11 +173,11 @@ export default function EditPlayerProfile() {
             <Input style={{ marginBottom: "10px" }} type="text" value={surname} onChange={handleSurnameChange} />
             {surnameError && <p style={{ color: "red" }}>{surnameError}</p>}
             <p style={{ marginBottom: "-2px", color: "white" }}>Nickname:</p>
-            <Input style={{ marginBottom: "10px" }} type="text" value={nickname} onChange={handleNicknameChange} />
-            {nicknameError && <p style={{ color: "red" }}>{nicknameError}</p>}
+            <Input readOnly style={{ marginBottom: "10px", background: "transparent", color: "white", border: "none"}} type="text" value={nickname}/>
             <p style={{ marginBottom: "-2px", color: "white" }}>Email:</p>
-            <Input style={{ marginBottom: "10px" }} type="text" value={email} onChange={handleEmailChange} />
-            {emailError && <p style={{ color: "red" }}>{emailError}</p>}
+            <Input readOnly style={{ marginBottom: "10px", background: "transparent", color: "white", border: "none" }} type="text" value={email}/>
+            <p style={{ marginBottom: "-2px", color: "white" }}>Birthdate:</p>
+            <p readOnly style={{ marginBottom: "10px", background: "transparent", color: "white", border: "none" }} type="text" value={birthDate}>{date_format(player.birthDate)}</p>
             <p style={{ marginBottom: "-2px", color: "white" }}>Avatar:</p>
             <Input style={{ marginBottom: "20px" }} type="text" value={avatar?avatar:defaultImage} onChange={handleAvatarChange} />
             {avatarError && <p style={{ color: "red" }}>{avatarError}</p>}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import tokenService from "../services/token.service";
 
 const imgnotfound = "https://cdn-icons-png.flaticon.com/512/5778/5778223.png";
@@ -14,7 +14,7 @@ export default function AchievementPlayer() {
         async function fetchData() {
             try {
                 // Fetch player data
-                const playerResponse = await fetch(`/api/v1/player/${user.id}`, {
+                const playerResponse = await fetch(`/api/v1/players/${user.id}`, {
                     headers: { Authorization: `Bearer ${jwt}` },
                 });
                 if (!playerResponse.ok) {

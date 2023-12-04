@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Button } from "reactstrap";
 import { Link } from "react-router-dom";
+import { Button } from "reactstrap";
 import tokenService from "../services/token.service";
-import useFetchState from "../util/useFetchState";
 import getErrorModal from "../util/getErrorModal";
+import useFetchState from "../util/useFetchState";
 
 const imgNotFound = "https://cdn-icons-png.flaticon.com/512/5778/5778223.png";
 const user = tokenService.getUser();
@@ -11,14 +11,14 @@ const user = tokenService.getUser();
 
 export default function PlayerProfile() {
   const jwt = tokenService.getLocalAccessToken();
-  const [player, setPlayer] = useFetchState(null, `/api/v1/player/{id}`, jwt);
+  const [player, setPlayer] = useFetchState(null, `/api/v1/players/{id}`, jwt);
   const [message, setMessage] = useState("");
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`/api/v1/player/${user.id}`, {
+        const response = await fetch(`/api/v1/players/${user.id}`, {
           headers: {
             Authorization: `Bearer ${jwt}`,
           },
