@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import tokenService from "../../services/token.service";
-import useFetchState from "../../util/useFetchState";
-import getErrorModal from "../../util/getErrorModal";
 import { Button } from "reactstrap";
+import tokenService from "../../services/token.service";
 import deleteFromList from "../../util/deleteFromList";
+import getErrorModal from "../../util/getErrorModal";
+import useFetchState from "../../util/useFetchState";
 
 const Pagination = ({ playersPerPage, totalPlayers, paginate, currentPage }) => {
     const pageNumbers = [];
@@ -49,7 +49,7 @@ const Pagination = ({ playersPerPage, totalPlayers, paginate, currentPage }) => 
 
 export default function PlayerList() {
     const jwt = tokenService.getLocalAccessToken();
-    const [players, setPlayers] = useFetchState(null, "/api/v1/player/all", jwt);
+    const [players, setPlayers] = useFetchState(null, "/api/v1/players/all", jwt);
     const [currentPage, setCurrentPage] = useState(1);
     const [playersPerPage] = useState(4);
 
@@ -60,7 +60,7 @@ export default function PlayerList() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch("/api/v1/player/all", {
+                const response = await fetch("/api/v1/players/all", {
                     headers: {
                         Authorization: `Bearer ${jwt}`,
                     },
