@@ -1,4 +1,3 @@
-//const Player  = require ('../player/Player');
 export const formValidators = {
     notBlankValidator: {
         validate: (value) => {

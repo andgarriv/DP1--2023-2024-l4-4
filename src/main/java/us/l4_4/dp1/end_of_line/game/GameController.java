@@ -27,26 +27,26 @@ public class GameController {
     @Autowired
     GameService gameService;
 
-    @GetMapping("/player/{id}")
+    @GetMapping("/players/{id}")
     @ResponseStatus(HttpStatus.OK)
     public List<Game> getGamesByPlayerId(@PathVariable Integer id) {
         return gameService.getGamesByPlayerId(id);
     }
 
-    @GetMapping("/player/{id}/notended")
+    @GetMapping("/players/{id}/notended")
     @ResponseStatus(HttpStatus.OK)
     public List<Game> getNotEndedGamesByPlayerId(@PathVariable Integer id) {
         return gameService.getNotEndedGamesByPlayerId(id);
     }
 
     @GetMapping("/all")
-    public Iterable<Game> getGames() {
+    public Iterable<Game> getAllGames() {
         return gameService.getAllGames();
     }
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public Game createGame(@RequestBody @Valid NewGameRequest newGameRequest) {
+    public Game create(@RequestBody @Valid NewGameRequest newGameRequest) {
         Integer player1_id = newGameRequest.getPlayer1Id();
         Integer player2_id = newGameRequest.getPlayer2Id();
         Color player1_color_enum = Color.valueOf(newGameRequest.getPlayer1Color());
@@ -55,7 +55,7 @@ public class GameController {
         return gameService.createNewGame(player1_id, player2_id, player1_color_enum, player2_color_enum);
     }
 
-    @GetMapping("/{gameId}")
+    @GetMapping("/{id}")
     public ResponseEntity<Game> getGame(@PathVariable Integer gameId) {
         Game game = gameService.getGame(gameId);
         return new ResponseEntity<>(game, HttpStatus.OK);
@@ -63,7 +63,7 @@ public class GameController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Game updateGame(@PathVariable Integer id, @RequestBody @Valid GameDTO gameDTO) {
+    public Game update(@PathVariable Integer id, @RequestBody @Valid GameDTO gameDTO) {
         return gameService.updateGame(id, gameDTO);
     }
 

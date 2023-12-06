@@ -1,6 +1,8 @@
 package us.l4_4.dp1.end_of_line.friendship;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -36,8 +38,11 @@ public class FriendshipService {
     }
 
     @Transactional(readOnly = true)
-    public Iterable<Friendship> findAllFriendshipsByPlayerId(Integer id) throws DataAccessException{
-        return friendshipRepository.findAllFriendshipsByPlayerId(id);
+    public Iterable<Friendship> findAllFriendshipsByPlayerId(Integer id, FriendStatus friendState) throws DataAccessException{
+        Iterable<Friendship> friendships = friendshipRepository.findAllFriendshipsByPlayerId(id);
+         return StreamSupport.stream(friendships.spliterator(), false)
+                        .filter(friendship -> friendship.getFriendState().equals(friendState))
+                        .collect(Collectors.toList());
     }
 
     private Boolean checkFriendship(Integer sender_id, Integer receiver_id) throws DataAccessException {

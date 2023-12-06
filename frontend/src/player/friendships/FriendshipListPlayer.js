@@ -48,7 +48,7 @@ const Pagination = ({ friendshipsPerPage, totalFriendships, paginate, currentPag
 export default function FriendshipList() {
     const jwt = tokenService.getLocalAccessToken();
     const user = tokenService.getUser();
-    const [friendships, setFriendships] = useFetchState(null, `/api/v1/friendships/friends/${user.id}`, jwt);
+    const [friendships, setFriendships] = useFetchState(null, `/api/v1/friendships/friends/${user.id}/ACCEPTED`, jwt);
     const [currentPage, setCurrentPage] = useState(1);
     const [friendshipsPerPage] = useState(5);
 
@@ -59,7 +59,7 @@ export default function FriendshipList() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch(`/api/v1/friendships/friends/${user.id}`, {
+                const response = await fetch(`/api/v1/friendships/friends/${user.id}/ACCEPTED`, {
                     headers: {
                         Authorization: `Bearer ${jwt}`,
                     },
