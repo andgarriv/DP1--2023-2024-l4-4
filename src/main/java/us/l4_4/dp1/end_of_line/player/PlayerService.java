@@ -24,7 +24,7 @@ public class PlayerService {
 	}
 
 	@Transactional(readOnly = true)
-	public Iterable<Player> findAll() throws DataAccessException{
+	public Iterable<Player> findAllPlayers() throws DataAccessException{
 		return playerRepository.findAllPlayers();
 	}
 
@@ -54,9 +54,8 @@ public class PlayerService {
 		LocalDate now = LocalDate.now();
 		LocalDate playerDate = player.getBirthDate();
 		LocalDate minDate = now.minusYears(7);
-		if(minDate.isBefore(playerDate)){
+		if(minDate.isBefore(playerDate))
 			throw new IllegalArgumentException("You must be at least 7 years old to register");
-		}
 		playerRepository.save(player);
 		return player;
 	}
