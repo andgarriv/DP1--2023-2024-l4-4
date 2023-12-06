@@ -44,8 +44,8 @@ public class PlayerController {
 
     @GetMapping("/all")
     @ResponseStatus(HttpStatus.OK)
-    public Iterable<Player> findAll() {
-        return playerService.findAll();
+    public Iterable<Player> findAllPlayers() {
+        return playerService.findAllPlayers();
     }
 
     @PostMapping()

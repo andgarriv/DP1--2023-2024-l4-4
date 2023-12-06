@@ -1,4 +1,4 @@
-package us.l4_4.dp1.end_of_line.user;
+package us.l4_4.dp1.end_of_line.player;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -15,13 +15,11 @@ import org.springframework.security.test.context.support.WithMockUser;
 import jakarta.transaction.Transactional;
 import us.l4_4.dp1.end_of_line.authorities.AuthoritiesService;
 import us.l4_4.dp1.end_of_line.exceptions.ResourceNotFoundException;
-import us.l4_4.dp1.end_of_line.player.Player;
-import us.l4_4.dp1.end_of_line.player.PlayerService;
 
 //@DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 @SpringBootTest
 @AutoConfigureTestDatabase
-class UserServiceTests {
+class PlayerServiceTests {
 
 	@Autowired
 	private PlayerService playerService;
@@ -40,27 +38,24 @@ class UserServiceTests {
 		player.setPassword("Sam3r!");
 		player.setEmail("sam@gmail.com");
 		player.setBirthDate(birthDate);
-		player.setAuthority(authoritiesService.findByAuthority("ADMIN"));
+		player.setAuthority(authoritiesService.findByAuthority("PLAYER"));
 		player.setAvatar(avatar);
+
 		return this.playerService.savePlayer(player);
 	}
 
 	@Test
-	void shouldFindAllUsers() {
-		List<Player> users = (List<Player>) this.playerService.findAll();
-		assertEquals(8, users.size());
+	void shouldFindAllPlayers() {
+		List<Player> players = (List<Player>) this.playerService.findAllPlayers();
+		List<Player> players2 = this.authoritiesService.findAllByAuthority("PLAYER");
+		assertEquals(10, players.size());
+		assertEquals(players.size(), players2.size());
 	}
 
 	@Test
 	void shouldFindAllAdmins() {
 		List<Player> admins = this.authoritiesService.findAllByAuthority("ADMIN");
-		assertEquals(2, admins.size());
-	}
-
-	@Test
-	void shouldFindAllPlayers() {
-		List<Player> players = this.authoritiesService.findAllByAuthority("PLAYER");
-		assertEquals(6, players.size());
+		assertEquals(4, admins.size());
 	}
 
 	@Test
@@ -75,7 +70,7 @@ class UserServiceTests {
 	}
 
 	@Test
-	void shouldExistUserByNickname() {
+	void shouldExistsUserByNickname() {
 		assertEquals(true, this.playerService.existsByNickname("Angelgares"));
 	}
 
@@ -92,7 +87,7 @@ class UserServiceTests {
 
 	@Test
 	void shouldNotFindUserWithBadUserNickname() {
-		assertThrows(ResourceNotFoundException.class, () -> this.playerService.findByNickname("usernotexists"));
+		assertThrows(ResourceNotFoundException.class, () -> this.playerService.findByNickname("UserNotExists"));
 	}
 
 	@Test
@@ -126,14 +121,6 @@ class UserServiceTests {
 	}
 
 	@Test
-	void shouldFindUsersByAuthority() {
-		List<Player> admins = this.authoritiesService.findAllByAuthority("ADMIN");
-		List<Player> players = this.authoritiesService.findAllByAuthority("PLAYER");
-		assertEquals(2, admins.size());
-		assertEquals(6, players.size());
-	}
-
-	@Test
 	void shouldNotFindAuthenticated() {
 		assertThrows(ResourceNotFoundException.class, () -> this.playerService.findCurrentPlayer());
 	}
@@ -141,12 +128,9 @@ class UserServiceTests {
 	@Test
 	@Transactional
 	void shouldInsertUser() {
-		int count = ((Collection<Player>) this.playerService.findAll()).size();
-		
-		Player player = createPlayer();
-		assertNotEquals(0, player.getId().longValue());
-
-		int finalCount = ((Collection<Player>) this.playerService.findAll()).size();
+		int count = ((Collection<Player>) this.playerService.findAllPlayers()).size();
+		createPlayer();
+		int finalCount = ((Collection<Player>) this.playerService.findAllPlayers()).size();
 		assertEquals(count + 1, finalCount);
 	}
 
@@ -162,14 +146,14 @@ class UserServiceTests {
 	@Test
 	@Transactional
 	void shouldDeleteUser() {
-		Integer firstCount = ((Collection<Player>) playerService.findAll()).size();
+		Integer firstCount = ((Collection<Player>) playerService.findAllPlayers()).size();
 		Player player = createPlayer();
 
-		Integer secondCount = ((Collection<Player>) playerService.findAll()).size();
+		Integer secondCount = ((Collection<Player>) playerService.findAllPlayers()).size();
 		assertEquals(firstCount + 1, secondCount);
 
 		playerService.deletePlayer(player.getId());
-		Integer lastCount = ((Collection<Player>) playerService.findAll()).size();
+		Integer lastCount = ((Collection<Player>) playerService.findAllPlayers()).size();
 		assertEquals(firstCount, lastCount);
 	}
 }

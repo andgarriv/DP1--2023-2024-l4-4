@@ -1,4 +1,4 @@
-package us.l4_4.dp1.end_of_line.user;
+package us.l4_4.dp1.end_of_line.player;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -37,5 +37,4 @@ class AuthoritiesServiceTests {
 	void shouldNotFindAuthoritiesByIncorrectAuthority() {
 		assertThrows(ResourceNotFoundException.class, () -> this.authService.findByAuthority("authnotexists"));
 	}
-
 }
