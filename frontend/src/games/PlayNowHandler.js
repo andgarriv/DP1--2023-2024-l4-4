@@ -5,7 +5,7 @@ const handlePlayNowClick = async (setMessage, setVisible) => {
         const jwt = tokenService.getLocalAccessToken();
         const user = tokenService.getUser();
         
-      const playerResponse = await fetch(`/api/v1/games/player/${user.id}/notended`, {
+      const playerResponse = await fetch(`/api/v1/games/players/${user.id}/notended`, {
         headers: { Authorization: `Bearer ${jwt}` },
       });
 
