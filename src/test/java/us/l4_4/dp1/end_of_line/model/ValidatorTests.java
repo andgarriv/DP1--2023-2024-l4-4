@@ -38,7 +38,7 @@ class ValidatorTests {
 		authorities.setAuthority("PLAYER");
 		player.setName("");
 		player.setSurname("Garcia Escudero");
-		player.setPassword("Adm1n*");
+		player.setPassword("Adm1n!");
 		player.setEmail("angelgares@gmail.com");
 		player.setBirthDate(birthdate);
 		player.setNickname("Angelgares");

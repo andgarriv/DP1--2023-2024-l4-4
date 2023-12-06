@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import us.l4_4.dp1.end_of_line.enums.FriendStatus;
 
 @RestController
 @RequestMapping("/api/v1/friendships")
@@ -35,27 +36,27 @@ public class FriendshipController {
         return friendshipService.findAllFriendships();
     }
 
-    @GetMapping("/friends/{id}")
+    @GetMapping("/friends/{id}/{friendState}")
     @ResponseStatus(HttpStatus.OK)
-    public Iterable<Friendship> getAllFriendshipsByPlayerId(@PathVariable @Valid Integer id) {
-        return friendshipService.findAllFriendshipsByPlayerId(id);
+    public Iterable<Friendship> getAllFriendshipsByPlayerId(@PathVariable @Valid Integer id, @PathVariable @Valid FriendStatus friendState) {
+        return friendshipService.findAllFriendshipsByPlayerId(id, friendState);
     }
     
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public Friendship createFriendship(@RequestBody @Valid FriendshipDTO friendshipDTO) {
+    public Friendship create(@RequestBody @Valid FriendshipDTO friendshipDTO) {
         return friendshipService.createFriendship(friendshipDTO);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Friendship updateFriendship(@PathVariable Integer id, @RequestBody @Valid FriendshipDTO friendshipDTO) {
+    public Friendship update(@PathVariable Integer id, @RequestBody @Valid FriendshipDTO friendshipDTO) {
         return friendshipService.updateFriendship(id, friendshipDTO); 
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteFriendship(@PathVariable Integer id) {
+    public void delete(@PathVariable Integer id) {
         friendshipService.deleteFriendship(id);
     }
 }

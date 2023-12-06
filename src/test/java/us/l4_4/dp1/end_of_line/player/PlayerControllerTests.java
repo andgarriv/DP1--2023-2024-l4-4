@@ -22,13 +22,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import us.l4_4.dp1.end_of_line.auth.AuthService;
 import us.l4_4.dp1.end_of_line.authorities.Authorities;
 import us.l4_4.dp1.end_of_line.authorities.AuthoritiesService;
-import us.l4_4.dp1.end_of_line.configuration.SecurityConfiguration;
 
 @WebMvcTest(controllers = PlayerController.class, excludeFilters = @ComponentScan.Filter(
-    type = FilterType.ASSIGNABLE_TYPE, classes = {WebSecurityConfigurer.class, PasswordEncoder.class}), 
-    excludeAutoConfiguration = {SecurityConfiguration.class, PasswordEncoder.class})
+    type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class))
 
-public class PlayerControllerTests {
+class PlayerControllerTests {
 
     private static final String BASE_URL = "/api/v1/players";
     
@@ -45,6 +43,9 @@ public class PlayerControllerTests {
     @MockBean
     private AuthoritiesService authoritiesService;
 
+    @MockBean
+    private PasswordEncoder passwordEncoder;
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -52,6 +53,8 @@ public class PlayerControllerTests {
     private Player player;
     private Player player2;
     private Player newPlayer;
+    private Authorities authority;
+    private Authorities authority2;
 
     @BeforeEach
     void setup() {
@@ -72,7 +75,7 @@ public class PlayerControllerTests {
         admin.setNickname("adminNickname");
         admin.setAuthority(authority);
 
-        Authorities authority2 = new Authorities();
+        authority2 = new Authorities();
         authority.setId(2);
         authority.setAuthority("PLAYER");
 
@@ -87,29 +90,21 @@ public class PlayerControllerTests {
         player.setAuthority(authority2);
         player.setAvatar(avatar);
 
-        Authorities authority3 = new Authorities();
-        authority.setId(3);
-        authority.setAuthority("PLAYER");
-
         player2 = new Player();
-        admin.setId(3);
-        admin.setName("player2Name");
-        admin.setSurname("player2Surname");
-        admin.setPassword("PLay3r!");
-        admin.setEmail("player2@gmail.com");
-        admin.setBirthDate(birthDate);
-        admin.setNickname("player2Nickname");
-        admin.setAuthority(authority3);
+        player2.setId(3);
+        player2.setName("player2Name");
+        player2.setSurname("player2Surname");
+        player2.setPassword("PLay3r!");
+        player2.setEmail("player2@gmail.com");
+        player2.setBirthDate(birthDate);
+        player2.setNickname("player2Nickname");
+        player2.setAuthority(authority2);
         player2.setAvatar(avatar);
     }
 
     @Test
     @WithMockUser(username = "admin1", password = "Adm1n!")
-    public void adminShouldFindAllPlayers() throws Exception {
-        Authorities newAuthority = new Authorities();
-        newAuthority.setId(4);
-        newAuthority.setAuthority("PLAYER");
-
+    void adminShouldFindAllPlayers() throws Exception {
         newPlayer = new Player();
         newPlayer.setId(4);
         newPlayer.setName("newPlayerName");
@@ -118,15 +113,17 @@ public class PlayerControllerTests {
         newPlayer.setEmail("newplayer@gmail.com");
         newPlayer.setBirthDate(LocalDate.of(1999, 01, 01));
         newPlayer.setNickname("newplayerNickname");
-        newPlayer.setAuthority(newAuthority);
+        newPlayer.setAuthority(authority2);
         newPlayer.setAvatar("https://cdn-icons-png.flaticon.com/512/147/147144.png");
 
         when(this.playerService.findAllPlayers()).thenReturn(List.of(player, player2, newPlayer));
 
         mockMvc.perform(get(BASE_URL + "/all")).andExpect(status().isOk()).andExpect(jsonPath("$.size()").value(3))
-                .andExpect(jsonPath("$[?(@.id == 1)].name").value("adminName"))
                 .andExpect(jsonPath("$[?(@.id == 2)].name").value("playerName"))
                 .andExpect(jsonPath("$[?(@.id == 3)].name").value("player2Name"))
                 .andExpect(jsonPath("$[?(@.id == 4)].name").value("newPlayerName"));
     }
+
+    /* @Test
+    @WithMockUser(username = "admin1", password = "Adm1n!") */
 }
