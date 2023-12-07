@@ -81,7 +81,7 @@ public class PlayerService {
 
 	@Transactional
 	public void deletePlayer(Integer id) throws DataAccessException{
-		playerRepository.deletePlayer(id);
+		playerRepository.deleteById(id);
 	}
 
 	@Transactional
