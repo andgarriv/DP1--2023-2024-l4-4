@@ -4,9 +4,12 @@ import java.util.List;
 
 import org.hibernate.validator.constraints.Range;
 
+import jakarta.persistence.ConstraintMode;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.ForeignKey;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -32,8 +35,9 @@ public class GamePlayer extends BaseEntity {
     @Range(min = 0, max = 3)
     Integer energy;
 
-    @NotNull
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "player_id", nullable = true, 
+                foreignKey = @ForeignKey(name = "FK_player", value = ConstraintMode.NO_CONSTRAINT))
     Player player;
 
     @NotNull

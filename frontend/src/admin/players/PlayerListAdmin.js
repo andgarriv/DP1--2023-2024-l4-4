@@ -122,7 +122,7 @@ export default function PlayerList() {
                             </div>
                         ))
                     ) : (
-                        <div style={{ textAlign: 'center', width: '100%' }}>Loading...</div>
+                        <div style={{ textAlign: 'center', width: '100%' }}>There are not registered players yet</div>
                     )}
                 </div>
                 <Pagination
