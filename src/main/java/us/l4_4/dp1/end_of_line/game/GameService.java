@@ -159,7 +159,7 @@ public class GameService {
     }
 
     @Transactional(readOnly = true)
-    public Iterable<Game> getAllGames() throws DataAccessException {
+    public Iterable<Game> findAllGames() throws DataAccessException {
         return gameRepository.findAll();
     }
 
@@ -171,7 +171,7 @@ public class GameService {
         return res;
     }
 
-    public List<Card> getFiveRandomCards(Integer gamePlayerId) {
+    public List<Card> findFiveRandomCards(Integer gamePlayerId) {
         if (gamePlayerRepository.findById(gamePlayerId) == null) {
             throw new ResourceNotFoundException("GamePlayer", "id", gamePlayerId);
         }
@@ -196,7 +196,7 @@ public class GameService {
         return randomCards;
     }
 
-    public List<Card> getNeedCardsToGetFive(Integer gamePlayerId) {
+    public List<Card> findNeededCardsToGetFive(Integer gamePlayerId) {
         if (gamePlayerRepository.findById(gamePlayerId) == null) {
             throw new ResourceNotFoundException("GamePlayer", "id", gamePlayerId);
         }
@@ -221,9 +221,9 @@ public class GameService {
     }
 
     @Transactional(readOnly = true)
-    public Game getGame(Integer gameId) {
-        return gameRepository.findById(gameId)
-                .orElseThrow(() -> new ResourceNotFoundException("Game", "id", gameId));
+    public Game findById(Integer id) throws ResourceNotFoundException {
+        return gameRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Game", "id", id));
     }
 
     @Transactional
@@ -298,17 +298,12 @@ public class GameService {
     }
 
     @Transactional(readOnly = true)
-    public List<Game> getNotEndedGamesByPlayerId(Integer playerId) {
+    public List<Game> findNotEndedGamesByPlayerId(Integer playerId) {
         return gameRepository.findNotEndedGamesByPlayerId(playerId);
     }
 
     @Transactional(readOnly = true)
-    public List<Game> getGamesByPlayerId(Integer playerId) {
+    public List<Game> findAllGamesByPlayerId(Integer playerId) {
         return gameRepository.findGamesByPlayerId(playerId);
-    }
-
-    @Transactional(readOnly = true)
-    public Game getGameById(Integer id) throws DataAccessException {
-        return gameRepository.findById(id).get();
     }
 }

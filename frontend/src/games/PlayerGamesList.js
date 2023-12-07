@@ -13,7 +13,7 @@ export default function AdminGamesList() {
         async function fetchData() {
             try {
                 setTimeout(async () => {
-                    const playerResponse = await fetch(`/api/v1/games/all`, {
+                    const playerResponse = await fetch(`/api/v1/games/players/${user.id}`, {
                         headers: { Authorization: `Bearer ${jwt}` },
                     });
                     if (!playerResponse.ok) {
@@ -21,14 +21,6 @@ export default function AdminGamesList() {
                     }
                     const playerData = await playerResponse.json();
                     setPlayerGames(playerData);
-                    let res = []
-                    for(var i = 0; i < playerData.length; i++){
-                        if(playerData[i].gamePlayers[0].player.id === user.id || playerData[i].gamePlayers[1].player.id === user.id){
-                                res.push(playerData[i]);
-
-                        }
-                    }
-                    setPlayerGames(res);
                     setLoading(false); 
                 }, 250);
             } catch (error) {

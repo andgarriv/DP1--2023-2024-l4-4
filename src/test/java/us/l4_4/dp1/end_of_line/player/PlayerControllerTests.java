@@ -1,8 +1,9 @@
 package us.l4_4.dp1.end_of_line.player;
 
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -116,7 +117,7 @@ class PlayerControllerTests {
         newPlayer.setAuthority(authority2);
         newPlayer.setAvatar("https://cdn-icons-png.flaticon.com/512/147/147144.png");
 
-        when(this.playerService.findAllPlayers()).thenReturn(List.of(player, player2, newPlayer));
+        when(this.playerService.findAll()).thenReturn(List.of(player, player2, newPlayer));
 
         mockMvc.perform(get(BASE_URL + "/all")).andExpect(status().isOk()).andExpect(jsonPath("$.size()").value(3))
                 .andExpect(jsonPath("$[?(@.id == 2)].name").value("playerName"))

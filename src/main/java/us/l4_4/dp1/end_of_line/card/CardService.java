@@ -11,8 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.validation.Valid;
 import us.l4_4.dp1.end_of_line.enums.Color;
-import us.l4_4.dp1.end_of_line.game.Game;
-import us.l4_4.dp1.end_of_line.game.GameRepository;
 import us.l4_4.dp1.end_of_line.game.GameService;
 import us.l4_4.dp1.end_of_line.gameplayer.GamePlayer;
 
@@ -56,7 +54,7 @@ public class CardService {
 
     @Transactional(readOnly = true)
     public List<Card> getCardsOfGame(Integer gameId) throws DataAccessException{
-        List<GamePlayer> gamePlayers = gameService.getGameById(gameId).getGamePlayers();
+        List<GamePlayer> gamePlayers = gameService.findById(gameId).getGamePlayers();
         Integer gamePlayerId1 = gamePlayers.get(0).getId();
         Integer gamePlayerId2 = gamePlayers.get(1).getId();
         List<Card> cards = cardRepository.findCardsByGamePlayer(gamePlayerId1);
