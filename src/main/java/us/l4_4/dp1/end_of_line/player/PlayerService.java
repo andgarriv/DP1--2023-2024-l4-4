@@ -24,7 +24,7 @@ public class PlayerService {
 	}
 
 	@Transactional(readOnly = true)
-	public Iterable<Player> findAllPlayers() throws DataAccessException{
+	public Iterable<Player> findAll() throws DataAccessException{
 		return playerRepository.findAllPlayers();
 	}
 
@@ -50,7 +50,7 @@ public class PlayerService {
 	}
 
 	@Transactional
-	public Player savePlayer(Player player) throws DataAccessException {
+	public Player save(Player player) throws DataAccessException {
 		LocalDate now = LocalDate.now();
 		LocalDate playerDate = player.getBirthDate();
 		LocalDate minDate = now.minusYears(7);
@@ -61,14 +61,7 @@ public class PlayerService {
 	}
 
 	@Transactional
-	public Player updatePlayer(Integer nickname) throws DataAccessException{
-		Player playerToUpdate = findById(nickname);
-		BeanUtils.copyProperties(nickname, playerToUpdate, "id");
-		return playerRepository.save(playerToUpdate);
-	}
-
-	@Transactional
-	public Player updatePlayer(Integer id, Player player){
+	public Player update(Integer id, Player player){
 		Player playerToUpdate = findById(id);
 		BeanUtils.copyProperties(player, playerToUpdate, "id");
 		return playerRepository.save(playerToUpdate);

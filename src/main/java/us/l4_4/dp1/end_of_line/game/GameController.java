@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,19 +28,19 @@ public class GameController {
 
     @GetMapping("/players/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public List<Game> getGamesByPlayerId(@PathVariable Integer id) {
-        return gameService.getGamesByPlayerId(id);
+    public List<Game> findAllGamesByPlayerId(@PathVariable Integer id) {
+        return gameService.findAllGamesByPlayerId(id);
     }
 
     @GetMapping("/players/{id}/notended")
     @ResponseStatus(HttpStatus.OK)
-    public List<Game> getNotEndedGamesByPlayerId(@PathVariable Integer id) {
-        return gameService.getNotEndedGamesByPlayerId(id);
+    public List<Game> findNotEndedGamesByPlayerId(@PathVariable Integer id) {
+        return gameService.findNotEndedGamesByPlayerId(id);
     }
 
     @GetMapping("/all")
-    public Iterable<Game> getAllGames() {
-        return gameService.getAllGames();
+    public Iterable<Game> findAllGames() {
+        return gameService.findAllGames();
     }
 
     @PostMapping()
@@ -56,9 +55,9 @@ public class GameController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Game> getGame(@PathVariable Integer gameId) {
-        Game game = gameService.getGame(gameId);
-        return new ResponseEntity<>(game, HttpStatus.OK);
+    @ResponseStatus(HttpStatus.OK)
+    public Game findById(@PathVariable Integer id) {
+        return gameService.findById(id);
     }
 
     @PutMapping("/{id}")
@@ -69,8 +68,8 @@ public class GameController {
 
     @GetMapping("/fivecards/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public List<Card> getFiveCards(@PathVariable Integer id) {
-        return gameService.getFiveRandomCards(id);
+    public List<Card> findFiveCards(@PathVariable Integer id) {
+        return gameService.findFiveRandomCards(id);
     }
 
 }

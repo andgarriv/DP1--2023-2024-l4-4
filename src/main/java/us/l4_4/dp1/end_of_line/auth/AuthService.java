@@ -36,6 +36,6 @@ public class AuthService {
 		player.setBirthDate(request.getBirthdate());
 		player.setNickname(request.getNickname());
 		player.setAvatar(request.getAvatar());
-		playerService.savePlayer(player);
+		playerService.save(player);
 		}
 	}

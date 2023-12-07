@@ -33,35 +33,35 @@ public class AchievementController {
 
     @GetMapping
 	@ResponseStatus(HttpStatus.OK)
-	public Iterable<Achievement> getAllAchievements() {
-		return achievementService.findAllAchievements();
+	public Iterable<Achievement> findAll() {
+		return achievementService.findAll();
 	}
 
 	@GetMapping("/{id}")
 	@ResponseStatus(HttpStatus.OK)
-	public Achievement findAchievement(@PathVariable("id") int id){
-		return achievementService.findAchiviementById(id);
+	public Achievement findById(@PathVariable("id") int id){
+		return achievementService.findById(id);
 	}
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Achievement createAchievement(@RequestBody @Valid Achievement achievement){ 
-		return achievementService.saveAchievement(achievement);
+	public Achievement create(@RequestBody @Valid Achievement achievement){ 
+		return achievementService.save(achievement);
 	}
 
 	@PutMapping("/{id}")
 	@ResponseStatus(HttpStatus.OK)
-	public Achievement updateAchievement(@PathVariable("id") Integer id, @RequestBody @Valid Achievement achievement) {
-		Achievement achievementToUpdate = achievementService.findAchiviementById(id);
+	public Achievement update(@PathVariable("id") Integer id, @RequestBody @Valid Achievement achievement) {
+		Achievement achievementToUpdate = achievementService.findById(id);
 		if(achievementToUpdate == null)
 			throw new BadRequestException("Achievement not found");
 		BeanUtils.copyProperties(achievement, achievementToUpdate, "id");
-		return achievementService.saveAchievement(achievementToUpdate);
+		return achievementService.save(achievementToUpdate);
 	}
 
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.OK)
-	public void deleteAchievement(@PathVariable("id") Integer id){
-		achievementService.deleteAchievementById(id);
+	public void delete(@PathVariable("id") Integer id){
+		achievementService.deleteById(id);
 	}
 }

@@ -1,6 +1,7 @@
 package us.l4_4.dp1.end_of_line.player;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDate;
 import java.util.Collection;
@@ -41,12 +42,12 @@ class PlayerServiceTests {
 		player.setAuthority(authoritiesService.findByAuthority("PLAYER"));
 		player.setAvatar(avatar);
 
-		return this.playerService.savePlayer(player);
+		return this.playerService.save(player);
 	}
 
 	@Test
 	void shouldFindAllPlayers() {
-		List<Player> players = (List<Player>) this.playerService.findAllPlayers();
+		List<Player> players = (List<Player>) this.playerService.findAll();
 		List<Player> players2 = this.authoritiesService.findAllByAuthority("PLAYER");
 		assertEquals(10, players.size());
 		assertEquals(players.size(), players2.size());
@@ -128,9 +129,9 @@ class PlayerServiceTests {
 	@Test
 	@Transactional
 	void shouldInsertUser() {
-		int count = ((Collection<Player>) this.playerService.findAllPlayers()).size();
+		int count = ((Collection<Player>) this.playerService.findAll()).size();
 		createPlayer();
-		int finalCount = ((Collection<Player>) this.playerService.findAllPlayers()).size();
+		int finalCount = ((Collection<Player>) this.playerService.findAll()).size();
 		assertEquals(count + 1, finalCount);
 	}
 
@@ -139,21 +140,21 @@ class PlayerServiceTests {
 	void shouldUpdateUser() {
 		Player player = this.playerService.findById(4);
 		player.setNickname("Change");
-		playerService.updatePlayer(4, player);
+		playerService.update(4, player);
 		assertEquals("Change", player.getNickname());
 	}
 
 	@Test
 	@Transactional
 	void shouldDeleteUser() {
-		Integer firstCount = ((Collection<Player>) playerService.findAllPlayers()).size();
+		Integer firstCount = ((Collection<Player>) playerService.findAll()).size();
 		Player player = createPlayer();
 
-		Integer secondCount = ((Collection<Player>) playerService.findAllPlayers()).size();
+		Integer secondCount = ((Collection<Player>) playerService.findAll()).size();
 		assertEquals(firstCount + 1, secondCount);
 
 		playerService.deletePlayer(player.getId());
-		Integer lastCount = ((Collection<Player>) playerService.findAllPlayers()).size();
+		Integer lastCount = ((Collection<Player>) playerService.findAll()).size();
 		assertEquals(firstCount, lastCount);
 	}
 }

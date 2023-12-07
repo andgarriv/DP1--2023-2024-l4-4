@@ -55,25 +55,19 @@ public class SecurityConfiguration {
 			.requestMatchers(HttpMethod.GET, "api/v1/players/all").hasAuthority(ADMIN)
 			.requestMatchers(HttpMethod.POST, "api/v1/players").permitAll()	
 			.requestMatchers(HttpMethod.DELETE, "api/v1/players/**").hasAuthority(ADMIN)
-			.requestMatchers("/api/v1/players/**").permitAll()
+			.requestMatchers("/api/v1/players/**").authenticated()
 
 			.requestMatchers(HttpMethod.GET,"/api/v1/friendships/all").hasAuthority(ADMIN)
-			.requestMatchers("/api/v1/friendships/**").permitAll()
+			.requestMatchers("/api/v1/friendships/**").authenticated()
 			
-
-
-
-
-
 			.requestMatchers(HttpMethod.GET,"/api/v1/achievements").authenticated()
-			.requestMatchers(HttpMethod.POST,"/api/v1/achievements").hasAuthority(ADMIN)
-			.requestMatchers(HttpMethod.DELETE,"/api/v1/achievements").hasAuthority(ADMIN)
-			//.requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/users/**")).hasAuthority(ADMIN)
+			.requestMatchers("/api/v1/achievements").hasAuthority(ADMIN)
 			
-			.requestMatchers("/api/v1/games/all").authenticated()
+			.requestMatchers(HttpMethod.GET,"/api/v1/games/all").hasAuthority(ADMIN)
+			.requestMatchers("/api/v1/games/**").authenticated()
+			
 			.requestMatchers(HttpMethod.GET,"/api/v1/cards/**").authenticated()
 			.requestMatchers(HttpMethod.POST, "/api/v1/gameplayers/**").authenticated()
-			.requestMatchers(HttpMethod.POST, "/api/v1/games/**").authenticated()
 			//.requestMatchers("/api/v1/clinicOwners/all").hasAuthority(ADMIN)
 			//.requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/clinicOwners/**")).hasAnyAuthority(ADMIN, CLINIC_OWNER)
 			/*.requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.DELETE, "/api/v1/consultations/**")).hasAuthority(ADMIN)*/

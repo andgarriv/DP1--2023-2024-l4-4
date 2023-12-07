@@ -18,27 +18,27 @@ public class AchievementService {
     }
 
     @Transactional(readOnly = true)    
-    public Iterable<Achievement> findAllAchievements(){
+    public Iterable<Achievement> findAll(){
         return achievementRepository.findAll();
     }
 
     @Transactional(readOnly = true)    
-    public Achievement findAchiviementById(Integer id){
+    public Achievement findById(Integer id) throws ResourceNotFoundException{
         return achievementRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Achievement", "id", id));
     }
 
     @Transactional
-    public Achievement saveAchievement(@Valid Achievement newAchievement) {
+    public Achievement save(@Valid Achievement newAchievement) {
         return achievementRepository.save(newAchievement);
     }
 
     @Transactional
-    public void deleteAchievementById(int id){
+    public void deleteById(int id){
         achievementRepository.deleteById(id);
     }
 
     @Transactional(readOnly = true)
-    public Achievement findAchievementByName(String name){
+    public Achievement findByName(String name){
         return achievementRepository.findByName(name);
     }
 }

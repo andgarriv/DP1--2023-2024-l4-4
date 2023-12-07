@@ -1,6 +1,7 @@
 package us.l4_4.dp1.end_of_line.achievements;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.util.stream.StreamSupport;
 
@@ -32,7 +33,7 @@ public class AchievementsServiceTests {
 
     @Test
      void shouldFindAllAchievements() {
-        Iterable<Achievement> achievements = this.achievementService.findAllAchievements();
+        Iterable<Achievement> achievements = this.achievementService.findAll();
         long count = StreamSupport.stream(achievements.spliterator(), false).count();
         assertEquals(3, count);
     }
@@ -48,10 +49,10 @@ public class AchievementsServiceTests {
         existingAchievement.setBadgeImage("https://example.com/originalBadgeImage.jpg");
         existingAchievement.setThreshold(100.0);
         existingAchievement.setCategory(Category.GAMES_PLAYED);
-        achievementService.saveAchievement(existingAchievement);
+        achievementService.save(existingAchievement);
 
         // Llamada al método que se está probando
-        Achievement result = achievementService.findAchiviementById(existingAchievement.getId());
+        Achievement result = achievementService.findById(existingAchievement.getId());
 
         // Verificación
         assertEquals(existingAchievement.getName(), result.getName());
@@ -68,7 +69,7 @@ public class AchievementsServiceTests {
         newAchievement.setThreshold(100.0);
         newAchievement.setCategory(Category.GAMES_PLAYED);
         // Llamada al método que se está probando
-        Achievement savedAchievement = achievementService.saveAchievement(newAchievement);
+        Achievement savedAchievement = achievementService.save(newAchievement);
         // Verificación
         assertEquals(newAchievement, savedAchievement);
     }
@@ -95,7 +96,7 @@ public class AchievementsServiceTests {
         updatedAchievement.setCategory(Category.TOTAL_PLAY_TIME);
 
         // Llamada al método que se está probando
-        Achievement result = achievementService.saveAchievement(updatedAchievement);
+        Achievement result = achievementService.save(updatedAchievement);
 
         // Verificación
         assertEquals(updatedAchievement.getDescription(), result.getDescription());
@@ -117,7 +118,7 @@ public class AchievementsServiceTests {
         existingAchievement.setCategory(Category.GAMES_PLAYED);
 
         // Llamada al método que se está probando
-        achievementService.deleteAchievementById(existingAchievement.getId());
+        achievementService.deleteById(existingAchievement.getId());
 
         // Verificación
         assertNull(achievementRepository.findById(existingAchievement.getId()).orElse(null));
@@ -134,10 +135,10 @@ public class AchievementsServiceTests {
         existingAchievement.setBadgeImage("https://example.com/originalBadgeImage.jpg");
         existingAchievement.setThreshold(100.0);
         existingAchievement.setCategory(Category.GAMES_PLAYED);
-        achievementService.saveAchievement(existingAchievement);
+        achievementService.save(existingAchievement);
 
         // Llamada al método que se está probando
-        Achievement result = achievementService.findAchievementByName(existingAchievement.getName());
+        Achievement result = achievementService.findByName(existingAchievement.getName());
 
         // Verificación
         assertEquals(existingAchievement.getName(), result.getName());

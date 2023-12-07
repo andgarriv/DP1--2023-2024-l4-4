@@ -44,8 +44,8 @@ public class PlayerController {
 
     @GetMapping("/all")
     @ResponseStatus(HttpStatus.OK)
-    public Iterable<Player> findAllPlayers() {
-        return playerService.findAllPlayers();
+    public Iterable<Player> findAll() {
+        return playerService.findAll();
     }
 
     @PostMapping()
@@ -54,7 +54,7 @@ public class PlayerController {
         String password2 = authService.encodePassword(player.getPassword());
         player.setPassword(password2);
         player.setAuthority(authoritiesService.findByAuthority("PLAYER"));
-        playerService.savePlayer(player);
+        playerService.save(player);
         return player;
     }
 
@@ -89,7 +89,7 @@ public class PlayerController {
     @ResponseStatus(HttpStatus.OK)
     public Player update(@PathVariable Integer id, @RequestBody @Valid Player player) {
         if (playerService.findById(id) != null)
-            return playerService.updatePlayer(id, player);
+            return playerService.update(id, player);
         else
             return null;
     }
