@@ -3,7 +3,6 @@ package us.l4_4.dp1.end_of_line.player;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -29,10 +28,6 @@ public interface PlayerRepository extends CrudRepository<Player, Integer> {
 
     @Query("SELECT p FROM Player p WHERE p.authority.authority = :auth")
 	List<Player> findAllByAuthority(String auth);
-    
-    @Modifying
-    @Query("DELETE FROM Player p WHERE p.id = :id")
-    public void deletePlayer(@Param("id")Integer id);
 
     @Query("SELECT p FROM Player p WHERE p.id <> :id ORDER BY p.nickname")
     List<Player> findAllExceptWithId(@Param("id") Integer id);

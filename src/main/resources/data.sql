@@ -27,15 +27,11 @@ INSERT INTO achievements(id, name, description, threshold, badge_image, category
                                                                                          (3,'Expert','Win 20 games',20.0, null, 'VICTORIES');
 
 -- Player Achievements
-INSERT INTO player_achievements(id, achieve_at, achievement_id) VALUES (1,'2021-09-01', 1),
-                                                                       (2, null, 2),
-                                                                       (3, null, 3);
+INSERT INTO player_achievements(id, achieve_at, achievement_id) VALUES (1,'2021-09-01', 1);
 
 
 --Player PlayerAchievements
-INSERT INTO players_player_achievement(player_achievement_id, player_id) VALUES (1, 6),
-                                                                                (2, 6),
-                                                                                (3, 5);
+INSERT INTO players_player_achievement(player_achievement_id, player_id) VALUES (1, 12);
 
 -- GamePlayers
 
@@ -104,7 +100,9 @@ INSERT INTO friendships(id, receiver, sender, friend_state) VALUES (1, 4, 3, 'AC
                                                                   (11, 5, 8, 'REJECTED'),
                                                                   (12, 6, 8, 'REJECTED'),
                                                                   (13, 8, 9, 'ACCEPTED'),
-                                                                  (14, 9, 10, 'PENDING');
+                                                                  (14, 9, 10, 'PENDING'),
+                                                                  (15, 12, 3, 'ACCEPTED'),
+                                                                  (16, 8, 12, 'PENDING');
 
                                                                   
 

@@ -55,10 +55,10 @@ public class SecurityConfiguration {
 			.requestMatchers(HttpMethod.GET, "api/v1/players/all").hasAuthority(ADMIN)
 			.requestMatchers(HttpMethod.POST, "api/v1/players").permitAll()	
 			.requestMatchers(HttpMethod.DELETE, "api/v1/players/**").hasAuthority(ADMIN)
-			.requestMatchers("/api/v1/players/**").authenticated()	
+			.requestMatchers("/api/v1/players/**").permitAll()
 
 			.requestMatchers(HttpMethod.GET,"/api/v1/friendships/all").hasAuthority(ADMIN)
-			.requestMatchers("/api/v1/friendships/**").authenticated()
+			.requestMatchers("/api/v1/friendships/**").permitAll()
 			
 
 
