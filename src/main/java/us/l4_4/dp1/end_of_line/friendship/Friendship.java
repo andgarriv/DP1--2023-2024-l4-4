@@ -1,6 +1,10 @@
 package us.l4_4.dp1.end_of_line.friendship;
 
-import jakarta.persistence.CascadeType;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -17,16 +21,19 @@ import us.l4_4.dp1.end_of_line.player.Player;
 @Getter
 @Setter
 @Entity
-@Table(name = "friendships")
-public class Friendship extends BaseEntity{
 
+@Table(name = "friendships")
+public class Friendship extends BaseEntity {
+
+    @JsonManagedReference
+    @ManyToOne
     @NotNull
-    @ManyToOne(cascade = CascadeType.REFRESH, optional = false)
     @JoinColumn(name = "sender")
     Player sender;
 
+    @JsonManagedReference
+    @ManyToOne
     @NotNull
-    @ManyToOne(cascade = CascadeType.REFRESH, optional = false)
     @JoinColumn(name = "receiver")
     Player receiver;
 
@@ -34,3 +41,4 @@ public class Friendship extends BaseEntity{
     @Enumerated(EnumType.STRING)
     FriendStatus friendState;
 }
+

@@ -2,8 +2,11 @@ package us.l4_4.dp1.end_of_line.game;
 
 import java.util.Date;
 import java.util.List;
+
 import jakarta.persistence.Column;
+import jakarta.persistence.ConstraintMode;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
@@ -30,7 +33,8 @@ public class Game extends BaseEntity {
     private Integer rounds;
 
     @ManyToOne
-    @JoinColumn(name = "winner")
+    @JoinColumn(name = "winner", nullable = true, 
+                foreignKey = @ForeignKey(name = "FK_player", value = ConstraintMode.NO_CONSTRAINT))
     private Player winner;
 
     @Column(name = "started")
