@@ -1,3 +1,8 @@
+/* Board Service
+ * =============
+ * Script to manage the board of the game. The long functions of board are here.
+*/
+
 export async function fetchGameCards(gameId, jwt, setDataGamePlayer, setHandCardsPlayer1, setHandCardsPlayer2, setBoard, setIsLoading) {
     try {
       const response = await fetch(`/api/v1/cards/game/${gameId}`, {
