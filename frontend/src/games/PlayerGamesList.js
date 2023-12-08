@@ -131,4 +131,3 @@ export default function AdminGamesList() {
         </div>
     );
 }
-// Delete this when you see. This is a test.

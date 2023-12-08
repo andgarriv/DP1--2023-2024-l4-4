@@ -30,4 +30,3 @@ const handlePlayNowClick = async (setMessage, setVisible) => {
 };
 
 export default handlePlayNowClick;
-// Delete this when you see. This is a test.
