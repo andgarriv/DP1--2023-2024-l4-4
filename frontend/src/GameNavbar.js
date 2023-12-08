@@ -14,10 +14,7 @@ function GameNavbar() {
     const [gameTime, setGameTime] = useState(0);
     const [turnId, setTurnId] = useState(0);
 
-    const gameId =
-        window.location.pathname.split("/")[
-        window.location.pathname.split("/").length - 1
-        ];
+    const gameId = window.location.pathname.split("/")[window.location.pathname.split("/").length - 1].replace(/\D/g, '');
 
     useEffect(() => {
         async function fetchGameData() {
@@ -57,7 +54,10 @@ function GameNavbar() {
     playerLinks = (
         <>
             <NavItem>
-                <NavLink className="fuente" style={{ color: "#75FBFD" }} tag={Link} to="/rules">Rules</NavLink>
+                <NavLink className="fuente" style={{ color: "#75FBFD" }} tag={Link} to={`/game/${gameId}`}>Game</NavLink>
+            </NavItem>
+            <NavItem>
+                <NavLink className="fuente" style={{ color: "#75FBFD" }} tag={Link} to="/rulesInGame">Rules</NavLink>
             </NavItem>
             <span style={{ color: "gray", display: "inline-block", margin: "5px 10px" }}>|</span>
             <NavItem className="d-flex">
@@ -84,9 +84,9 @@ function GameNavbar() {
                 }}>
                     <span>ROUND {rounds}</span>
                     <span style={{ marginLeft: '10%' }}>{formattedGameTime}</span>
-                    <span style={{ marginLeft: '10%' }}>TURN {turnId}</span>
+                    <span style={{ marginLeft: '10%' }}>TURN {turnId ? turnId : 'NONE'}</span>
                 </div>
-                
+
                 <Collapse isOpen={!collapsed} navbar>
                     <Nav className="ms-auto mb-2 mb-lg-0" navbar>
 
