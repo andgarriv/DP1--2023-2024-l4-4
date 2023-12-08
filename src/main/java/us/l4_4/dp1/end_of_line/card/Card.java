@@ -58,7 +58,6 @@ public class Card extends BaseEntity{
     @Column(name = "is_template")
     Boolean is_Template;
 
-    @Transient
     Date timeStamp;
 
 }
