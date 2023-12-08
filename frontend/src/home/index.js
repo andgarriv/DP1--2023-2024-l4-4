@@ -1,7 +1,7 @@
 import jwt_decode from "jwt-decode";
 import React, { useEffect, useState } from "react";
 import "../App.css";
-import handlePlayNowClick from "../games/PlayNowHandler";
+import handlePlayNowClick from "../games/playNowHandler";
 import tokenService from "../services/token.service";
 import "../static/css/home/home.css";
 

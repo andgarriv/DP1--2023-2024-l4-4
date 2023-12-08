@@ -2,7 +2,7 @@ import jwt_decode from "jwt-decode";
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Collapse, DropdownItem, DropdownMenu, DropdownToggle, Nav, NavItem, NavLink, Navbar, NavbarBrand, NavbarToggler, UncontrolledDropdown } from 'reactstrap';
-import handlePlayNowClick from "./games/PlayNowHandler";
+import handlePlayNowClick from "./games/playNowHandler";
 import tokenService from './services/token.service';
 import './static/css/home/home.css';
 

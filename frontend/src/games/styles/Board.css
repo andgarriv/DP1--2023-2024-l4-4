@@ -54,3 +54,19 @@
   width: 25%;
   height: auto;
 }
+
+.rotate-north {
+  transform: rotate(180deg);
+}
+
+.rotate-south {
+  transform: rotate(0deg);
+}
+
+.rotate-east {
+  transform: rotate(270deg);
+}
+
+.rotate-west {
+  transform: rotate(90deg);
+}

@@ -4,12 +4,30 @@ import { fetchGameCards, isPlayerAuthorized } from "./services/boardService.js";
 import "./styles/Board.css";
 
 function Box({ content }) {
+  const getRotationClass = (orientation) => {
+    switch (orientation) {
+      case 'N':
+        return 'rotate-north';
+      case 'S':
+        return 'rotate-south';
+      case 'E':
+        return 'rotate-east';
+      case 'W':
+        return 'rotate-west';
+      default:
+        return '';
+    }
+  };
+
+  const rotationClass = content ? getRotationClass(content.orientation) : '';
+
   return (
     <div className="box">
-      {content ? <img src={content.image} alt="Card" /> : null}
+      {content ? <img src={content.image} alt="Card" className={rotationClass} /> : null}
     </div>
   );
 }
+
 
 export default function Board() {
   const jwt = tokenService.getLocalAccessToken();

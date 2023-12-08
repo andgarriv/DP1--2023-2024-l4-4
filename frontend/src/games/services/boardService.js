@@ -42,7 +42,7 @@ export async function fetchGameCards(gameId, jwt, setDataGamePlayer, setHandCard
       const cardsOnBoardImages = await Promise.all(
         cardsOnBoard.map((card) =>
           importGameCard(card.color, card.exit, card.iniciative).then(
-            (module) => ({ ...card, image: module.default })
+            (module) => ({ ...card, image: module.default, orientation: card.orientation })
           )
         )
       );
@@ -53,10 +53,10 @@ export async function fetchGameCards(gameId, jwt, setDataGamePlayer, setHandCard
   
         cardsOnBoardImages.forEach((card) => {
           if (card.color === dataGamePlayer[0].color) {
-            newBoard[card.row][card.column] = { image: card.image };
+            newBoard[card.row][card.column] = { image: card.image, orientation: card.orientation };
           }
           if (card.color === dataGamePlayer[1].color) {
-            newBoard[card.row][card.column] = { image: card.image };
+            newBoard[card.row][card.column] = { image: card.image, orientation: card.orientation };
           }
         });
   
