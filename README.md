@@ -1,7 +1,8 @@
 # End Of Line
 
 ## EOL UML
-![UML EOL](https://github.com/gii-is-DP1/DP1--2023-2024-l4-4/assets/91954520/724207b1-861b-498d-aa64-7af8169352a4)
+![UML EOL](https://github.com/gii-is-DP1/DP1--2023-2024-l4-4/assets/91957427/64d4758e-72ab-485b-8693-f8e8e7474081)
+
 
 ## Running EOL backend locally
 EOL is a [Spring Boot](https://spring.io/guides/gs/spring-boot) application built using [Maven](https://spring.io/guides/gs/maven/). You can build a jar file and run it from the command line:
