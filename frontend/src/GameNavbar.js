@@ -13,12 +13,19 @@ function GameNavbar() {
     const [rounds, setRounds] = useState(0);
     const [gameTime, setGameTime] = useState(0);
     const [turnId, setTurnId] = useState(0);
-
-    const gameId = window.location.pathname.split("/")[window.location.pathname.split("/").length - 1].replace(/\D/g, '');
+    const [ongoingGameId, setOngoingGameId] = useState(null);
 
     useEffect(() => {
         async function fetchGameData() {
-            const response = await fetch(`/api/v1/games/${gameId}`, {
+            const jwt = tokenService.getLocalAccessToken();
+            const user = tokenService.getUser();
+            const playerResponse = await fetch(`/api/v1/games/players/${user.id}/notended`, {
+                headers: { Authorization: `Bearer ${jwt}` },
+            });
+            const playerData = await playerResponse.json();
+
+            const ongoingGame = playerData.find((game) => !game.endedAt);
+            const response = await fetch(`/api/v1/games/${ongoingGame.id}`, {
                 method: "GET",
                 headers: {
                     Authorization: `Bearer ${jwt}`,
@@ -28,6 +35,7 @@ function GameNavbar() {
             const data = await response.json();
             setRounds(data.rounds);
             setTurnId(data.turnId);
+            setOngoingGameId(data.id);
 
             const startedAt = new Date(data.startedAt);
             const now = new Date();
@@ -43,7 +51,8 @@ function GameNavbar() {
 
         // Clear interval on component unmount
         return () => clearInterval(intervalId);
-    }, [gameId, jwt]);
+    }, [jwt]);
+
 
     // Convert gameTime to minutes:seconds format
     const minutes = Math.floor(gameTime / 60);
@@ -54,8 +63,9 @@ function GameNavbar() {
     playerLinks = (
         <>
             <NavItem>
-                <NavLink className="fuente" style={{ color: "#75FBFD" }} tag={Link} to={`/game/${gameId}`}>Game</NavLink>
-            </NavItem>
+                <NavItem>
+                    <NavLink className="fuente" style={{ color: "#75FBFD" }} tag={Link} to={`/game/${ongoingGameId}`}>Game</NavLink>
+                </NavItem>            </NavItem>
             <NavItem>
                 <NavLink className="fuente" style={{ color: "#75FBFD" }} tag={Link} to="/rulesInGame">Rules</NavLink>
             </NavItem>
