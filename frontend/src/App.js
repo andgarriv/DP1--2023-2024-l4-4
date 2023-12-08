@@ -98,7 +98,7 @@ function App() {
           <Route path="/consultations/:consultationId" exact={true} element={<PrivateRoute><ConsultationEditAdmin /></PrivateRoute>} />
           <Route path="/consultations/:consultationId/tickets" exact={true} element={<PrivateRoute><TicketListAdmin /></PrivateRoute>} />
           <Route path="/achievements" exact={true} element={<PrivateRoute><AchievementList /></PrivateRoute>} />
-          <Route path="/achievements/:achievementId" exact={true} element={<PrivateRoute><AchievementEdit/></PrivateRoute>} />
+          <Route path="/achievements/:achievementId" exact={true} element={<PrivateRoute><AchievementEdit /></PrivateRoute>} />
           <Route path="/games" exact={true} element={<PrivateRoute><AdminGamesList /></PrivateRoute>} />
           <Route path="/players" exact={true} element={<PrivateRoute><PlayerListAdmin /></PrivateRoute>} />
           <Route path="/friendships" exact={true} element={<PrivateRoute><FriendshipListAdmin /></PrivateRoute>} />
@@ -117,11 +117,12 @@ function App() {
           <Route path="/game/:id" exact={true} element={<PrivateRoute><Board /></PrivateRoute>} />
           <Route path="/friendships" exact={true} element={<PrivateRoute><FriendshipListPlayer /></PrivateRoute>} />
         </>)
-        gameRoutes = (
-          <>
-            <Route path="/game/:id" exact={true} element={<PrivateRoute><Board /></PrivateRoute>} />
-          </>
-        )
+      gameRoutes = (
+        <>
+          <Route path="/game/:id" exact={true} element={<PrivateRoute><Board /></PrivateRoute>} />
+          <Route path="/rulesInGame" element={<PDFViewer />} />
+        </>
+      )
     }
   })
   if (!jwt) {
@@ -142,18 +143,21 @@ function App() {
   }
 
   const location = useLocation();
-    const [isGameRoute, setIsGameRoute] = useState(false);
+  const [isGameRoute, setIsGameRoute] = useState(false);
+  const [isRulesInGameRoute, setIsRulesInGameRoute] = useState(false);
 
-    useEffect(() => {
-        const gamePaths = ['/game/:id'];
-        const currentPath = location.pathname;
-        setIsGameRoute(gamePaths.some(path => currentPath.startsWith(path.replace(':id', ''))));
-    }, [location]);
+  useEffect(() => {
+    const gamePaths = ['/game/:id'];
+    const rulesInGamePaths = ['/rulesInGame'];
+    const currentPath = location.pathname;
+    setIsGameRoute(gamePaths.some(path => currentPath.startsWith(path.replace(':id', ''))));
+    setIsRulesInGameRoute(rulesInGamePaths.some(path => currentPath.startsWith(path)));
+  }, [location]);
 
   return (
     <div>
       <ErrorBoundary FallbackComponent={ErrorFallback} >
-      {isGameRoute ? <GameNavbar /> : <AppNavbar />}
+        {(isGameRoute || isRulesInGameRoute) ? <GameNavbar /> : <AppNavbar />}
         <Routes>
           <Route path="/" exact={true} element={<Home />} />
           <Route path="/plans" element={<PlanList />} />

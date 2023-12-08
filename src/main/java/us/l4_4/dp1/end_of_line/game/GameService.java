@@ -154,6 +154,8 @@ public class GameService {
         gamePlayerRepository.save(p2);
         List<GamePlayer> gamePlayers = List.of(p1, p2);
         game.setGamePlayers(gamePlayers);
+        findFiveRandomCards(p1.getId());
+        findFiveRandomCards(p2.getId());
         gameRepository.save(game);
         return game;
     }
