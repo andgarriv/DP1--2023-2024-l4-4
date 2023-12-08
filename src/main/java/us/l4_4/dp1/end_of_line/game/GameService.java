@@ -111,6 +111,7 @@ public class GameService {
                 newCard.setColumn(2);
                 newCard.setRow(4);
                 newCard.setCard_Status(CardStatus.ON_BOARD);
+                newCard.setTimeStamp(Date.from(java.time.Instant.now()));
             } else {
                 newCard.setColumn(null);
                 newCard.setRow(null);
@@ -137,10 +138,12 @@ public class GameService {
                 newCard.setColumn(4);
                 newCard.setRow(4);
                 newCard.setCard_Status(CardStatus.ON_BOARD);
+                newCard.setTimeStamp(Date.from(java.time.Instant.now()));
             } else {
                 newCard.setColumn(null);
                 newCard.setRow(null);
                 newCard.setCard_Status(CardStatus.IN_DECK);
+                 
             }
             newCard.setIniciative(card.getIniciative());
             newCard.setColor(card.getColor());
@@ -171,7 +174,7 @@ public class GameService {
         return res;
     }
 
-    public List<Card> findFiveRandomCards(Integer gamePlayerId) {
+    public List<Card> updateFiveRandomCards(Integer gamePlayerId) {
         if (gamePlayerRepository.findById(gamePlayerId) == null) {
             throw new ResourceNotFoundException("GamePlayer", "id", gamePlayerId);
         }
@@ -256,7 +259,7 @@ public class GameService {
         return gameRepository.save(game);
     }
 
-    private Integer whoIsNext(Integer id1, Integer id2) {
+    public Integer whoIsNext(Integer id1, Integer id2) {
         Integer res = null;
         Integer maxSize = null;
 
@@ -270,7 +273,7 @@ public class GameService {
                 .sorted(Comparator.comparing(Card::getTimeStamp).reversed())
                 .collect(Collectors.toList());
 
-        List<Card> player2Cards = gamePlayerRepository.findById(id1).get().getCards().stream()
+        List<Card> player2Cards = gamePlayerRepository.findById(id2).get().getCards().stream()
                 .filter(card -> card.getCard_Status() == CardStatus.ON_BOARD)
                 .sorted(Comparator.comparing(Card::getTimeStamp).reversed())
                 .collect(Collectors.toList());
@@ -281,16 +284,27 @@ public class GameService {
             maxSize = player2Cards.size();
 
         for (int i = 0; i < maxSize; i++) {
-            if (player1Cards.get(i).getIniciative() > player2Cards.get(i).getIniciative()) {
-                res = id2;
-            } else if (player1Cards.get(i).getIniciative() < player2Cards.get(i).getIniciative()) {
-                res = id1;
+            if (res == null) {
+
+                if (player1Cards.get(i).getIniciative() > player2Cards.get(i).getIniciative()) {
+                    res = id2;
+                } else if (player1Cards.get(i).getIniciative() < player2Cards.get(i).getIniciative()) {
+                    res = id1;
+                }
             }
         }
         if (res == null) {
             if (player1Cards.size() < player2Cards.size()) {
                 res = id1;
+            } else if (player1Cards.size() == player2Cards.size()) {
+                
+                if (player1Cards.get(maxSize - 2).getTimeStamp().before(player2Cards.get(maxSize - 2).getTimeStamp()))
+                    res = id1;
+                else
+                    res = id2;
+
             } else {
+
                 res = id2;
             }
         }
