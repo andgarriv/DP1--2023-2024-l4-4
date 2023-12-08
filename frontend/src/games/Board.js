@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import tokenService from "../services/token.service";
+import tokenService from "../services/token.service.js";
 import { fetchGameCards, isPlayerAuthorized } from "./services/boardService.js";
 import "./styles/Board.css";
 
