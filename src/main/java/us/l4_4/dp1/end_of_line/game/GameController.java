@@ -68,7 +68,13 @@ public class GameController {
     @GetMapping("/fivecards/{id}")
     @ResponseStatus(HttpStatus.OK)
     public List<Card> findFiveCards(@PathVariable Integer id) {
-        return gameService.findFiveRandomCards(id);
+        return gameService.updateFiveRandomCards(id);
     }
+    @GetMapping("/next/{id1}/{id2}")
+    @ResponseStatus(HttpStatus.OK)
+    public Integer whoIsNext(@PathVariable Integer id1, @PathVariable Integer id2) {
+        return gameService.whoIsNext(id1, id2);
+    }
+
 
 }
