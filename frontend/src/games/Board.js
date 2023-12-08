@@ -90,19 +90,8 @@ export default function Board() {
               card.card_Status === "IN_HAND"
           );
 
-          if (handCardsPlayer1.length === 0 && handCardsPlayer2.length === 0) {
-            // Obtener nuevas cartas y actualizar el estado
-            const [newHandCardsPlayer1, newHandCardsPlayer2] = await Promise.all([
-              fetch(`/api/v1/games/fivecards/${dataGamePlayer[0].id}`, { headers: { Authorization: `Bearer ${jwt}` } }).then(res => res.json()),
-              fetch(`/api/v1/games/fivecards/${dataGamePlayer[1].id}`, { headers: { Authorization: `Bearer ${jwt}` } }).then(res => res.json())
-            ]);
-
-            setHandCardsPlayer(newHandCardsPlayer1, setHandCardsPlayer1);
-            setHandCardsPlayer(newHandCardsPlayer2, setHandCardsPlayer2);
-          } else {
-            setHandCardsPlayer(handCardsPlayer1, setHandCardsPlayer1);
-            setHandCardsPlayer(handCardsPlayer2, setHandCardsPlayer2);
-          }
+          setHandCardsPlayer(handCardsPlayer1, setHandCardsPlayer1);
+          setHandCardsPlayer(handCardsPlayer2, setHandCardsPlayer2);
 
           const cardsOnBoard = data.filter((card) => card.card_Status === "ON_BOARD");
 

@@ -20,7 +20,7 @@ import us.l4_4.dp1.end_of_line.enums.Color;
 
 @RestController
 @RequestMapping("/api/v1/games")
-@Tag(name= "Games", description = "API for the management of Games")
+@Tag(name = "Games", description = "API for the management of Games")
 public class GameController {
 
     @Autowired
@@ -50,7 +50,6 @@ public class GameController {
         Integer player2_id = newGameRequest.getPlayer2Id();
         Color player1_color_enum = Color.valueOf(newGameRequest.getPlayer1Color());
         Color player2_color_enum = Color.valueOf(newGameRequest.getPlayer2Color());
-
         return gameService.createNewGame(player1_id, player2_id, player1_color_enum, player2_color_enum);
     }
 
