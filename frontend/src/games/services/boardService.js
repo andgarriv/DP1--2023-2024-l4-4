@@ -50,7 +50,7 @@ export async function fetchGameCards(gameId, jwt, setDataGamePlayer, setHandCard
   
       const cardsOnBoardImages = await Promise.all(
         cardsOnBoard.map((card) =>
-          importGameCard(card.color, card.exit, card.iniciative).then(
+          importGameCard(card.color, card.exit, card.initiative).then(
             (module) => ({ ...card, image: module.default, orientation: card.orientation })
           )
         )
@@ -80,7 +80,7 @@ export async function fetchGameCards(gameId, jwt, setDataGamePlayer, setHandCard
 
 export function setHandCardsPlayer(cards, setHandCardsFunction) {
   const handCardImages = cards.map((card) => {
-    const module = importGameCard(card.color, card.exit, card.iniciative);
+    const module = importGameCard(card.color, card.exit, card.initiative);
     return module.then((mod) => ({ ...card, image: mod.default }));
   });
 
@@ -89,14 +89,14 @@ export function setHandCardsPlayer(cards, setHandCardsFunction) {
   });
 }
 
-export function importGameCard(color, exit, iniciative) {
+export function importGameCard(color, exit, initiative) {
   let name = "";
   let exitSubstring = exit.replace("EXIT_", "").substring(0, 3);
   if (exit === "START") {
     name = "C" + color.toUpperCase()[0] + "_START";
   } else {
     if (exitSubstring === "111") {
-      name = "C" + color.toUpperCase()[0] + "_111_" + iniciative;
+      name = "C" + color.toUpperCase()[0] + "_111_" + initiative;
     } else {
       name = "C" + color.toUpperCase()[0] + "_" + exitSubstring;
     }
