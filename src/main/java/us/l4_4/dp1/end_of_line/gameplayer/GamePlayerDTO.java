@@ -8,11 +8,9 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import us.l4_4.dp1.end_of_line.enums.Color;
-import us.l4_4.dp1.end_of_line.model.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
+import us.l4_4.dp1.end_of_line.enums.Color;
 
 @Getter
 @Setter
@@ -32,9 +30,5 @@ public class GamePlayerDTO{
     @NotNull
     Integer player_id;
 
-    //@NotNull
-    //@Size(min = 23, max = 25)
-    //TODO: Necesitamos que al crear un gameplayer se le asignen todas las cartas de su color
     List<Integer> cards_ids;
-
 }

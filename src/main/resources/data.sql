@@ -52,7 +52,7 @@ INSERT INTO game_players(id, energy, player_id, color) VALUES (1, 3, 3,'RED'),
 
 
 -- Games 
-INSERT INTO games(id, rounds, winner, ended, started, game_player_turn_id) VALUES (1, 16, 3, '2021-09-01 11:13:24', '2021-09-01 10:35:10', 3),
+INSERT INTO games(id, round, winner, ended, started, game_player_turn_id) VALUES (1, 16, 3, '2021-09-01 11:13:24', '2021-09-01 10:35:10', 3),
                                                                                   (2, 18, 5, '2021-09-01 14:30:00', '2021-09-01 11:00:00', 5),
                                                                                   (3, 24, null, null, '2021-01-01 15:45:00', 3),
                                                                                   (4, 3, 10, '2021-01-01 10:15:00', '2021-01-01 10:00:00', 10),
@@ -107,7 +107,7 @@ INSERT INTO friendships(id, receiver, sender, friend_state) VALUES (1, 4, 3, 'AC
                                                                   
 
 -- Cards
-INSERT INTO cards (id, card_column, card_row, iniciative, color, exit, orientation, is_template) VALUES (1, null, null, 2, 'RED', 'EXIT_001_A', 'S', 1),
+INSERT INTO cards (id, card_column, card_row, initiative, color, exit, orientation, is_template) VALUES (1, null, null, 2, 'RED', 'EXIT_001_A', 'S', 1),
                                                                                                         (2, null, null, 2, 'RED', 'EXIT_001_B', 'S', 1),
                                                                                                         (3, null, null, 2, 'RED', 'EXIT_001_C', 'S', 1),
                                                                                                         (4, null, null, 2, 'RED', 'EXIT_001_D', 'S', 1),

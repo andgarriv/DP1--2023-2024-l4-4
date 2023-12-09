@@ -1,7 +1,6 @@
 package us.l4_4.dp1.end_of_line.player;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDate;
 import java.util.Collection;
@@ -153,7 +152,7 @@ class PlayerServiceTests {
 		Integer secondCount = ((Collection<Player>) playerService.findAll()).size();
 		assertEquals(firstCount + 1, secondCount);
 
-		playerService.deletePlayer(player.getId());
+		playerService.delete(player.getId());
 		Integer lastCount = ((Collection<Player>) playerService.findAll()).size();
 		assertEquals(firstCount, lastCount);
 	}

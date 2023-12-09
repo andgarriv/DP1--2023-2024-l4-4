@@ -26,37 +26,37 @@ public class FriendshipController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Friendship getFriendshipById(@PathVariable Integer id) {
-        return friendshipService.findFriendshipById(id);
+    public Friendship findById(@PathVariable Integer id) {
+        return friendshipService.findById(id);
     }
 
     @GetMapping("/all")
     @ResponseStatus(HttpStatus.OK)
-    public Iterable<Friendship> getAllFriendships() {
-        return friendshipService.findAllFriendships();
+    public Iterable<Friendship> findAll() {
+        return friendshipService.findAll();
     }
 
     @GetMapping("/friends/{id}/{friendState}")
     @ResponseStatus(HttpStatus.OK)
-    public Iterable<Friendship> getAllFriendshipsByPlayerId(@PathVariable @Valid Integer id, @PathVariable @Valid FriendStatus friendState) {
+    public Iterable<Friendship> findAllFriendshipsByPlayerId(@PathVariable @Valid Integer id, @PathVariable @Valid FriendStatus friendState) {
         return friendshipService.findAllFriendshipsByPlayerId(id, friendState);
     }
     
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public Friendship create(@RequestBody @Valid FriendshipDTO friendshipDTO) {
-        return friendshipService.createFriendship(friendshipDTO);
+        return friendshipService.create(friendshipDTO);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Friendship update(@PathVariable Integer id, @RequestBody @Valid FriendshipDTO friendshipDTO) {
-        return friendshipService.updateFriendship(id, friendshipDTO); 
+        return friendshipService.update(id, friendshipDTO); 
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable Integer id) {
-        friendshipService.deleteFriendship(id);
+        friendshipService.delete(id);
     }
 }

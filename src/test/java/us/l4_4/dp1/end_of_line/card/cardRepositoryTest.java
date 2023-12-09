@@ -1,6 +1,6 @@
 package us.l4_4.dp1.end_of_line.card;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ public class cardRepositoryTest {
 
         @Test
         public void findCardsByColor(){
-            List<Card> cds = cr.findCardsByColor(Color.RED);
+            List<Card> cds = cr.findAllCardsByColor(Color.RED);
 
             assertTrue(cds.size() > 0 );
 

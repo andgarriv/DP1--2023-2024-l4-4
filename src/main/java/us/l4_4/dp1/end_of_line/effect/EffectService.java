@@ -18,21 +18,22 @@ public class EffectService {
     }
 
     @Transactional(readOnly = true)
-    public Iterable<Effect> getEffects() {
+    public Iterable<Effect> findAll() {
         return effectRepository.findAll();
     }
+
+    @Transactional(readOnly = true)
+    public Effect findById(Integer id) throws DataAccessException{
+        return effectRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Effect","id", id));
+    }
+
     @Transactional
     public Effect save(Effect effect) {
         return effectRepository.save(effect);
     }
 
     @Transactional
-    public void deleteById(Integer id) {
+    public void delete(Integer id) {
         effectRepository.deleteById(id);
-    }
-
-    @Transactional(readOnly = true)
-    public Effect findEffectById(Integer id) throws DataAccessException{
-        return effectRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Effect","id", id));
     }
 }

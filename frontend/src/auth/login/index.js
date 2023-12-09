@@ -15,7 +15,10 @@ export default function Login() {
     const reqBody = values;
     setMessage(null);
     await fetch("/api/v1/auth/signin", {
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        Accept: "application/json",
+        "Content-Type": "application/json" 
+      },
       method: "POST",
       body: JSON.stringify(reqBody),
     })

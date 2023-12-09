@@ -32,7 +32,7 @@ class MessageServiceTest {
 
     @Test
     void shouldFindMessageById(){
-        Message message = this.messageService.findMessageById(1);
+        Message message = this.messageService.findById(1);
         assertEquals(1, message.getId());
     }
     
@@ -87,7 +87,7 @@ class MessageServiceTest {
         Integer secondCount = ((Collection<Message>) messageRepository.findAll()).size();
         assertEquals(firstCount + 1, secondCount);
         // Llamada al método que se está probando
-        messageService.deleteById(1);
+        messageService.delete(1);
         Integer lastCount = ((Collection<Message>) messageRepository.findAll()).size();
         assertEquals(firstCount, lastCount);
         // Verificación

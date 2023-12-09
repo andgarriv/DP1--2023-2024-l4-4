@@ -62,6 +62,6 @@ public class AchievementController {
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	public void delete(@PathVariable("id") Integer id){
-		achievementService.deleteById(id);
+		achievementService.delete(id);
 	}
 }

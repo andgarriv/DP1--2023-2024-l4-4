@@ -18,7 +18,7 @@ public class MessageService {
     }
 
     @Transactional(readOnly = true)
-    public Iterable<Message> findAllMessages() throws DataAccessException{
+    public Iterable<Message> findAll() throws DataAccessException{
         return messageRepository.findAll();
     }
 
@@ -28,12 +28,12 @@ public class MessageService {
     }
 
     @Transactional
-    public void deleteById(int id) {
+    public void delete(Integer id) {
         messageRepository.deleteById(id);
     }
 
     @Transactional(readOnly = true)
-    public Message findMessageById(int id) throws DataAccessException{
+    public Message findById(Integer id) throws DataAccessException{
         return messageRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Message", "id", id));
     }
 }

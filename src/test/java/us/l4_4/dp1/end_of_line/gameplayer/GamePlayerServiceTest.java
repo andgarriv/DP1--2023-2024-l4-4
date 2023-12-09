@@ -21,7 +21,7 @@ public class GamePlayerServiceTest {
     @Test
     @Transactional
     public void shouldGetGamePlayerById(){
-        GamePlayer gp = gps.getGamePlayerById(3);
+        GamePlayer gp = gps.findById(3);
         assertEquals(3,gp.getId());
     }
 
@@ -33,7 +33,7 @@ public class GamePlayerServiceTest {
         gp.setEnergy(3);
         gp.setPlayer_id(3);
         gp.setCards_ids(List.of(1,2,3));
-        gps.createGamePlayer(gp);
+        gps.create(gp);
     }
 
     
@@ -46,7 +46,7 @@ public class GamePlayerServiceTest {
         gp.setEnergy(3);
         gp.setPlayer_id(3);
         gp.setCards_ids(List.of(1,2,3));
-        gps.updateGamePlayer(gp, 3);
+        gps.update(gp, 3);
     }
 
 

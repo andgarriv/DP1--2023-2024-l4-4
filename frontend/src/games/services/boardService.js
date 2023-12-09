@@ -5,7 +5,7 @@
 
 export async function fetchGameCards(gameId, jwt, setDataGamePlayer, setHandCardsPlayer1, setHandCardsPlayer2, setBoard, setIsLoading) {
     try {
-      const response = await fetch(`/api/v1/cards/game/${gameId}`, {
+      const response = await fetch(`/api/v1/cards/games/${gameId}`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${jwt}`,
@@ -13,7 +13,7 @@ export async function fetchGameCards(gameId, jwt, setDataGamePlayer, setHandCard
         },
       });
       const responseGamePlayer = await fetch(
-        `/api/v1/gameplayers/game/${gameId}`,
+        `/api/v1/gameplayers/games/${gameId}`,
         {
           headers: {
             Authorization: `Bearer ${jwt}`,

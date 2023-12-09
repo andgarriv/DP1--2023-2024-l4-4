@@ -28,17 +28,17 @@ public class GamePlayerService {
         this.cardRepository = cardRepository;
     }
 
-    public GamePlayer createGamePlayer(GamePlayerDTO newGamePlayerDTO) throws DataAccessException{
+    public GamePlayer create(GamePlayerDTO gamePlayerDTO) throws DataAccessException{
         GamePlayer gamePlayer = new GamePlayer();
 
-        gamePlayer.setColor(newGamePlayerDTO.getColor());
+        gamePlayer.setColor(gamePlayerDTO.getColor());
 
-        gamePlayer.setEnergy(newGamePlayerDTO.getEnergy());
+        gamePlayer.setEnergy(gamePlayerDTO.getEnergy());
 
-        Player player = playerRepository.findById(newGamePlayerDTO.getPlayer_id()).orElseThrow();
+        Player player = playerRepository.findById(gamePlayerDTO.getPlayer_id()).orElseThrow();
         gamePlayer.setPlayer(player);
 
-        List<Card> cards = newGamePlayerDTO.getCards_ids()
+        List<Card> cards = gamePlayerDTO.getCards_ids()
                 .stream()
                 .map(cardId -> cardRepository.findById(cardId)
                         .orElseThrow())
@@ -49,21 +49,21 @@ public class GamePlayerService {
         return gamePlayer;
     }
 
-    public List<GamePlayer> getGamePlayersByGameId(int gameId) {
-        return gamePlayerRepository.findGamePlayersByGameId(gameId);
+    public List<GamePlayer> findGamePlayersByGameId(Integer id) {
+        return gamePlayerRepository.findGamePlayersByGameId(id);
     }
 
-    public GamePlayer getGamePlayerById(int id) throws DataAccessException{
+    public GamePlayer findById(Integer id) throws DataAccessException{
         return gamePlayerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("GamePlayer", "id", id));
     }
 
-    public GamePlayer updateGamePlayer(GamePlayerDTO newGamePlayerDTO, int id) throws DataAccessException{
+    public GamePlayer update(GamePlayerDTO gamePlayerDTO, Integer id) throws DataAccessException{
         GamePlayer gamePlayer = gamePlayerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("GamePlayer", "id", id));
-        gamePlayer.setColor(newGamePlayerDTO.getColor());
-        gamePlayer.setEnergy(newGamePlayerDTO.getEnergy());
-        Player player = playerRepository.findById(newGamePlayerDTO.getPlayer_id()).orElseThrow();
+        gamePlayer.setColor(gamePlayerDTO.getColor());
+        gamePlayer.setEnergy(gamePlayerDTO.getEnergy());
+        Player player = playerRepository.findById(gamePlayerDTO.getPlayer_id()).orElseThrow();
         gamePlayer.setPlayer(player);
-        List<Card> cards = newGamePlayerDTO.getCards_ids()
+        List<Card> cards = gamePlayerDTO.getCards_ids()
                 .stream()
                 .map(cardId -> cardRepository.findById(cardId)
                         .orElseThrow())
