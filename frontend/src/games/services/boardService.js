@@ -12,6 +12,11 @@ export async function fetchGameCards(gameId, jwt, setDataGamePlayer, setHandCard
           "Content-Type": "application/json",
         },
       });
+
+      if(!response.ok) {
+        throw new Error('Error al cargar las cartas.');
+      }
+      
       const responseGamePlayer = await fetch(
         `/api/v1/gameplayers/games/${gameId}`,
         {
@@ -20,24 +25,28 @@ export async function fetchGameCards(gameId, jwt, setDataGamePlayer, setHandCard
           },
         }
       );
+      if (!responseGamePlayer.ok) {
+        throw new Error("Error al cargar los gameplayers.");
+      }
+
       const dataGamePlayer = await responseGamePlayer.json();
       setDataGamePlayer(dataGamePlayer);
       const data = await response.json();
       const handCardsPlayer1 = data.filter(
         (card) =>
           card.color === dataGamePlayer[0].color &&
-          card.card_Status === "IN_HAND"
+          card.cardState === "IN_HAND"
       );
       const handCardsPlayer2 = data.filter(
         (card) =>
           card.color === dataGamePlayer[1].color &&
-          card.card_Status === "IN_HAND"
+          card.cardState === "IN_HAND"
       );
   
       setHandCardsPlayer(handCardsPlayer1, setHandCardsPlayer1);
       setHandCardsPlayer(handCardsPlayer2, setHandCardsPlayer2);
   
-      const cardsOnBoard = data.filter((card) => card.card_Status === "ON_BOARD");
+      const cardsOnBoard = data.filter((card) => card.cardState === "ON_BOARD");
   
       const cardsOnBoardImages = await Promise.all(
         cardsOnBoard.map((card) =>
@@ -65,7 +74,7 @@ export async function fetchGameCards(gameId, jwt, setDataGamePlayer, setHandCard
   
       setIsLoading(false);
     } catch (error) {
-      console.error("Error al cargar las cartas", error);
+      console.error("Error al cargar los datos del juego.", error);
     }
   }
 

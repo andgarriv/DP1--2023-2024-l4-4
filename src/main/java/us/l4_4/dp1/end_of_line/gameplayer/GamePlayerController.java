@@ -28,7 +28,7 @@ public class GamePlayerController {
         this.gamePlayerService = gamePlayerService;
     }
 
-    @GetMapping("/games/{gameId}")
+    @GetMapping("/games/{id}")
     @ResponseStatus(HttpStatus.OK)
     public List<GamePlayer> findGamePlayersByGameId(@PathVariable Integer id) {
         return gamePlayerService.findGamePlayersByGameId(id);
