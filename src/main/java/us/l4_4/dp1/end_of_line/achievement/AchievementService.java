@@ -27,18 +27,18 @@ public class AchievementService {
         return achievementRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Achievement", "id", id));
     }
 
+    @Transactional(readOnly = true)
+    public Achievement findByName(String name){
+        return achievementRepository.findByName(name);
+    }
+
     @Transactional
     public Achievement save(@Valid Achievement newAchievement) {
         return achievementRepository.save(newAchievement);
     }
 
     @Transactional
-    public void deleteById(int id){
+    public void delete(Integer id){
         achievementRepository.deleteById(id);
-    }
-
-    @Transactional(readOnly = true)
-    public Achievement findByName(String name){
-        return achievementRepository.findByName(name);
     }
 }

@@ -28,28 +28,27 @@ public class GamePlayerController {
         this.gamePlayerService = gamePlayerService;
     }
 
-    @GetMapping("/game/{gameId}")
+    @GetMapping("/games/{gameId}")
     @ResponseStatus(HttpStatus.OK)
-    public List<GamePlayer> getGamePlayersByGameId(@PathVariable Integer gameId) {
-        return gamePlayerService.getGamePlayersByGameId(gameId);
+    public List<GamePlayer> findGamePlayersByGameId(@PathVariable Integer id) {
+        return gamePlayerService.findGamePlayersByGameId(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public GamePlayer createGamePlayer(@RequestBody @Valid GamePlayerDTO newGamePlayerDTO){
-        return gamePlayerService.createGamePlayer(newGamePlayerDTO);
+    public GamePlayer create(@RequestBody @Valid GamePlayerDTO gamePlayerDTO){
+        return gamePlayerService.create(gamePlayerDTO);
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public GamePlayer getGamePlayerById(@PathVariable Integer id){
-        return gamePlayerService.getGamePlayerById(id);
+    public GamePlayer findById(@PathVariable Integer id){
+        return gamePlayerService.findById(id);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public GamePlayer updateGamePlayer(@RequestBody @Valid GamePlayerDTO newGamePlayerDTO, @PathVariable Integer id){
-        return gamePlayerService.updateGamePlayer(newGamePlayerDTO, id);
+    public GamePlayer update(@RequestBody @Valid GamePlayerDTO gamePlayerDTO, @PathVariable Integer id){
+        return gamePlayerService.update(gamePlayerDTO, id);
     }
-    
 }

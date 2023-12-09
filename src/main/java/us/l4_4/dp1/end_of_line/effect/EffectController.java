@@ -29,26 +29,26 @@ public class EffectController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public Iterable<Effect> getAllEffects() {
-        return effectService.getEffects();
+    public Iterable<Effect> findAll() {
+        return effectService.findAll();
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Effect getEffectById(@PathVariable int id) {
-        return effectService.findEffectById(id);
+    public Effect findById(@PathVariable int id) {
+        return effectService.findById(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Effect createEffect(Effect effect) {
-        effectService.save(effect);
-        return effect;
+    public Effect create(Effect effect) {
+        return effectService.save(effect);
     }
 
     @PutMapping("/{id}")
-    public Effect updateEffect(@PathVariable int id, @RequestBody Effect effect) {
-        Effect effectToUpdate = effectService.findEffectById(id);
+    @ResponseStatus(HttpStatus.OK)
+    public Effect update(@PathVariable Integer id, @RequestBody Effect effect) {
+        Effect effectToUpdate = effectService.findById(id);
         effectToUpdate.setColor(effect.getColor());
         effectToUpdate.setHability(effect.getHability());
         effectService.save(effectToUpdate);
@@ -56,7 +56,8 @@ public class EffectController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteEffect(@PathVariable int id) {
-        effectService.deleteById(id);
+    @ResponseStatus(HttpStatus.OK)
+    public void delete(@PathVariable int id) {
+        effectService.delete(id);
     }
 }

@@ -1,7 +1,6 @@
 package us.l4_4.dp1.end_of_line.achievements;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.stream.StreamSupport;
 
@@ -118,7 +117,7 @@ public class AchievementsServiceTests {
         existingAchievement.setCategory(Category.GAMES_PLAYED);
 
         // Llamada al método que se está probando
-        achievementService.deleteById(existingAchievement.getId());
+        achievementService.delete(existingAchievement.getId());
 
         // Verificación
         assertNull(achievementRepository.findById(existingAchievement.getId()).orElse(null));

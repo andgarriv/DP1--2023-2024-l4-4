@@ -15,7 +15,10 @@ export default function Register() {
 
     fetch("/api/v1/players", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        Accept: "application/json",
+        "Content-Type": "application/json" 
+      },
       body: JSON.stringify(playerData),
     })
       .then(response => {

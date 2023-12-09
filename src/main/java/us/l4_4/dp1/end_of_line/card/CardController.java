@@ -35,59 +35,61 @@ public class CardController {
     }
     
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public Iterable<Card> findAll(){
-        Iterable<Card> cards = cardService.getAll();
-            return cards;
+        return cardService.findAll();
     }
 
     @GetMapping("/{id}")
-    public Card findById(@PathVariable int id){
-        Card cards = cardService.getCardById(id);
-            return cards;
+    @ResponseStatus(HttpStatus.OK)
+    public Card findById(@PathVariable Integer id){
+        return cardService.findById(id);
     }
 
     @GetMapping("/color/{color}")
-    public List<Card> findAllColorcard(@PathVariable("color") String color){
-        List<Card> cards = cardService.getAllColorCards(color);
+    @ResponseStatus(HttpStatus.OK)
+    public List<Card> findAllCardsByColor(@PathVariable String color){
+        List<Card> cards = cardService.findAllCardsByColor(color);
         if(cards == null)
             throw new ResourceNotFoundException(color);
         return cards;
     }
 
-     @PostMapping
-     @ResponseStatus(HttpStatus.CREATED)
-     public Card createCard(@RequestBody @Valid CardDTO newCard ){
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public Card create(@RequestBody @Valid CardDTO cardDTO ){
         Card card = new Card();
-        card.setId(newCard.getId());
-        card.setIniciative(newCard.getInitiative());
-        card.setExit(Exit.valueOf(newCard.getExit()));
-        card.setRow(newCard.getCard_row());
-        card.setColumn(newCard.getCard_column());
-        card.setOrientation(Orientation.valueOf(newCard.getOrientation()));
-        card.setCard_Status(CardStatus.valueOf(newCard.getCard_statu()));
-        return cardService.saveCard(card);
-     }
+        card.setId(cardDTO.getId());
+        card.setInitiative(cardDTO.getInitiative());
+        card.setExit(Exit.valueOf(cardDTO.getExit()));
+        card.setRow(cardDTO.getCard_row());
+        card.setColumn(cardDTO.getCard_column());
+        card.setOrientation(Orientation.valueOf(cardDTO.getOrientation()));
+        card.setCardState(CardStatus.valueOf(cardDTO.getCard_statu()));
+        return cardService.save(card);
+    }
 
-     @PutMapping("/{id}")
-     public Card updateCard(@PathVariable int id,@RequestBody @Valid CardDTO newCard ){
-        Card card = cardService.getCardById(id);
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Card update(@PathVariable Integer id, @RequestBody @Valid CardDTO cardDTO ){
+        Card card = cardService.findById(id);
         if(card == null)
             throw new ResourceNotFoundException("Cards not found");
-        card.setIniciative(newCard.getInitiative());
-        card.setExit(Exit.valueOf(newCard.getExit()));
-        card.setRow(newCard.getCard_row());
-        card.setColumn(newCard.getCard_column());
-        card.setOrientation(Orientation.valueOf(newCard.getOrientation()));
-        card.setCard_Status(CardStatus.valueOf(newCard.getCard_statu()));
-        return cardService.saveCard(card);
-     }
+        card.setInitiative(cardDTO.getInitiative());
+        card.setExit(Exit.valueOf(cardDTO.getExit()));
+        card.setRow(cardDTO.getCard_row());
+        card.setColumn(cardDTO.getCard_column());
+        card.setOrientation(Orientation.valueOf(cardDTO.getOrientation()));
+        card.setCardState(CardStatus.valueOf(cardDTO.getCard_statu()));
+        return cardService.save(card);
+    }
 
-    @GetMapping("/game/{gameId}")
+    @GetMapping("/games/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public List<Card> findAllCardsOfGame(@PathVariable("gameId") Integer gameId){
-        List<Card> cards = cardService.getCardsOfGame(gameId);
+    public List<Card> findAllCardsOfGame(@PathVariable Integer id){
+        List<Card> cards = cardService.findAllCardsOfGame(id);
         if(cards.isEmpty())
-            throw new ResourceNotFoundException("No cards found for game with id: " + gameId);
+            throw new ResourceNotFoundException("No cards found for game with id: " + id);
         return cards;
     }
 }

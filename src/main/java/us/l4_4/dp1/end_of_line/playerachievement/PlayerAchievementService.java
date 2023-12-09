@@ -17,22 +17,22 @@ public class PlayerAchievementService {
     }
 
     @Transactional(readOnly = true)
-    public Iterable<PlayerAchievement> findAllPlayerAchievements(){
+    public Iterable<PlayerAchievement> findAll(){
         return playerAchievementRepository.findAll();
     }
 
     @Transactional(readOnly = true)
-    public PlayerAchievement findPlayerAchievementById(Integer id){
+    public PlayerAchievement findById(Integer id){
         return playerAchievementRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("PlayerAchievement", "id", id));
     }
 
     @Transactional
-    public PlayerAchievement savePlayerAchievement(PlayerAchievement playerAchievement) {
+    public PlayerAchievement save(PlayerAchievement playerAchievement) {
         return playerAchievementRepository.save(playerAchievement);
     }
 
     @Transactional
-    public void deletePlayerAchievementById(Integer id){
+    public void delete(Integer id){
         playerAchievementRepository.deleteById(id);
     }
 }

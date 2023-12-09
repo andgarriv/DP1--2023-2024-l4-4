@@ -8,10 +8,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,7 +16,6 @@ import us.l4_4.dp1.end_of_line.enums.CardStatus;
 import us.l4_4.dp1.end_of_line.enums.Color;
 import us.l4_4.dp1.end_of_line.enums.Exit;
 import us.l4_4.dp1.end_of_line.enums.Orientation;
-import us.l4_4.dp1.end_of_line.game.Game;
 import us.l4_4.dp1.end_of_line.model.BaseEntity;
 
 @Getter
@@ -30,7 +26,7 @@ public class Card extends BaseEntity{
 
     @NotNull
     @Range(min = 0, max = 5)
-    Integer iniciative;
+    Integer initiative;
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -45,7 +41,7 @@ public class Card extends BaseEntity{
     Orientation orientation;
 
     @Enumerated(EnumType.STRING)
-    CardStatus card_Status;
+    CardStatus cardState;
 
     @Range(min = 0, max = 6)
     @Column(name = "card_row")
@@ -56,8 +52,8 @@ public class Card extends BaseEntity{
     Integer column;
 
     @Column(name = "is_template")
-    Boolean is_Template;
+    Boolean isTemplate;
 
-    Date timeStamp;
+    Date updatedAt;
 
 }

@@ -77,7 +77,7 @@ public class PlayerController {
     }
 
     @GetMapping("/allExcept/{id}")
-    public ResponseEntity<List<Player>> getAllPlayersExceptWithId(@PathVariable Integer id) {
+    public ResponseEntity<List<Player>> findAllPlayersExceptWithId(@PathVariable Integer id) {
         List<Player> players = playerService.findAllPlayersExceptWithId(id);
         if (players.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -86,7 +86,7 @@ public class PlayerController {
     }
 
     @GetMapping("/friends/{id}")
-    public ResponseEntity<List<Player>> getAllPlayersByPlayerId(@PathVariable Integer id) {
+    public ResponseEntity<List<Player>> findAllPlayersFriendsByPlayerId(@PathVariable Integer id) {
         List<Player> players = playerService.findAllPlayersFriendsByPlayerId(id);
         if (players.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -106,6 +106,6 @@ public class PlayerController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable Integer id) {
-        playerService.deletePlayer(id);
+        playerService.delete(id);
     }
 }

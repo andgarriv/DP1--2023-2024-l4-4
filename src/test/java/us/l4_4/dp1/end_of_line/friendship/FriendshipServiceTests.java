@@ -16,7 +16,7 @@ class FriendshipServiceTests {
 
     @Test
     void shouldFindFriendshipById() {
-        Friendship friendship = friendshipService.findFriendshipById(1);
+        Friendship friendship = friendshipService.findById(1);
         assert(friendship.getSender().getId() == 3);
         assert(friendship.getReceiver().getId() == 4);
         assert(friendship.getFriendState().equals(FriendStatus.ACCEPTED));

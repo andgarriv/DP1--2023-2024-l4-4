@@ -2,7 +2,6 @@ package us.l4_4.dp1.end_of_line.playerachievement;
 
 import java.time.LocalDate;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;

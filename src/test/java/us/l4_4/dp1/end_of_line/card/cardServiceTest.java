@@ -6,11 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import us.l4_4.dp1.end_of_line.enums.CardStatus;
 import us.l4_4.dp1.end_of_line.enums.Color;
 import us.l4_4.dp1.end_of_line.enums.Exit;
 import us.l4_4.dp1.end_of_line.enums.Orientation;
@@ -24,7 +22,7 @@ public class cardServiceTest {
     
     @Test
     public void shouldFindCardByID(){
-        Card c = this.cs.getCardById(1);
+        Card c = this.cs.findById(1);
         assertEquals(1,c.getId());
     }
 
@@ -32,13 +30,13 @@ public class cardServiceTest {
     @Transactional
     public void shouldCreateCard(){
         Card c = new Card();
-        c.setIniciative(2);
+        c.setInitiative(2);
         c.setColor(Color.GREEN);
         c.setExit(Exit.EXIT_011_A);
         c.setOrientation(Orientation.S);
 
-        cs.saveCard(c);
-        Card valiCard = this.cs.getCardById(c.getId());
+        cs.save(c);
+        Card valiCard = this.cs.findById(c.getId());
 
         assertNotNull(valiCard);
     }
@@ -48,21 +46,21 @@ public class cardServiceTest {
     @Transactional
     public void shouldEditCard(){
          Card c = new Card();
-        c.setIniciative(2);
+        c.setInitiative(2);
         c.setExit(Exit.EXIT_011_A);
         c.setColor(Color.MAGENTA);
         c.setOrientation(Orientation.S);
 
-        Card created = cs.saveCard(c);
+        Card created = cs.save(c);
 
-        created.setIniciative(4);
+        created.setInitiative(4);
         created.setColor(Color.GREEN);
         created.setExit(Exit.EXIT_001_A);
         created.setOrientation(Orientation.E);
 
-        Card updated = cs.saveCard(created);
+        Card updated = cs.save(created);
 
-        assertEquals(updated.getIniciative(),4);
+        assertEquals(updated.getInitiative(),4);
         assertEquals(updated.getColor(), Color.GREEN);
         assertEquals(updated.getExit(), Exit.EXIT_001_A);
         assertEquals(updated.getOrientation(), Orientation.E);
@@ -74,15 +72,15 @@ public class cardServiceTest {
     public void shouldDeleteCard(){
 
         Card c = new Card();
-        c.setIniciative(2);
+        c.setInitiative(2);
         c.setExit(Exit.EXIT_011_A);
         c.setColor(Color.MAGENTA);
         c.setOrientation(Orientation.S);
 
-        Card created = cs.saveCard(c);
+        Card created = cs.save(c);
 
-        cs.deleteCardById(created.getId());
-        Card resut = cs.getCardById(created.getId());
+        cs.delete(created.getId());
+        Card resut = cs.findById(created.getId());
         assertNull(resut);
 
 

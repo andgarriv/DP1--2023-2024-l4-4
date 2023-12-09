@@ -28,13 +28,13 @@ public class FriendshipService {
     }
 
     @Transactional(readOnly = true)
-    public Friendship findFriendshipById(Integer id) throws DataAccessException {
+    public Friendship findById(Integer id) throws DataAccessException {
         return friendshipRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Friendship", "id", id));
     }
 
     @Transactional(readOnly = true)
-    public Iterable<Friendship> findAllFriendships() throws DataAccessException {
+    public Iterable<Friendship> findAll() throws DataAccessException {
         return friendshipRepository.findAll();
     }
 
@@ -71,7 +71,7 @@ public class FriendshipService {
     }
 
     @Transactional
-    public Friendship createFriendship(FriendshipDTO friendshipDTO) throws DataAccessException {
+    public Friendship create(FriendshipDTO friendshipDTO) throws DataAccessException {
         checkFriendship(friendshipDTO.sender, friendshipDTO.receiver);
         Friendship friendship = new Friendship();
         friendship.setSender(playerRepository.findById(friendshipDTO.sender).orElseThrow(
@@ -83,20 +83,20 @@ public class FriendshipService {
     }
 
     @Transactional
-    public Friendship saveFriendship(Friendship friendship) throws DataAccessException {
+    public Friendship save(Friendship friendship) throws DataAccessException {
         friendshipRepository.save(friendship);
         return friendship;
     }
 
     @Transactional
-    public Friendship updateFriendship(Integer id, FriendshipDTO friendshipDTO) throws DataAccessException {
-        Friendship friendshipToUpdate = findFriendshipById(id);
+    public Friendship update(Integer id, FriendshipDTO friendshipDTO) throws DataAccessException {
+        Friendship friendshipToUpdate = findById(id);
         friendshipToUpdate.setFriendState(friendshipDTO.getFriendship_state());
         return friendshipRepository.save(friendshipToUpdate);
     }
 
     @Transactional
-    public void deleteFriendship(Integer id) throws DataAccessException {
+    public void delete(Integer id) throws DataAccessException {
         friendshipRepository.deleteById(id);
     }
 }

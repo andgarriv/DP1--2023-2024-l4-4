@@ -58,7 +58,7 @@ public class GameService {
     @Transactional
     public Game createGame(GameDTO gameDTO) throws DataAccessException {
         Game game = new Game();
-        game.setRounds(gameDTO.getRounds());
+        game.setRound(gameDTO.getRounds());
         if (gameDTO.getWinner_id() != null) {
             game.setWinner(playerRepository.findById(gameDTO.getWinner_id()).get());
         }
@@ -93,7 +93,7 @@ public class GameService {
             throw new BadRequestException("No se puede crear una partida ya que el jugador tiene una en curso");
         }
         Game game = new Game();
-        game.setRounds(0);
+        game.setRound(0);
         game.setWinner(null);
         game.setStartedAt(Date.from(java.time.Instant.now()));
         game.setEndedAt(null);
@@ -103,21 +103,21 @@ public class GameService {
         p1.setColor(c1);
         p1.setEnergy(3);
         p1.setPlayer(playerRepository.findById(playerID1).get());
-        List<Card> cardsC1 = cardRepository.findTemplatedCardsByColor(c1);
+        List<Card> cardsC1 = cardRepository.findAllTemplatedCardsByColor(c1);
         List<Card> cardsC1Duplicated = new ArrayList<>();
         for (Card card : cardsC1) {
             Card newCard = new Card();
             if (card.getExit() == Exit.START) {
                 newCard.setColumn(2);
                 newCard.setRow(4);
-                newCard.setCard_Status(CardStatus.ON_BOARD);
-                newCard.setTimeStamp(Date.from(java.time.Instant.now()));
+                newCard.setCardState(CardStatus.ON_BOARD);
+                newCard.setUpdatedAt(Date.from(java.time.Instant.now()));
             } else {
                 newCard.setColumn(null);
                 newCard.setRow(null);
-                newCard.setCard_Status(CardStatus.IN_DECK);
+                newCard.setCardState(CardStatus.IN_DECK);
             }
-            newCard.setIniciative(card.getIniciative());
+            newCard.setInitiative(card.getInitiative());
             newCard.setColor(card.getColor());
             newCard.setExit(card.getExit());
             newCard.setOrientation(card.getOrientation());
@@ -130,22 +130,22 @@ public class GameService {
         p2.setColor(c2);
         p2.setEnergy(3);
         p2.setPlayer(playerRepository.findById(playerID2).get());
-        List<Card> cardsC2 = cardRepository.findTemplatedCardsByColor(c2);
+        List<Card> cardsC2 = cardRepository.findAllTemplatedCardsByColor(c2);
         List<Card> cardsC2Duplicated = new ArrayList<>();
         for (Card card : cardsC2) {
             Card newCard = new Card();
             if (card.getExit() == Exit.START) {
                 newCard.setColumn(4);
                 newCard.setRow(4);
-                newCard.setCard_Status(CardStatus.ON_BOARD);
-                newCard.setTimeStamp(Date.from(java.time.Instant.now()));
+                newCard.setCardState(CardStatus.ON_BOARD);
+                newCard.setUpdatedAt(Date.from(java.time.Instant.now()));
             } else {
                 newCard.setColumn(null);
                 newCard.setRow(null);
-                newCard.setCard_Status(CardStatus.IN_DECK);
+                newCard.setCardState(CardStatus.IN_DECK);
                  
             }
-            newCard.setIniciative(card.getIniciative());
+            newCard.setInitiative(card.getInitiative());
             newCard.setColor(card.getColor());
             newCard.setExit(card.getExit());
             newCard.setOrientation(card.getOrientation());
@@ -182,19 +182,19 @@ public class GameService {
         }
         List<Card> cards = gamePlayerRepository.findById(gamePlayerId).get().getCards();
         // Si hay alguna carta en mano, no se puede pedir más
-        if (cards.stream().anyMatch(card -> card.getCard_Status() == CardStatus.IN_HAND)) {
+        if (cards.stream().anyMatch(card -> card.getCardState() == CardStatus.IN_HAND)) {
             return new ArrayList<>();
         }
         // Excluir las cartas con estado ON_BOARD
         cards = cards.stream()
-                .filter(card -> card.getCard_Status() != CardStatus.ON_BOARD)
+                .filter(card -> card.getCardState() != CardStatus.ON_BOARD)
                 .collect(Collectors.toList());
         // Mezclar la lista de cartas
         Collections.shuffle(cards);
         // Tomar las primeras cinco cartas
         List<Card> randomCards = cards.subList(0, Math.min(5, cards.size()));
         for (Card card : randomCards) {
-            card.setCard_Status(CardStatus.IN_HAND);
+            card.setCardState(CardStatus.IN_HAND);
             cardRepository.save(card);
         }
 
@@ -208,10 +208,10 @@ public class GameService {
         List<Card> cards = gamePlayerRepository.findById(gamePlayerId).get().getCards();
 
         List<Card> cardsInDeck = cards.stream()
-                .filter(card -> card.getCard_Status() == CardStatus.IN_DECK)
+                .filter(card -> card.getCardState() == CardStatus.IN_DECK)
                 .collect(Collectors.toList());
         List<Card> cardsInHand = cards.stream()
-                .filter(card -> card.getCard_Status() == CardStatus.IN_HAND)
+                .filter(card -> card.getCardState() == CardStatus.IN_HAND)
                 .collect(Collectors.toList());
 
         Collections.shuffle(cardsInDeck);
@@ -219,7 +219,7 @@ public class GameService {
 
         for (Card card : randomCards) {
             cardsInHand.add(card);
-            card.setCard_Status(CardStatus.IN_HAND);
+            card.setCardState(CardStatus.IN_HAND);
             cardRepository.save(card);
         }
         return cardsInHand;
@@ -234,7 +234,7 @@ public class GameService {
     @Transactional
     public Game updateGame(Integer id, GameDTO gameDTO) throws DataAccessException {
         Game game = gameRepository.findById(id).get();
-        game.setRounds(gameDTO.getRounds());
+        game.setRound(gameDTO.getRounds());
         if (gameDTO.getWinner_id() != null) {
             game.setWinner(playerRepository.findById(gameDTO.getWinner_id()).get());
         }
@@ -271,13 +271,13 @@ public class GameService {
             throw new ResourceNotFoundException("GamePlayer", "id", id2);
         }
         List<Card> player1Cards = gamePlayerRepository.findById(id1).get().getCards().stream()
-                .filter(card -> card.getCard_Status() == CardStatus.ON_BOARD)
-                .sorted(Comparator.comparing(Card::getTimeStamp).reversed())
+                .filter(card -> card.getCardState() == CardStatus.ON_BOARD)
+                .sorted(Comparator.comparing(Card::getUpdatedAt).reversed())
                 .collect(Collectors.toList());
 
         List<Card> player2Cards = gamePlayerRepository.findById(id2).get().getCards().stream()
-                .filter(card -> card.getCard_Status() == CardStatus.ON_BOARD)
-                .sorted(Comparator.comparing(Card::getTimeStamp).reversed())
+                .filter(card -> card.getCardState() == CardStatus.ON_BOARD)
+                .sorted(Comparator.comparing(Card::getUpdatedAt).reversed())
                 .collect(Collectors.toList());
 
         if (player1Cards.size() < player2Cards.size())
@@ -288,9 +288,9 @@ public class GameService {
         for (int i = 0; i < maxSize; i++) {
             if (res == null) {
 
-                if (player1Cards.get(i).getIniciative() > player2Cards.get(i).getIniciative()) {
+                if (player1Cards.get(i).getInitiative() > player2Cards.get(i).getInitiative()) {
                     res = id2;
-                } else if (player1Cards.get(i).getIniciative() < player2Cards.get(i).getIniciative()) {
+                } else if (player1Cards.get(i).getInitiative() < player2Cards.get(i).getInitiative()) {
                     res = id1;
                 }
             }
@@ -300,7 +300,7 @@ public class GameService {
                 res = id1;
             } else if (player1Cards.size() == player2Cards.size()) {
                 
-                if (player1Cards.get(maxSize - 2).getTimeStamp().before(player2Cards.get(maxSize - 2).getTimeStamp()))
+                if (player1Cards.get(maxSize - 2).getUpdatedAt().before(player2Cards.get(maxSize - 2).getUpdatedAt()))
                     res = id1;
                 else
                     res = id2;

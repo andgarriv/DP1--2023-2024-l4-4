@@ -30,7 +30,7 @@ public class Game extends BaseEntity {
 
     @NotNull
     @Min(0)
-    private Integer rounds;
+    private Integer round;
 
     @ManyToOne
     @JoinColumn(name = "winner", nullable = true, 
