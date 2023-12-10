@@ -1,6 +1,6 @@
 package us.l4_4.dp1.end_of_line.friendship;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -22,13 +22,13 @@ import us.l4_4.dp1.end_of_line.player.Player;
 @Table(name = "friendships")
 public class Friendship extends BaseEntity {
 
-    @JsonManagedReference
+    @JsonBackReference("sentFriendships")
     @ManyToOne
     @NotNull
     @JoinColumn(name = "sender")
     Player sender;
 
-    @JsonManagedReference
+    @JsonBackReference("receivedFriendships")
     @ManyToOne
     @NotNull
     @JoinColumn(name = "receiver")
