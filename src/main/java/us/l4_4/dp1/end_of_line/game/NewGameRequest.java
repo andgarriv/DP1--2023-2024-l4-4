@@ -1,9 +1,5 @@
 package us.l4_4.dp1.end_of_line.game;
 
-import java.util.Date;
-import java.util.List;
-
-import jakarta.persistence.Id;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;

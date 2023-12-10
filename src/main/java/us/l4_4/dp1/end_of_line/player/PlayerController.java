@@ -86,21 +86,15 @@ public class PlayerController {
     }
 
     @GetMapping("/friends/{id}")
-    public ResponseEntity<List<Player>> findAllPlayersFriendsByPlayerId(@PathVariable Integer id) {
-        List<Player> players = playerService.findAllPlayersFriendsByPlayerId(id);
-        if (players.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<>(players, HttpStatus.OK);
+    @ResponseStatus(HttpStatus.OK)
+    public List<Player> findAllPlayersFriendsByPlayerId(@PathVariable Integer id) {
+        return playerService.findAllPlayersFriendsByPlayerId(id);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Player update(@PathVariable Integer id, @RequestBody @Valid Player player) {
-        if (playerService.findById(id) != null)
-            return playerService.update(id, player);
-        else
-            return null;
+        return playerService.update(id, player);
     }
 
     @DeleteMapping("/{id}")

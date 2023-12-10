@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import us.l4_4.dp1.end_of_line.exceptions.BadRequestException;
 
 @RestController
 @RequestMapping("/api/v1/achievements")
@@ -53,8 +52,6 @@ public class AchievementController {
 	@ResponseStatus(HttpStatus.OK)
 	public Achievement update(@PathVariable("id") Integer id, @RequestBody @Valid Achievement achievement) {
 		Achievement achievementToUpdate = achievementService.findById(id);
-		if(achievementToUpdate == null)
-			throw new BadRequestException("Achievement not found");
 		BeanUtils.copyProperties(achievement, achievementToUpdate, "id");
 		return achievementService.save(achievementToUpdate);
 	}

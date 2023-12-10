@@ -26,7 +26,6 @@ public class DevelopersController {
             Model model = reader.read(new FileReader("pom.xml"));
             developers=model.getDevelopers();                                            
         } catch (IOException | XmlPullParserException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         

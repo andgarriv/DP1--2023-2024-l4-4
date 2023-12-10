@@ -25,7 +25,7 @@ public class PlayerAchievementController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public Iterable<PlayerAchievement> getAll() {
+    public Iterable<PlayerAchievement> findAll() {
         return playerAchievementService.findAll();
     }
 }
