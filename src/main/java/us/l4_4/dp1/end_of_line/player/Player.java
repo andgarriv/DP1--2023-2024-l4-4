@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.hibernate.validator.constraints.URL;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -27,11 +27,11 @@ public class Player extends User{
     @URL
     String avatar;
 
-    @JsonBackReference
+    @JsonManagedReference("sentFriendships")
     @OneToMany(mappedBy = "sender", cascade = CascadeType.REMOVE)
     List<Friendship> sentFriendships;
 
-    @JsonBackReference
+    @JsonManagedReference("receivedFriendships")
     @OneToMany(mappedBy = "receiver", cascade = CascadeType.REMOVE)
     List<Friendship> receivedFriendships;
 
