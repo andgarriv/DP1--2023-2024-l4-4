@@ -50,8 +50,6 @@ public final class GenericIdToEntityConverter implements ConditionalGenericConve
             log.info("Did not find an entity with id {} of type {}", id,  targetType.getType());
             return null;
         }
-
         return entity;
     }
-
 }

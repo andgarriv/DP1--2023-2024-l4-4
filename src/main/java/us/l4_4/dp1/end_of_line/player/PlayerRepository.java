@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -28,7 +27,4 @@ public interface PlayerRepository extends CrudRepository<Player, Integer> {
 
     @Query("SELECT p FROM Player p WHERE p.authority.authority = :auth")
 	List<Player> findAllByAuthority(String auth);
-
-    @Query("SELECT p FROM Player p WHERE p.id <> :id ORDER BY p.nickname")
-    List<Player> findAllExceptWithId(@Param("id") Integer id);
 }

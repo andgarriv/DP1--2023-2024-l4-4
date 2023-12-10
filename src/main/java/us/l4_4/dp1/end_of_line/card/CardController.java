@@ -19,7 +19,6 @@ import jakarta.validation.Valid;
 import us.l4_4.dp1.end_of_line.enums.CardStatus;
 import us.l4_4.dp1.end_of_line.enums.Exit;
 import us.l4_4.dp1.end_of_line.enums.Orientation;
-import us.l4_4.dp1.end_of_line.exceptions.ResourceNotFoundException;
 
 @RestController
 @RequestMapping("api/v1/cards")
@@ -49,10 +48,7 @@ public class CardController {
     @GetMapping("/color/{color}")
     @ResponseStatus(HttpStatus.OK)
     public List<Card> findAllCardsByColor(@PathVariable String color){
-        List<Card> cards = cardService.findAllCardsByColor(color);
-        if(cards == null)
-            throw new ResourceNotFoundException(color);
-        return cards;
+        return cardService.findAllCardsByColor(color);
     }
 
     @PostMapping
@@ -73,8 +69,6 @@ public class CardController {
     @ResponseStatus(HttpStatus.OK)
     public Card update(@PathVariable Integer id, @RequestBody @Valid CardDTO cardDTO ){
         Card card = cardService.findById(id);
-        if(card == null)
-            throw new ResourceNotFoundException("Cards not found");
         card.setInitiative(cardDTO.getInitiative());
         card.setExit(Exit.valueOf(cardDTO.getExit()));
         card.setRow(cardDTO.getCard_row());
@@ -87,9 +81,6 @@ public class CardController {
     @GetMapping("/games/{id}")
     @ResponseStatus(HttpStatus.OK)
     public List<Card> findAllCardsOfGame(@PathVariable Integer id){
-        List<Card> cards = cardService.findAllCardsOfGame(id);
-        if(cards.isEmpty())
-            throw new ResourceNotFoundException("No cards found for game with id: " + id);
-        return cards;
+        return cardService.findAllCardsOfGame(id);
     }
 }
