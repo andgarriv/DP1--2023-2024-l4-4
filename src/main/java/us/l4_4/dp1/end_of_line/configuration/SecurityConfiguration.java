@@ -66,10 +66,13 @@ public class SecurityConfiguration {
 			.requestMatchers(HttpMethod.GET,"/api/v1/games/all").hasAuthority(ADMIN)
 			.requestMatchers("/api/v1/games/**").authenticated()
 			
-			.requestMatchers(HttpMethod.GET,"/api/v1/cards/**").authenticated()
+			.requestMatchers("/api/v1/cards").authenticated()
+			.requestMatchers("/api/v1/cards/**").authenticated()
+			
 			.requestMatchers( "/api/v1/gameplayers/**").authenticated()
 
 			.requestMatchers(HttpMethod.POST,"/api/v1/messages").hasAuthority(ADMIN)
+			.requestMatchers("/api/v1/messages").authenticated()
 			.requestMatchers("/api/v1/messages/**").authenticated()
 
 			

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import jakarta.transaction.Transactional;
 import us.l4_4.dp1.end_of_line.enums.FriendStatus;
 import us.l4_4.dp1.end_of_line.exceptions.ResourceNotFoundException;
 
@@ -54,6 +55,7 @@ class FriendshipServiceTests {
     }
 
     @Test
+    @Transactional
     void shouldInsertFriendship(){
         Iterable<Friendship> friendships = friendshipService.findAll();
         long initialCount = StreamSupport.stream(friendships.spliterator(), false).count();
@@ -64,20 +66,20 @@ class FriendshipServiceTests {
     }
 
     @Test
+    @Transactional
     void shouldUpdateFriendship(){
         FriendshipDTO friendshipDTO = new FriendshipDTO();
         friendshipDTO.setSender(4);
         friendshipDTO.setReceiver(6);
-        this.friendshipService.create(friendshipDTO);
-        Friendship friendship = this.friendshipService.findById(300);
+        Friendship friendship = this.friendshipService.create(friendshipDTO);
         assertEquals(friendship.getFriendState(), FriendStatus.PENDING);
         friendshipDTO.setFriendship_state(FriendStatus.ACCEPTED);
-        this.friendshipService.update(300, friendshipDTO);
-        Friendship updatedFriendship = this.friendshipService.findById(300);
+        Friendship updatedFriendship = this.friendshipService.update(friendship.getId(), friendshipDTO);
         assertEquals(updatedFriendship.getFriendState(), FriendStatus.ACCEPTED);
     }
 
     @Test
+    @Transactional
     void shouldDeleteFriendship(){
         Friendship friendship = createFriendship();
         Iterable<Friendship> friendships = friendshipService.findAll();

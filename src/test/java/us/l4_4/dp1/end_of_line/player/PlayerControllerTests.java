@@ -1,5 +1,6 @@
 package us.l4_4.dp1.end_of_line.player;
 
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -15,6 +16,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -169,12 +171,12 @@ class PlayerControllerTests {
     void playerShouldFindAllFriendsByPlayerId() throws Exception{
         when(this.playerService.findAllFriendsByPlayerId(TEST_PLAYER_ID)).thenReturn(List.of(player2));
 
-        mockMvc.perform(get(BASE_URL + "/friends/{id}", TEST_PLAYER_ID)).andExpect(status().isOk())
+        mockMvc.perform(get(BASE_URL + "/{id}/friends", TEST_PLAYER_ID)).andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()").value(1))
                 .andExpect(jsonPath("$[?(@.id == 3)].name").value("player2Name"));
     }
 
-    /* @Test
+    @Test
     @WithMockUser()
     void shouldCreatePlayer() throws Exception {
         newPlayer = new Player();
@@ -205,7 +207,7 @@ class PlayerControllerTests {
 				.content(objectMapper.writeValueAsString(player))).andExpect(status().isOk())
 				.andExpect(jsonPath("$.name").value("UPDATED"))
 				.andExpect(jsonPath("$.surname").value("UPDATED"));
-	} */ 
+	}
 
     @Test
 	@WithMockUser(username = "admin1", password = "Adm1n!")
