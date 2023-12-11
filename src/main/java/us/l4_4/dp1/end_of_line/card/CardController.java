@@ -77,10 +77,4 @@ public class CardController {
         card.setCardState(CardStatus.valueOf(cardDTO.getCard_statu()));
         return cardService.save(card);
     }
-
-    @GetMapping("/games/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public List<Card> findAllCardsOfGame(@PathVariable Integer id){
-        return cardService.findAllCardsOfGame(id);
-    }
 }

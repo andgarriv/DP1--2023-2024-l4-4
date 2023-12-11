@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import us.l4_4.dp1.end_of_line.enums.Hability;
 
 @Getter
 @Setter
@@ -29,7 +30,7 @@ public class GameDTO {
 
     List<Integer> message_id;
 
-    Integer effect_id;
+    Hability effect;
 
     @NotNull
     List<Integer> gamePlayers_ids;

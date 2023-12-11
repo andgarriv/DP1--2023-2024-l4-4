@@ -10,7 +10,7 @@ function GameNavbar() {
     const [collapsed, setCollapsed] = useState(true);
 
     const toggleNavbar = () => setCollapsed(!collapsed);
-    const [rounds, setRounds] = useState(0);
+    const [round, setRound] = useState(0);
     const [gameTime, setGameTime] = useState(0);
     const [turnId, setTurnId] = useState(0);
     const [ongoingGameId, setOngoingGameId] = useState(null);
@@ -33,8 +33,8 @@ function GameNavbar() {
                 },
             });
             const data = await response.json();
-            setRounds(data.rounds);
-            setTurnId(data.turnId);
+            setRound(data.round);
+            setTurnId(data.gamePlayerTurnId);
             setOngoingGameId(data.id);
 
             const startedAt = new Date(data.startedAt);
@@ -91,7 +91,7 @@ function GameNavbar() {
                     width: '100%',
                     marginRight: '5%',
                 }}>
-                    <span>ROUND {rounds}</span>
+                    <span>ROUND {round}</span>
                     <span style={{ marginLeft: '10%' }}>{formattedGameTime}</span>
                     <span style={{ marginLeft: '10%' }}>TURN {turnId ? turnId : 'NONE'}</span>
                 </div>

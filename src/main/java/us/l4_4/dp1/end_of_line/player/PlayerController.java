@@ -75,7 +75,7 @@ public class PlayerController {
             return null;
     }
 
-    @GetMapping("/friends/{id}")
+    @GetMapping("/{id}/friends")
     @ResponseStatus(HttpStatus.OK)
     public List<Player> findAllFriendsByPlayerId(@PathVariable Integer id) {
         return playerService.findAllFriendsByPlayerId(id);

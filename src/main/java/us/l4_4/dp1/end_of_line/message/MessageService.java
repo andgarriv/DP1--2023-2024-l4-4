@@ -1,5 +1,7 @@
 package us.l4_4.dp1.end_of_line.message;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,11 @@ public class MessageService {
         return messageRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
+    public List<Message> findAllMessagesByGameId(Integer id) {
+        return messageRepository.findAllMessagesByGameId(id);
+    }
+
     @Transactional
     public Message save(Message message) throws DataAccessException{
         return messageRepository.save(message);
@@ -36,4 +43,6 @@ public class MessageService {
     public Message findById(Integer id) throws DataAccessException{
         return messageRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Message", "id", id));
     }
+
+    
 }

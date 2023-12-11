@@ -41,7 +41,6 @@ public class SecurityConfiguration {
 	protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
 		
 		http
-			//.cors(withDefaults())		
 			.csrf(AbstractHttpConfigurer::disable)		
 			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))			
 			.headers((headers) -> headers.frameOptions((frameOptions) -> frameOptions.disable()))
@@ -53,21 +52,26 @@ public class SecurityConfiguration {
 			.requestMatchers("/api/v1/developers").hasAuthority(ADMIN)	
 
 			.requestMatchers(HttpMethod.GET, "api/v1/players/all").hasAuthority(ADMIN)
-			.requestMatchers(HttpMethod.POST, "api/v1/players").permitAll()	
 			.requestMatchers(HttpMethod.DELETE, "api/v1/players/**").hasAuthority(ADMIN)
+			.requestMatchers(HttpMethod.POST, "api/v1/players").permitAll()	
 			.requestMatchers("/api/v1/players/**").authenticated()
 
 			.requestMatchers(HttpMethod.GET,"/api/v1/friendships/all").hasAuthority(ADMIN)
 			.requestMatchers("/api/v1/friendships/**").authenticated()
 			
+			.requestMatchers(HttpMethod.GET,"/api/v1/achievements/**").authenticated()
+			.requestMatchers("/api/v1/achievements/**").hasAuthority(ADMIN)
 			.requestMatchers(HttpMethod.GET,"/api/v1/achievements").authenticated()
-			.requestMatchers("/api/v1/achievements").hasAuthority(ADMIN)
 			
 			.requestMatchers(HttpMethod.GET,"/api/v1/games/all").hasAuthority(ADMIN)
 			.requestMatchers("/api/v1/games/**").authenticated()
 			
 			.requestMatchers(HttpMethod.GET,"/api/v1/cards/**").authenticated()
-			.requestMatchers(HttpMethod.POST, "/api/v1/gameplayers/**").authenticated()
+			.requestMatchers( "/api/v1/gameplayers/**").authenticated()
+
+			.requestMatchers(HttpMethod.POST,"/api/v1/messages").hasAuthority(ADMIN)
+			.requestMatchers("/api/v1/messages/**").authenticated()
+
 			
 			.requestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")).permitAll()
 			.anyRequest().authenticated())					
