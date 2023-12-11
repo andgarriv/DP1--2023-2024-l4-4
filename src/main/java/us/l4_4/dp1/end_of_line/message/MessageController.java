@@ -17,7 +17,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/v1/games/messages")
+@RequestMapping("/api/v1/messages")
 @Tag(name = "Message", description = "API for the management of Message")
 @SecurityRequirement(name = "bearerAuth")
 public class MessageController {

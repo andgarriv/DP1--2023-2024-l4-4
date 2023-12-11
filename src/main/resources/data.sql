@@ -31,7 +31,7 @@ INSERT INTO player_achievements(id, achieve_at, achievement_id) VALUES (1,'2021-
 
 
 --Player PlayerAchievements
-INSERT INTO players_player_achievement(player_achievement_id, player_id) VALUES (1, 12);
+INSERT INTO players_player_achievement(player_achievement_id, player_id) VALUES (1, 3);
 
 -- GamePlayers
 
@@ -52,11 +52,11 @@ INSERT INTO game_players(id, energy, player_id, color) VALUES (1, 3, 3,'RED'),
 
 
 -- Games 
-INSERT INTO games(id, round, winner, ended, started, game_player_turn_id) VALUES (1, 16, 3, '2021-09-01 11:13:24', '2021-09-01 10:35:10', 3),
-                                                                                  (2, 18, 5, '2021-09-01 14:30:00', '2021-09-01 11:00:00', 5),
-                                                                                  (3, 24, null, null, '2021-01-01 15:45:00', 3),
-                                                                                  (4, 3, 10, '2021-01-01 10:15:00', '2021-01-01 10:00:00', 10),
-                                                                                  (5, 7, 6, '2021-01-01 10:14:00', '2021-01-01 10:00:00', 6);
+INSERT INTO games(id, round, winner, ended, started, game_player_turn_id, effect) VALUES (1, 16, 3, '2021-09-01 11:13:24', '2021-09-01 10:35:10', 3, 'NONE'),
+                                                                                  (2, 18, 5, '2021-09-01 14:30:00', '2021-09-01 11:00:00', 5, 'NONE'),
+                                                                                  (3, 24, null, null, '2021-01-01 15:45:00', 3, 'NONE'),
+                                                                                  (4, 3, 10, '2021-01-01 10:15:00', '2021-01-01 10:00:00', 10, 'NONE'),
+                                                                                  (5, 7, 6, '2021-01-01 10:14:00', '2021-01-01 10:00:00', 6, 'NONE');
 
 
 -- Games_Game_Players
@@ -369,9 +369,3 @@ INSERT INTO cards (id, card_column, card_row, initiative, color, exit, orientati
                                                                                                         (199, null, null, 0, 'MAGENTA', 'START', 'S', 1),
                                                                                                         (200, null, null, 0, 'ORANGE', 'START', 'S', 1);
                                                         
---Effects
-
-INSERT INTO effects(id, color, hability) VALUES (1, null,'SPEED_UP'),
-                                                (2, null,'BRAKE'),
-                                                (3, null,'REVERSE'),
-                                                (4, null,'EXTRA_GAS');

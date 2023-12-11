@@ -95,7 +95,7 @@ export default function NewGame() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch(`/api/v1/players/friends/${user.id}`, {
+        const response = await fetch(`/api/v1/players/${user.id}/friends`, {
           headers: {
             Authorization: `Bearer ${jwt}`,
           },

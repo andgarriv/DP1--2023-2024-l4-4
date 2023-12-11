@@ -15,10 +15,10 @@ import org.springframework.transaction.annotation.Transactional;
 import us.l4_4.dp1.end_of_line.card.Card;
 import us.l4_4.dp1.end_of_line.card.CardRepository;
 import us.l4_4.dp1.end_of_line.card.CardService;
-import us.l4_4.dp1.end_of_line.effect.EffectRepository;
 import us.l4_4.dp1.end_of_line.enums.CardStatus;
 import us.l4_4.dp1.end_of_line.enums.Color;
 import us.l4_4.dp1.end_of_line.enums.Exit;
+import us.l4_4.dp1.end_of_line.enums.Hability;
 import us.l4_4.dp1.end_of_line.exceptions.BadRequestException;
 import us.l4_4.dp1.end_of_line.exceptions.ResourceNotFoundException;
 import us.l4_4.dp1.end_of_line.gameplayer.GamePlayer;
@@ -34,18 +34,16 @@ public class GameService {
     PlayerRepository playerRepository;
     GamePlayerRepository gamePlayerRepository;
     MessageRepository messageRepository;
-    EffectRepository effectRepository;
     CardRepository cardRepository;
     CardService cardService;
 
     @Autowired
     public GameService(GameRepository gameRepository, PlayerRepository playerRepository,
-            MessageRepository messageRepository, EffectRepository effectRepository,
+            MessageRepository messageRepository,
             GamePlayerRepository gamePlayerRepository, CardRepository cardRepository) {
         this.gameRepository = gameRepository;
         this.playerRepository = playerRepository;
         this.messageRepository = messageRepository;
-        this.effectRepository = effectRepository;
         this.gamePlayerRepository = gamePlayerRepository;
         this.cardRepository = cardRepository;
     }
@@ -74,9 +72,6 @@ public class GameService {
                     .collect(Collectors.toList());
             game.setMessage(messages);
         }
-        if (gameDTO.getEffect_id() != null) {
-            game.setEffect(effectRepository.findById(gameDTO.getEffect_id()).get());
-        }
         List<GamePlayer> gamePlayers = gameDTO.getGamePlayers_ids()
                 .stream()
                 .map(gamePlayerId -> gamePlayerRepository.findById(gamePlayerId).get())
@@ -98,7 +93,7 @@ public class GameService {
         game.setStartedAt(Date.from(java.time.Instant.now()));
         game.setEndedAt(null);
         game.setMessage(null);
-        game.setEffect(null);
+        game.setEffect(Hability.NONE);
         GamePlayer p1 = new GamePlayer();
         p1.setColor(c1);
         p1.setEnergy(3);
@@ -249,9 +244,6 @@ public class GameService {
                             .orElseThrow(() -> new ResourceNotFoundException("Message", "id", messageId)))
                     .collect(Collectors.toList());
             game.setMessage(messages);
-        }
-        if (gameDTO.getEffect_id() != null) {
-            game.setEffect(effectRepository.findById(gameDTO.getEffect_id()).get());
         }
         List<GamePlayer> gamePlayers = gameDTO.getGamePlayers_ids()
                 .stream()

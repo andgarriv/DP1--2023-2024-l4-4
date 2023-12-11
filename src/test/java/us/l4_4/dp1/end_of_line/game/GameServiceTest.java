@@ -13,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 
 import us.l4_4.dp1.end_of_line.enums.Color;
+import us.l4_4.dp1.end_of_line.enums.Hability;
 
 @SpringBootTest
 @AutoConfigureTestDatabase
@@ -36,7 +37,7 @@ class GameServiceTest {
         gameDTO.setEndedAt(null);
         gameDTO.setWinner_id(null);
         gameDTO.setMessage_id(null);
-        gameDTO.setEffect_id(null);
+        gameDTO.setEffect(Hability.NONE);
         gameDTO.setGamePlayers_ids(List.of(3,4));
         Game game = gameService.createGame(gameDTO);
         assertNotEquals(null, game);
