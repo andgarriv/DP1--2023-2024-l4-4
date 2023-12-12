@@ -32,7 +32,8 @@
 
 .custom-container-singin {
   width: auto;
-  background-color: rgba(34, 34, 34, 0.95);
+  background-color: rgba(34, 34, 34, 0.67);
+  backdrop-filter: blur(10px);
   border: 5px solid #75FBFD; /* Borde azul claro */
   border-radius: 50px; /* Bordes redondeados */
   padding: 3%; /* Espacio interno para los elementos */
@@ -48,7 +49,8 @@
 
 .custom-container {
   width: 35%;
-  background-color: rgba(34, 34, 34, 0.95);
+  background-color: rgba(34, 34, 34, 0.67);
+  backdrop-filter: blur(10px);
   border: 5px solid #75FBFD; /* Borde azul claro */
   border-radius: 50px; /* Bordes redondeados */
   padding: 1%; /* Espacio interno para los elementos */
