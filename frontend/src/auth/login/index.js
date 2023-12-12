@@ -7,17 +7,17 @@ import { loginFormInputs } from "./form/loginFormInputs";
 
 export default function Login() {
   const [message, setMessage] = useState(null)
-  const loginFormRef = React.createRef();      
-  
+  const loginFormRef = React.createRef();
+
 
   async function handleSubmit({ values }) {
 
     const reqBody = values;
     setMessage(null);
     await fetch("/api/v1/auth/signin", {
-      headers: { 
+      headers: {
         Accept: "application/json",
-        "Content-Type": "application/json" 
+        "Content-Type": "application/json"
       },
       method: "POST",
       body: JSON.stringify(reqBody),
@@ -31,12 +31,12 @@ export default function Login() {
         tokenService.updateLocalAccessToken(data.token);
         window.location.href = "/"; //Esto es para que se vaya a la pagina inicio en vez de al dashboard.
       })
-      .catch((error) => {         
+      .catch((error) => {
         setMessage(error);
-      });            
+      });
   }
 
-  
+
   return (
     <div className="auth-page-container">
       {message ? (
@@ -44,10 +44,10 @@ export default function Login() {
       ) : (
         <></>
       )}
-  
-      <div className="custom-container">
-        <h1 style={{ color: "#75FBFD", whiteSpace: "nowrap"  }}>Sign In</h1>
-  
+
+      <div className="custom-container-singin">
+        <h2 style={{ color: "#75FBFD", whiteSpace: "nowrap" }}>Sign In</h2>
+
         <div className="auth-form-container">
           <FormGenerator
             ref={loginFormRef}

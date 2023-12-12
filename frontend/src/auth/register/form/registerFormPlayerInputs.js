@@ -15,7 +15,7 @@ export const registerFormPlayerInputs = [
     type: "text",
     defaultValue: "",
     isRequired: true,
-   validators: [formValidators.notBlankValidator],
+    validators: [formValidators.notBlankValidator],
   },
   {
     tag: "Nickname",
@@ -23,8 +23,8 @@ export const registerFormPlayerInputs = [
     type: "text",
     defaultValue: "",
     isRequired: true,
-    validators: [formValidators.notBlankValidator, 
-      formValidators.validNicknameValidator/*, formValidators.uniqueNicknameValidator*/],
+    validators: [formValidators.notBlankValidator,
+    formValidators.validNicknameValidator/*, formValidators.uniqueNicknameValidator*/],
   },
   {
     tag: "Email",

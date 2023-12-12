@@ -108,8 +108,8 @@ public class GameService {
                 newCard.setCardState(CardStatus.ON_BOARD);
                 newCard.setUpdatedAt(Date.from(java.time.Instant.now()));
             } else {
-                newCard.setColumn(7);
-                newCard.setRow(7);
+                newCard.setColumn(null);
+                newCard.setRow(null);
                 newCard.setCardState(CardStatus.IN_DECK);
             }
             newCard.setInitiative(card.getInitiative());
@@ -135,8 +135,8 @@ public class GameService {
                 newCard.setCardState(CardStatus.ON_BOARD);
                 newCard.setUpdatedAt(Date.from(java.time.Instant.now()));
             } else {
-                newCard.setColumn(7);
-                newCard.setRow(7);
+                newCard.setColumn(null);
+                newCard.setRow(null);
                 newCard.setCardState(CardStatus.IN_DECK);
                  
             }

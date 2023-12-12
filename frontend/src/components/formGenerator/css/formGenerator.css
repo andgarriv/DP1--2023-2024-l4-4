@@ -1,12 +1,12 @@
 :root{
-  --color-input: #303030;
-  --color-label: #5e5e5e;
+  --color-input: #ffffff;
+  --color-label: #909090;
   --color-btn-disabled: #5757577e;
   --color-error: #cc0033;
-  --color-error-background: #fce4e4;
+  --color-error-background: #0000006f;
   --color-border-disabled: #706c6c;
-  --main-button-hover-dark-color: #23c483;
-  --main-button-hover-light-color: #23c483;
+  --main-button-hover-dark-color: #75FBFD;
+  --main-button-hover-light-color: #75FBFD;
   --main-button-shadow-hover-color: rgba(0,0,0,0.4);
   --main-black: #111;
 }
@@ -37,7 +37,6 @@
 }
 
 .class-form {
-  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -50,6 +49,11 @@
 .class-form-group {
   position: relative;
 }
+
+.class-form-input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
+
 
 input.class-form-input,
 select.class-form-input {
