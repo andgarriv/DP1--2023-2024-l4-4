@@ -43,11 +43,13 @@ public class Card extends BaseEntity{
     @Enumerated(EnumType.STRING)
     CardStatus cardState;
 
-    @Range(min = 0, max = 6)
+    @NotNull
+    @Range(min = 0, max = 7)
     @Column(name = "card_row")
     Integer row;
     
-    @Range(min = 0, max = 6)
+    @NotNull
+    @Range(min = 0, max = 7)
     @Column(name = "card_column")
     Integer column;
 

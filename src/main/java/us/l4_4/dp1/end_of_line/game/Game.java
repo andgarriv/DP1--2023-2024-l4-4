@@ -56,7 +56,5 @@ public class Game extends BaseEntity {
     @OneToMany
     private List<GamePlayer> gamePlayers;
 
-    Integer gamePlayerTurnId;
-
-
+    private Integer gamePlayerTurnId;
 }
