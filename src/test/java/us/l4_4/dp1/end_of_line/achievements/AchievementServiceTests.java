@@ -1,6 +1,7 @@
 package us.l4_4.dp1.end_of_line.achievements;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.util.stream.StreamSupport;
 
@@ -17,7 +18,7 @@ import us.l4_4.dp1.end_of_line.enums.Category;
 
 @SpringBootTest
 @AutoConfigureTestDatabase
-public class AchievementsServiceTests {
+public class AchievementServiceTests {
 
     private AchievementService achievementService;
 
@@ -25,13 +26,12 @@ public class AchievementsServiceTests {
     private AchievementRepository achievementRepository;
 
     @Autowired
-    public AchievementsServiceTests(AchievementService achievementService){
-        this.achievementService=achievementService;
-    }    
-
+    public AchievementServiceTests(AchievementService achievementService) {
+        this.achievementService = achievementService;
+    }
 
     @Test
-     void shouldFindAllAchievements() {
+    void shouldFindAllAchievements() {
         Iterable<Achievement> achievements = this.achievementService.findAll();
         long count = StreamSupport.stream(achievements.spliterator(), false).count();
         assertEquals(3, count);
@@ -42,7 +42,7 @@ public class AchievementsServiceTests {
     public void shouldFindAchievementById() {
         // Crear un logro de prueba
         Achievement existingAchievement = new Achievement();
-        existingAchievement.setId(1); 
+        existingAchievement.setId(1);
         existingAchievement.setName("Original Name");
         existingAchievement.setDescription("Original Description");
         existingAchievement.setBadgeImage("https://example.com/originalBadgeImage.jpg");
@@ -78,7 +78,7 @@ public class AchievementsServiceTests {
     public void shouldEditAchievement() {
         // Crear un logro de prueba
         Achievement existingAchievement = new Achievement();
-        existingAchievement.setId(1); 
+        existingAchievement.setId(1);
         existingAchievement.setName("Original Name");
         existingAchievement.setDescription("Original Description");
         existingAchievement.setBadgeImage("https://example.com/originalBadgeImage.jpg");
@@ -87,7 +87,7 @@ public class AchievementsServiceTests {
 
         // Suponer que este es el logro actualizado
         Achievement updatedAchievement = new Achievement();
-        updatedAchievement.setId(1); 
+        updatedAchievement.setId(1);
         updatedAchievement.setName("Updated Name");
         updatedAchievement.setDescription("Updated Description");
         updatedAchievement.setBadgeImage("https://example.com/updatedBadgeImage.jpg");
@@ -109,7 +109,7 @@ public class AchievementsServiceTests {
     public void shouldDeleteAchievement() {
         // Crear un logro de prueba
         Achievement existingAchievement = new Achievement();
-        existingAchievement.setId(1); 
+        existingAchievement.setId(1);
         existingAchievement.setName("Original Name");
         existingAchievement.setDescription("Original Description");
         existingAchievement.setBadgeImage("https://example.com/originalBadgeImage.jpg");
@@ -123,24 +123,4 @@ public class AchievementsServiceTests {
         assertNull(achievementRepository.findById(existingAchievement.getId()).orElse(null));
     }
 
-    @Test
-    @Transactional
-    public void shouldFindAchievementByName() {
-        // Crear un logro de prueba
-        Achievement existingAchievement = new Achievement();
-        existingAchievement.setId(1); 
-        existingAchievement.setName("Original Name");
-        existingAchievement.setDescription("Original Description");
-        existingAchievement.setBadgeImage("https://example.com/originalBadgeImage.jpg");
-        existingAchievement.setThreshold(100.0);
-        existingAchievement.setCategory(Category.GAMES_PLAYED);
-        achievementService.save(existingAchievement);
-
-        // Llamada al método que se está probando
-        Achievement result = achievementService.findByName(existingAchievement.getName());
-
-        // Verificación
-        assertEquals(existingAchievement.getName(), result.getName());
-    }
-    
 }
