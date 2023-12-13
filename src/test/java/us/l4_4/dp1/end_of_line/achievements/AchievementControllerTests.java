@@ -1,14 +1,13 @@
 package us.l4_4.dp1.end_of_line.achievements;
 
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.util.List;
 
-import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -22,6 +21,7 @@ import us.l4_4.dp1.end_of_line.achievement.Achievement;
 import us.l4_4.dp1.end_of_line.achievement.AchievementController;
 import us.l4_4.dp1.end_of_line.achievement.AchievementService;
 import us.l4_4.dp1.end_of_line.enums.Category;
+
 
 @WebMvcTest(controllers = AchievementController.class, excludeFilters = @ComponentScan.Filter(
     type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class))
@@ -65,8 +65,8 @@ class AchievementControllerTests {
     void adminShouldFindAllAchievements() throws Exception {
         when(this.achievementService.findAll()).thenReturn(List.of(achievement, achievement2));
 
-        mockMvc.perform(get(BASE_URL + "all")).andExpect(status().isOk()).andExpect(jsonPath("$.size()").value(2))
-                .andExpect(jsonPath("$[?(@id == 1)].name").value("achievementName"))
-                .andExpect(jsonPath("$[?(@id == 2)].name").value("achievement2"));
+        mockMvc.perform(get(BASE_URL)).andExpect(status().isOk()).andExpect(jsonPath("$.size()").value(2))
+                .andExpect(jsonPath("$[?(@.id == 1)].name").value("achievementName"))
+                .andExpect(jsonPath("$[?(@.id == 2)].name").value("achievementName2"));
     }
 }
