@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,7 @@ import us.l4_4.dp1.end_of_line.enums.CardStatus;
 import us.l4_4.dp1.end_of_line.enums.Color;
 import us.l4_4.dp1.end_of_line.enums.Exit;
 import us.l4_4.dp1.end_of_line.enums.Hability;
+import us.l4_4.dp1.end_of_line.enums.Orientation;
 import us.l4_4.dp1.end_of_line.exceptions.BadRequestException;
 import us.l4_4.dp1.end_of_line.exceptions.ResourceNotFoundException;
 import us.l4_4.dp1.end_of_line.gameplayer.GamePlayer;
@@ -316,22 +319,142 @@ public class GameService {
     }
 
     @Transactional
-    public List<String> findPosiblePositionOfACardGiven(Card c ){
+    public List<String> findPosiblePositionOfACardGiven(Integer cardId, Integer gameId) {
+        Card c = cardRepository.findById(cardId).get();
+        GamePlayer gp = gameRepository.findGameplayerByCardId(c.getId());
+        //todas las cartas que estan en el tablero
+        List<String> cartasON_BOARD= gamePlayerRepository.findGamePlayersByGameId(gameId)
+        .get(0)
+        .getCards()
+        .stream()
+        .filter(card -> card.getCardState() == CardStatus.ON_BOARD)
+        .map(card -> card.getColumn() + "," + card.getRow())
+        .collect(Collectors.toList()); 
+        cartasON_BOARD.addAll(gamePlayerRepository.findGamePlayersByGameId(gameId)
+        .get(1)
+        .getCards()
+        .stream()
+        .filter(card -> card.getCardState() == CardStatus.ON_BOARD)
+        .map(card -> card.getColumn() + "," + card.getRow())
+        .collect(Collectors.toList()));
 
+        Card ultimaCartaEchada = gp.getCards().stream()
+                .filter(card -> card.getCardState() == CardStatus.ON_BOARD)
+                .sorted(Comparator.comparing(Card::getUpdatedAt).reversed())
+                .collect(Collectors.toList()).get(0);
 
+        Integer n = ultimaCartaEchada.getColumn();
+        Integer m = ultimaCartaEchada.getRow();
 
+        List<String> res = new ArrayList<>();
 
+        String norte = n + "," + (m - 1);
+        String sur = n + "," + (m + 1);
+        String este = (n + 1) + "," + m;
+        String oeste = (n - 1) + "," + m;
+        List<Integer> salidas = extraerNumerosDeSalida(ultimaCartaEchada.getExit().toString());
 
+        if (c.getOrientation().equals(Orientation.S)) {
+            // sur
+            // posiciones posibles
+            // oeste -> primer numero de salida
+            // norte-> segundo numero de salida
+            // este-> tercer numero de salida
 
-
-
-
-
-
+            if (ultimaCartaEchada.getExit().equals(Exit.START)) {
+                if(!cartasON_BOARD.contains(norte)) res.add(norte);
+            } else {
+                if (salidas.get(0) == 1 && !cartasON_BOARD.contains(oeste)) {
+                    res.add(oeste);
+                }
+                if (salidas.get(1) == 1 && !cartasON_BOARD.contains(norte)) {
+                    res.add(norte);
+                }
+                if (salidas.get(2) == 1 && !cartasON_BOARD.contains(este)) {
+                    res.add(este);
+                }
+            }
+        }
         
-        return null;
+        if(c.getOrientation().equals(Orientation.N)){
+            // norte
+            // posiciones posibles
+            //este-> primer numero de salida
+            //sur-> segundo numero de salida
+            //oeste-> tercer numero de salida
+
+             if(salidas.get(0)==1 && !cartasON_BOARD.contains(este)){
+                res.add(este);
+            }
+            if(salidas.get(1) == 1&& !cartasON_BOARD.contains(sur)){
+               res.add(sur);
+            }
+            if(salidas.get(2) == 1 && !cartasON_BOARD.contains(oeste)){
+                res.add(oeste);
+            }
+            }
+        
+        if(c.getOrientation().equals(Orientation.E)){
+            //este 
+            // posiciones posibles
+            //sur-> primer numero de salida
+            //oeste-> segundo numero de salida
+            //norte-> tercer numero de salida
+
+            if (salidas.get(0) == 1 && !cartasON_BOARD.contains(sur)) {
+                res.add(sur);
+            }
+            if (salidas.get(1) == 1 && !cartasON_BOARD.contains(oeste)) {
+                res.add(oeste);
+            }
+            if (salidas.get(2) == 1 && !cartasON_BOARD.contains(norte)) {
+                res.add(norte);
+                
+            }
+            }
+        
+        if(c.getOrientation().equals(Orientation.W)){
+            //oeste 
+            // posiciones posibles
+            //norte-> primer numero de salida
+            //este-> segundo numero de salida
+            //sur-> tercer numero de salida
+
+            if (salidas.get(0) == 1 && !cartasON_BOARD.contains(norte)) {
+                res.add(norte);
+            }
+            if (salidas.get(1) == 1 && !cartasON_BOARD.contains(este)) {
+                res.add(este);
+            }
+            if (salidas.get(2) == 1 && !cartasON_BOARD.contains(sur)) {
+                res.add(sur);
+                
+            }
+        }
+        return res;
     }
 
+    private static ArrayList<Integer> extraerNumerosDeSalida(String texto) {
+       
+        ArrayList<Integer> digitos = new ArrayList<>();
+        
+       
+        Pattern patron = Pattern.compile("_(\\d+)_");
+        Matcher coincidencias = patron.matcher(texto);
+
+       
+        if (coincidencias.find()) {
+            
+            String secuencia = coincidencias.group(1);
+
+            
+            for (char digito : secuencia.toCharArray()) {
+                digitos.add(Character.getNumericValue(digito));
+            }
+        }
+
+        return digitos;
+    }
 
 
 
