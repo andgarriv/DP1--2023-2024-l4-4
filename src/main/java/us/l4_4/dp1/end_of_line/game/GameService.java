@@ -314,4 +314,26 @@ public class GameService {
     public List<Game> findAllGamesByPlayerId(Integer playerId) {
         return gameRepository.findGamesByPlayerId(playerId);
     }
+
+    @Transactional
+    public List<String> findPosiblePositionOfACardGiven(Card c ){
+
+
+
+
+
+
+
+
+
+
+
+        
+        return null;
+    }
+
+
+
+
+
 }
