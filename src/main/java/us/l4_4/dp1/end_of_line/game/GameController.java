@@ -108,4 +108,6 @@ public class GameController {
     public Integer whoIsNext(@PathVariable Integer id1, @PathVariable Integer id2) {
         return gameService.whoIsNext(id1, id2);
     }
+
+
 }
