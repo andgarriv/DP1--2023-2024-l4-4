@@ -1,9 +1,8 @@
 package us.l4_4.dp1.end_of_line.achievements;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.stream.StreamSupport;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,41 +19,22 @@ import us.l4_4.dp1.end_of_line.enums.Category;
 @AutoConfigureTestDatabase
 public class AchievementServiceTests {
 
+    @Autowired
     private AchievementService achievementService;
 
     @Autowired
     private AchievementRepository achievementRepository;
 
-    @Autowired
-    public AchievementServiceTests(AchievementService achievementService) {
-        this.achievementService = achievementService;
-    }
-
     @Test
     void shouldFindAllAchievements() {
-        Iterable<Achievement> achievements = this.achievementService.findAll();
-        long count = StreamSupport.stream(achievements.spliterator(), false).count();
-        assertEquals(3, count);
+        List<Achievement> achievements = (List<Achievement>) this.achievementService.findAll();
+        assertEquals(9, achievements.size());
     }
 
     @Test
-    @Transactional
-    public void shouldFindAchievementById() {
-        // Crear un logro de prueba
-        Achievement existingAchievement = new Achievement();
-        existingAchievement.setId(1);
-        existingAchievement.setName("Original Name");
-        existingAchievement.setDescription("Original Description");
-        existingAchievement.setBadgeImage("https://example.com/originalBadgeImage.jpg");
-        existingAchievement.setThreshold(100.0);
-        existingAchievement.setCategory(Category.GAMES_PLAYED);
-        achievementService.save(existingAchievement);
-
-        // Llamada al método que se está probando
-        Achievement result = achievementService.findById(existingAchievement.getId());
-
-        // Verificación
-        assertEquals(existingAchievement.getName(), result.getName());
+    void shouldFindAchievementById(){
+        Achievement achievement = this.achievementService.findById(1);
+        assertEquals("First crossing", achievement.getName());
     }
 
     @Test
