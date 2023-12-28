@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import tokenService from "../services/token.service.js";
-import { fetchGameCards, isPlayerAuthorized } from "./services/boardService.js";
+import { fetchGameCards, getRotationStyle } from "./services/boardService.js";
 import "./styles/Board.css";
 
 function Box({ content }) {
@@ -11,10 +11,9 @@ function Box({ content }) {
   );
 }
 
-export default function Board() {
+export default function AdminBoard() {
   const jwt = tokenService.getLocalAccessToken();
   const user = tokenService.getUser();
-  const [isAuthorized, setIsAuthorized] = useState(false);
   const [board, setBoard] = useState(
     Array(7)
       .fill(null)
@@ -25,16 +24,17 @@ export default function Board() {
     window.location.pathname.split("/").length - 1
     ];
   const [dataGamePlayer, setDataGamePlayer] = useState([]);
+  const [energyCards, setEnergyCards] = useState([]);
   const [handCardsPlayer1, setHandCardsPlayer1] = useState([]);
   const [handCardsPlayer2, setHandCardsPlayer2] = useState([]);
+  const [cardPlayer1PossiblePositions, setPlayer1CardPossiblePositions] = useState([]);
+  const [cardPlayer2PossiblePositions, setPlayer2CardPossiblePositions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (dataGamePlayer.length > 0) {
-      setIsAuthorized(isPlayerAuthorized(user, dataGamePlayer));
-    }
+    
     const interval = setInterval(() => {
-      fetchGameCards(gameId, jwt, setDataGamePlayer, setHandCardsPlayer1, setHandCardsPlayer2, setBoard, setIsLoading);
+      fetchGameCards(gameId, jwt, setDataGamePlayer, setHandCardsPlayer1, setHandCardsPlayer2, setBoard, setIsLoading, setEnergyCards, setPlayer1CardPossiblePositions, setPlayer2CardPossiblePositions);
     }, 1000); // Actualization every second
     return () => clearInterval(interval);
 
@@ -42,10 +42,6 @@ export default function Board() {
 
   if (isLoading) {
     return <div>Loading...</div>;
-  }
-
-  if (!isAuthorized) {
-    return <div>You are not authorized to see this game. Only for admins.</div>;
   }
 
   return (
@@ -60,6 +56,16 @@ export default function Board() {
               <img src={card.image} alt="Card" />
             </div>
           ))}
+          <div className="hand">
+            <img
+            src={energyCards[0].image}
+            alt="EnergyCard0"
+            style={{
+              ...getRotationStyle(dataGamePlayer.length > 0 ? dataGamePlayer[0].energy : 0),
+              marginTop: '40px'
+            }}
+          />
+          </div>
         </div>
         <div className="board">
           {board.map((row, i) => (
@@ -77,7 +83,18 @@ export default function Board() {
             <div className="hand" key={index}>
               <img src={card.image} alt="Card" />
             </div>
-          ))}
+          )
+          )}
+          <div className="hand">
+            <img
+            src={energyCards[1].image}
+            alt="EnergyCard1"
+            style={{
+              ...getRotationStyle(dataGamePlayer.length > 0 ? dataGamePlayer[1].energy : 0),
+              marginTop: '40px'
+            }}
+          />
+          </div>
         </div>
       </div>
     </div>

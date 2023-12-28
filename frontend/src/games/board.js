@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import tokenService from "../services/token.service.js";
-import { fetchGameCards, isPlayerAuthorized } from "./services/boardService.js";
+import { fetchGameCards, getRotationStyle, isPlayerAuthorized } from "./services/boardService.js";
 import "./styles/Board.css";
 
-function Box({ content }) {
+function Box({ content, onClick, isHighlighted }) {
   const getRotationClass = (orientation) => {
     switch (orientation) {
       case 'N':
@@ -20,11 +20,13 @@ function Box({ content }) {
   };
 
   const rotationClass = content ? getRotationClass(content.orientation) : '';
+  const highlightClass = isHighlighted ? 'highlight' : '';
+
 
   return (
-    <div className="box">
+    <button className={`box ${rotationClass} ${highlightClass}`} onClick={onClick}>
       {content ? <img src={content.image} alt="Card" className={rotationClass} /> : null}
-    </div>
+    </button>
   );
 }
 
@@ -44,15 +46,23 @@ export default function Board() {
     ];
   const [dataGamePlayer, setDataGamePlayer] = useState([]);
   const [handCardsPlayer1, setHandCardsPlayer1] = useState([]);
+  const [energyCards, setEnergyCards] = useState([]);
   const [handCardsPlayer2, setHandCardsPlayer2] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [player1CardPossiblePositions, setPlayer1CardPossiblePositions] = useState([]);
+  const [player2CardPossiblePositions, setPlayer2CardPossiblePositions] = useState([]);
+  
+  const handleBoxClick = (rowIndex, colIndex) => {
+    console.log(`Casilla clickeada: fila ${rowIndex}, columna ${colIndex}`);
+    // TODO: Implementar lógica de click en casilla
+  };
 
   useEffect(() => {
     if (dataGamePlayer.length > 0) {
       setIsAuthorized(isPlayerAuthorized(user, dataGamePlayer));
     }
     const interval = setInterval(() => {
-      fetchGameCards(gameId, jwt, setDataGamePlayer, setHandCardsPlayer1, setHandCardsPlayer2, setBoard, setIsLoading);
+      fetchGameCards(gameId, jwt, setDataGamePlayer, setHandCardsPlayer1, setHandCardsPlayer2, setBoard, setIsLoading, setEnergyCards, setPlayer1CardPossiblePositions, setPlayer2CardPossiblePositions);
     }, 1000); // Actualization every second
     return () => clearInterval(interval);
 
@@ -63,7 +73,7 @@ export default function Board() {
   }
 
   if (!isAuthorized) {
-    return <div>You are not authorized to see this game</div>;
+    return <div>You are not authorized to see this game!</div>;
   }
 
   return (
@@ -71,31 +81,68 @@ export default function Board() {
       <br />
       <div style={{ display: "flex", flexDirection: "row" }}>
         <div className="player-column">
-          {dataGamePlayer.length > 0 ? dataGamePlayer[0].player.nickname : null}
+          In Hand
           <br />
-          {handCardsPlayer1.map((card, index) => (
+          {/* SHOW PLAYER 1 CARDS IF PLAYER 1 */}
+          {dataGamePlayer[0].player.id == user.id && 
+          handCardsPlayer1.map((card, index) => (
             <div className="hand" key={index}>
               <img src={card.image} alt="Card" />
             </div>
           ))}
+          {dataGamePlayer[0].player.id == user.id &&
+          <div className="hand">
+            <img
+            src={energyCards[0].image}
+            alt="EnergyCard0"
+            style={{
+              ...getRotationStyle(dataGamePlayer.length > 0 ? dataGamePlayer[0].energy : 0),
+              marginTop: '40px'
+            }}
+          />
+          </div>
+          }
+          {/* SHOW PLAYER 2 CARDS IF PLAYER 2 */}
+          {dataGamePlayer[1].player.id == user.id && 
+          handCardsPlayer2.map((card, index) => (
+            <div className="hand" key={index}>
+              <img src={card.image} alt="Card" />
+            </div>
+          ))}
+          {dataGamePlayer[1].player.id == user.id &&
+          <div className="hand">
+            <img
+            src={energyCards[1].image}
+            alt="EnergyCard0"
+            style={{
+              ...getRotationStyle(dataGamePlayer.length > 0 ? dataGamePlayer[1].energy : 0),
+              marginTop: '40px'
+            }}
+          />
+          </div>
+          }
         </div>
+        {/* SHOW BOARD */}
         <div className="board">
           {board.map((row, i) => (
             <div key={i} className="row2">
               {row.map((boxContent, j) => (
-                <Box key={j} content={boxContent} />
+                <Box 
+                key={j} 
+                content={boxContent} 
+                onClick={() => handleBoxClick(i, j)}
+                // Caso de ser jugador 1
+                isHighlighted = {(player1CardPossiblePositions.some(pos => pos.row === j && pos.col === i) && dataGamePlayer[0].player.id === user.id) 
+                                  || 
+                                 (player2CardPossiblePositions.some(pos => pos.row === j && pos.col === i) && dataGamePlayer[1].player.id === user.id)}
+                
+                />
               ))}
             </div>
           ))}
         </div>
         <div className="player-column">
-          {dataGamePlayer.length > 0 ? dataGamePlayer[1].player.nickname : null}
-          <br />
-          {handCardsPlayer2.map((card, index) => (
-            <div className="hand" key={index}>
-              <img src={card.image} alt="Card" />
-            </div>
-          ))}
+          
         </div>
       </div>
     </div>
