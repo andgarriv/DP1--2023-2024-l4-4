@@ -6,75 +6,147 @@ INSERT INTO authorities(id, authority) VALUES (1,'ADMIN'),
 INSERT INTO players(id, name, surname, password, email, birth_date, authority, nickname, avatar) VALUES -- Admins Users
                                                                                                         (1,'Alvaro','Fernandez','$2b$12$kjSsw.4pp2iBQn8PfwSmM.DiYv5r2d4.PwmpreyvPdZrvOJDzUjEK','admin1@gmail.com', '2003-07-12', 1, 'admin1', 'https://cdn-icons-png.flaticon.com/512/147/147144.png'),
                                                                                                         (2,'Carlos','Prieto','$2b$12$kjSsw.4pp2iBQn8PfwSmM.DiYv5r2d4.PwmpreyvPdZrvOJDzUjEK','admin2@gmail.com', '2000-05-11', 1, 'admin2', 'https://cdn-icons-png.flaticon.com/512/147/147144.png'),
-                                                                                                        (13, 'Sofia', 'Lopez', '$2b$12$kjSsw.4pp2iBQn8PfwSmM.DiYv5r2d4.PwmpreyvPdZrvOJDzUjEK','admin3@gmail.com', '1998-09-10', 1, 'sofialopez', 'https://cdn-icons-png.flaticon.com/512/147/147138.png'),
-                                                                                                        (14, 'David', 'Sanchez', '$2b$12$kjSsw.4pp2iBQn8PfwSmM.DiYv5r2d4.PwmpreyvPdZrvOJDzUjEK','admin4@gmail.com', '1988-12-05', 1, 'davidsan', 'https://cdn-icons-png.flaticon.com/512/147/147139.png'),
+                                                                                                        (13, 'Sofia', 'Lopez', '$2b$12$kjSsw.4pp2iBQn8PfwSmM.DiYv5r2d4.PwmpreyvPdZrvOJDzUjEK','admin3@gmail.com', '1998-09-10', 1, 'admin3', 'https://cdn-icons-png.flaticon.com/512/147/147138.png'),
+                                                                                                        (14, 'David', 'Sanchez', '$2b$12$kjSsw.4pp2iBQn8PfwSmM.DiYv5r2d4.PwmpreyvPdZrvOJDzUjEK','admin4@gmail.com', '1988-12-05', 1, 'admin4', 'https://cdn-icons-png.flaticon.com/512/147/147139.png'),
                                                                                                         -- Player Users
                                                                                                         (3,'Ángel','García','$2b$12$EB6dhGe96Fx1dt4CMxkF/ONMXHMNGLwSD9vhOWMwhLqKNRU2IvoCa','angelgares6424@gmail.com', '2003-07-12', 2, 'Angelgares', 'https://i.pinimg.com/originals/09/69/c2/0969c2f8a87af926fcf912330b67206f.jpg'),
                                                                                                         (4,'Jorge','Muñoz','$2b$12$EB6dhGe96Fx1dt4CMxkF/ONMXHMNGLwSD9vhOWMwhLqKNRU2IvoCa','jorgemr@pm.me', '1999-09-11', 2, 'Jorge_ADD', 'https://images.squarespace-cdn.com/content/v1/5e45d3a8e509f61738454469/81e0d83b-0fa6-48d0-801b-1f0c1515d786/logo+arus+cuadrado+web.png'),
-                                                                                                        (5,'Javier','Rodriguez','$2b$12$EB6dhGe96Fx1dt4CMxkF/ONMXHMNGLwSD9vhOWMwhLqKNRU2IvoCa','java@pm.me', '2006-11-30', 2, 'javrodrei', 'https://cdn-icons-png.flaticon.com/512/147/147144.png'),
-                                                                                                        (6,'Isaac','Solis','$2b$12$EB6dhGe96Fx1dt4CMxkF/ONMXHMNGLwSD9vhOWMwhLqKNRU2IvoCa','princesita@pm.me', '2002-07-12', 2, 'isasolpad', 'https://cdn-icons-png.flaticon.com/512/147/147144.png'),
+                                                                                                        (5,'Javier','Rodriguez','$2b$12$EB6dhGe96Fx1dt4CMxkF/ONMXHMNGLwSD9vhOWMwhLqKNRU2IvoCa','java@gmail.com', '2006-11-30', 2, 'javrodrei', 'https://cdn-icons-png.flaticon.com/512/147/147144.png'),
+                                                                                                        (6,'Isaac','Solis','$2b$12$EB6dhGe96Fx1dt4CMxkF/ONMXHMNGLwSD9vhOWMwhLqKNRU2IvoCa','princesita@gmail.com', '2002-07-12', 2, 'isasolpad', 'https://cdn-icons-png.flaticon.com/512/147/147144.png'),
                                                                                                         (7,'Andres','Garcia','$2b$12$EB6dhGe96Fx1dt4CMxkF/ONMXHMNGLwSD9vhOWMwhLqKNRU2IvoCa','andres7212@gmail.com', '2000-04-30', 2, 'Andresisco', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHRfYlqLUzoJjY4CQnv2yIOwS7WAFuBZrs9w&usqp=CAU'),
                                                                                                         (8,'Alejandro','Perez','$2b$12$EB6dhGe96Fx1dt4CMxkF/ONMXHMNGLwSD9vhOWMwhLqKNRU2IvoCa','alejandro@gmail.com', '2001-08-11', 2, 'alepersan', 'https://pbs.twimg.com/media/FTQBiYDXwAADvbp.jpg'),                                                                                          
-                                                                                                        (9, 'Maria', 'Herrero', '$2b$12$EB6dhGe96Fx1dt4CMxkF/ONMXHMNGLwSD9vhOWMwhLqKNRU2IvoCa', 'maria.herrero@gmail.com', '2005-05-02', 2, 'Mariaa_hm', 'https://pbs.twimg.com/profile_images/1729861116203810816/bcN6IZ0H_400x400.jpg'),
-                                                                                                        (10, 'Juan', 'Fernandez', '$2b$12$EB6dhGe96Fx1dt4CMxkF/ONMXHMNGLwSD9vhOWMwhLqKNRU2IvoCa', 'juan.fernandez@example.com', '1985-05-20', 2, 'juanfer', 'https://cdn-icons-png.flaticon.com/512/147/147142.png'),
-                                                                                                        (11, 'Lucia', 'Martinez', '$2b$12$EB6dhGe96Fx1dt4CMxkF/ONMXHMNGLwSD9vhOWMwhLqKNRU2IvoCa', 'lucia.martinez@example.com', '1995-03-30', 2, 'luciamart', 'https://cdn-icons-png.flaticon.com/512/147/147146.png'),
-                                                                                                        (12, 'Carlos', 'Garcia', '$2b$12$EB6dhGe96Fx1dt4CMxkF/ONMXHMNGLwSD9vhOWMwhLqKNRU2IvoCa', 'carlos.garcia@example.com', '1992-07-25', 2, 'carlosgar', 'https://cdn-icons-png.flaticon.com/512/147/147143.png');
+                                                                                                        (9, 'Maria', 'Herrero', '$2b$12$EB6dhGe96Fx1dt4CMxkF/ONMXHMNGLwSD9vhOWMwhLqKNRU2IvoCa', 'mariahm@gmail.com', '2005-05-02', 2, 'Mariia_hm25', 'https://pbs.twimg.com/profile_images/1729861116203810816/bcN6IZ0H_400x400.jpg'),
+                                                                                                        (10, 'Juan', 'Fernandez', '$2b$12$EB6dhGe96Fx1dt4CMxkF/ONMXHMNGLwSD9vhOWMwhLqKNRU2IvoCa', 'juanfg@gmail.com', '1985-05-20', 2, 'juanfer', 'https://cdn-icons-png.flaticon.com/512/147/147142.png'),
+                                                                                                        (11, 'Lucia', 'Martinez', '$2b$12$EB6dhGe96Fx1dt4CMxkF/ONMXHMNGLwSD9vhOWMwhLqKNRU2IvoCa', 'luciamn@gmail.com', '1995-03-30', 2, 'luciamart', 'https://cdn-icons-png.flaticon.com/512/147/147146.png'),
+                                                                                                        (12, 'Carlos', 'Garcia', '$2b$12$EB6dhGe96Fx1dt4CMxkF/ONMXHMNGLwSD9vhOWMwhLqKNRU2IvoCa', 'carlosgc@gmail.com', '1992-07-25', 2, 'carlosgar', 'https://cdn-icons-png.flaticon.com/512/147/147143.png');
 
 
 -- Achievements
-INSERT INTO achievements(id, name, description, threshold, badge_image, category) VALUES (1,'Basic expirence','Play 10 games',10.0,'https://cdn-icons-png.flaticon.com/512/5243/5243423.png','GAMES_PLAYED'),
-                                                                                         (2,'Explorer','Play 25 games',25.0,'https://cdn-icons-png.flaticon.com/512/603/603855.png','GAMES_PLAYED'),
-                                                                                         (3,'Expert','Win 20 games',20.0, null, 'VICTORIES');
+INSERT INTO achievements(id, name, description, threshold, badge_image, category) VALUES (1, 'First crossing','This is just the beggining, take part in your first game', 1.0,'https://cdn-icons-png.flaticon.com/128/4245/4245486.png','GAMES_PLAYED'),
+                                                                                         (2, 'Five Paths','Complete 5 games. Each game enhances your understanding and skills', 5.0,'https://cdn-icons-png.flaticon.com/128/3521/3521881.png','GAMES_PLAYED'),
+                                                                                         (3, 'Decade of Detours','Play 10 games to showcase your growing expertise and ability to go through challenges', 10.0, 'https://cdn-icons-png.flaticon.com/128/5229/5229355.png', 'GAMES_PLAYED'),
 
+                                                                                         (4, 'Winning initiative', 'Achieve your first victory by pushing your skills to the limit', 1.0, 'https://cdn-icons-png.flaticon.com/128/4442/4442281.png', 'VICTORIES'),
+                                                                                         (5, 'Quintet of Conquest', 'Secure 5 victories to show it is not a matter of luck', 5.0, 'https://cdn-icons-png.flaticon.com/128/3884/3884644.png', 'VICTORIES'),
+                                                                                         (6, 'Decisive dominion', 'Consolidate 10 victories to guarantee the constant capacity for improvement and hard work', 10.0, 'https://cdn-icons-png.flaticon.com/128/1357/1357043.png', 'VICTORIES'), 
+
+                                                                                         (7, 'First Journey', 'First half hour of contact with the game', 0.5, 'https://cdn-icons-png.flaticon.com/128/6198/6198482.png', 'TOTAL_PLAY_TIME'),
+                                                                                         (8, 'Hour of Skillful Maneuvering', 'Dedicate a whole hour to mastering the game', 1.0, 'https://cdn-icons-png.flaticon.com/128/6117/6117105.png', 'TOTAL_PLAY_TIME'),
+                                                                                         (9, 'Marathon of Mastery', 'Invest 4 hours as a deep expertise in the games strategic depth', 4.0, 'https://cdn-icons-png.flaticon.com/128/1837/1837562.png', 'TOTAL_PLAY_TIME');
+                                                                                         
 -- Player Achievements
-INSERT INTO player_achievements(id, achieve_at, achievement_id) VALUES (1,'2021-09-01', 1);
+INSERT INTO player_achievements(id, achieve_at, achievement_id) VALUES (1,'2023-09-01', 1),
+                                                                       (2, '2023-09-02', 4),
+                                                                       (3, '2023-09-02', 7),
+                                                                       (4, '2023-09-27', 8),                                      
+                                                                       (5, '2023-10-09', 5),
+                                                                       (6, '2023-10-09', 2),
+                                                                       (7, '2023-11-01', 3),
+                                                                       (8, '2023-11-25', 6),
+                                                                       (9, '2023-12-19', 9);
 
 
 --Player PlayerAchievements
-INSERT INTO players_player_achievement(player_achievement_id, player_id) VALUES (1, 3);
+INSERT INTO players_player_achievement(player_achievement_id, player_id) VALUES (1, 3),
+                                                                                (2, 3),
+                                                                                (3, 3),
+                                                                                (4, 3),
+                                                                                (5, 3),
+                                                                                (6, 3),
+                                                                                (7, 3),
+                                                                                (8, 3),
+                                                                                (9, 3);
 
 -- GamePlayers
-
-INSERT INTO game_players(id, energy, player_id, color) VALUES (1, 3, 3,'RED'), 
-                                                              (2, 3, 4,'BLUE'), 
-
-                                                              (3, 3, 5,'BLUE'),
+INSERT INTO game_players(id, energy, player_id, color) VALUES -- Player con id 5 y 6 son los game_players 1 y 2, respectivamente
+                                                              (1, 3, 5,'VIOLET'), 
+                                                              (2, 2, 6,'ORANGE'), 
+                                                              
+                                                              (3, 1, 5,'GREEN'),
                                                               (4, 3, 6,'RED'), 
-
-                                                              (5, 3, 3,'BLUE'), 
-                                                              (6, 3, 8,'RED'), 
-
-                                                              (7, 3, 9,'BLUE'), 
-                                                              (8, 3, 10,'RED'), 
-
-                                                              (9, 3, 11,'BLUE'), 
-                                                              (10, 3, 6,'RED'); 
-
+                                                              (5, 1, 7,'ORANGE'), 
+                                                              (6, 2, 8,'RED'), 
+                                                              (7, 0, 10,'MAGENTA'), 
+                                                              (8, 3, 11,'RED'), 
+                                                              (9, 3, 3,'BLUE'), 
+                                                              (10, 3, 6,'GREEN'),
+                                                              (11, 2, 3,'MAGENTA'), 
+                                                              (12, 1, 4,'ORANGE'),
+                                                              (13, 3, 3,'BLUE'), 
+                                                              (14, 3, 10,'RED'),
+                                                              (15, 0, 3,'BLUE'), 
+                                                              (16, 1, 7,'VIOLET'),
+                                                              (17, 3, 3,'GREEN'), 
+                                                              (18, 3, 7,'ORANGE'),
+                                                              (19, 2, 3,'ORANGE'), 
+                                                              (20, 3, 8,'RED'),
+                                                              (21, 0, 3,'MAGENTA'), 
+                                                              (22, 3, 6,'RED'),
+                                                              (23, 3, 3,'VIOLET'), 
+                                                              (24, 2, 5,'RED'),
+                                                              (25, 3, 3,'BLUE'), 
+                                                              (26, 1, 9,'ORANGE'),
+                                                              (27, 1, 3,'BLUE'), 
+                                                              (28, 2, 8,'VIOLET'),
+                                                              (29, 3, 3,'GREEN'), 
+                                                              (30, 1, 10,'RED'),
+                                                              (31, 2, 3,'BLUE'), 
+                                                              (32, 2, 8,'GREEN');
 
 -- Games 
-INSERT INTO games(id, round, winner, ended, started, game_player_turn_id, effect) VALUES (1, 16, 3, '2021-09-01 11:13:24', '2021-09-01 10:35:10', 3, 'NONE'),
-                                                                                  (2, 18, 5, '2021-09-01 14:30:00', '2021-09-01 11:00:00', 5, 'NONE'),
-                                                                                  (3, 24, null, null, '2021-01-01 15:45:00', 3, 'NONE'),
-                                                                                  (4, 3, 10, '2021-01-01 10:15:00', '2021-01-01 10:00:00', 10, 'NONE'),
-                                                                                  (5, 7, 6, '2021-01-01 10:14:00', '2021-01-01 10:00:00', 6, 'NONE');
+INSERT INTO games(id, round, winner, started, ended, game_player_turn_id, effect) VALUES (1, 16, 6, '2023-09-01 09:00:05', '2023-09-01 09:15:54', 5, 'NONE'),
+                                                                                         (2, 18, 5, '2023-09-01 09:05:17', '2023-09-01 09:23:17', 6, 'NONE'),
+                                                                                         (3, 24, 7, '2023-09-01 10:00:00', '2023-09-01 10:28:39', 8, 'NONE'),
+                                                                                         (4, 20, 10, '2023-09-01 14:18:32', '2023-09-01 14:52:20', 11, 'NONE'),
 
+                                                                                         (5, 27, 6, '2023-09-01 19:14:25', '2023-09-01 19:41:38', 3, 'NONE'),
+                                                                                         (6, 28, 3, '2023-09-02 14:03:07', '2023-09-02 14:18:07', 4, 'NONE'),
+                                                                                         (7, 20, 3, '2023-09-19 04:13:56', '2023-09-19 04:27:56', 10, 'NONE'),
+                                                                                         (8, 27, 3, '2023-09-27 09:49:44', '2023-09-27 10:13:44', 7, 'NONE'),                                     
+                                                                                         (9, 18, 3, '2023-10-09 08:30:29', '2023-10-09 08:47:29', 7, 'NONE'),
+                                                                                         (10, 20, 3, '2023-10-09 09:07:00', '2023-10-09 09:23:00', 8, 'NONE'),
+                                                                                         (11, 26, 3, '2023-10-12 07:08:07', '2023-10-12 07:19:07', 6, 'NONE'),
+                                                                                         (12, 20, 3, '2023-10-20 00:51:04', '2023-10-20 01:20:04', 5, 'NONE'),
+                                                                                         (13, 23, 3, '2023-10-30 22:34:55', '2023-10-30 22:49:55', 9, 'NONE'),
+                                                                                         (14, 27, 3, '2023-11-01 13:44:27', '2023-11-01 14:01:27', 8, 'NONE'),
+                                                                                         (15, 26, 3, '2023-11-25 03:59:03', '2023-11-25 04:22:03', 10, 'NONE'),
+                                                                                         (16, 28, 3, '2023-12-19 17:33:57', '2023-12-19 18:08:57', 8, 'NONE');
 
 -- Games_Game_Players
-INSERT INTO games_game_players(game_id, game_players_id) VALUES --Player con id 3 y 4 juegan la partida 1
+INSERT INTO games_game_players(game_id, game_players_id) VALUES --Player con id 5 y 6 juegan la partida 1
                                                                 (1, 1),
                                                                 (1, 2),
-                                                                --Player con id 5 y 6 juegan la partida 2
+
                                                                 (2, 3),
                                                                 (2, 4),
-                                                                --Player con id 3 y 8 juegan la partida 3
                                                                 (3, 5),
                                                                 (3, 6),
-                                                                --Player con id 9 y 10 juegan la partida 4
                                                                 (4, 7),
                                                                 (4, 8),
-                                                                --Player con id 11 y 12 juegan la partida 5
                                                                 (5, 9),
-                                                                (5, 10);
+                                                                (5, 10),
+                                                                (6, 11),
+                                                                (6, 12),
+                                                                (7, 13),
+                                                                (7, 14),
+                                                                (8, 15),
+                                                                (8, 16),
+                                                                (9, 17),
+                                                                (9, 18),
+                                                                (10, 19),
+                                                                (10, 20),
+                                                                (11, 21),
+                                                                (11, 22),
+                                                                (12, 23),
+                                                                (12, 24),
+                                                                (13, 25),
+                                                                (13, 26),
+                                                                (14, 27),
+                                                                (14, 28),
+                                                                (15, 29),
+                                                                (15, 30),
+                                                                (16, 31),
+                                                                (16, 32);
 
 -- Message
 INSERT INTO messages(id, color, reaction) VALUES (1, null, 'HI'),
@@ -88,7 +160,7 @@ INSERT INTO messages(id, color, reaction) VALUES (1, null, 'HI'),
 
 -- Friendship
 INSERT INTO friendships(id, receiver, sender, friend_state) VALUES (1, 4, 3, 'ACCEPTED'),
-                                                                  (2, 5, 3, 'PENDING'),
+                                                                  (2, 5, 3, 'ACCEPTED'),
                                                                   (3, 6, 3, 'ACCEPTED'),
                                                                   (4, 7, 3, 'PENDING'),
                                                                   (5, 8, 3, 'ACCEPTED'),
@@ -103,7 +175,6 @@ INSERT INTO friendships(id, receiver, sender, friend_state) VALUES (1, 4, 3, 'AC
                                                                   (14, 9, 10, 'PENDING'),
                                                                   (15, 12, 3, 'ACCEPTED'),
                                                                   (16, 8, 12, 'PENDING');
-
                                                                   
 
 -- Cards
