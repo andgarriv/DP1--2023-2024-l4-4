@@ -31,19 +31,16 @@ function GameNavbar() {
             });
            
             const playerData = await playerResponse.json();
-            let gameId = null;
+            let gameId = 0;
 
-
-            roles.forEach((role) => {
-                if (role === "PLAYER") {
-                    const playerGame = playerData.find((game) => !game.endedAt);
-                    if (playerGame) {
-                        gameId = playerGame.id;
-                    }                }
-                if (role === "AMDIN") {
-                   gameId = 401;            
-                }
-            });
+            if (user.id < 3) {
+                gameId = 401;            
+            } else {
+                const playerGame = playerData.find((game) => !game.endedAt);
+                if (playerGame) {
+                    gameId = playerGame.id;
+                }             }
+            
 
             const response = await fetch(`/api/v1/games/${gameId}`, {
                 method: "GET",
@@ -56,7 +53,7 @@ function GameNavbar() {
             const data = await response.json();
 
 
-            setRounds(data.rounds);
+            setRound(data.rounds);
             setTurnId(data.turnId);
             setgameId(gameId);
 
@@ -132,7 +129,7 @@ function GameNavbar() {
                     width: '100%',
                     marginRight: '2%'
                 }}>
-                    <span>ROUND {gameId}</span>
+                    <span>ROUND {round}</span>
                     <span style={{ marginLeft: '10%' }}>{formattedGameTime}</span>
                     <span style={{ marginLeft: '10%' }}>TURN {turnId ? turnId : 'NONE'}</span>
                 </div>
