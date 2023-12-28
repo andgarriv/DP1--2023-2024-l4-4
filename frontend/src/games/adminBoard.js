@@ -27,12 +27,13 @@ export default function AdminBoard() {
   const [energyCards, setEnergyCards] = useState([]);
   const [handCardsPlayer1, setHandCardsPlayer1] = useState([]);
   const [handCardsPlayer2, setHandCardsPlayer2] = useState([]);
+  const [cardPossiblePositions, setCardPossiblePositions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     
     const interval = setInterval(() => {
-      fetchGameCards(gameId, jwt, setDataGamePlayer, setHandCardsPlayer1, setHandCardsPlayer2, setBoard, setIsLoading, setEnergyCards);
+      fetchGameCards(gameId, jwt, setDataGamePlayer, setHandCardsPlayer1, setHandCardsPlayer2, setBoard, setIsLoading, setEnergyCards, setCardPossiblePositions);
     }, 1000); // Actualization every second
     return () => clearInterval(interval);
 

@@ -47,13 +47,14 @@ export default function Board() {
   const [energyCards, setEnergyCards] = useState([]);
   const [handCardsPlayer2, setHandCardsPlayer2] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [cardPossiblePositions, setCardPossiblePositions] = useState([]);
 
   useEffect(() => {
     if (dataGamePlayer.length > 0) {
       setIsAuthorized(isPlayerAuthorized(user, dataGamePlayer));
     }
     const interval = setInterval(() => {
-      fetchGameCards(gameId, jwt, setDataGamePlayer, setHandCardsPlayer1, setHandCardsPlayer2, setBoard, setIsLoading, setEnergyCards);
+      fetchGameCards(gameId, jwt, setDataGamePlayer, setHandCardsPlayer1, setHandCardsPlayer2, setBoard, setIsLoading, setEnergyCards, setCardPossiblePositions);
     }, 1000); // Actualization every second
     return () => clearInterval(interval);
 
@@ -64,7 +65,7 @@ export default function Board() {
   }
 
   if (!isAuthorized) {
-    return <div>You are not authorized to see this game</div>;
+    return <div>You are not authorized to see this game!</div>;
   }
 
   return (

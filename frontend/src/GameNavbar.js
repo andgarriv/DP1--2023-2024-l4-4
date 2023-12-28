@@ -16,7 +16,7 @@ function GameNavbar() {
     const [rounds, setRounds] = useState(0);
     const [gameTime, setGameTime] = useState(0);
     const [turnId, setTurnId] = useState(0);
-    const [ongoingGameId, setOngoingGameId] = useState(null);
+    const [gameId, setgameId] = useState(null);
 
     useEffect(() => {
         if (jwt) {
@@ -29,20 +29,36 @@ function GameNavbar() {
             const playerResponse = await fetch(`/api/v1/games/players/${user.id}/notended`, {
                 headers: { Authorization: `Bearer ${jwt}` },
             });
+           
             const playerData = await playerResponse.json();
+            let gameId = null;
 
-            const ongoingGame = playerData.find((game) => !game.endedAt);
-            const response = await fetch(`/api/v1/games/${ongoingGame.id}`, {
+
+            roles.forEach((role) => {
+                if (role === "PLAYER") {
+                    const playerGame = playerData.find((game) => !game.endedAt);
+                    if (playerGame) {
+                        gameId = playerGame.id;
+                    }                }
+                if (role === "AMDIN") {
+                   gameId = 401;            
+                }
+            });
+
+            const response = await fetch(`/api/v1/games/${gameId}`, {
                 method: "GET",
                 headers: {
                     Authorization: `Bearer ${jwt}`,
                     "Content-Type": "application/json",
                 },
             });
+
             const data = await response.json();
+
+
             setRounds(data.rounds);
             setTurnId(data.turnId);
-            setOngoingGameId(data.id);
+            setgameId(gameId);
 
             const startedAt = new Date(data.startedAt);
             const now = new Date();
@@ -69,14 +85,22 @@ function GameNavbar() {
     let playerLinks = <></>;
     let adminLinks = <></>;
 
-    roles.forEach((role)) => {
-        
-    }
-
+    roles.forEach((role) => {
+        if (role === "ADMIN") {
+            adminLinks = (
+                <>
+                <NavItem className="d-flex">
+                <NavLink className="fuente" style={{ color: "#EF87E0" }} id="logout" tag={Link} to="">Exit</NavLink>
+            </NavItem>
+         </>
+            )
+        }
+        if (role === "PLAYER") {
+            
     playerLinks = (
         <>
                 <NavItem>
-                    <NavLink className="fuente" style={{ color: "#75FBFD" }} tag={Link} to={`/game/${ongoingGameId}`}>Game</NavLink>
+                    <NavLink className="fuente" style={{ color: "#75FBFD" }} tag={Link} to={`/game/${gameId}`}>Game</NavLink>
                 </NavItem>
             <NavItem>
                 <NavLink className="fuente" style={{ color: "#75FBFD" }} tag={Link} to="/rulesInGame">Rules</NavLink>
@@ -87,6 +111,10 @@ function GameNavbar() {
             </NavItem>
         </>
     )
+
+        }
+    })
+
 
     return (
         <div>
@@ -104,14 +132,14 @@ function GameNavbar() {
                     width: '100%',
                     marginRight: '2%'
                 }}>
-                    <span>ROUND {rounds}</span>
+                    <span>ROUND {gameId}</span>
                     <span style={{ marginLeft: '10%' }}>{formattedGameTime}</span>
                     <span style={{ marginLeft: '10%' }}>TURN {turnId ? turnId : 'NONE'}</span>
                 </div>
 
                 <Collapse isOpen={!collapsed} navbar>
                     <Nav className="ms-auto mb-2 mb-lg-0" navbar>
-
+                        {adminLinks}
                         {playerLinks}
                     </Nav>
                 </Collapse>

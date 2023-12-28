@@ -3,7 +3,7 @@
  * Script to manage the board of the game. The long functions of board are here.
 */
 
-export async function fetchGameCards(gameId, jwt, setDataGamePlayer, setHandCardsPlayer1, setHandCardsPlayer2, setBoard, setIsLoading, setEnergyCards) {
+export async function fetchGameCards(gameId, jwt, setDataGamePlayer, setHandCardsPlayer1, setHandCardsPlayer2, setBoard, setIsLoading, setEnergyCards, setCardPossiblePositions) {
     try {
       const response = await fetch(`/api/v1/cards/games/${gameId}`, {
         method: "GET",
@@ -70,9 +70,23 @@ export async function fetchGameCards(gameId, jwt, setDataGamePlayer, setHandCard
             newBoard[card.row][card.column] = { image: card.image, orientation: card.orientation };
           }
         });
-  
         return newBoard;
       });
+
+      // Actualizar las posiciones posibles de las cartas
+      const responseCardPossiblePositions = await fetch(
+        `/api/v1/cards/${gameId}/possiblepositions`,
+        {
+          headers: {
+            Authorization: `Bearer ${jwt}`,
+          },
+        }
+      );
+      if (!responseCardPossiblePositions.ok) {
+        throw new Error("Error al cargar las posiciones posibles de las cartas.");
+      }
+      const cardPossiblePositions = await responseCardPossiblePositions.json();
+      setCardPossiblePositions(cardPossiblePositions);
   
       setIsLoading(false);
     } catch (error) {
