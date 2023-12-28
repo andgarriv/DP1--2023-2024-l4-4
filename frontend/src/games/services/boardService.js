@@ -3,7 +3,7 @@
  * Script to manage the board of the game. The long functions of board are here.
 */
 
-export async function fetchGameCards(gameId, jwt, setDataGamePlayer, setHandCardsPlayer1, setHandCardsPlayer2, setBoard, setIsLoading) {
+export async function fetchGameCards(gameId, jwt, setDataGamePlayer, setHandCardsPlayer1, setHandCardsPlayer2, setBoard, setIsLoading, setEnergyCards) {
     try {
       const response = await fetch(`/api/v1/cards/games/${gameId}`, {
         method: "GET",
@@ -45,6 +45,8 @@ export async function fetchGameCards(gameId, jwt, setDataGamePlayer, setHandCard
   
       setHandCardsPlayer(handCardsPlayer1, setHandCardsPlayer1);
       setHandCardsPlayer(handCardsPlayer2, setHandCardsPlayer2);
+      setEnergyCards(dataGamePlayer[0].color, dataGamePlayer[1].color, setEnergyCards);
+      importEnergyCards(dataGamePlayer[0].color, dataGamePlayer[1].color, setEnergyCards);
   
       const cardsOnBoard = data.filter((card) => card.cardState === "ON_BOARD");
   
@@ -104,9 +106,38 @@ export function importGameCard(color, exit, initiative) {
   return import(`../../static/images/GameCards/${name}.png`);
 }
 
+function importEnergyCard(color) {
+  return import(`../../static/images/GameCards/C${color.toUpperCase()[0]}_ENERGY.png`);
+}
+
+export function importEnergyCards(color1, color2, setEnergyCards) {
+  importEnergyCard(color1).then((module) => {
+    const energyCard1 = { image: module.default };
+    importEnergyCard(color2).then((module) => {
+      const energyCard2 = { image: module.default };
+      setEnergyCards([energyCard1, energyCard2]);
+    });
+  });
+}
+
 export function isPlayerAuthorized(user, dataGamePlayer) {
   return (
     user.id === dataGamePlayer[0].player.id ||
     user.id === dataGamePlayer[1].player.id
   );
+}
+
+export function getRotationStyle(energy) {
+  switch (energy) {
+    case 3:
+      return { transform: 'rotate(0deg)' };
+    case 2:
+      return { transform: 'rotate(90deg)' };
+    case 1:
+      return { transform: 'rotate(180deg)' };
+    case 0:
+      return { transform: 'rotate(270deg)' };
+    default:
+      return {};
+  }
 }

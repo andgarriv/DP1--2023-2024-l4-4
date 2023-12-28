@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import tokenService from "../services/token.service.js";
-import { fetchGameCards, isPlayerAuthorized } from "./services/boardService.js";
+import { fetchGameCards, getRotationStyle, isPlayerAuthorized } from "./services/boardService.js";
 import "./styles/Board.css";
 
 function Box({ content }) {
@@ -44,6 +44,7 @@ export default function Board() {
     ];
   const [dataGamePlayer, setDataGamePlayer] = useState([]);
   const [handCardsPlayer1, setHandCardsPlayer1] = useState([]);
+  const [energyCards, setEnergyCards] = useState([]);
   const [handCardsPlayer2, setHandCardsPlayer2] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -52,7 +53,7 @@ export default function Board() {
       setIsAuthorized(isPlayerAuthorized(user, dataGamePlayer));
     }
     const interval = setInterval(() => {
-      fetchGameCards(gameId, jwt, setDataGamePlayer, setHandCardsPlayer1, setHandCardsPlayer2, setBoard, setIsLoading);
+      fetchGameCards(gameId, jwt, setDataGamePlayer, setHandCardsPlayer1, setHandCardsPlayer2, setBoard, setIsLoading, setEnergyCards);
     }, 1000); // Actualization every second
     return () => clearInterval(interval);
 
@@ -71,14 +72,48 @@ export default function Board() {
       <br />
       <div style={{ display: "flex", flexDirection: "row" }}>
         <div className="player-column">
-          {dataGamePlayer.length > 0 ? dataGamePlayer[0].player.nickname : null}
+          In Hand
           <br />
-          {handCardsPlayer1.map((card, index) => (
+          {/* SHOW PLAYER 1 CARDS IF PLAYER 1 */}
+          {dataGamePlayer[0].player.id == user.id && 
+          handCardsPlayer1.map((card, index) => (
             <div className="hand" key={index}>
               <img src={card.image} alt="Card" />
             </div>
           ))}
+          {dataGamePlayer[0].player.id == user.id &&
+          <div className="hand">
+            <img
+            src={energyCards[0].image}
+            alt="EnergyCard0"
+            style={{
+              ...getRotationStyle(dataGamePlayer.length > 0 ? dataGamePlayer[0].energy : 0),
+              marginTop: '40px'
+            }}
+          />
+          </div>
+          }
+          {/* SHOW PLAYER 2 CARDS IF PLAYER 2 */}
+          {dataGamePlayer[1].player.id == user.id && 
+          handCardsPlayer2.map((card, index) => (
+            <div className="hand" key={index}>
+              <img src={card.image} alt="Card" />
+            </div>
+          ))}
+          {dataGamePlayer[1].player.id == user.id &&
+          <div className="hand">
+            <img
+            src={energyCards[1].image}
+            alt="EnergyCard0"
+            style={{
+              ...getRotationStyle(dataGamePlayer.length > 0 ? dataGamePlayer[1].energy : 0),
+              marginTop: '40px'
+            }}
+          />
+          </div>
+          }
         </div>
+        {/* SHOW BOARD */}
         <div className="board">
           {board.map((row, i) => (
             <div key={i} className="row2">
@@ -89,13 +124,7 @@ export default function Board() {
           ))}
         </div>
         <div className="player-column">
-          {dataGamePlayer.length > 0 ? dataGamePlayer[1].player.nickname : null}
-          <br />
-          {handCardsPlayer2.map((card, index) => (
-            <div className="hand" key={index}>
-              <img src={card.image} alt="Card" />
-            </div>
-          ))}
+          
         </div>
       </div>
     </div>

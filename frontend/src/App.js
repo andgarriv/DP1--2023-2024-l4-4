@@ -31,6 +31,7 @@ import VisitListAdmin from "./admin/visits/VisitListAdmin";
 import Login from "./auth/login";
 import Logout from "./auth/logout";
 import Register from "./auth/register";
+import AdminBoard from "./games/adminBoard";
 import AdminGamesList from "./games/adminGamesList";
 import Board from "./games/board";
 import NewGame from "./games/newGame";
@@ -45,6 +46,7 @@ import PlanList from "./public/plan";
 import SwaggerDocs from "./public/swagger";
 import PDFViewer from "./rules";
 import tokenService from "./services/token.service";
+
 
 function ErrorFallback({ error, resetErrorBoundary }) {
   return (
@@ -102,6 +104,7 @@ function App() {
           <Route path="/games" exact={true} element={<PrivateRoute><AdminGamesList /></PrivateRoute>} />
           <Route path="/players" exact={true} element={<PrivateRoute><PlayerListAdmin /></PrivateRoute>} />
           <Route path="/friendships" exact={true} element={<PrivateRoute><FriendshipListAdmin /></PrivateRoute>} />
+          <Route path="/game/:id" exact={true} element={<PrivateRoute><AdminBoard /></PrivateRoute>} />
         </>)
     }
     if (role === "PLAYER") {

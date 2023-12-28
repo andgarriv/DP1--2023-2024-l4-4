@@ -1,3 +1,4 @@
+import jwt_decode from "jwt-decode";
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Collapse, Nav, NavItem, NavLink, Navbar, NavbarBrand, NavbarToggler } from 'reactstrap';
@@ -6,6 +7,8 @@ import './static/css/home/home.css';
 
 function GameNavbar() {
     const jwt = tokenService.getLocalAccessToken();
+    const [roles, setRoles] = useState([]);
+    const [username, setUsername] = useState("");
 
     const [collapsed, setCollapsed] = useState(true);
 
@@ -16,6 +19,10 @@ function GameNavbar() {
     const [ongoingGameId, setOngoingGameId] = useState(null);
 
     useEffect(() => {
+        if (jwt) {
+            setRoles(jwt_decode(jwt).authorities);
+            setUsername(jwt_decode(jwt).sub);
+        };
         async function fetchGameData() {
             const jwt = tokenService.getLocalAccessToken();
             const user = tokenService.getUser();
@@ -60,6 +67,12 @@ function GameNavbar() {
     const formattedGameTime = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 
     let playerLinks = <></>;
+    let adminLinks = <></>;
+
+    roles.forEach((role)) => {
+        
+    }
+
     playerLinks = (
         <>
                 <NavItem>
@@ -85,11 +98,11 @@ function GameNavbar() {
                 <div style={{
                     color: 'white',
                     display: 'flex',
-                    justifyContent: 'center',
                     alignItems: 'center',
+                    justifyContent: 'center',
                     height: '100%',
                     width: '100%',
-                    marginRight: '5%',
+                    marginRight: '2%'
                 }}>
                     <span>ROUND {rounds}</span>
                     <span style={{ marginLeft: '10%' }}>{formattedGameTime}</span>
