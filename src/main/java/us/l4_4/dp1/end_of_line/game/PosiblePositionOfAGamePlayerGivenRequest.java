@@ -7,19 +7,14 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class NewGameRequest {
+public class PosiblePositionOfAGamePlayerGivenRequest {
 
     @NotNull
     @Min(0)
-    private Integer player1Id;
+    private Integer gamePlayerId;
 
     @NotNull
     @Min(0)
-    private Integer player2Id;
-
-    @NotNull
-    private String player1Color;
-
-    @NotNull
-    private String player2Color;
+    private Integer gameId;
+    
 }

@@ -36,7 +36,7 @@ public class FriendshipController {
         return friendshipService.findAll();
     }
 
-    @GetMapping("/friends/{id}/{friendState}")
+    @GetMapping("/players/{id}/{friendState}")
     @ResponseStatus(HttpStatus.OK)
     public Iterable<Friendship> findAllFriendshipsByPlayerId(@PathVariable @Valid Integer id, @PathVariable @Valid FriendStatus friendState) {
         return friendshipService.findAllFriendshipsByPlayerId(id, friendState);

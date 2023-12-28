@@ -35,9 +35,10 @@ export default function Register() {
   }
   return (
     <div className="auth-page-container">
-      <div className="hero-div">
-        <h2>Register</h2>
-        <div style={{ marginTop: "10px" }}>
+      <div className="custom-container">
+      <h2 style={{ color: "#75FBFD", whiteSpace: "nowrap"  }}>Register</h2>
+
+      <div className="auth-form-container">
           <FormGenerator
             ref={registerFormRef}
             inputs={registerFormPlayerInputs}
@@ -45,7 +46,7 @@ export default function Register() {
             numberOfColumns={1}
             listenEnterKey
             buttonText="Save"
-            buttonClassName="auth-button"
+            buttonClassName="auth-button-eol"
           />
         </div>
       </div>

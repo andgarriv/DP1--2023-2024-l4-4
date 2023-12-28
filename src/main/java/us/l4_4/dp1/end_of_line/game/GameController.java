@@ -16,7 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import us.l4_4.dp1.end_of_line.card.Card;
+import us.l4_4.dp1.end_of_line.card.CardService;
 import us.l4_4.dp1.end_of_line.enums.Color;
+import us.l4_4.dp1.end_of_line.gameplayer.GamePlayer;
+import us.l4_4.dp1.end_of_line.gameplayer.GamePlayerService;
+import us.l4_4.dp1.end_of_line.message.Message;
+import us.l4_4.dp1.end_of_line.message.MessageService;
 
 @RestController
 @RequestMapping("/api/v1/games")
@@ -25,6 +30,15 @@ public class GameController {
 
     @Autowired
     GameService gameService;
+
+    @Autowired
+    CardService cardService;
+
+    @Autowired
+    GamePlayerService gamePlayerService;
+
+    @Autowired
+    MessageService messageService;
 
     @GetMapping("/players/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -36,6 +50,24 @@ public class GameController {
     @ResponseStatus(HttpStatus.OK)
     public List<Game> findNotEndedGamesByPlayerId(@PathVariable Integer id) {
         return gameService.findNotEndedGamesByPlayerId(id);
+    }
+
+    @GetMapping("/{id}/cards")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Card> findAllCardsOfGame(@PathVariable Integer id){
+        return cardService.findAllCardsOfGame(id);
+    }
+
+    @GetMapping("/{id}/gameplayers")
+    @ResponseStatus(HttpStatus.OK)
+    public List<GamePlayer> findGamePlayersByGameId(@PathVariable Integer id) {
+        return gamePlayerService.findGamePlayersByGameId(id);
+    }
+
+    @GetMapping("/{id}/messages")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Message> findAllMessagesByGameId(@PathVariable Integer id) {
+        return messageService.findAllMessagesByGameId(id);
     }
 
     @GetMapping("/all")
@@ -76,4 +108,14 @@ public class GameController {
     public Integer whoIsNext(@PathVariable Integer id1, @PathVariable Integer id2) {
         return gameService.whoIsNext(id1, id2);
     }
+
+    @GetMapping("/prueba")
+    @ResponseStatus(HttpStatus.OK)
+    public List<String> prueba(@RequestBody @Valid PosiblePositionOfAGamePlayerGivenRequest pp) {
+        Integer gameplayerId = pp.getGamePlayerId();
+        Integer gameId = pp.getGameId();
+        return gameService.findPosiblePositionOfAGamePlayerGiven(gameplayerId, gameId);
+    }
+
+
 }

@@ -6,17 +6,18 @@ import java.util.List;
 import jakarta.persistence.Column;
 import jakarta.persistence.ConstraintMode;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
-import us.l4_4.dp1.end_of_line.effect.Effect;
+import us.l4_4.dp1.end_of_line.enums.Hability;
 import us.l4_4.dp1.end_of_line.gameplayer.GamePlayer;
 import us.l4_4.dp1.end_of_line.message.Message;
 import us.l4_4.dp1.end_of_line.model.BaseEntity;
@@ -47,14 +48,13 @@ public class Game extends BaseEntity {
     @OneToMany
     private List<Message> message;
 
-    @Transient
-    private Effect effect;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private Hability effect;
 
     @NotNull
     @OneToMany
     private List<GamePlayer> gamePlayers;
 
-    Integer gamePlayerTurnId;
-
-
+    private Integer gamePlayerTurnId;
 }

@@ -83,12 +83,6 @@ public class FriendshipService {
     }
 
     @Transactional
-    public Friendship save(Friendship friendship) throws DataAccessException {
-        friendshipRepository.save(friendship);
-        return friendship;
-    }
-
-    @Transactional
     public Friendship update(Integer id, FriendshipDTO friendshipDTO) throws DataAccessException {
         Friendship friendshipToUpdate = findById(id);
         friendshipToUpdate.setFriendState(friendshipDTO.getFriendship_state());

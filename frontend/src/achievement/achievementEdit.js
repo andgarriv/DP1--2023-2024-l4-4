@@ -1,7 +1,7 @@
 import { useState } from "react";
-import tokenService from "../services/token.service";
 import { Link } from "react-router-dom";
 import { Form, Input, Label } from "reactstrap";
+import tokenService from "../services/token.service";
 import getErrorModal from "./../util/getErrorModal";
 import getIdFromUrl from "./../util/getIdFromUrl";
 import useFetchState from "./../util/useFetchState";
@@ -14,7 +14,7 @@ export default function AchievementEdit() {
         description: "",
         badgeImage: "",
         threshold: 1,
-        metric: "GAMES_PLAYED",
+        category: "GAMES_PLAYED",
         actualDescription: ""
     };
     const [message, setMessage] = useState(null);
@@ -64,14 +64,15 @@ export default function AchievementEdit() {
         setAchievement({ ...achievement, [name]: value });
     }
     return (
-        <div className="home-page-container" style={{ display: "flex", justifyContent: "center", alignItems: "center"}}>
-            <h2 className="text-center" style={{color:'white'}}> 
-                {achievement.id ? "Edit Consultation" : "Add Consultation"}
-            </h2>
+        <div className="home-page-container" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+
             <div className="hero-div">
                 {modal}
-                <Form onSubmit={handleSubmit}>
-                    <div className="custom-form-input" >
+                <h2 className="text-center" style={{ color: 'white' }}>
+                    {achievement.id ? "Edit Achievement" : "Add Achievement"}
+                </h2>
+                <Form onSubmit={handleSubmit} style={{ width: '100%' }}>
+                    <div className="custom-form-input">
                         <Label for="name" className="custom-form-input-label-achievements">
                             Name
                         </Label>
@@ -114,15 +115,15 @@ export default function AchievementEdit() {
                         />
                     </div>
                     <div className="custom-form-input">
-                        <Label for="metric" className="custom-form-input-label-achievements" >
-                            Metric
+                        <Label for="category" className="custom-form-input-label-achievements" >
+                            Category
                         </Label>
                         <Input
                             type="select"
                             required
-                            name="metric"
-                            id="metric"
-                            value={achievement.metric || ""}
+                            name="category"
+                            id="category"
+                            value={achievement.category || ""}
                             onChange={handleChange}
                             className="custom-input"
                         >
@@ -147,9 +148,6 @@ export default function AchievementEdit() {
                         />
                     </div>
                     <div className="custom-button-row">
-                        <button className="auth-button-eol">
-                            Save
-                        </button>
                         <Link
                             to={`/achievements`}
                             className="auth-button-eol"
@@ -157,6 +155,9 @@ export default function AchievementEdit() {
                         >
                             Cancel
                         </Link>
+                        <button className="auth-button-eol">
+                            Save
+                        </button>
                     </div>
                 </Form>
             </div>

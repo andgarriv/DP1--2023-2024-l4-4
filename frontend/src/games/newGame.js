@@ -15,6 +15,7 @@ export default function NewGame() {
   const [p2, setP2] = useState(null);
   const [p2name, setP2name] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(true);
   const playersPerPage = 5;
 
   const modal = getErrorModal(setVisible, visible, message);
@@ -95,7 +96,7 @@ export default function NewGame() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch(`/api/v1/players/friends/${user.id}`, {
+        const response = await fetch(`/api/v1/players/${user.id}/friends`, {
           headers: {
             Authorization: `Bearer ${jwt}`,
           },
@@ -105,6 +106,8 @@ export default function NewGame() {
         }
         const data = await response.json();
         setPlayers(data);
+        setLoading(false);
+        console.log(data);
       } catch (error) {
         console.error('Error fetching players data:', error);
       }
@@ -113,6 +116,10 @@ export default function NewGame() {
 
   }, [jwt, user.id]);
 
+  if (loading) {
+    return <div className="home-page-container"> <div className="hero-div">Loading...</div> </div>;
+  }
+
   return (
     <div className="home-page-container">
       <div className="hero-div"
@@ -120,7 +127,7 @@ export default function NewGame() {
         <h1>NEW GAME</h1>
         <br />
         <div>
-          {players ? (
+          {players.length > 0 ? (
             <>
               <div style={{
                 display: "flex",

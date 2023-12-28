@@ -13,7 +13,7 @@ function GameNavbar() {
     const [collapsed, setCollapsed] = useState(true);
 
     const toggleNavbar = () => setCollapsed(!collapsed);
-    const [rounds, setRounds] = useState(0);
+    const [round, setRound] = useState(0);
     const [gameTime, setGameTime] = useState(0);
     const [turnId, setTurnId] = useState(0);
     const [gameId, setgameId] = useState(null);

@@ -73,11 +73,6 @@ public class PlayerService {
 		return playerRepository.save(playerToUpdate);
 	}
 
-	@Transactional(readOnly = true)
-	public List<Player> findAllPlayersExceptWithId(Integer id) {
-		return playerRepository.findAllExceptWithId(id);
-	}
-
 	@Transactional
 	public void delete(Integer id) throws DataAccessException {
 		playerRepository.deleteById(id);
@@ -94,7 +89,7 @@ public class PlayerService {
 	}
 
 	@Transactional(readOnly = true)
-	public List<Player> findAllPlayersFriendsByPlayerId(Integer playerId) throws DataAccessException {
+	public List<Player> findAllFriendsByPlayerId(Integer playerId) throws DataAccessException {
 		return StreamSupport.stream(friendshipRepository.findAllFriendshipsByPlayerId(playerId).spliterator(), false)
 				.filter(friendship -> friendship.getFriendState().equals(FriendStatus.ACCEPTED))
 				.map(friendship -> friendship.getSender().getId().equals(playerId) ? friendship.getReceiver()

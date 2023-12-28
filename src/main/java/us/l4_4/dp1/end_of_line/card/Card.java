@@ -46,7 +46,7 @@ public class Card extends BaseEntity{
     @Range(min = 0, max = 6)
     @Column(name = "card_row")
     Integer row;
-    
+
     @Range(min = 0, max = 6)
     @Column(name = "card_column")
     Integer column;

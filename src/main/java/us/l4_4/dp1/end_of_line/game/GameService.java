@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +17,11 @@ import org.springframework.transaction.annotation.Transactional;
 import us.l4_4.dp1.end_of_line.card.Card;
 import us.l4_4.dp1.end_of_line.card.CardRepository;
 import us.l4_4.dp1.end_of_line.card.CardService;
-import us.l4_4.dp1.end_of_line.effect.EffectRepository;
 import us.l4_4.dp1.end_of_line.enums.CardStatus;
 import us.l4_4.dp1.end_of_line.enums.Color;
 import us.l4_4.dp1.end_of_line.enums.Exit;
+import us.l4_4.dp1.end_of_line.enums.Hability;
+import us.l4_4.dp1.end_of_line.enums.Orientation;
 import us.l4_4.dp1.end_of_line.exceptions.BadRequestException;
 import us.l4_4.dp1.end_of_line.exceptions.ResourceNotFoundException;
 import us.l4_4.dp1.end_of_line.gameplayer.GamePlayer;
@@ -34,18 +37,16 @@ public class GameService {
     PlayerRepository playerRepository;
     GamePlayerRepository gamePlayerRepository;
     MessageRepository messageRepository;
-    EffectRepository effectRepository;
     CardRepository cardRepository;
     CardService cardService;
 
     @Autowired
     public GameService(GameRepository gameRepository, PlayerRepository playerRepository,
-            MessageRepository messageRepository, EffectRepository effectRepository,
+            MessageRepository messageRepository,
             GamePlayerRepository gamePlayerRepository, CardRepository cardRepository) {
         this.gameRepository = gameRepository;
         this.playerRepository = playerRepository;
         this.messageRepository = messageRepository;
-        this.effectRepository = effectRepository;
         this.gamePlayerRepository = gamePlayerRepository;
         this.cardRepository = cardRepository;
     }
@@ -74,9 +75,6 @@ public class GameService {
                     .collect(Collectors.toList());
             game.setMessage(messages);
         }
-        if (gameDTO.getEffect_id() != null) {
-            game.setEffect(effectRepository.findById(gameDTO.getEffect_id()).get());
-        }
         List<GamePlayer> gamePlayers = gameDTO.getGamePlayers_ids()
                 .stream()
                 .map(gamePlayerId -> gamePlayerRepository.findById(gamePlayerId).get())
@@ -98,7 +96,7 @@ public class GameService {
         game.setStartedAt(Date.from(java.time.Instant.now()));
         game.setEndedAt(null);
         game.setMessage(null);
-        game.setEffect(null);
+        game.setEffect(Hability.NONE);
         GamePlayer p1 = new GamePlayer();
         p1.setColor(c1);
         p1.setEnergy(3);
@@ -250,9 +248,6 @@ public class GameService {
                     .collect(Collectors.toList());
             game.setMessage(messages);
         }
-        if (gameDTO.getEffect_id() != null) {
-            game.setEffect(effectRepository.findById(gameDTO.getEffect_id()).get());
-        }
         List<GamePlayer> gamePlayers = gameDTO.getGamePlayers_ids()
                 .stream()
                 .map(gamePlayerId -> gamePlayerRepository.findById(gamePlayerId).get())
@@ -322,4 +317,161 @@ public class GameService {
     public List<Game> findAllGamesByPlayerId(Integer playerId) {
         return gameRepository.findGamesByPlayerId(playerId);
     }
+
+    @Transactional
+    public List<String> findPosiblePositionOfAGamePlayerGiven(Integer gamePlayerId, Integer gameId) {
+        GamePlayer gp = gamePlayerRepository.findById(gamePlayerId).get();
+        //todas las cartas que estan en el tablero
+        List<String> cartasON_BOARD= gamePlayerRepository.findGamePlayersByGameId(gameId)
+        .get(0)
+        .getCards()
+        .stream()
+        .filter(card -> card.getCardState() == CardStatus.ON_BOARD)
+        .map(card -> card.getColumn() + "," + card.getRow())
+        .collect(Collectors.toList()); 
+        cartasON_BOARD.addAll(gamePlayerRepository.findGamePlayersByGameId(gameId)
+        .get(1)
+        .getCards()
+        .stream()
+        .filter(card -> card.getCardState() == CardStatus.ON_BOARD)
+        .map(card -> card.getColumn() + "," + card.getRow())
+        .collect(Collectors.toList()));
+
+        Card ultimaCartaEchada = gp.getCards().stream()
+                .filter(card -> card.getCardState() == CardStatus.ON_BOARD)
+                .sorted(Comparator.comparing(Card::getUpdatedAt).reversed())
+                .collect(Collectors.toList()).get(0);
+
+        Integer n = ultimaCartaEchada.getColumn();
+        Integer m = ultimaCartaEchada.getRow();
+
+        List<String> res = new ArrayList<>();
+        
+
+        String norte = n + "," + (m - 1);
+        if((m-1)<0)norte = n + "," + 6;
+
+
+        String sur = n + "," + (m + 1);
+        if((m+1)>6)sur = n + "," + 6;
+
+
+
+        String este = (n + 1) + "," + m;
+        if((n+1)>6)este = 0 + "," + m;
+
+
+
+        String oeste = (n - 1) + "," + m;
+        if((n-1)<0)oeste = 6 + "," + m;
+
+
+
+        List<Integer> salidas = extraerNumerosDeSalida(ultimaCartaEchada.getExit().toString());
+
+        if (ultimaCartaEchada.getOrientation().equals(Orientation.S)) {
+            // sur
+            // posiciones posibles
+            // oeste -> primer numero de salida
+            // norte-> segundo numero de salida
+            // este-> tercer numero de salida
+
+            if (ultimaCartaEchada.getExit().equals(Exit.START)) {
+                if(!cartasON_BOARD.contains(norte)) res.add(norte+",S");
+            } else {
+                if (salidas.get(0) == 1 && !cartasON_BOARD.contains(oeste)) {
+                    res.add(oeste+",E");
+                }
+                if (salidas.get(1) == 1 && !cartasON_BOARD.contains(norte)) {
+                    res.add(norte+ ",S");
+                }
+                if (salidas.get(2) == 1 && !cartasON_BOARD.contains(este)) {
+                    res.add(este+",W");
+                }
+            }
+        }
+        
+        if(ultimaCartaEchada.getOrientation().equals(Orientation.N)){
+            // norte
+            // posiciones posibles
+            //este-> primer numero de salida
+            //sur-> segundo numero de salida
+            //oeste-> tercer numero de salida
+
+             if(salidas.get(0)==1 && !cartasON_BOARD.contains(este)){
+                res.add(este+",W");
+            }
+            if(salidas.get(1) == 1&& !cartasON_BOARD.contains(sur)){
+              res.add(sur+",N");
+            }
+            if(salidas.get(2) == 1 && !cartasON_BOARD.contains(oeste)){
+                 res.add(oeste+",E");
+            }
+            }
+        
+        if(ultimaCartaEchada.getOrientation().equals(Orientation.E)){
+            //este 
+            // posiciones posibles
+            //sur-> primer numero de salida
+            //oeste-> segundo numero de salida
+            //norte-> tercer numero de salida
+
+            if (salidas.get(0) == 1 && !cartasON_BOARD.contains(sur)) {
+                res.add(sur+",N");
+            }
+            if (salidas.get(1) == 1 && !cartasON_BOARD.contains(oeste)) {
+                 res.add(oeste+",E");
+            }
+            if (salidas.get(2) == 1 && !cartasON_BOARD.contains(norte)) {
+               res.add(norte+ ",S");
+                
+            }
+            }
+        
+        if(ultimaCartaEchada.getOrientation().equals(Orientation.W)){
+            //oeste 
+            // posiciones posibles
+            //norte-> primer numero de salida
+            //este-> segundo numero de salida
+            //sur-> tercer numero de salida
+
+            if (salidas.get(0) == 1 && !cartasON_BOARD.contains(norte)) {
+                res.add(norte+ ",S");
+            }
+            if (salidas.get(1) == 1 && !cartasON_BOARD.contains(este)) {
+               res.add(este+",W");
+            }
+            if (salidas.get(2) == 1 && !cartasON_BOARD.contains(sur)) {
+                res.add(sur+",N");
+                
+            }
+        }
+        return res;
+    }
+
+    private static ArrayList<Integer> extraerNumerosDeSalida(String texto) {
+       
+        ArrayList<Integer> digitos = new ArrayList<>();
+        
+       
+        Pattern patron = Pattern.compile("_(\\d+)_");
+        Matcher coincidencias = patron.matcher(texto);
+
+       
+        if (coincidencias.find()) {
+            
+            String secuencia = coincidencias.group(1);
+
+            
+            for (char digito : secuencia.toCharArray()) {
+                digitos.add(Character.getNumericValue(digito));
+            }
+        }
+
+        return digitos;
+    }
+
+
+
+
 }
