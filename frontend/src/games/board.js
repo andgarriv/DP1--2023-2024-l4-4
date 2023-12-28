@@ -3,7 +3,7 @@ import tokenService from "../services/token.service.js";
 import { fetchGameCards, getRotationStyle, isPlayerAuthorized } from "./services/boardService.js";
 import "./styles/Board.css";
 
-function Box({ content }) {
+function Box({ content, onClick, isHighlighted }) {
   const getRotationClass = (orientation) => {
     switch (orientation) {
       case 'N':
@@ -20,11 +20,13 @@ function Box({ content }) {
   };
 
   const rotationClass = content ? getRotationClass(content.orientation) : '';
+  const highlightClass = isHighlighted ? 'highlight' : '';
+
 
   return (
-    <div className="box">
+    <button className={`box ${rotationClass} ${highlightClass}`} onClick={onClick}>
       {content ? <img src={content.image} alt="Card" className={rotationClass} /> : null}
-    </div>
+    </button>
   );
 }
 
@@ -49,6 +51,11 @@ export default function Board() {
   const [isLoading, setIsLoading] = useState(true);
   const [player1CardPossiblePositions, setPlayer1CardPossiblePositions] = useState([]);
   const [player2CardPossiblePositions, setPlayer2CardPossiblePositions] = useState([]);
+  
+  const handleBoxClick = (rowIndex, colIndex) => {
+    console.log(`Casilla clickeada: fila ${rowIndex}, columna ${colIndex}`);
+    // TODO: Implementar lógica de click en casilla
+  };
 
   useEffect(() => {
     if (dataGamePlayer.length > 0) {
@@ -85,8 +92,6 @@ export default function Board() {
           ))}
           {dataGamePlayer[0].player.id == user.id &&
           <div className="hand">
-            <text> Player1 possible positions: {player1CardPossiblePositions}</text>
-            <text> Player2 possible positions: {player2CardPossiblePositions}</text>
             <img
             src={energyCards[0].image}
             alt="EnergyCard0"
@@ -122,7 +127,16 @@ export default function Board() {
           {board.map((row, i) => (
             <div key={i} className="row2">
               {row.map((boxContent, j) => (
-                <Box key={j} content={boxContent} />
+                <Box 
+                key={j} 
+                content={boxContent} 
+                onClick={() => handleBoxClick(i, j)}
+                // Caso de ser jugador 1
+                isHighlighted = {(player1CardPossiblePositions.some(pos => pos.row === j && pos.col === i) && dataGamePlayer[0].player.id === user.id) 
+                                  || 
+                                 (player2CardPossiblePositions.some(pos => pos.row === j && pos.col === i) && dataGamePlayer[1].player.id === user.id)}
+                
+                />
               ))}
             </div>
           ))}

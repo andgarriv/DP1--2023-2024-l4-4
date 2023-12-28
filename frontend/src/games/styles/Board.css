@@ -17,6 +17,7 @@
 
 .box {
   flex: 1; /* Las casillas se distribuyen uniformemente */
+  background: none;
   aspect-ratio: 1; /* Mantiene las casillas cuadradas */
   border: 1px solid rgb(255, 255, 255);
   overflow: hidden;
@@ -28,6 +29,18 @@
   height: 100%;
   object-fit: contain; /* Asegura que las imágenes se ajusten a la casilla sin distorsionarse */
 }
+
+.box:hover, .box:focus {
+  outline: none;
+  background-color: rgba(255, 255, 255, 0.322); /* Cambia ligeramente el color de fondo al pasar el mouse o enfocar */
+}
+
+.highlight {
+  border: 2px solid yellow; /* Un borde amarillo para destacar */
+  background-color: rgba(255, 255, 0, 0.2); /* Un ligero resaltado de fondo */
+}
+
+
 
 .background {
   background-color: #222222;

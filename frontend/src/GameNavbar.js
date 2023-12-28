@@ -8,10 +8,7 @@ import './static/css/home/home.css';
 function GameNavbar() {
     const jwt = tokenService.getLocalAccessToken();
     const [roles, setRoles] = useState([]);
-    const [username, setUsername] = useState("");
-
     const [collapsed, setCollapsed] = useState(true);
-
     const toggleNavbar = () => setCollapsed(!collapsed);
     const [round, setRound] = useState(0);
     const [gameTime, setGameTime] = useState(0);
@@ -21,7 +18,6 @@ function GameNavbar() {
     useEffect(() => {
         if (jwt) {
             setRoles(jwt_decode(jwt).authorities);
-            setUsername(jwt_decode(jwt).sub);
         };
         async function fetchGameData() {
             const jwt = tokenService.getLocalAccessToken();
@@ -34,7 +30,9 @@ function GameNavbar() {
             let gameId = 0;
 
             if (user.id < 3) {
-                gameId = 401;            
+                const uriParts = window.location.pathname.split('/');
+                const lastSegment = uriParts[uriParts.length - 1];
+                gameId = parseInt(lastSegment, 10);
             } else {
                 const playerGame = playerData.find((game) => !game.endedAt);
                 if (playerGame) {
@@ -52,8 +50,7 @@ function GameNavbar() {
 
             const data = await response.json();
 
-
-            setRound(data.rounds);
+            setRound(data.round);
             setTurnId(data.turnId);
             setgameId(gameId);
 
@@ -87,7 +84,7 @@ function GameNavbar() {
             adminLinks = (
                 <>
                 <NavItem className="d-flex">
-                <NavLink className="fuente" style={{ color: "#EF87E0" }} id="logout" tag={Link} to="">Exit</NavLink>
+                <NavLink className="fuente" style={{ color: "#EF87E0", marginLeft: "150px" }} id="logout" tag={Link} to="">Exit</NavLink>
             </NavItem>
          </>
             )

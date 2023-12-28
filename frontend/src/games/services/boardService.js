@@ -98,8 +98,28 @@ export async function fetchGameCards(gameId, jwt, setDataGamePlayer, setHandCard
       }
       const cardPlayer1PossiblePositions = await responsePlayer1CardPossiblePositions.json();
       const cardPlayer2PossiblePositions = await responsePlayer2CardPossiblePositions.json();
-      setPlayer1CardPossiblePositions(cardPlayer1PossiblePositions);
-      setPlayer2CardPossiblePositions(cardPlayer2PossiblePositions);
+
+      const parsedPlayer1Positions = cardPlayer1PossiblePositions.map(pos => {
+        const parts = pos.split(',');
+        return { 
+          row: parseInt(parts[0], 10), // Convertir la fila a número
+          col: parseInt(parts[1], 10)  // Convertir la columna a número
+        };
+      });
+
+      const parsedPlayer2Positions = cardPlayer2PossiblePositions.map(pos => {
+        const parts = pos.split(',');
+        return { 
+          row: parseInt(parts[0], 10), // Convertir la fila a número
+          col: parseInt(parts[1], 10)  // Convertir la columna a número
+        };
+      }
+      );
+        
+
+
+      setPlayer1CardPossiblePositions(parsedPlayer1Positions);
+      setPlayer2CardPossiblePositions(parsedPlayer2Positions);
   
       setIsLoading(false);
     } catch (error) {
@@ -117,6 +137,8 @@ export function setHandCardsPlayer(cards, setHandCardsFunction) {
     setHandCardsFunction(images);
   });
 }
+
+
 
 export function importGameCard(color, exit, initiative) {
   let name = "";
