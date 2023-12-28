@@ -39,7 +39,7 @@ function GameNavbar() {
                 const playerGame = playerData.find((game) => !game.endedAt);
                 if (playerGame) {
                     gameId = playerGame.id;
-                }             }
+            }}
             
 
             const response = await fetch(`/api/v1/games/${gameId}`, {
