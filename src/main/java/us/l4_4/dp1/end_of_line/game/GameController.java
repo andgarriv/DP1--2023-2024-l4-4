@@ -109,10 +109,12 @@ public class GameController {
         return gameService.whoIsNext(id1, id2);
     }
 
-        @GetMapping("/prueba/{cardId}/{gameId}")
+    @GetMapping("/prueba")
     @ResponseStatus(HttpStatus.OK)
-    public List<String> prueba(@PathVariable Integer cardId, @PathVariable Integer gameId) {
-        return gameService.findPosiblePositionOfACardGiven(cardId, gameId);
+    public List<String> prueba(@RequestBody @Valid PosiblePositionOfAGamePlayerGivenRequest pp) {
+        Integer gameplayerId = pp.getGamePlayerId();
+        Integer gameId = pp.getGameId();
+        return gameService.findPosiblePositionOfAGamePlayerGiven(gameplayerId, gameId);
     }
 
 
