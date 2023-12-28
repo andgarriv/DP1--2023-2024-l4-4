@@ -319,9 +319,8 @@ public class GameService {
     }
 
     @Transactional
-    public List<String> findPosiblePositionOfACardGiven(Integer cardId, Integer gameId) {
-        Card c = cardRepository.findById(cardId).get();
-        GamePlayer gp = gameRepository.findGameplayerByCardId(c.getId());
+    public List<String> findPosiblePositionOfAGamePlayerGiven(Integer gamePlayerId, Integer gameId) {
+        GamePlayer gp = gamePlayerRepository.findById(gamePlayerId).get();
         //todas las cartas que estan en el tablero
         List<String> cartasON_BOARD= gamePlayerRepository.findGamePlayersByGameId(gameId)
         .get(0)
@@ -347,14 +346,30 @@ public class GameService {
         Integer m = ultimaCartaEchada.getRow();
 
         List<String> res = new ArrayList<>();
+        
 
         String norte = n + "," + (m - 1);
+        if((m-1)<0)norte = n + "," + 6;
+
+
         String sur = n + "," + (m + 1);
+        if((m+1)>6)sur = n + "," + 6;
+
+
+
         String este = (n + 1) + "," + m;
+        if((n+1)>6)este = 0 + "," + m;
+
+
+
         String oeste = (n - 1) + "," + m;
+        if((n-1)<0)oeste = 6 + "," + m;
+
+
+
         List<Integer> salidas = extraerNumerosDeSalida(ultimaCartaEchada.getExit().toString());
 
-        if (c.getOrientation().equals(Orientation.S)) {
+        if (ultimaCartaEchada.getOrientation().equals(Orientation.S)) {
             // sur
             // posiciones posibles
             // oeste -> primer numero de salida
@@ -362,21 +377,21 @@ public class GameService {
             // este-> tercer numero de salida
 
             if (ultimaCartaEchada.getExit().equals(Exit.START)) {
-                if(!cartasON_BOARD.contains(norte)) res.add(norte);
+                if(!cartasON_BOARD.contains(norte)) res.add(norte+",S");
             } else {
                 if (salidas.get(0) == 1 && !cartasON_BOARD.contains(oeste)) {
-                    res.add(oeste);
+                    res.add(oeste+",E");
                 }
                 if (salidas.get(1) == 1 && !cartasON_BOARD.contains(norte)) {
-                    res.add(norte);
+                    res.add(norte+ ",S");
                 }
                 if (salidas.get(2) == 1 && !cartasON_BOARD.contains(este)) {
-                    res.add(este);
+                    res.add(este+",W");
                 }
             }
         }
         
-        if(c.getOrientation().equals(Orientation.N)){
+        if(ultimaCartaEchada.getOrientation().equals(Orientation.N)){
             // norte
             // posiciones posibles
             //este-> primer numero de salida
@@ -384,17 +399,17 @@ public class GameService {
             //oeste-> tercer numero de salida
 
              if(salidas.get(0)==1 && !cartasON_BOARD.contains(este)){
-                res.add(este);
+                res.add(este+",W");
             }
             if(salidas.get(1) == 1&& !cartasON_BOARD.contains(sur)){
-               res.add(sur);
+              res.add(sur+",N");
             }
             if(salidas.get(2) == 1 && !cartasON_BOARD.contains(oeste)){
-                res.add(oeste);
+                 res.add(oeste+",E");
             }
             }
         
-        if(c.getOrientation().equals(Orientation.E)){
+        if(ultimaCartaEchada.getOrientation().equals(Orientation.E)){
             //este 
             // posiciones posibles
             //sur-> primer numero de salida
@@ -402,18 +417,18 @@ public class GameService {
             //norte-> tercer numero de salida
 
             if (salidas.get(0) == 1 && !cartasON_BOARD.contains(sur)) {
-                res.add(sur);
+                res.add(sur+",N");
             }
             if (salidas.get(1) == 1 && !cartasON_BOARD.contains(oeste)) {
-                res.add(oeste);
+                 res.add(oeste+",E");
             }
             if (salidas.get(2) == 1 && !cartasON_BOARD.contains(norte)) {
-                res.add(norte);
+               res.add(norte+ ",S");
                 
             }
             }
         
-        if(c.getOrientation().equals(Orientation.W)){
+        if(ultimaCartaEchada.getOrientation().equals(Orientation.W)){
             //oeste 
             // posiciones posibles
             //norte-> primer numero de salida
@@ -421,13 +436,13 @@ public class GameService {
             //sur-> tercer numero de salida
 
             if (salidas.get(0) == 1 && !cartasON_BOARD.contains(norte)) {
-                res.add(norte);
+                res.add(norte+ ",S");
             }
             if (salidas.get(1) == 1 && !cartasON_BOARD.contains(este)) {
-                res.add(este);
+               res.add(este+",W");
             }
             if (salidas.get(2) == 1 && !cartasON_BOARD.contains(sur)) {
-                res.add(sur);
+                res.add(sur+",N");
                 
             }
         }
