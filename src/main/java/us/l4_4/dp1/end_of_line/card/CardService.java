@@ -62,12 +62,13 @@ public class CardService {
         cards.addAll(cardRepository.findAllCardsByGamePlayer(gamePlayerId2));
         return cards;
     }
+
     @Transactional
-    public  Card updateInHandCard(Integer cardId,Integer row, Integer column,  Orientation orientation){
+    public Card updateInHandCard(Integer cardId,Integer row, Integer column,  Orientation orientation){
         Card card = cardRepository.findById(cardId).get();
         card.setColumn(column);
         card.setRow(row);
-        card.setOrientation(Orientation.valueOf(orientation.toString()));
+        card.setOrientation(orientation);
         card.setCardState(CardStatus.ON_BOARD);
         card.setUpdatedAt(Date.from(java.time.Instant.now()));
         return cardRepository.save(card);
