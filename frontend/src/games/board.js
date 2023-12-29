@@ -80,10 +80,6 @@ export default function Board() {
       return;
     }
 
-    console.log('Has seleccionado una carta y una posición');
-    console.log(`Casilla seleccionada: ${colIndex}, ${rowIndex}`);
-    console.log(`Carta seleccionada: ${selectedCard.id}`);
-
     // Verifica si la posición seleccionada coincide con una de las CardPossiblePositions
     const isPlayer1 = dataGamePlayer[0].player.id === user.id;
     const isPlayer2 = dataGamePlayer[1].player.id === user.id;
@@ -107,7 +103,6 @@ export default function Board() {
       if(position){
         cardOrientation = position.orientation;
       }
-      console.log('Es una posición válida', cardOrientation)
       } else {
         const position = player2CardPossiblePositions.find(
           (pos) => pos.row === rowIndex && pos.col === colIndex
@@ -115,13 +110,8 @@ export default function Board() {
         if(position){
           cardOrientation = position.orientation;
         }
-        console.log('Es una posición válida', cardOrientation)
       }
-
-
-
       playCard(selectedCard.id, colIndex, rowIndex, cardOrientation, jwt)
-
       // Limpia la carta seleccionada
       setSelectedCard(null);
     } else {
@@ -137,7 +127,6 @@ export default function Board() {
       gameLogic(gameId, jwt, user, setDataGamePlayer, setHandCardsPlayer1, setHandCardsPlayer2, setBoard,
         setIsLoading, setEnergyCards, setPlayer1CardPossiblePositions, setPlayer2CardPossiblePositions,
         setIsMyTurn, setDataGame);
-      // console.log(player2CardPossiblePositions)
     }, 1000); // Actualization every second
     return () => clearInterval(interval);
 
