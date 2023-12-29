@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "reactstrap";
 import tokenService from "../services/token.service.js";
-import { gameLogic, getButtonColorStyles, getColorStyles, getRotationStyle, isPlayerAuthorized } from "./services/boardService.js";
+import { gameLogic, getButtonColorStyles, getColorStyles, getRotationStyle, isPlayerAuthorized, playCard } from "./services/boardService.js";
 import "./styles/Board.css";
 
 function Box({ content, onClick, isHighlighted, playerColor }) {
@@ -20,16 +20,15 @@ function Box({ content, onClick, isHighlighted, playerColor }) {
     }
   };
 
-  const rotationClass = content ? getRotationClass(content.orientation) : '';
   const highlightStyle = isHighlighted ? getColorStyles(playerColor) : {};
 
   return (
     <button
-      className={`box ${rotationClass}`}
+      className={`box`}
       onClick={onClick}
       style={highlightStyle}
     >
-      {content ? <img src={content.image} alt="Card" className={rotationClass} /> : null}
+      {content ? <img src={content.image} alt="Card" className={`card-image ${getRotationClass(content.orientation)}`} /> : null}
     </button>
   );
 }
@@ -81,10 +80,6 @@ export default function Board() {
       return;
     }
 
-    console.log('Has seleccionado una carta y una posición');
-    console.log(`Casilla seleccionada: ${colIndex}, ${rowIndex}`);
-    console.log(`Carta seleccionada: ${selectedCard.id}`);
-
     // Verifica si la posición seleccionada coincide con una de las CardPossiblePositions
     const isPlayer1 = dataGamePlayer[0].player.id === user.id;
     const isPlayer2 = dataGamePlayer[1].player.id === user.id;
@@ -100,12 +95,23 @@ export default function Board() {
         ));
 
     if (isValidPosition) {
-      console.log('Colocada');
-      // Coloca la carta en la posición seleccionada en el tablero
-      const newBoard = [...board];
-      newBoard[colIndex][rowIndex] = selectedCard;
-      setBoard(newBoard);
-
+      let cardOrientation;
+      if(isPlayer1) {
+        const position = player1CardPossiblePositions.find(
+        (pos) => pos.row === rowIndex && pos.col === colIndex
+      );
+      if(position){
+        cardOrientation = position.orientation;
+      }
+      } else {
+        const position = player2CardPossiblePositions.find(
+          (pos) => pos.row === rowIndex && pos.col === colIndex
+        );
+        if(position){
+          cardOrientation = position.orientation;
+        }
+      }
+      playCard(selectedCard.id, colIndex, rowIndex, cardOrientation, jwt)
       // Limpia la carta seleccionada
       setSelectedCard(null);
     } else {

@@ -123,7 +123,8 @@ export async function gameLogic(gameId, jwt, user, setDataGamePlayer, setHandCar
         const parts = pos.split(',');
         return { 
           row: parseInt(parts[0], 10), // Convertir la fila a número
-          col: parseInt(parts[1], 10)  // Convertir la columna a número
+          col: parseInt(parts[1], 10),  // Convertir la columna a número
+          orientation: parts[2] // Obtener la orientación
         };
       });
 
@@ -131,7 +132,8 @@ export async function gameLogic(gameId, jwt, user, setDataGamePlayer, setHandCar
         const parts = pos.split(',');
         return { 
           row: parseInt(parts[0], 10), // Convertir la fila a número
-          col: parseInt(parts[1], 10)  // Convertir la columna a número
+          col: parseInt(parts[1], 10),  // Convertir la columna a número
+          orientation: parts[2] // Obtener la orientación
         };
       }
       );
@@ -298,3 +300,17 @@ export function getButtonColorStyles(colorName) {
   };
 }
 
+export async function playCard(cardId, row, column, orientation, jwt){
+  const response = await fetch(`/api/v1/cards/${cardId}/position`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${jwt}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ row, column, orientation }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Error al jugar la carta.");
+  }
+}
