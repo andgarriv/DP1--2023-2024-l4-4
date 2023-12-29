@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import tokenService from "../services/token.service.js";
-import { gameLogic, getRotationStyle, isPlayerAuthorized } from "./services/boardService.js";
+import { gameLogic, getColorStyles, getRotationStyle, isPlayerAuthorized } from "./services/boardService.js";
 import "./styles/Board.css";
 
 function Box({ content, onClick, isHighlighted, playerColor }) {
@@ -19,69 +19,8 @@ function Box({ content, onClick, isHighlighted, playerColor }) {
     }
   };
 
-  const rotationClass = content ? getRotationClass(content.orientation) : '';
-
-  function getColorStyles(colorName) {
-    switch (colorName) {
-        case 'RED':
-            return {
-              border: '2px solid rgb((225,28,36)',
-            backgroundColor: 'rgb(255, 0, 0, 0.2)'
-          };
-        case 'ORANGE':
-          return {
-            border: 'rgb(255, 0, 0)',
-          backgroundColor: 'rgb(255, 0, 0, 0.2)'
-        };
-         case 'YELLOW':
-          return {
-            border: 'rgb(255, 0, 0)',
-          backgroundColor: 'rgb(255, 0, 0, 0.2)'
-        };
-                case 'GREEN':
-                  return {
-                    border: 'rgb(255, 0, 0)',
-                  backgroundColor: 'rgb(255, 0, 0, 0.2)'
-                };
-                case 'BLUE':
-
-                return {
-                  border: '2px solid rgb(4,163,227)',
-                backgroundColor: 'rgba(4,163,227, 0.2)'
-              };
-                case 'MAGENTA':
-
-                return {
-                  border: 'rgb(255, 0, 0)',
-                backgroundColor: 'rgb(255, 0, 0, 0.2)'
-              };
-
-                case 'VIOLET':
-
-                return {
-                  border: '2px solid rgb(192, 138, 184)',
-                backgroundColor: 'rgba(192, 138, 184, 0.2)'
-              };
-                case 'WHITE':
-
-        return {
-          border: 'rgb(255, 0, 0)',
-        backgroundColor: 'rgb(255, 0, 0, 0.2)'
-      };
-        default:
-
-        return {
-          border: 'rgb(255, 0, 0)',
-        backgroundColor: 'rgb(255, 0, 0, 0.2)'
-      };
-      }
-}
-
-const colorStyles = getColorStyles(playerColor);
-
-  const highlightStyle = isHighlighted
-    ? colorStyles
-    : {};
+const rotationClass = content ? getRotationClass(content.orientation) : '';
+const highlightStyle = isHighlighted ? getColorStyles(playerColor) : {};
 
 return (
   <button

@@ -217,3 +217,45 @@ export function getRotationStyle(energy) {
       return {};
   }
 }
+
+export function getColorStyles(colorName) {
+  const colors = {
+    RED: {
+      border: '2px solid rgb(225, 28, 36)',
+      backgroundColor: 'rgba(225, 28, 36, 0.2)',
+    },
+    ORANGE: {
+      border: '2px solid rgb(239, 145, 20)',
+      backgroundColor: 'rgba(239, 145, 20, 0.2)',
+    },
+    YELLOW: {
+      border: '2px solid rgb(251, 235, 68)',
+      backgroundColor: 'rgba(251, 235, 68, 0.2)',
+    },
+    GREEN: {
+      border: '2px solid rgb(75, 178, 91)',
+      backgroundColor: 'rgba(75, 178, 91, 0.2)',
+    },
+    BLUE: {
+      border: '2px solid rgb(4, 163, 227)',
+      backgroundColor: 'rgba(4, 163, 227, 0.2)',
+    },
+    MAGENTA: {
+      border: '2px solid rgb(225, 12, 123)',
+      backgroundColor: 'rgba(225, 12, 123, 0.2)',
+    },
+    VIOLET: {
+      border: '2px solid rgb(192, 138, 184)',
+      backgroundColor: 'rgba(192, 138, 184, 0.2)',
+    },
+    WHITE: {
+      border: '2px solid rgb(194, 194, 194)',
+      backgroundColor: 'rgba(194, 194, 194, 0.2)',
+    },
+  };
+
+  return colors[colorName] || {
+    border: '2px solid rgb(0, 0, 0)',
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+  };
+}
