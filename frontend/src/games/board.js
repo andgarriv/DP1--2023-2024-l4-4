@@ -20,16 +20,15 @@ function Box({ content, onClick, isHighlighted, playerColor }) {
     }
   };
 
-  const rotationClass = content ? getRotationClass(content.orientation) : '';
   const highlightStyle = isHighlighted ? getColorStyles(playerColor) : {};
 
   return (
     <button
-      className={`box ${rotationClass}`}
+      className={`box`}
       onClick={onClick}
       style={highlightStyle}
     >
-      {content ? <img src={content.image} alt="Card" className={rotationClass} /> : null}
+      {content ? <img src={content.image} alt="Card" className={`card-image ${getRotationClass(content.orientation)}`} /> : null}
     </button>
   );
 }
@@ -100,14 +99,28 @@ export default function Board() {
         ));
 
     if (isValidPosition) {
-      console.log('Colocada');
-      // Coloca la carta en la posición seleccionada en el tablero
-      // const newBoard = [...board];
-      // newBoard[colIndex][rowIndex] = selectedCard;
-      // setBoard(newBoard);
-      // Llama a la función de colocar carta
-      playCard(selectedCard.id, colIndex, rowIndex, selectedCard.orientation, jwt)
+      let cardOrientation;
+      if(isPlayer1) {
+        const position = player1CardPossiblePositions.find(
+        (pos) => pos.row === rowIndex && pos.col === colIndex
+      );
+      if(position){
+        cardOrientation = position.orientation;
+      }
+      console.log('Es una posición válida', cardOrientation)
+      } else {
+        const position = player2CardPossiblePositions.find(
+          (pos) => pos.row === rowIndex && pos.col === colIndex
+        );
+        if(position){
+          cardOrientation = position.orientation;
+        }
+        console.log('Es una posición válida', cardOrientation)
+      }
 
+
+
+      playCard(selectedCard.id, colIndex, rowIndex, cardOrientation, jwt)
 
       // Limpia la carta seleccionada
       setSelectedCard(null);
@@ -124,6 +137,7 @@ export default function Board() {
       gameLogic(gameId, jwt, user, setDataGamePlayer, setHandCardsPlayer1, setHandCardsPlayer2, setBoard,
         setIsLoading, setEnergyCards, setPlayer1CardPossiblePositions, setPlayer2CardPossiblePositions,
         setIsMyTurn, setDataGame);
+      // console.log(player2CardPossiblePositions)
     }, 1000); // Actualization every second
     return () => clearInterval(interval);
 
