@@ -1,7 +1,7 @@
 package us.l4_4.dp1.end_of_line.game;
 
 
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.stream.StreamSupport;
 
@@ -22,6 +22,12 @@ class GameServiceTest {
         Iterable<Game> allGames = this.gameService.findAllGames();
         long count = StreamSupport.stream(allGames.spliterator(), false).count();
         assertNotEquals(0, count);
+    }
+
+    @Test 
+    void shouldFindGameById(){
+        Game game = gameService.findById(1);
+        assertEquals(16, game.getRound());
     }
 
     /* @Test

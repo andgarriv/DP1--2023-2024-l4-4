@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import tokenService from "../services/token.service.js";
-import { fetchGameCards, getRotationStyle } from "./services/boardService.js";
+import { gameLogic, getRotationStyle } from "./services/boardService.js";
+
 import "./styles/Board.css";
 
 function Box({ content }) {
@@ -30,11 +31,14 @@ export default function AdminBoard() {
   const [cardPlayer1PossiblePositions, setPlayer1CardPossiblePositions] = useState([]);
   const [cardPlayer2PossiblePositions, setPlayer2CardPossiblePositions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [dataGame, setDataGame] = useState([]);
+  const [isMyTurn, setIsMyTurn] = useState(false);
 
   useEffect(() => {
     
     const interval = setInterval(() => {
-      fetchGameCards(gameId, jwt, setDataGamePlayer, setHandCardsPlayer1, setHandCardsPlayer2, setBoard, setIsLoading, setEnergyCards, setPlayer1CardPossiblePositions, setPlayer2CardPossiblePositions);
+      gameLogic(gameId, jwt, user, setDataGamePlayer, setHandCardsPlayer1, setHandCardsPlayer2, setBoard, setIsLoading, setEnergyCards, setPlayer1CardPossiblePositions, setPlayer2CardPossiblePositions,
+        setDataGame, setIsMyTurn);
     }, 1000); // Actualization every second
     return () => clearInterval(interval);
 
