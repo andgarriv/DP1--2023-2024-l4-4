@@ -1,7 +1,5 @@
 package us.l4_4.dp1.end_of_line.card;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,11 +31,11 @@ public class CardController {
         this.cardService = cardService;
     }
     
-    @GetMapping
+    /* @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Iterable<Card> findAll(){
         return cardService.findAll();
-    }
+    } */
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -45,11 +43,11 @@ public class CardController {
         return cardService.findById(id);
     }
 
-    @GetMapping("/color/{color}")
+    /* @GetMapping("/color/{color}")
     @ResponseStatus(HttpStatus.OK)
     public List<Card> findAllCardsByColor(@PathVariable String color){
         return cardService.findAllCardsByColor(color);
-    }
+    } */
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.validation.Valid;
-import us.l4_4.dp1.end_of_line.enums.Color;
 import us.l4_4.dp1.end_of_line.exceptions.ResourceNotFoundException;
 import us.l4_4.dp1.end_of_line.game.GameService;
 import us.l4_4.dp1.end_of_line.gameplayer.GamePlayer;
@@ -25,20 +24,20 @@ public class CardService {
         this.gameService = gameService;
     }
 
-    @Transactional(readOnly = true)
+    /* @Transactional(readOnly = true)
     public List<Card> findAllCardsByColor(String color) throws DataAccessException{
         return cardRepository.findAllCardsByColor(Color.valueOf(color));
-    }
+    } */
 
     @Transactional(readOnly = true)
     public Card findById(Integer id) throws DataAccessException{
         return this.cardRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Card", "id", id));
     }
 
-    @Transactional(readOnly = true)
+    /* @Transactional(readOnly = true)
     public Iterable<Card> findAll() throws DataAccessException{
         return cardRepository.findAll();
-    }
+    } */
 
     @Transactional
     public void delete(Integer id) throws DataAccessException{
@@ -51,12 +50,14 @@ public class CardService {
     }
 
     @Transactional(readOnly = true)
-    public List<Card> findAllCardsOfGame(Integer gameId) throws DataAccessException{
-        List<GamePlayer> gamePlayers = gameService.findById(gameId).getGamePlayers();
+    public List<Card> findAllCardsOfGame(Integer id) throws DataAccessException{
+        List<GamePlayer> gamePlayers = gameService.findById(id).getGamePlayers();
         Integer gamePlayerId1 = gamePlayers.get(0).getId();
         Integer gamePlayerId2 = gamePlayers.get(1).getId();
         List<Card> cards = cardRepository.findAllCardsByGamePlayer(gamePlayerId1);
         cards.addAll(cardRepository.findAllCardsByGamePlayer(gamePlayerId2));
+        if(cards.isEmpty() || cards == null)
+            throw new ResourceNotFoundException("Card", "game_id", id);
         return cards;
     }
 }
