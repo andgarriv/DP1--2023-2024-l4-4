@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.validation.Valid;
 import us.l4_4.dp1.end_of_line.enums.CardStatus;
-import us.l4_4.dp1.end_of_line.enums.Color;
 import us.l4_4.dp1.end_of_line.enums.Orientation;
 import us.l4_4.dp1.end_of_line.exceptions.ResourceNotFoundException;
 import us.l4_4.dp1.end_of_line.game.GameService;
@@ -66,11 +65,11 @@ public class CardService {
     }
 
     @Transactional
-    public Card updateInHandCard(Integer cardId,Integer row, Integer column,  Orientation orientation){
+    public Card updateInHandCard(Integer cardId, UpdateCardRequest updateCardRequest){
         Card card = cardRepository.findById(cardId).get();
-        card.setColumn(column);
-        card.setRow(row);
-        card.setOrientation(orientation);
+        card.setColumn(updateCardRequest.getColumn());
+        card.setRow(updateCardRequest.getRow());
+        card.setOrientation(Orientation.valueOf(updateCardRequest.getOrientation()));
         card.setCardState(CardStatus.ON_BOARD);
         card.setUpdatedAt(Date.from(java.time.Instant.now()));
         return cardRepository.save(card);
