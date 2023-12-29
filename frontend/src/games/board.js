@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "reactstrap";
 import tokenService from "../services/token.service.js";
-import { gameLogic, getButtonColorStyles, getColorStyles, getRotationStyle, isPlayerAuthorized } from "./services/boardService.js";
+import { gameLogic, getButtonColorStyles, getColorStyles, getRotationStyle, isPlayerAuthorized, playCard } from "./services/boardService.js";
 import "./styles/Board.css";
 
 function Box({ content, onClick, isHighlighted, playerColor }) {
@@ -102,9 +102,12 @@ export default function Board() {
     if (isValidPosition) {
       console.log('Colocada');
       // Coloca la carta en la posición seleccionada en el tablero
-      const newBoard = [...board];
-      newBoard[colIndex][rowIndex] = selectedCard;
-      setBoard(newBoard);
+      // const newBoard = [...board];
+      // newBoard[colIndex][rowIndex] = selectedCard;
+      // setBoard(newBoard);
+      // Llama a la función de colocar carta
+      playCard(selectedCard.id, colIndex, rowIndex, selectedCard.orientation, jwt)
+
 
       // Limpia la carta seleccionada
       setSelectedCard(null);
