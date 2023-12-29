@@ -3,158 +3,153 @@
  * Script to manage the board of the game. The long functions of board are here.
 */
 
-export async function gameLogic(gameId, jwt, user, setDataGamePlayer, setHandCardsPlayer1, setHandCardsPlayer2, 
+export async function gameLogic(gameId, jwt, user, setDataGamePlayer, setHandCardsPlayer1, setHandCardsPlayer2,
   setBoard, setIsLoading, setEnergyCards, setPlayer1CardPossiblePositions, setPlayer2CardPossiblePositions,
   setDataGame, setIsMyTurn) {
-    try {
-      const response = await fetch(`/api/v1/games/${gameId}/cards`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-          "Content-Type": "application/json",
-        },
-      });
+  try {
+    const response = await fetch(`/api/v1/games/${gameId}/cards`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        "Content-Type": "application/json",
+      },
+    });
 
-      if(!response.ok) {
-        throw new Error('Error al cargar las cartas.');
-      }
-
-      const responseGame = await fetch(`/api/v1/games/${gameId}`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-          "Content-Type": "application/json",
-        },
-      });
-
-      if(!responseGame.ok) {
-        throw new Error('Error al cargar los datos del juego.');
-      }
-      
-      const dataGame = await responseGame.json();
-      setDataGame(dataGame);
-
-      
-
-      
-      const responseGamePlayer = await fetch(
-        `/api/v1/games/${gameId}/gameplayers`,
-        {
-          headers: {
-            Authorization: `Bearer ${jwt}`,
-          },
-        }
-      );
-      if (!responseGamePlayer.ok) {
-        throw new Error("Error al cargar los gameplayers.");
-      }
-
-      const dataGamePlayer = await responseGamePlayer.json();
-      setDataGamePlayer(dataGamePlayer);
-      const data = await response.json();
-      const handCardsPlayer1 = data.filter(
-        (card) =>
-          card.color === dataGamePlayer[0].color &&
-          card.cardState === "IN_HAND"
-      );
-      const handCardsPlayer2 = data.filter(
-        (card) =>
-          card.color === dataGamePlayer[1].color &&
-          card.cardState === "IN_HAND"
-      );
-  
-      setHandCardsPlayer(handCardsPlayer1, setHandCardsPlayer1);
-      setHandCardsPlayer(handCardsPlayer2, setHandCardsPlayer2);
-      setEnergyCards(dataGamePlayer[0].color, dataGamePlayer[1].color, setEnergyCards);
-      importEnergyCards(dataGamePlayer[0].color, dataGamePlayer[1].color, setEnergyCards);
-  
-      const cardsOnBoard = data.filter((card) => card.cardState === "ON_BOARD");
-  
-      const cardsOnBoardImages = await Promise.all(
-        cardsOnBoard.map((card) =>
-          importGameCard(card.color, card.exit, card.initiative).then(
-            (module) => ({ ...card, image: module.default, orientation: card.orientation })
-          )
-        )
-      );
-  
-      // Actualizar el tablero con las cartas en el tablero
-      setBoard((oldBoard) => {
-        const newBoard = oldBoard.map((row) => row.slice());
-  
-        cardsOnBoardImages.forEach((card) => {
-          if (card.color === dataGamePlayer[0].color) {
-            newBoard[card.row][card.column] = { image: card.image, orientation: card.orientation };
-          }
-          if (card.color === dataGamePlayer[1].color) {
-            newBoard[card.row][card.column] = { image: card.image, orientation: card.orientation };
-          }
-        });
-        return newBoard;
-      });
-
-      // Actualizar las posiciones posibles de las cartas
-      const responsePlayer1CardPossiblePositions = await fetch(
-        `/api/v1/games/${gameId}/gameplayers/${dataGamePlayer[0].id}/cardPositions`,
-        {
-          headers: {
-            Authorization: `Bearer ${jwt}`,
-          },
-        }
-      );
-      if (!responsePlayer1CardPossiblePositions.ok) {
-        throw new Error("Error al cargar las posiciones posibles de las cartas del jugador 1.");
-      }
-      const responsePlayer2CardPossiblePositions = await fetch(
-        `/api/v1/games/${gameId}/gameplayers/${dataGamePlayer[1].id}/cardPositions`,
-        {
-          headers: {
-            Authorization: `Bearer ${jwt}`,
-          },
-        }
-      );
-      if (!responsePlayer2CardPossiblePositions.ok) {
-        throw new Error("Error al cargar las posiciones posibles de las cartas del jugador 2.");
-      }
-      const cardPlayer1PossiblePositions = await responsePlayer1CardPossiblePositions.json();
-      const cardPlayer2PossiblePositions = await responsePlayer2CardPossiblePositions.json();
-
-      const parsedPlayer1Positions = cardPlayer1PossiblePositions.map(pos => {
-        const parts = pos.split(',');
-        return { 
-          row: parseInt(parts[0], 10), // Convertir la fila a número
-          col: parseInt(parts[1], 10),  // Convertir la columna a número
-          orientation: parts[2] // Obtener la orientación
-        };
-      });
-
-      const parsedPlayer2Positions = cardPlayer2PossiblePositions.map(pos => {
-        const parts = pos.split(',');
-        return { 
-          row: parseInt(parts[0], 10), // Convertir la fila a número
-          col: parseInt(parts[1], 10),  // Convertir la columna a número
-          orientation: parts[2] // Obtener la orientación
-        };
-      }
-      );
-        
-
-
-      setPlayer1CardPossiblePositions(parsedPlayer1Positions);
-      setPlayer2CardPossiblePositions(parsedPlayer2Positions);
-
-      const myGamePlayer = dataGamePlayer.find((gamePlayer) => gamePlayer.player.id === user.id);
-      if(myGamePlayer.id === dataGame.gamePlayerTurnId) {
-        setIsMyTurn(true);
-      } else {
-        setIsMyTurn(false);
-      }
-  
-      setIsLoading(false);
-    } catch (error) {
-      console.error("Error al cargar los datos del juego.", error);
+    if (!response.ok) {
+      throw new Error('Error al cargar las cartas.');
     }
+
+    const responseGame = await fetch(`/api/v1/games/${gameId}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!responseGame.ok) {
+      throw new Error('Error al cargar los datos del juego.');
+    }
+
+    const dataGame = await responseGame.json();
+    setDataGame(dataGame);
+
+    const responseGamePlayer = await fetch(
+      `/api/v1/games/${gameId}/gameplayers`,
+      {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      }
+    );
+    if (!responseGamePlayer.ok) {
+      throw new Error("Error al cargar los gameplayers.");
+    }
+
+    const dataGamePlayer = await responseGamePlayer.json();
+    setDataGamePlayer(dataGamePlayer);
+    const data = await response.json();
+    const handCardsPlayer1 = data.filter(
+      (card) =>
+        card.color === dataGamePlayer[0].color &&
+        card.cardState === "IN_HAND"
+    );
+    const handCardsPlayer2 = data.filter(
+      (card) =>
+        card.color === dataGamePlayer[1].color &&
+        card.cardState === "IN_HAND"
+    );
+
+    setHandCardsPlayer(handCardsPlayer1, setHandCardsPlayer1);
+    setHandCardsPlayer(handCardsPlayer2, setHandCardsPlayer2);
+    setEnergyCards(dataGamePlayer[0].color, dataGamePlayer[1].color, setEnergyCards);
+    importEnergyCards(dataGamePlayer[0].color, dataGamePlayer[1].color, setEnergyCards);
+
+    const cardsOnBoard = data.filter((card) => card.cardState === "ON_BOARD");
+
+    const cardsOnBoardImages = await Promise.all(
+      cardsOnBoard.map((card) =>
+        importGameCard(card.color, card.exit, card.initiative).then(
+          (module) => ({ ...card, image: module.default, orientation: card.orientation })
+        )
+      )
+    );
+
+    // Actualizar el tablero con las cartas en el tablero
+    setBoard((oldBoard) => {
+      const newBoard = oldBoard.map((row) => row.slice());
+
+      cardsOnBoardImages.forEach((card) => {
+        if (card.color === dataGamePlayer[0].color) {
+          newBoard[card.row][card.column] = { image: card.image, orientation: card.orientation };
+        }
+        if (card.color === dataGamePlayer[1].color) {
+          newBoard[card.row][card.column] = { image: card.image, orientation: card.orientation };
+        }
+      });
+      return newBoard;
+    });
+
+    // Actualizar las posiciones posibles de las cartas
+    const responsePlayer1CardPossiblePositions = await fetch(
+      `/api/v1/games/${gameId}/gameplayers/${dataGamePlayer[0].id}/cardPositions`,
+      {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      }
+    );
+    if (!responsePlayer1CardPossiblePositions.ok) {
+      throw new Error("Error al cargar las posiciones posibles de las cartas del jugador 1.");
+    }
+    const responsePlayer2CardPossiblePositions = await fetch(
+      `/api/v1/games/${gameId}/gameplayers/${dataGamePlayer[1].id}/cardPositions`,
+      {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      }
+    );
+    if (!responsePlayer2CardPossiblePositions.ok) {
+      throw new Error("Error al cargar las posiciones posibles de las cartas del jugador 2.");
+    }
+    const cardPlayer1PossiblePositions = await responsePlayer1CardPossiblePositions.json();
+    const cardPlayer2PossiblePositions = await responsePlayer2CardPossiblePositions.json();
+
+    const parsedPlayer1Positions = cardPlayer1PossiblePositions.map(pos => {
+      const parts = pos.split(',');
+      return {
+        row: parseInt(parts[0], 10), // Convertir la fila a número
+        col: parseInt(parts[1], 10),  // Convertir la columna a número
+        orientation: parts[2] // Obtener la orientación
+      };
+    });
+
+    const parsedPlayer2Positions = cardPlayer2PossiblePositions.map(pos => {
+      const parts = pos.split(',');
+      return {
+        row: parseInt(parts[0], 10), // Convertir la fila a número
+        col: parseInt(parts[1], 10),  // Convertir la columna a número
+        orientation: parts[2] // Obtener la orientación
+      };
+    }
+    );
+
+    setPlayer1CardPossiblePositions(parsedPlayer1Positions);
+    setPlayer2CardPossiblePositions(parsedPlayer2Positions);
+
+    const myGamePlayer = dataGamePlayer.find((gamePlayer) => gamePlayer.player.id === user.id);
+    if (myGamePlayer.id === dataGame.gamePlayerTurnId) {
+      setIsMyTurn(true);
+    } else {
+      setIsMyTurn(false);
+    }
+
+    setIsLoading(false);
+  } catch (error) {
+    console.error("Error al cargar los datos del juego.", error);
   }
+}
 
 export function setHandCardsPlayer(cards, setHandCardsFunction) {
   const handCardImages = cards.map((card) => {
@@ -300,7 +295,7 @@ export function getButtonColorStyles(colorName) {
   };
 }
 
-export async function playCard(cardId, row, column, orientation, jwt){
+export async function playCard(cardId, row, column, orientation, jwt) {
   const response = await fetch(`/api/v1/cards/${cardId}/position`, {
     method: "PUT",
     headers: {
@@ -312,5 +307,19 @@ export async function playCard(cardId, row, column, orientation, jwt){
 
   if (!response.ok) {
     throw new Error("Error al jugar la carta.");
+  }
+}
+
+export async function updateTurn(gameId, gamePlayerId, jwt) {
+  const response = await fetch(`/api/v1/games/${gameId}/${gamePlayerId}`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${jwt}`,
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Error al actualizar el turno.");
   }
 }
