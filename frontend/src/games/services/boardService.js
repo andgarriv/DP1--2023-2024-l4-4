@@ -3,7 +3,9 @@
  * Script to manage the board of the game. The long functions of board are here.
 */
 
-export async function fetchGameCards(gameId, jwt, setDataGamePlayer, setHandCardsPlayer1, setHandCardsPlayer2, setBoard, setIsLoading, setEnergyCards, setPlayer1CardPossiblePositions, setPlayer2CardPossiblePositions) {
+export async function gameLogic(gameId, jwt, user, setDataGamePlayer, setHandCardsPlayer1, setHandCardsPlayer2, 
+  setBoard, setIsLoading, setEnergyCards, setPlayer1CardPossiblePositions, setPlayer2CardPossiblePositions,
+  setDataGame, setIsMyTurn) {
     try {
       const response = await fetch(`/api/v1/games/${gameId}/cards`, {
         method: "GET",
@@ -16,6 +18,24 @@ export async function fetchGameCards(gameId, jwt, setDataGamePlayer, setHandCard
       if(!response.ok) {
         throw new Error('Error al cargar las cartas.');
       }
+
+      const responseGame = await fetch(`/api/v1/games/${gameId}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if(!responseGame.ok) {
+        throw new Error('Error al cargar los datos del juego.');
+      }
+      
+      const dataGame = await responseGame.json();
+      setDataGame(dataGame);
+
+      
+
       
       const responseGamePlayer = await fetch(
         `/api/v1/games/${gameId}/gameplayers`,
@@ -120,6 +140,13 @@ export async function fetchGameCards(gameId, jwt, setDataGamePlayer, setHandCard
 
       setPlayer1CardPossiblePositions(parsedPlayer1Positions);
       setPlayer2CardPossiblePositions(parsedPlayer2Positions);
+
+      const myGamePlayer = dataGamePlayer.find((gamePlayer) => gamePlayer.player.id === user.id);
+      if(myGamePlayer.id === dataGame.gamePlayerTurnId) {
+        setIsMyTurn(true);
+      } else {
+        setIsMyTurn(false);
+      }
   
       setIsLoading(false);
     } catch (error) {
@@ -189,4 +216,46 @@ export function getRotationStyle(energy) {
     default:
       return {};
   }
+}
+
+export function getColorStyles(colorName) {
+  const colors = {
+    RED: {
+      border: '2px solid rgb(225, 28, 36)',
+      backgroundColor: 'rgba(225, 28, 36, 0.2)',
+    },
+    ORANGE: {
+      border: '2px solid rgb(239, 145, 20)',
+      backgroundColor: 'rgba(239, 145, 20, 0.2)',
+    },
+    YELLOW: {
+      border: '2px solid rgb(251, 235, 68)',
+      backgroundColor: 'rgba(251, 235, 68, 0.2)',
+    },
+    GREEN: {
+      border: '2px solid rgb(75, 178, 91)',
+      backgroundColor: 'rgba(75, 178, 91, 0.2)',
+    },
+    BLUE: {
+      border: '2px solid rgb(4, 163, 227)',
+      backgroundColor: 'rgba(4, 163, 227, 0.2)',
+    },
+    MAGENTA: {
+      border: '2px solid rgb(225, 12, 123)',
+      backgroundColor: 'rgba(225, 12, 123, 0.2)',
+    },
+    VIOLET: {
+      border: '2px solid rgb(192, 138, 184)',
+      backgroundColor: 'rgba(192, 138, 184, 0.2)',
+    },
+    WHITE: {
+      border: '2px solid rgb(194, 194, 194)',
+      backgroundColor: 'rgba(194, 194, 194, 0.2)',
+    },
+  };
+
+  return colors[colorName] || {
+    border: '2px solid rgb(0, 0, 0)',
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+  };
 }
