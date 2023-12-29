@@ -113,7 +113,7 @@ public class GameService {
                 newCard.setColumn(null);
                 newCard.setRow(null);
                 newCard.setCardState(CardStatus.IN_DECK);
-                 
+
             }
             newCard.setInitiative(card.getInitiative());
             newCard.setColor(card.getColor());
@@ -267,7 +267,7 @@ public class GameService {
             if (player1Cards.size() < player2Cards.size()) {
                 res = id1;
             } else if (player1Cards.size() == player2Cards.size()) {
-                
+
                 if (player1Cards.get(maxSize - 2).getUpdatedAt().before(player2Cards.get(maxSize - 2).getUpdatedAt()))
                     res = id1;
                 else
@@ -295,21 +295,21 @@ public class GameService {
     public List<String> findPosiblePositionOfAGamePlayerGiven(Integer gamePlayerId, Integer gameId) {
         GamePlayer gp = gamePlayerRepository.findById(gamePlayerId).get();
         Game game = gameRepository.findById(gameId).get();
-        //todas las cartas que estan en el tablero
-        List<String> cartasON_BOARD= gamePlayerRepository.findGamePlayersByGameId(gameId)
-        .get(0)
-        .getCards()
-        .stream()
-        .filter(card -> card.getCardState() == CardStatus.ON_BOARD)
-        .map(card -> card.getColumn() + "," + card.getRow())
-        .collect(Collectors.toList()); 
+        // todas las cartas que estan en el tablero
+        List<String> cartasON_BOARD = gamePlayerRepository.findGamePlayersByGameId(gameId)
+                .get(0)
+                .getCards()
+                .stream()
+                .filter(card -> card.getCardState() == CardStatus.ON_BOARD)
+                .map(card -> card.getColumn() + "," + card.getRow())
+                .collect(Collectors.toList());
         cartasON_BOARD.addAll(gamePlayerRepository.findGamePlayersByGameId(gameId)
-        .get(1)
-        .getCards()
-        .stream()
-        .filter(card -> card.getCardState() == CardStatus.ON_BOARD)
-        .map(card -> card.getColumn() + "," + card.getRow())
-        .collect(Collectors.toList()));
+                .get(1)
+                .getCards()
+                .stream()
+                .filter(card -> card.getCardState() == CardStatus.ON_BOARD)
+                .map(card -> card.getColumn() + "," + card.getRow())
+                .collect(Collectors.toList()));
 
         List<Card> ultimasCartasEchadas = gp.getCards().stream()
                 .filter(card -> card.getCardState() == CardStatus.ON_BOARD)
@@ -317,32 +317,29 @@ public class GameService {
                 .collect(Collectors.toList());
 
         Card ultimaCartaEchada = ultimasCartasEchadas.get(0);
-        if(game.getEffect() == Hability.REVERSE)ultimaCartaEchada = ultimasCartasEchadas.get(1);
-       
+        if (game.getEffect() == Hability.REVERSE)
+            ultimaCartaEchada = ultimasCartasEchadas.get(1);
+
         Integer n = ultimaCartaEchada.getColumn();
         Integer m = ultimaCartaEchada.getRow();
 
         List<String> res = new ArrayList<>();
-        
 
         String norte = n + "," + (m - 1);
-        if((m-1)<0)norte = n + "," + 6;
-
+        if ((m - 1) < 0)
+            norte = n + "," + 6;
 
         String sur = n + "," + (m + 1);
-        if((m+1)>6)sur = n + "," + 6;
-
-
+        if ((m + 1) > 6)
+            sur = n + "," + 6;
 
         String este = (n + 1) + "," + m;
-        if((n+1)>6)este = 0 + "," + m;
-
-
+        if ((n + 1) > 6)
+            este = 0 + "," + m;
 
         String oeste = (n - 1) + "," + m;
-        if((n-1)<0)oeste = 6 + "," + m;
-
-
+        if ((n - 1) < 0)
+            oeste = 6 + "," + m;
 
         List<Integer> salidas = extraerNumerosDeSalida(ultimaCartaEchada.getExit().toString());
 
@@ -354,94 +351,91 @@ public class GameService {
             // este-> tercer numero de salida
 
             if (ultimaCartaEchada.getExit().equals(Exit.START)) {
-                if(!cartasON_BOARD.contains(norte)) res.add(norte+",S");
+                if (!cartasON_BOARD.contains(norte))
+                    res.add(norte + ",S");
             } else {
                 if (salidas.get(0) == 1 && !cartasON_BOARD.contains(oeste)) {
-                    res.add(oeste+",E");
+                    res.add(oeste + ",E");
                 }
                 if (salidas.get(1) == 1 && !cartasON_BOARD.contains(norte)) {
-                    res.add(norte+ ",S");
+                    res.add(norte + ",S");
                 }
                 if (salidas.get(2) == 1 && !cartasON_BOARD.contains(este)) {
-                    res.add(este+",W");
+                    res.add(este + ",W");
                 }
             }
         }
-        
-        if(ultimaCartaEchada.getOrientation().equals(Orientation.N)){
+
+        if (ultimaCartaEchada.getOrientation().equals(Orientation.N)) {
             // norte
             // posiciones posibles
-            //este-> primer numero de salida
-            //sur-> segundo numero de salida
-            //oeste-> tercer numero de salida
+            // este-> primer numero de salida
+            // sur-> segundo numero de salida
+            // oeste-> tercer numero de salida
 
-             if(salidas.get(0)==1 && !cartasON_BOARD.contains(este)){
-                res.add(este+",W");
+            if (salidas.get(0) == 1 && !cartasON_BOARD.contains(este)) {
+                res.add(este + ",W");
             }
-            if(salidas.get(1) == 1&& !cartasON_BOARD.contains(sur)){
-              res.add(sur+",N");
+            if (salidas.get(1) == 1 && !cartasON_BOARD.contains(sur)) {
+                res.add(sur + ",N");
             }
-            if(salidas.get(2) == 1 && !cartasON_BOARD.contains(oeste)){
-                 res.add(oeste+",E");
-            }
-            }
-        
-        if(ultimaCartaEchada.getOrientation().equals(Orientation.E)){
-            //este 
-            // posiciones posibles
-            //sur-> primer numero de salida
-            //oeste-> segundo numero de salida
-            //norte-> tercer numero de salida
-
-            if (salidas.get(0) == 1 && !cartasON_BOARD.contains(sur)) {
-                res.add(sur+",N");
-            }
-            if (salidas.get(1) == 1 && !cartasON_BOARD.contains(oeste)) {
-                 res.add(oeste+",E");
-            }
-            if (salidas.get(2) == 1 && !cartasON_BOARD.contains(norte)) {
-               res.add(norte+ ",S");
-                
-            }
-            }
-        
-        if(ultimaCartaEchada.getOrientation().equals(Orientation.W)){
-            //oeste 
-            // posiciones posibles
-            //norte-> primer numero de salida
-            //este-> segundo numero de salida
-            //sur-> tercer numero de salida
-
-            if (salidas.get(0) == 1 && !cartasON_BOARD.contains(norte)) {
-                res.add(norte+ ",S");
-            }
-            if (salidas.get(1) == 1 && !cartasON_BOARD.contains(este)) {
-               res.add(este+",W");
-            }
-            if (salidas.get(2) == 1 && !cartasON_BOARD.contains(sur)) {
-                res.add(sur+",N");
-                
+            if (salidas.get(2) == 1 && !cartasON_BOARD.contains(oeste)) {
+                res.add(oeste + ",E");
             }
         }
 
+        if (ultimaCartaEchada.getOrientation().equals(Orientation.E)) {
+            // este
+            // posiciones posibles
+            // sur-> primer numero de salida
+            // oeste-> segundo numero de salida
+            // norte-> tercer numero de salida
+
+            if (salidas.get(0) == 1 && !cartasON_BOARD.contains(sur)) {
+                res.add(sur + ",N");
+            }
+            if (salidas.get(1) == 1 && !cartasON_BOARD.contains(oeste)) {
+                res.add(oeste + ",E");
+            }
+            if (salidas.get(2) == 1 && !cartasON_BOARD.contains(norte)) {
+                res.add(norte + ",S");
+
+            }
+        }
+
+        if (ultimaCartaEchada.getOrientation().equals(Orientation.W)) {
+            // oeste
+            // posiciones posibles
+            // norte-> primer numero de salida
+            // este-> segundo numero de salida
+            // sur-> tercer numero de salida
+
+            if (salidas.get(0) == 1 && !cartasON_BOARD.contains(norte)) {
+                res.add(norte + ",S");
+            }
+            if (salidas.get(1) == 1 && !cartasON_BOARD.contains(este)) {
+                res.add(este + ",W");
+            }
+            if (salidas.get(2) == 1 && !cartasON_BOARD.contains(sur)) {
+                res.add(sur + ",N");
+
+            }
+        }
 
         return res;
     }
 
     private static ArrayList<Integer> extraerNumerosDeSalida(String texto) {
-       
+
         ArrayList<Integer> digitos = new ArrayList<>();
-        
-       
+
         Pattern patron = Pattern.compile("_(\\d+)_");
         Matcher coincidencias = patron.matcher(texto);
 
-       
         if (coincidencias.find()) {
-            
+
             String secuencia = coincidencias.group(1);
 
-            
             for (char digito : secuencia.toCharArray()) {
                 digitos.add(Character.getNumericValue(digito));
             }
@@ -457,20 +451,16 @@ public class GameService {
         List<Card> cartas = gamePlayerRepository.findById(gamePlayerId).get().getCards().stream()
                 .filter(card -> card.getCardState() == CardStatus.IN_HAND)
                 .collect(Collectors.toList());
-        Integer round = game.getRound() + 1;
+        Integer round = game.getRound();
         Integer turnPlayerId = game.getGamePlayerTurnId();
         Integer otherPlayerId = null;
-        //---------------------------------------------------
-        if (gps.get(0).getId() == game.getGamePlayerTurnId())
+        // ---------------------------------------------------
+        if (gps.get(0).getId().equals(game.getGamePlayerTurnId()))
             otherPlayerId = gps.get(1).getId();
-        if (gps.get(1).getId() == game.getGamePlayerTurnId())
+        if (gps.get(1).getId().equals(game.getGamePlayerTurnId()))
             otherPlayerId = gps.get(0).getId();
-        //---------------------------------------------------
-
-
-
-        
-        if (round == 1) {
+        // ---------------------------------------------------
+        if (round.equals(1)) {
             game.setRound(round + 1);
             giveNeededCardsToGetFive(turnPlayerId);
             game.setGamePlayerTurnId(otherPlayerId);
@@ -544,7 +534,7 @@ public class GameService {
 
         }
 
-        return  gameRepository.save(game);
+        return gameRepository.save(game);
     }
 
 }

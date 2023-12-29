@@ -115,5 +115,11 @@ public class GameController {
         return gameService.findPosiblePositionOfAGamePlayerGiven(gamePlayerId, gameId);
     }
 
+    @PutMapping("/{gameId}/{gamePlayerId}")
+    @ResponseStatus(HttpStatus.OK)
+    public Game pruebaTurn(@PathVariable Integer gamePlayerId,@PathVariable Integer gameId ) {
+    return gameService.updateGameTurn(gameId, gamePlayerId);
+    }
+
 
 }
