@@ -12,7 +12,7 @@ function GameNavbar() {
     const toggleNavbar = () => setCollapsed(!collapsed);
     const [round, setRound] = useState(0);
     const [gameTime, setGameTime] = useState(0);
-    const [turnId, setTurnId] = useState(0);
+    const [turnColor, setTurnColor] = useState(null);
     const [gameId, setgameId] = useState(null);
 
     useEffect(() => {
@@ -51,19 +51,27 @@ function GameNavbar() {
             const data = await response.json();
 
             setRound(data.round);
-            setTurnId(data.turnId);
             setgameId(gameId);
+
+            if(data.gamePlayers[0].id === data.gamePlayerTurnId) {
+                setTurnColor(data.gamePlayers[0].color)
+            }
+            if(data.gamePlayers[1].id === data.gamePlayerTurnId) {
+                setTurnColor(data.gamePlayers[1].color)
+            }
 
             const startedAt = new Date(data.startedAt);
             const now = new Date();
             const timeDifference = now - startedAt; // in milliseconds
             setGameTime(Math.floor(timeDifference / 1000)); // convert to seconds
+            setGameTime(prevGameTime => prevGameTime + 1);
+
         }
 
         fetchGameData();
 
         const intervalId = setInterval(() => {
-            setGameTime(prevGameTime => prevGameTime + 1);
+            fetchGameData();
         }, 1000);
 
         // Clear interval on component unmount
@@ -120,15 +128,17 @@ function GameNavbar() {
                 <div style={{
                     color: 'white',
                     display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
+                    alignItems: 'left',
+                    justifyContent: 'left',
                     height: '100%',
                     width: '100%',
-                    marginRight: '2%'
+                    marginLeft: '25%',
+                    marginRight: '20%'
+
                 }}>
-                    <span>ROUND {round}</span>
-                    <span style={{ marginLeft: '10%' }}>{formattedGameTime}</span>
-                    <span style={{ marginLeft: '10%' }}>TURN {turnId ? turnId : 'NONE'}</span>
+                    <span style={{ minWidth: '120px' }}>ROUND {round}</span>
+                    <span style={{ marginLeft: '10%', minWidth: '60px' }}>{formattedGameTime}</span>
+                    <span style={{ marginLeft: '10%', minWidth: '200px' }}>{turnColor ? turnColor : 'NONE'}'S TURN</span>
                 </div>
 
                 <Collapse isOpen={!collapsed} navbar>

@@ -3,7 +3,9 @@
  * Script to manage the board of the game. The long functions of board are here.
 */
 
-export async function fetchGameCards(gameId, jwt, setDataGamePlayer, setHandCardsPlayer1, setHandCardsPlayer2, setBoard, setIsLoading, setEnergyCards, setPlayer1CardPossiblePositions, setPlayer2CardPossiblePositions) {
+export async function gameLogic(gameId, jwt, user, setDataGamePlayer, setHandCardsPlayer1, setHandCardsPlayer2, 
+  setBoard, setIsLoading, setEnergyCards, setPlayer1CardPossiblePositions, setPlayer2CardPossiblePositions,
+  setDataGame, setIsMyTurn) {
     try {
       const response = await fetch(`/api/v1/games/${gameId}/cards`, {
         method: "GET",
@@ -16,6 +18,24 @@ export async function fetchGameCards(gameId, jwt, setDataGamePlayer, setHandCard
       if(!response.ok) {
         throw new Error('Error al cargar las cartas.');
       }
+
+      const responseGame = await fetch(`/api/v1/games/${gameId}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if(!responseGame.ok) {
+        throw new Error('Error al cargar los datos del juego.');
+      }
+      
+      const dataGame = await responseGame.json();
+      setDataGame(dataGame);
+
+      
+
       
       const responseGamePlayer = await fetch(
         `/api/v1/games/${gameId}/gameplayers`,
@@ -120,6 +140,13 @@ export async function fetchGameCards(gameId, jwt, setDataGamePlayer, setHandCard
 
       setPlayer1CardPossiblePositions(parsedPlayer1Positions);
       setPlayer2CardPossiblePositions(parsedPlayer2Positions);
+
+      const myGamePlayer = dataGamePlayer.find((gamePlayer) => gamePlayer.player.id === user.id);
+      if(myGamePlayer.id === dataGame.gamePlayerTurnId) {
+        setIsMyTurn(true);
+      } else {
+        setIsMyTurn(false);
+      }
   
       setIsLoading(false);
     } catch (error) {
