@@ -259,3 +259,42 @@ export function getColorStyles(colorName) {
     backgroundColor: 'rgba(0, 0, 0, 0.2)',
   };
 }
+
+export function getButtonColorStyles(colorName) {
+  const colors = {
+    RED: {
+      rgb: 'rgb(225, 28, 36)',
+    },
+    ORANGE: {
+      rgb: 'rgb(239, 145, 20)',
+    },
+    YELLOW: {
+      rgb: 'rgb(251, 235, 68)',
+    },
+    GREEN: {
+      rgb: 'rgb(75, 178, 91)',
+    },
+    BLUE: {
+      rgb: 'rgb(4, 163, 227)',
+    },
+    MAGENTA: {
+      rgb: 'rgb(225, 12, 123)',
+    },
+    VIOLET: {
+      rgb: 'rgb(192, 138, 184)',
+    },
+    WHITE: {
+      rgb: 'rgb(194, 194, 194)',
+    },
+  };
+
+  const colorStyles = colors[colorName] || {};
+  const rgbValue = colorStyles.rgb || 'rgb(0, 0, 0)';
+
+  return {
+    color: rgbValue,
+    outlineColor: rgbValue,
+    border: `2px solid ${rgbValue}`
+  };
+}
+
