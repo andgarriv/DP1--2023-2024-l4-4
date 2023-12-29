@@ -57,41 +57,13 @@ public class GameService {
     }
 
     @Transactional
-    public Game createGame(GameDTO gameDTO) throws DataAccessException {
-        Game game = new Game();
-        game.setRound(gameDTO.getRounds());
-        if (gameDTO.getWinner_id() != null) {
-            game.setWinner(playerRepository.findById(gameDTO.getWinner_id()).get());
-        }
-        game.setStartedAt(gameDTO.getStartedAt());
-        if (gameDTO.getEndedAt() != null) {
-            game.setEndedAt(gameDTO.getEndedAt());
-        }
-        if (gameDTO.getMessage_id() != null) {
-            List<Message> messages = gameDTO.getMessage_id()
-                    .stream()
-                    .map(messageId -> messageRepository.findById(messageId)
-                            .orElseThrow(() -> new ResourceNotFoundException("Message", "id", messageId)))
-                    .collect(Collectors.toList());
-            game.setMessage(messages);
-        }
-        List<GamePlayer> gamePlayers = gameDTO.getGamePlayers_ids()
-                .stream()
-                .map(gamePlayerId -> gamePlayerRepository.findById(gamePlayerId).get())
-                .collect(Collectors.toList());
-        game.setGamePlayers(gamePlayers);
-
-        return gameRepository.save(game);
-    }
-
-    @Transactional
     public Game createNewGame(Integer playerID1, Integer playerID2, Color c1, Color c2) throws DataAccessException {
 
         if (checkOnlyOneGameForEachPlayer(playerID1)) {
             throw new BadRequestException("No se puede crear una partida ya que el jugador tiene una en curso");
         }
         Game game = new Game();
-        game.setRound(0);
+        game.setRound(1);
         game.setWinner(null);
         game.setStartedAt(Date.from(java.time.Instant.now()));
         game.setEndedAt(null);
@@ -155,6 +127,7 @@ public class GameService {
         gamePlayerRepository.save(p2);
         List<GamePlayer> gamePlayers = List.of(p1, p2);
         game.setGamePlayers(gamePlayers);
+        game.setGamePlayerTurnId(p1.getId());
         updateFiveRandomCards(p1.getId());
         updateFiveRandomCards(p2.getId());
         gameRepository.save(game);

@@ -49,8 +49,11 @@ public class GamePlayerService {
         return gamePlayer;
     }
 
-    public List<GamePlayer> findGamePlayersByGameId(Integer id) {
-        return gamePlayerRepository.findGamePlayersByGameId(id);
+    public List<GamePlayer> findGamePlayersByGameId(Integer id) throws DataAccessException{
+        List<GamePlayer> gamePlayers = gamePlayerRepository.findGamePlayersByGameId(id);
+        if(gamePlayers.isEmpty() || gamePlayers == null)
+            throw new ResourceNotFoundException("GamePlayer", "game_id", id);
+        return gamePlayers;
     }
 
     public GamePlayer findById(Integer id) throws DataAccessException{

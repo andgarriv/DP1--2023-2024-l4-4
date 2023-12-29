@@ -91,7 +91,9 @@ INSERT INTO game_players(id, energy, player_id, color) VALUES -- Player con id 5
                                                               (29, 3, 3,'GREEN'), 
                                                               (30, 1, 10,'RED'),
                                                               (31, 2, 3,'BLUE'), 
-                                                              (32, 2, 8,'GREEN');
+                                                              (32, 2, 8,'GREEN'),
+                                                              (33, 3, 7,'ORANGE'), 
+                                                              (34, 3, 8,'RED');
 
 -- Games 
 INSERT INTO games(id, round, winner, started, ended, game_player_turn_id, effect) VALUES (1, 16, 6, '2023-09-01 09:00:05', '2023-09-01 09:15:54', 5, 'NONE'),
@@ -110,7 +112,9 @@ INSERT INTO games(id, round, winner, started, ended, game_player_turn_id, effect
                                                                                          (13, 23, 3, '2023-10-30 22:34:55', '2023-10-30 22:49:55', 9, 'NONE'),
                                                                                          (14, 27, 3, '2023-11-01 13:44:27', '2023-11-01 14:01:27', 8, 'NONE'),
                                                                                          (15, 26, 3, '2023-11-25 03:59:03', '2023-11-25 04:22:03', 10, 'NONE'),
-                                                                                         (16, 28, 3, '2023-12-19 17:33:57', '2023-12-19 18:08:57', 8, 'NONE');
+                                                                                         (16, 28, 3, '2023-12-19 17:33:57', '2023-12-19 18:08:57', 8, 'NONE'),
+
+                                                                                         (17, 5, null, '2023-12-21 17:35:45', null, 6, 'NONE');
 
 -- Games_Game_Players
 INSERT INTO games_game_players(game_id, game_players_id) VALUES --Player con id 5 y 6 juegan la partida 1
@@ -146,7 +150,9 @@ INSERT INTO games_game_players(game_id, game_players_id) VALUES --Player con id 
                                                                 (15, 29),
                                                                 (15, 30),
                                                                 (16, 31),
-                                                                (16, 32);
+                                                                (16, 32),
+                                                                (17, 33),
+                                                                (17, 34);
 
 -- Message
 INSERT INTO messages(id, color, reaction) VALUES (1, null, 'HI'),
@@ -449,5 +455,126 @@ INSERT INTO cards (id, initiative, color, exit, orientation, is_template) VALUES
                                                                                         
                                                                                                         (199, 5, 'ORANGE', 'EXIT_111_B', 'S', 1),
 
-                                                                                                        (200, 0, 'ORANGE', 'START', 'S', 1);
+                                                                                                        (200, 0, 'ORANGE', 'START', 'S', 1),
+
+                                                                                                        (201, 2, 'MAGENTA', 'EXIT_001_A', 'S', 0),
+                                                                                                        (202, 2, 'MAGENTA', 'EXIT_001_B', 'S', 0),
+                                                                                                        (203, 2, 'MAGENTA', 'EXIT_001_C', 'S', 0),
+                                                                                                        (204, 2, 'MAGENTA', 'EXIT_001_D', 'S', 0),
+
+                                                                                                        (205, 1, 'MAGENTA', 'EXIT_010_A', 'S', 0),
+                                                                                                        (206, 1, 'MAGENTA', 'EXIT_010_B', 'S', 0),
+                                                                                                        (207, 1, 'MAGENTA', 'EXIT_010_C', 'S', 0),
+                                                                                                        (208, 1, 'MAGENTA', 'EXIT_010_D', 'S', 0),
+                                                                                                        (209, 1, 'MAGENTA', 'EXIT_010_E', 'S', 0),
+                                                                                                        (210, 1, 'MAGENTA', 'EXIT_010_F', 'S', 0),
+                                                                                                        (211, 1, 'MAGENTA', 'EXIT_010_G', 'S', 0),
+                                                                                                        (212, 1, 'MAGENTA', 'EXIT_010_H', 'S', 0),
+
+                                                                                                        (213, 3, 'MAGENTA', 'EXIT_011_A', 'S', 0),
+                                                                                                        (214, 3, 'MAGENTA', 'EXIT_011_B', 'S', 0),
+
+                                                                                                        (215, 2, 'MAGENTA', 'EXIT_100_A', 'S', 0),
+                                                                                                        (216, 2, 'MAGENTA', 'EXIT_100_B', 'S', 0),
+                                                                                                        (217, 2, 'MAGENTA', 'EXIT_100_C', 'S', 0),
+                                                                                                        (218, 2, 'MAGENTA', 'EXIT_100_D', 'S', 0),
+
+                                                                                                        (219, 4, 'MAGENTA', 'EXIT_101_A', 'S', 0),
+                                                                                                        (220, 4, 'MAGENTA', 'EXIT_101_B', 'S', 0),
+
+                                                                                                        (221, 3, 'MAGENTA', 'EXIT_110_A', 'S', 0),
+                                                                                                        (222, 3, 'MAGENTA', 'EXIT_110_B', 'S', 0),
+
+                                                                                                        (223, 0, 'MAGENTA', 'EXIT_111_A', 'S', 0),
+
+                                                                                                        (224, 5, 'MAGENTA', 'EXIT_111_B', 'S', 0),
+
+                                                                                                        (225, 0, 'MAGENTA', 'START', 'S', 0),
+
+                                                                                                        (226, 2, 'ORANGE', 'EXIT_001_A', 'S', 0),
+                                                                                                        (227, 2, 'ORANGE', 'EXIT_001_B', 'S', 0),
+                                                                                                        (228, 2, 'ORANGE', 'EXIT_001_C', 'S', 0),
+                                                                                                        (229, 2, 'ORANGE', 'EXIT_001_D', 'S', 0),
+
+                                                                                                        (230, 1, 'ORANGE', 'EXIT_010_A', 'S', 0),
+                                                                                                        (231, 1, 'ORANGE', 'EXIT_010_B', 'S', 0),
+                                                                                                        (232, 1, 'ORANGE', 'EXIT_010_C', 'S', 0),
+                                                                                                        (233, 1, 'ORANGE', 'EXIT_010_D', 'S', 0),
+                                                                                                        (234, 1, 'ORANGE', 'EXIT_010_E', 'S', 0),
+                                                                                                        (235, 1, 'ORANGE', 'EXIT_010_F', 'S', 0),
+                                                                                                        (236, 1, 'ORANGE', 'EXIT_010_G', 'S', 0),
+                                                                                                        (237, 1, 'ORANGE', 'EXIT_010_H', 'S', 0),
+
+                                                                                                        (238, 3, 'ORANGE', 'EXIT_011_A', 'S', 0),
+                                                                                                        (239, 3, 'ORANGE', 'EXIT_011_B', 'S', 0),
+
+                                                                                                        (240, 2, 'ORANGE', 'EXIT_100_A', 'S', 0),
+                                                                                                        (241, 2, 'ORANGE', 'EXIT_100_B', 'S', 0),
+                                                                                                        (242, 2, 'ORANGE', 'EXIT_100_C', 'S', 0),
+                                                                                                        (243, 2, 'ORANGE', 'EXIT_100_D', 'S', 0),
+
+                                                                                                        (244, 4, 'ORANGE', 'EXIT_101_A', 'S', 0),
+                                                                                                        (245, 4, 'ORANGE', 'EXIT_101_B', 'S', 0),
+
+                                                                                                        (246, 3, 'ORANGE', 'EXIT_110_A', 'S', 0),
+
+                                                                                                        (247, 3, 'ORANGE', 'EXIT_110_B', 'S', 0),
+                                                                                                        
+                                                                                                        (248, 0, 'ORANGE', 'EXIT_111_A', 'S', 0),
+                                                                                        
+                                                                                                        (249, 5, 'ORANGE', 'EXIT_111_B', 'S', 0),
+
+                                                                                                        (250, 0, 'ORANGE', 'START', 'S', 0);
+
+INSERT INTO game_players_cards (cards_id, game_player_id) VALUES (201, 33),
+                                                                 (202, 33),
+                                                                 (203, 33),
+                                                                 (204, 33),
+                                                                 (205, 33),
+                                                                 (206, 33),
+                                                                 (207, 33),
+                                                                 (208, 33),
+                                                                 (209, 33),
+                                                                 (210, 33),
+                                                                 (211, 33),
+                                                                 (212, 33),
+                                                                 (213, 33),
+                                                                 (214, 33),
+                                                                 (215, 33),
+                                                                 (216, 33),
+                                                                 (217, 33),
+                                                                 (218, 33),
+                                                                 (219, 33),
+                                                                 (220, 33),
+                                                                 (221, 33),
+                                                                 (222, 33),
+                                                                 (223, 33),
+                                                                 (224, 33),
+                                                                 (225, 33),
+                                                                 (226, 34),
+                                                                 (227, 34),
+                                                                 (228, 34),
+                                                                 (229, 34),
+                                                                 (230, 34),
+                                                                 (231, 34),
+                                                                 (232, 34),
+                                                                 (233, 34),
+                                                                 (234, 34),
+                                                                 (235, 34),
+                                                                 (236, 34),
+                                                                 (237, 34),
+                                                                 (238, 34),
+                                                                 (239, 34),
+                                                                 (240, 34),
+                                                                 (241, 34),
+                                                                 (242, 34),
+                                                                 (243, 34),
+                                                                 (244, 34),
+                                                                 (245, 34),
+                                                                 (246, 34),
+                                                                 (247, 34),
+                                                                 (248, 34),
+                                                                 (249, 34),
+                                                                 (250, 34);
+
                                                                                                                                                                 

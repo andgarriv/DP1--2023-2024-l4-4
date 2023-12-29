@@ -83,3 +83,9 @@
 .rotate-west {
   transform: rotate(90deg);
 }
+
+.selected-card {
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 2%;
+  border-radius: 10%;
+}

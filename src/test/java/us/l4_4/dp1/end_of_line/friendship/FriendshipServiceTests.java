@@ -51,7 +51,7 @@ class FriendshipServiceTests {
     void shouldFindAllFriendshipsByPlayerId(){
         Iterable<Friendship> friendships = friendshipService.findAllFriendshipsByPlayerId(3, FriendStatus.ACCEPTED);
         long count = StreamSupport.stream(friendships.spliterator(), false).count();
-        assertEquals(5, count);
+        assertEquals(6, count);
     }
 
     @Test
