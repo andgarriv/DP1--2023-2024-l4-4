@@ -172,7 +172,7 @@ public class GameService {
         return randomCards;
     }
 
-    public List<Card> findNeededCardsToGetFive(Integer gamePlayerId) {
+    public List<Card> giveNeededCardsToGetFive(Integer gamePlayerId) {
         if (gamePlayerRepository.findById(gamePlayerId) == null) {
             throw new ResourceNotFoundException("GamePlayer", "id", gamePlayerId);
         }
@@ -294,6 +294,7 @@ public class GameService {
     @Transactional
     public List<String> findPosiblePositionOfAGamePlayerGiven(Integer gamePlayerId, Integer gameId) {
         GamePlayer gp = gamePlayerRepository.findById(gamePlayerId).get();
+        Game game = gameRepository.findById(gameId).get();
         //todas las cartas que estan en el tablero
         List<String> cartasON_BOARD= gamePlayerRepository.findGamePlayersByGameId(gameId)
         .get(0)
@@ -310,11 +311,14 @@ public class GameService {
         .map(card -> card.getColumn() + "," + card.getRow())
         .collect(Collectors.toList()));
 
-        Card ultimaCartaEchada = gp.getCards().stream()
+        List<Card> ultimasCartasEchadas = gp.getCards().stream()
                 .filter(card -> card.getCardState() == CardStatus.ON_BOARD)
                 .sorted(Comparator.comparing(Card::getUpdatedAt).reversed())
-                .collect(Collectors.toList()).get(0);
+                .collect(Collectors.toList());
 
+        Card ultimaCartaEchada = ultimasCartasEchadas.get(0);
+        if(game.getEffect() == Hability.REVERSE)ultimaCartaEchada = ultimasCartasEchadas.get(1);
+       
         Integer n = ultimaCartaEchada.getColumn();
         Integer m = ultimaCartaEchada.getRow();
 
@@ -419,6 +423,8 @@ public class GameService {
                 
             }
         }
+
+
         return res;
     }
 
@@ -444,7 +450,101 @@ public class GameService {
         return digitos;
     }
 
+    @Transactional
+    public Game updateGameTurn(Integer gameId, Integer gamePlayerId) {
+        Game game = gameRepository.findById(gameId).get();
+        List<GamePlayer> gps = game.getGamePlayers();
+        List<Card> cartas = gamePlayerRepository.findById(gamePlayerId).get().getCards().stream()
+                .filter(card -> card.getCardState() == CardStatus.IN_HAND)
+                .collect(Collectors.toList());
+        Integer round = game.getRound() + 1;
+        Integer turnPlayerId = game.getGamePlayerTurnId();
+        Integer otherPlayerId = null;
+        //---------------------------------------------------
+        if (gps.get(0).getId() == game.getGamePlayerTurnId())
+            otherPlayerId = gps.get(1).getId();
+        if (gps.get(1).getId() == game.getGamePlayerTurnId())
+            otherPlayerId = gps.get(0).getId();
+        //---------------------------------------------------
 
 
+
+        
+        if (round == 1) {
+            game.setRound(round + 1);
+            giveNeededCardsToGetFive(turnPlayerId);
+            game.setGamePlayerTurnId(otherPlayerId);
+
+        } else if (round == 2) {
+            game.setRound(round + 1);
+            giveNeededCardsToGetFive(turnPlayerId);
+            game.setGamePlayerTurnId(whoIsNext(turnPlayerId, otherPlayerId));
+
+        } else if (round < 5) {
+            if (round == 3 && cartas.size() == 3) {
+                game.setRound(round + 1);
+                giveNeededCardsToGetFive(turnPlayerId);
+                game.setGamePlayerTurnId(otherPlayerId);
+
+            } else if (round == 4 && cartas.size() == 3) {
+                game.setRound(round + 1);
+                giveNeededCardsToGetFive(turnPlayerId);
+                game.setGamePlayerTurnId(whoIsNext(turnPlayerId, otherPlayerId));
+
+            }
+        } else if (round > 4) {
+
+            if (round % 2 == 1) {
+                if (game.getEffect() == Hability.SPEED_UP) {
+                    if (cartas.size() == 2) {
+                        game.setRound(round + 1);
+                        giveNeededCardsToGetFive(turnPlayerId);
+                        game.setGamePlayerTurnId(otherPlayerId);
+                    }
+                } else if (game.getEffect() == Hability.BRAKE) {
+                    if (cartas.size() == 4) {
+                        game.setRound(round + 1);
+                        giveNeededCardsToGetFive(turnPlayerId);
+                        game.setGamePlayerTurnId(otherPlayerId);
+                    }
+
+                } else {
+                    if (cartas.size() == 3) {
+                        game.setRound(round + 1);
+                        giveNeededCardsToGetFive(turnPlayerId);
+                        game.setGamePlayerTurnId(otherPlayerId);
+                    }
+
+                }
+
+            } else {
+
+                if (game.getEffect() == Hability.SPEED_UP) {
+                    if (cartas.size() == 2) {
+                        game.setRound(round + 1);
+                        giveNeededCardsToGetFive(turnPlayerId);
+                        game.setGamePlayerTurnId(whoIsNext(turnPlayerId, otherPlayerId));
+                    }
+                } else if (game.getEffect() == Hability.BRAKE) {
+                    if (cartas.size() == 4) {
+                        game.setRound(round + 1);
+                        giveNeededCardsToGetFive(turnPlayerId);
+                        game.setGamePlayerTurnId(whoIsNext(turnPlayerId, otherPlayerId));
+                    }
+
+                } else {
+                    if (cartas.size() == 3) {
+                        game.setRound(round + 1);
+                        giveNeededCardsToGetFive(turnPlayerId);
+                        game.setGamePlayerTurnId(whoIsNext(turnPlayerId, otherPlayerId));
+                    }
+                }
+
+            }
+
+        }
+
+        return  gameRepository.save(game);
+    }
 
 }
