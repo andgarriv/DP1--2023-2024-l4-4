@@ -19,6 +19,7 @@ import jakarta.validation.Valid;
 import us.l4_4.dp1.end_of_line.enums.CardStatus;
 import us.l4_4.dp1.end_of_line.enums.Exit;
 import us.l4_4.dp1.end_of_line.enums.Orientation;
+import us.l4_4.dp1.end_of_line.gameplayer.GamePlayer;
 
 @RestController
 @RequestMapping("api/v1/cards")
@@ -76,5 +77,14 @@ public class CardController {
         card.setOrientation(Orientation.valueOf(cardDTO.getOrientation()));
         card.setCardState(CardStatus.valueOf(cardDTO.getCard_statu()));
         return cardService.save(card);
+    }
+    @PutMapping("/{id}/{row}/{column}/{orientation}")
+    @ResponseStatus(HttpStatus.OK)
+    public Card updateInhandCard(@PathVariable Integer id, @PathVariable Integer row, @PathVariable Integer column, @PathVariable String orientation){
+        Integer cardId = id;
+        Integer columnToChange = column;
+        Integer rowToChange = row;
+        Orientation orientationtoChage = Orientation.valueOf(orientation.toString());
+        return cardService.updateInHandCard(cardId, rowToChange, columnToChange, orientationtoChage);
     }
 }
