@@ -549,10 +549,33 @@ public class GameService {
         if (changeEffectRequest.getEffect() != null) {
             Hability effect = Hability.valueOf(changeEffectRequest.getEffect());
             game.setEffect(effect);
+            if(effect == Hability.EXTRA_GAS){
+                extraGasEffect(gameId);
+            }
         } else {
             game.setEffect(Hability.NONE);
         }
         return gameRepository.save(game); 
     }
 
+    @Transactional
+    public Card extraGasEffect(Integer gameId){
+        Game game = gameRepository.findById(gameId).get();
+        Integer gamePlayerId = game.getGamePlayerTurnId();
+        List<Card> cards = gamePlayerRepository.findById(gamePlayerId).get().getCards();
+        List<Card> cardsInHand = cards.stream()
+                .filter(card -> card.getCardState() == CardStatus.IN_HAND)
+                .collect(Collectors.toList());
+        Card cardToAdd = new Card();
+        if(cardsInHand.size() < 6){
+            cardToAdd = cards.stream()
+                .filter(card -> card.getCardState() == CardStatus.IN_DECK)
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("Card", "id", gamePlayerId));
+        cardToAdd.setCardState(CardStatus.IN_HAND);
+        cardRepository.save(cardToAdd);
+        }
+       
+        return cardToAdd;
+    }
 }
