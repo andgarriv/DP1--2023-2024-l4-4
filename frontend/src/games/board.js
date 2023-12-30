@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "reactstrap";
 import tokenService from "../services/token.service.js";
-import { gameLogic, getButtonColorStyles, getColorStyles, getRotationStyle, isPlayerAuthorized, playCard, updateTurn } from "./services/boardService.js";
+import { changeEffect, gameLogic, getButtonColorStyles, getColorStyles, getRotationStyle, isPlayerAuthorized, playCard, updateTurn } from "./services/boardService.js";
 import "./styles/Board.css";
 
 function Box({ content, onClick, isHighlighted, playerColor }) {
@@ -134,7 +134,6 @@ export default function Board() {
       gameLogic(gameId, jwt, user, setDataGamePlayer, setHandCardsPlayer1, setHandCardsPlayer2, setBoard,
         setIsLoading, setEnergyCards, setPlayer1CardPossiblePositions, setPlayer2CardPossiblePositions,
         setIsMyTurn, setDataGame);
-      console.log(isMyTurn)
     }, 1000); // Actualization every second
     return () => clearInterval(interval);
 
@@ -227,19 +226,35 @@ export default function Board() {
         <div className="player-column">
           <div style={{ background: "#161616", height: "50%", width: "80%", borderRadius: "5%", padding: "2%" }}>CHAT</div>
           <br />
-          <Button outline style={{ textDecoration: "none", ...getButtonColorStyles(playerColor), width: "30%" }}>
+          <Button
+            outline style={{ textDecoration: "none", ...getButtonColorStyles(playerColor), width: "30%" }}
+            onClick={() => {
+              changeEffect(jwt, gameId, 'EXTRA_GAS');
+            }}>
             EXTRA GAS
           </Button>
           <br />
-          <Button outline style={{ textDecoration: "none", ...getButtonColorStyles(playerColor), width: "30%" }}>
+          <Button 
+            outline style={{ textDecoration: "none", ...getButtonColorStyles(playerColor), width: "30%" }}
+            onClick={() => {
+              changeEffect(jwt, gameId, 'REVERSE');
+            }}>
             REVERSE
           </Button>
           <br />
-          <Button outline style={{ textDecoration: "none", ...getButtonColorStyles(playerColor), width: "30%" }}>
+          <Button 
+            outline style={{ textDecoration: "none", ...getButtonColorStyles(playerColor), width: "30%" }}
+            onClick={() => {
+              changeEffect(jwt, gameId, 'BRAKE');
+            }}>
             BRAKE
           </Button>
           <br />
-          <Button outline style={{ textDecoration: "none", ...getButtonColorStyles(playerColor), width: "30%" }}>
+          <Button 
+            outline style={{ textDecoration: "none", ...getButtonColorStyles(playerColor), width: "30%" }}
+            onClick={() => {
+              changeEffect(jwt, gameId, 'SPEED_UP');
+            }}>
             SPEED UP
           </Button>
           <br />
