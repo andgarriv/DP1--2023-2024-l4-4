@@ -173,25 +173,31 @@ public class GameService {
     }
 
     public List<Card> giveNeededCardsToGetFive(Integer gamePlayerId) {
-        if (gamePlayerRepository.findById(gamePlayerId) == null) {
-            throw new ResourceNotFoundException("GamePlayer", "id", gamePlayerId);
-        }
-        List<Card> cards = gamePlayerRepository.findById(gamePlayerId).get().getCards();
-
+        GamePlayer gamePlayer = gamePlayerRepository.findById(gamePlayerId)
+                .orElseThrow(() -> new ResourceNotFoundException("GamePlayer", "id", gamePlayerId));  
+        List<Card> cards = gamePlayer.getCards();
         List<Card> cardsInDeck = cards.stream()
                 .filter(card -> card.getCardState() == CardStatus.IN_DECK)
                 .collect(Collectors.toList());
         List<Card> cardsInHand = cards.stream()
                 .filter(card -> card.getCardState() == CardStatus.IN_HAND)
                 .collect(Collectors.toList());
-
-        Collections.shuffle(cardsInDeck);
-        List<Card> randomCards = cardsInDeck.subList(0, 5 - cardsInHand.size() - 1);
-
-        for (Card card : randomCards) {
-            cardsInHand.add(card);
-            card.setCardState(CardStatus.IN_HAND);
-            cardRepository.save(card);
+        int cardsNeeded = 5 - cardsInHand.size();
+        if (cardsNeeded > 0) {
+            Collections.shuffle(cardsInDeck);
+            int endIndex = Math.min(cardsInDeck.size(), cardsNeeded);
+            List<Card> randomCards = cardsInDeck.subList(0, endIndex);
+            for (Card card : randomCards) {
+                cardsInHand.add(card);
+                card.setCardState(CardStatus.IN_HAND);
+                try {
+                    cardRepository.save(card);
+                } catch (Exception e) {
+                    System.out.println("Error al guardar la carta: " + e.getMessage());
+                }
+            }
+        } else {
+            System.out.println("No se necesitan cartas adicionales.");
         }
         return cardsInHand;
     }

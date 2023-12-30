@@ -119,7 +119,5 @@ public class GameController {
     @ResponseStatus(HttpStatus.OK)
     public Game pruebaTurn(@PathVariable Integer gamePlayerId,@PathVariable Integer gameId ) {
     return gameService.updateGameTurn(gameId, gamePlayerId);
-    }
-
-
+    } 
 }
