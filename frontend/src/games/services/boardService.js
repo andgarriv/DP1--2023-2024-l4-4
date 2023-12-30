@@ -5,7 +5,7 @@
 
 export async function gameLogic(gameId, jwt, user, setDataGamePlayer, setHandCardsPlayer1, setHandCardsPlayer2,
   setBoard, setIsLoading, setEnergyCards, setPlayer1CardPossiblePositions, setPlayer2CardPossiblePositions,
-  setDataGame, setIsMyTurn) {
+  setIsMyTurn, setDataGame) {
   try {
     const response = await fetch(`/api/v1/games/${gameId}/cards`, {
       method: "GET",
