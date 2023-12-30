@@ -323,7 +323,7 @@ public class GameService {
                 .collect(Collectors.toList());
 
         Card ultimaCartaEchada = ultimasCartasEchadas.get(0);
-        if (game.getEffect() == Hability.REVERSE)
+        if (game.getEffect() == Hability.REVERSE && ultimasCartasEchadas.size() > 1)
             ultimaCartaEchada = ultimasCartasEchadas.get(1);
 
         Integer n = ultimaCartaEchada.getColumn();
@@ -546,11 +546,16 @@ public class GameService {
     @Transactional
     public Game updateGameEffect(Integer gameId, ChangeEffectRequest changeEffectRequest) {
         Game game = gameRepository.findById(gameId).get();
-        if (changeEffectRequest.getEffect() != null) {
+        GamePlayer gp = gamePlayerRepository.findById(game.getGamePlayerTurnId()).get();
+        if( gp.getEnergy() <= 0 ){
+            throw new BadRequestException("No tienes suficiente energia para cambiar el efecto");
+        }
+        else if (changeEffectRequest.getEffect() != null) {
             Hability effect = Hability.valueOf(changeEffectRequest.getEffect());
             game.setEffect(effect);
+            gp.setEnergy(gp.getEnergy() - 1);
             if(effect == Hability.EXTRA_GAS){
-                extraGasEffect(gameId);
+                extraGasEffect(gameId);     
             }
         } else {
             game.setEffect(Hability.NONE);
