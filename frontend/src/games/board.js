@@ -134,6 +134,7 @@ export default function Board() {
       gameLogic(gameId, jwt, user, setDataGamePlayer, setHandCardsPlayer1, setHandCardsPlayer2, setBoard,
         setIsLoading, setEnergyCards, setPlayer1CardPossiblePositions, setPlayer2CardPossiblePositions,
         setIsMyTurn, setDataGame);
+      console.log(isMyTurn)
     }, 1000); // Actualization every second
     return () => clearInterval(interval);
 
