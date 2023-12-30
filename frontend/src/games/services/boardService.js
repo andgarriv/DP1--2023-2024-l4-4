@@ -323,3 +323,18 @@ export async function updateTurn(gameId, gamePlayerId, jwt) {
     throw new Error("Error al actualizar el turno.");
   }
 }
+
+export async function changeEffect(jwt, gameId, effect){
+  const response = await fetch(`/api/v1/games/${gameId}/effect`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${jwt}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ effect }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Error al cambiar el efecto.");
+  }
+}
