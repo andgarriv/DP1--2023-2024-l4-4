@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "reactstrap";
 import tokenService from "../services/token.service.js";
-import { gameLogic, getButtonColorStyles, getColorStyles, getRotationStyle, isPlayerAuthorized, playCard } from "./services/boardService.js";
+import { gameLogic, getButtonColorStyles, getColorStyles, getRotationStyle, isPlayerAuthorized, playCard, updateTurn } from "./services/boardService.js";
 import "./styles/Board.css";
 
 function Box({ content, onClick, isHighlighted, playerColor }) {
@@ -57,6 +57,7 @@ export default function Board() {
   const [dataGame, setDataGame] = useState([]);
   const [isMyTurn, setIsMyTurn] = useState(false);
   const [playerColor, setPlayerColor] = useState(null);
+  const [gamePlayerId, setGamePlayerId] = useState(null);
 
   useEffect(() => {
     // Calcular playerColor una vez que dataGamePlayer esté disponible
@@ -65,9 +66,15 @@ export default function Board() {
         (dataGamePlayer[0].player.id === user.id && dataGamePlayer[0].color) ||
         (dataGamePlayer[1].player.id === user.id && dataGamePlayer[1].color);
       setPlayerColor(calculatedPlayerColor);
+      if (dataGamePlayer[0].player.id === user.id) {
+        setGamePlayerId(dataGamePlayer[0].id);
+      }
+      if (dataGamePlayer[1].player.id === user.id) {
+        setGamePlayerId(dataGamePlayer[1].id);
+      }
     }
 
-  }, [dataGamePlayer, user]);
+  }, [dataGamePlayer, setGamePlayerId, user]);
 
   const handleBoxClick = (colIndex, rowIndex) => {
     if (!isMyTurn) {
@@ -96,23 +103,23 @@ export default function Board() {
 
     if (isValidPosition) {
       let cardOrientation;
-      if(isPlayer1) {
+      if (isPlayer1) {
         const position = player1CardPossiblePositions.find(
-        (pos) => pos.row === rowIndex && pos.col === colIndex
-      );
-      if(position){
-        cardOrientation = position.orientation;
-      }
+          (pos) => pos.row === rowIndex && pos.col === colIndex
+        );
+        if (position) {
+          cardOrientation = position.orientation;
+        }
       } else {
         const position = player2CardPossiblePositions.find(
           (pos) => pos.row === rowIndex && pos.col === colIndex
         );
-        if(position){
+        if (position) {
           cardOrientation = position.orientation;
         }
       }
       playCard(selectedCard.id, colIndex, rowIndex, cardOrientation, jwt)
-      // Limpia la carta seleccionada
+      updateTurn(gameId, gamePlayerId, jwt);
       setSelectedCard(null);
     } else {
       console.log('No es una posición válida');
