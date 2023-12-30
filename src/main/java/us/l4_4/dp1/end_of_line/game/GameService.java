@@ -543,4 +543,16 @@ public class GameService {
         return gameRepository.save(game);
     }
 
+    @Transactional
+    public Game updateGameEffect(Integer gameId, ChangeEffectRequest changeEffectRequest) {
+        Game game = gameRepository.findById(gameId).get();
+        if (changeEffectRequest.getEffect() != null) {
+            Hability effect = Hability.valueOf(changeEffectRequest.getEffect());
+            game.setEffect(effect);
+        } else {
+            game.setEffect(Hability.NONE);
+        }
+        return gameRepository.save(game); 
+    }
+
 }

@@ -120,4 +120,10 @@ public class GameController {
     public Game pruebaTurn(@PathVariable Integer gamePlayerId,@PathVariable Integer gameId ) {
     return gameService.updateGameTurn(gameId, gamePlayerId);
     } 
+
+    @PutMapping("/{gameId}/effect")
+    @ResponseStatus(HttpStatus.OK)
+    public Game changeEffect(@PathVariable Integer gameId, @RequestBody @Valid ChangeEffectRequest changeEffectRequest) {
+        return gameService.updateGameEffect(gameId, changeEffectRequest);
+    }
 }
