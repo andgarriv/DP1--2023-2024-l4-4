@@ -21,6 +21,7 @@ export default function AchievementPlayer() {
                     throw new Error(`HTTP error! status: ${playerResponse.status}`);
                 }
                 const playerData = await playerResponse.json();
+                console.log(playerData);
                 setPlayer(playerData);
 
                 // Fetch achievements data
@@ -31,6 +32,7 @@ export default function AchievementPlayer() {
                     throw new Error(`HTTP error! status: ${achievementsResponse.status}`);
                 }
                 const achievementsData = await achievementsResponse.json();
+                console.log(achievementsData);
                 setDoAchievement(achievementsData);
             } catch (error) {
                 console.error("Error fetching data:", error);
@@ -39,15 +41,6 @@ export default function AchievementPlayer() {
 
         fetchData();
     }, [jwt, user.id]);
-
-    useEffect(() => {
-        if (player && doAchievement.length > 0) {
-            const completedAchievements = doAchievement.filter((achievement) => 
-                player.playerAchievement.find(a => a.achievement.id === achievement.id)?.achieveAt
-            ).length;
-            setPercentageCompleted(((completedAchievements / doAchievement.length) * 100).toFixed(0)); 
-        }
-    }, [player, doAchievement]);
 
     if (!player) {
         return <div className="loading">Loading player data...</div>;
@@ -78,11 +71,9 @@ export default function AchievementPlayer() {
                                     </td>
                                     <td className="text-center">
                                         <div style={{ marginRight: "40px", marginBottom: "15px" }}>
-                                                {player.playerAchievement.find(a => a.achievement.id === achievement.id)?.achieveAt ? (
-                                                    `${player.playerAchievement.find(a => a.achievement.id === achievement.id)?.achieveAt}`
-                                                ) : (
-                                                    <span style={{ color: 'red' }}>Not completed</span>
-                                                )}
+                                        {achievement.playerAchievements.find(pa => player.playerAchievement.find(pa2 => pa2.id === pa.id))?.achieveAt ? 
+                                        (achievement.playerAchievements.find(pa => player.playerAchievement.find(pa2 => pa2.id === pa.id))?.achieveAt) :
+                                        <span style={{ fontSize: "13px" }}>Not achieved yet</span>}
                                         </div>
                                     </td>
 
