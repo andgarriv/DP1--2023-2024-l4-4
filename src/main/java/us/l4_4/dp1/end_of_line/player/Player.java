@@ -35,7 +35,7 @@ public class Player extends User{
     @OneToMany(mappedBy = "receiver", cascade = CascadeType.REMOVE)
     List<Friendship> receivedFriendships;
 
-    @OneToMany(cascade = CascadeType.REMOVE)
+    @OneToMany()
     List<PlayerAchievement> playerAchievement;
 
 }

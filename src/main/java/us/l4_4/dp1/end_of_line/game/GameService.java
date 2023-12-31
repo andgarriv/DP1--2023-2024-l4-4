@@ -301,6 +301,10 @@ public class GameService {
     public List<String> findPosiblePositionOfAGamePlayerGiven(Integer gamePlayerId, Integer gameId) {
         GamePlayer gp = gamePlayerRepository.findById(gamePlayerId).get();
         Game game = gameRepository.findById(gameId).get();
+        List<Card> cartasInHand = gamePlayerRepository.findById(gamePlayerId).get().getCards().stream()
+                .filter(card -> card.getCardState() == CardStatus.IN_HAND)
+                .collect(Collectors.toList()); 
+        Integer nInHand = cartasInHand.size();
         // todas las cartas que estan en el tablero
         List<String> cartasON_BOARD = gamePlayerRepository.findGamePlayersByGameId(gameId)
                 .get(0)
@@ -323,7 +327,7 @@ public class GameService {
                 .collect(Collectors.toList());
 
         Card ultimaCartaEchada = ultimasCartasEchadas.get(0);
-        if (game.getEffect() == Hability.REVERSE && ultimasCartasEchadas.size() > 1)
+        if (game.getEffect() == Hability.REVERSE)
             ultimaCartaEchada = ultimasCartasEchadas.get(1);
 
         Integer n = ultimaCartaEchada.getColumn();
