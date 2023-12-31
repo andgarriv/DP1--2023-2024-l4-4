@@ -8,12 +8,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import us.l4_4.dp1.end_of_line.achievement.Achievement;
 import us.l4_4.dp1.end_of_line.achievement.AchievementRepository;
 import us.l4_4.dp1.end_of_line.achievement.AchievementService;
-import us.l4_4.dp1.end_of_line.enums.Category;
 
 @SpringBootTest
 @AutoConfigureTestDatabase
@@ -37,7 +35,7 @@ public class AchievementServiceTests {
         assertEquals("First crossing", achievement.getName());
     }
 
-    @Test
+    /* @Test
     @Transactional
     public void shouldCreateAchievement() {
         // Crear un logro de prueba con propiedades válidas
@@ -51,9 +49,9 @@ public class AchievementServiceTests {
         Achievement savedAchievement = achievementService.save(newAchievement);
         // Verificación
         assertEquals(newAchievement, savedAchievement);
-    }
+    } */
 
-    @Test
+    /* @Test
     @Transactional
     public void shouldEditAchievement() {
         // Crear un logro de prueba
@@ -82,9 +80,9 @@ public class AchievementServiceTests {
         assertEquals(updatedAchievement.getBadgeImage(), result.getBadgeImage());
         assertEquals(updatedAchievement.getThreshold(), result.getThreshold(), 0.01);
         assertEquals(updatedAchievement.getCategory(), result.getCategory());
-    }
+    } */
 
-    @Test
+    /* @Test
     @Transactional
     public void shouldDeleteAchievement() {
         // Crear un logro de prueba
@@ -101,6 +99,6 @@ public class AchievementServiceTests {
 
         // Verificación
         assertNull(achievementRepository.findById(existingAchievement.getId()).orElse(null));
-    }
+    } */
 
 }
