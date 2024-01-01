@@ -114,6 +114,7 @@ export default function AchievementList() {
                                         <Link to={`/achievements/` + achievement.id} style={{textDecoration: "none", color: 'black'}}>Edit</Link>
                                     </Button>
                                     <Button
+                                        className="auth-button-eol-delete"
                                         aria-label={"delete-" + achievement.id}
                                         size="sm"
                                         color="danger"
@@ -125,14 +126,21 @@ export default function AchievementList() {
                                             setMessage,
                                             setVisible
                                         )}
-                                        className="auth-button-eol-delete"
                                     >
                                         Delete
                                     </Button>
                                 </span>
+                                <div style={{ position: 'fixed', bottom: '20px', right: '20px' }}>
+                                <Button color="success"
+                                size="lg"
+                                className="auth-button-eol-create">
+                                <Link to="" style={{ textDecoration: "none", color: "white"}}>
+                                    Create
+                                </Link>
+                                </Button>
+                                </div>
                             </div>
-                        ))
-                    ) : (
+                        ))) : (
                         <div style={{ textAlign: 'center', width: '100%' }}>There are not achievements yet</div>
                     )}
                 </div>
