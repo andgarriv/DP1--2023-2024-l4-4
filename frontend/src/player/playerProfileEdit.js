@@ -6,7 +6,7 @@ import getErrorModal from "../util/getErrorModal";
 import useFetchState from "../util/useFetchState";
 
 const user = tokenService.getUser();
-const defaultImage = "https://img.freepik.com/fotos-premium/adorable-bebe-buho-estilo-pixar-grandes-ojos-felices_804788-4862.jpg";
+const defaultImage = "https://cdn-icons-png.flaticon.com/512/5778/5778223.png";
 
 export default function EditPlayerProfile() {
   const jwt = tokenService.getLocalAccessToken();

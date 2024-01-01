@@ -6,13 +6,15 @@ import getErrorModal from "./../util/getErrorModal";
 import getIdFromUrl from "./../util/getIdFromUrl";
 import useFetchState from "./../util/useFetchState";
 const jwt = tokenService.getLocalAccessToken();
+
 export default function AchievementEdit() {
     const id = getIdFromUrl(2);
     const emptyAchievement = {
         id: id === "new" ? null : id,
         name: "",
         description: "",
-        badgeImage: "",
+        badgeAchieved: "",
+        badgeNotAchieved: "",
         threshold: 1,
         category: "GAMES_PLAYED",
         actualDescription: ""
@@ -101,15 +103,29 @@ export default function AchievementEdit() {
                         />
                     </div>
                     <div className="custom-form-input">
-                        <Label for="badgeImage" className="custom-form-input-label-achievements">
+                        <Label for="badgeAchieved" className="custom-form-input-label-achievements">
                             Badge Image Url:
                         </Label>
                         <Input
                             type="text"
                             required
-                            name="badgeImage"
-                            id="badgeImage"
-                            value={achievement.badgeImage || ""}
+                            name="badgeAchieved"
+                            id="badgeAchieved"
+                            value={achievement.badgeAchieved || ""}
+                            onChange={handleChange}
+                            className="custom-input"
+                        />
+                    </div>
+                    <div className="custom-form-input">
+                        <Label for="badgeNotAchieved" className="custom-form-input-label-achievements">
+                            Badge Image Url:
+                        </Label>
+                        <Input
+                            type="text"
+                            required
+                            name="badgeNotAchieved"
+                            id="badgeNotAchieved"
+                            value={achievement.badgeNotAchieved || ""}
                             onChange={handleChange}
                             className="custom-input"
                         />
