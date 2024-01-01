@@ -120,7 +120,7 @@ export default function FriendshipList() {
                             </div>
                         ))
                     ) : (
-                        <div style={{ textAlign: 'center', width: '100%' }}>Loading...</div>
+                        <div style={{ textAlign: 'center', width: '100%' }}>There are not friendships yet</div>
                     )}
                 </div>
                 <Pagination

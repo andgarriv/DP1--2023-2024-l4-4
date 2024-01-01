@@ -25,31 +25,6 @@ body {
   transform: translateY(-7px);
 }
 
-.auth-button-achievements {
-  padding: 1.3em 3em;
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 2.5px;
-  font-weight: 500;
-  color: #000;
-  background-color: #fff;
-  border: 2px solid #c4239c ;
-  border-radius: 45px;
-  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease 0s;
-  cursor: pointer;
-  outline: none;
-}
-
-.auth-button-achievements:hover {
-  background-color: #c4239c;
-  box-shadow: 0px 15px 20px rgba(225, 41, 225, 0.746);
-  color: #fff;
-  transform: translateY(-7px);
-}
-
-
-
 .auth-button:active {
   transform: translateY(-1px);
 }
@@ -104,62 +79,23 @@ body {
   transform: translateY(-7px);
 }
 
-.auth-button-eol-achievements-create {
+.auth-button-eol-create {
   padding: 1.3em 3em;
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 2.5px;
-  font-weight: 500;
-  color:  #97ef87;
-  background-color:rgba(34, 34, 34, 0.67);
-  border: 2px solid #97ef87;
-  border-radius: 10px;
-  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+  letter-spacing: 1px;
+  color:  green;
   cursor: pointer;
 }
 
-.auth-button-eol-achievements-create:hover  {
-  background-color: #97ef87;
-  box-shadow: 0px 15px 20px #0e2f02;
-  color: black;
-}
-
-.auth-button-eol-achievements-edit {
+.auth-button-eol-edit  {
   padding: 1.3em 3em;
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 2.5px;
-  font-weight: 500;
-  color:  yellow;
-  background-color:rgba(34, 34, 34, 0.67);
-  border: 2px solid yellow;
-  border-radius: 10px;
-  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+  letter-spacing: 1px;
+  color:  yellow; 
   cursor: pointer;
 }
 
-.auth-button-eol-achievements-edit:hover  {
-  background-color: yellow;
-  box-shadow: 0px 15px 20px rgb(236, 253, 108);
-  color: black;
-}
-
-.auth-button-eol-achievements-delete {
+.auth-button-eol-delete {
   padding: 1.3em 3em;
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 2.5px;
-  font-weight: 500;
+  letter-spacing: 1px;
   color:  red;
-  background-color:rgba(34, 34, 34, 0.67);
-  border: 2px solid red;
-  border-radius: 10px;
-  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
   cursor: pointer;
-}
-
-.auth-button-eol-achievements-delete:hover  {
-  background-color: red;
-  box-shadow: 0px 15px 20px rgb(91, 2, 1);
-  color: black;
 }
