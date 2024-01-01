@@ -11,6 +11,12 @@ export const formValidators = {
         },
         message: "The field cannot be null"
     },
+    notNegativeValidator: {
+        validate: (value) => {
+            return value >= 0.;
+        },
+        message: "The field cannot be negative"
+    },
     validEmailValidator: {
         validate: (value) => {
             const parts = value.split('@');
@@ -28,20 +34,6 @@ export const formValidators = {
         },
         message: "The date must not be in the future and the user must be at least 7 years old"
     },
-    /* uniqueNicknameValidator: {
-        validate: async (nickname) => {
-            const player = await Player.findOne({ where: { nickname: nickname } });
-            return !player;
-        },
-        message: "The nickname must be unique"
-    },
-    uniqueEmailValidator: {
-        validate: async (email) => {
-            const player = await Player.findOne({ where: { email: email } });
-            return !player;
-        },
-        message: "The email must be unique"
-    }, */
     validPasswordValidator: {
         validate: (value) => {
             const hasLowercase = /[a-z]/.test(value);
@@ -59,5 +51,11 @@ export const formValidators = {
             return value.trim().length >= 5 && value.trim().length <= 15;
         },
         message: "The nickname must be between 5 and 15 characters long"
-    }
+    },
+    validURLValidator: {
+        validate: (value) => {
+            return value.endsWith(".jpg") || value.endsWith(".jpeg") || value.endsWith(".png");
+        },
+        message: "The URL must end with .jpg, .jpeg, .png."
+    },
 }
