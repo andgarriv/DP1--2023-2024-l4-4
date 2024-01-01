@@ -97,26 +97,25 @@ export default function FriendshipList() {
             <h1 style={{ textAlign: 'center', color: "#EF87E0" }}>Friendships</h1>
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', marginBottom: '20px' }}>
                     <div style={{ display: 'flex', width: '100%', padding: '10px' }}>
-                        <span style={{ flex: 2, textAlign: 'center' }}>Sender's nickname</span>
-                        <span style={{ flex: 2, textAlign: 'left' }}>Sender's avatar</span>
-                        <span style={{ flex: 2, textAlign: 'left' }}>Receiver's nickname</span>
+                        <span style={{ flex: 3, textAlign: 'center' }}>Sender's nickname</span>
+                        <span style={{ flex: 2, textAlign: 'center' }}>Sender's avatar</span>
+                        <span style={{ flex: 3, textAlign: 'center' }}>Receiver's nickname</span>
                         <span style={{ flex: 2, textAlign: 'center' }}>Receiver's avatar</span>
                         <span style={{ flex: 2, textAlign: 'center' }}>Status</span>
                     </div>
                     {currentFriendships.length > 0 ? (
                         currentFriendships.map((friendship) => (
                             <div key={friendship.id} style={{ display: 'flex', width: '100%', padding: '10px', borderBottom: '1px solid #ddd' }}>
-                                <span style={{ flex: 2, textAlign: 'left', paddingLeft: '10px' }}>{friendship.sender.nickname}</span>
+                                <span style={{ flex: 3, textAlign: 'center' }}>{friendship.sender.nickname}</span>
                                 <span style={{ flex: 2, textAlign: 'center' }}>
-                                    <img src={friendship.sender.avatar} alt="avatar" style={{ borderRadius: "50%", width: "40px", height: "40px" }} />
+                                    <img src={friendship.sender.avatar} alt="sender avatar" style={{ borderRadius: "50%", width: "40px", height: "40px" }} />
                                 </span>
-                                <span style={{ flex: 3, textAlign: 'left', paddingLeft: '10px' }}>{friendship.receiver.nickname}</span>
+                                <span style={{ flex: 3, textAlign: 'center' }}>{friendship.receiver.nickname}</span>
                                 <span style={{ flex: 2, textAlign: 'center' }}>
-                                    <img src={friendship.receiver.avatar} alt="avatar" style={{ borderRadius: "50%", width: "40px", height: "40px" }} />
+                                    <img src={friendship.receiver.avatar} alt="receiver avatar" style={{ borderRadius: "50%", width: "40px", height: "40px" }} />
                                 </span>
-                                <span style={{ flex: 2, textAlign: 'center', paddingLeft: '10px', ...getFriendStateStyle(friendship.friendState) }}>{friendship.friendState}
+                                <span style={{ flex: 2, textAlign: 'center', paddingLeft: '10px' , ...getFriendStateStyle(friendship.friendState) }}>{friendship.friendState}
                                 </span>
-
                             </div>
                         ))
                     ) : (
@@ -132,5 +131,5 @@ export default function FriendshipList() {
                 {modal}
             </div>
         </div>
-    );
+    );    
 };

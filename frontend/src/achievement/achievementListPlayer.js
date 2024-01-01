@@ -1,48 +1,55 @@
 import React, { useEffect, useState } from 'react';
 import tokenService from "../services/token.service";
 
-const imgnotfound = "https://cdn-icons-png.flaticon.com/512/5778/5778223.png";
 const user = tokenService.getUser();
 
 export default function AchievementPlayer() {
     const jwt = tokenService.getLocalAccessToken();
-    const [player, setPlayer] = useState(null); // Inicializa player como null
-    const [doAchievement, setDoAchievement] = useState([]); // Inicializa doAchievement como un arreglo vacío
+    const [player, setPlayer] = useState(null);
+    const [doAchievement, setDoAchievement] = useState([]);
     const [percentageCompleted, setPercentageCompleted] = useState(0);
 
-    useEffect(() => {
-        async function fetchData() {
-            try {
-                // Fetch player data
-                const playerResponse = await fetch(`/api/v1/players/${user.id}`, {
-                    headers: { Authorization: `Bearer ${jwt}` },
-                });
-                if (!playerResponse.ok) {
-                    throw new Error(`HTTP error! status: ${playerResponse.status}`);
-                }
-                const playerData = await playerResponse.json();
-                console.log(playerData);
-                setPlayer(playerData);
+    const formatDate = (date) => {
+  const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+  return new Date(date).toLocaleDateString(undefined, options);
+};
 
-                // Fetch achievements data
-                const achievementsResponse = await fetch(`/api/v1/achievements`, {
-                    headers: { Authorization: `Bearer ${jwt}` },
-                });
-                if (!achievementsResponse.ok) {
-                    throw new Error(`HTTP error! status: ${achievementsResponse.status}`);
-                }
-                const achievementsData = await achievementsResponse.json();
-                console.log(achievementsData);
-                setDoAchievement(achievementsData);
-            } catch (error) {
-                console.error("Error fetching data:", error);
+
+useEffect(() => {
+    async function fetchData() {
+        try {
+            const playerResponse = await fetch(`/api/v1/players/${user.id}`, {
+                headers: { Authorization: `Bearer ${jwt}` },
+            });
+            if (!playerResponse.ok) {
+                throw new Error(`HTTP error! status: ${playerResponse.status}`);
             }
+            const playerData = await playerResponse.json();
+            setPlayer(playerData);
+
+            const achievementsResponse = await fetch(`/api/v1/achievements`, {
+                headers: { Authorization: `Bearer ${jwt}` },
+            });
+            if (!achievementsResponse.ok) {
+                throw new Error(`HTTP error! status: ${achievementsResponse.status}`);
+            }
+            const achievementsData = await achievementsResponse.json();
+            const achievementsCount = achievementsData.length;
+            const playerAchievementsCount = playerData.playerAchievement.length;
+            const percentage = (playerAchievementsCount / achievementsCount) * 100;
+            setPercentageCompleted(Math.round(percentage));
+            setDoAchievement(achievementsData);
+        } catch (error) {
+            console.error("Error fetching data:", error);
         }
+    }
 
-        fetchData();
-    }, [jwt, user.id]);
+    fetchData();
+}, [jwt]);
+    
+    
 
-    if (!player) {
+    if (!player || doAchievement.length === 0) {
         return <div className="loading">Loading player data...</div>;
     }
 
@@ -50,38 +57,41 @@ export default function AchievementPlayer() {
         <div className="home-page-container">
             <div className="hero-div">
                 <h1 style={{ textAlign: 'center' }}>Achievements {percentageCompleted}%</h1>
-                
                 <table>
                     <tbody>
                         {doAchievement && doAchievement.length > 0 ? (
-                            doAchievement.map((achievement) => (
-                                <tr key={achievement.id}>
-                                    <td className="text-center">
-                                        <div style={{ marginRight: "40px", marginBottom: "15px" }}>
-                                            <img src={achievement.badgeImage || imgnotfound} alt={achievement.name} width="50px" />
-                                        </div>
-                                        
-                                    </td>
-                                    <td className="text-center" colSpan="2">
-                                        <div style={{ marginRight: "40px", marginBottom: "15px" }}>
-                                            <strong>{achievement.name}</strong>
-                                            <br />
-                                            <span style={{ fontSize: "13px" }}>{achievement.description}</span>
-                                        </div>
-                                    </td>
-                                    <td className="text-center">
-                                        <div style={{ marginRight: "40px", marginBottom: "15px" }}>
-                                        {achievement.playerAchievements.find(pa => player.playerAchievement.find(pa2 => pa2.id === pa.id))?.achieveAt ? 
-                                        (achievement.playerAchievements.find(pa => player.playerAchievement.find(pa2 => pa2.id === pa.id))?.achieveAt) :
-                                        <span style={{ fontSize: "13px" }}>Not achieved yet</span>}
-                                        </div>
-                                    </td>
+                            doAchievement.map((achievement) => {
+                                const playerAchievementRecord = achievement.playerAchievements.find(pa => 
+                                    player.playerAchievement.find(pa2 => pa2.id === pa.id));
+                                const isAchieved = playerAchievementRecord?.achieveAt;
+                                const achievementImage = isAchieved ? achievement.badgeAchieved : achievement.badgeNotAchieved;
+                                const formattedDate = isAchieved ? formatDate(playerAchievementRecord.achieveAt) : "Not achieved yet";
 
-                                </tr>
-                            ))
+                                return (
+                                    <tr key={achievement.id}>
+                                        <td className="text-center">
+                                            <div style={{ marginRight: "40px", marginBottom: "15px" }}>
+                                                <img src={achievementImage} alt={achievement.name} width="50px" />
+                                            </div>
+                                        </td>
+                                        <td className="text-center" colSpan="2">
+                                            <div style={{ marginRight: "40px", marginBottom: "15px" }}>
+                                                <strong>{achievement.name}</strong>
+                                                <br />
+                                                <span style={{ fontSize: "13px" }}>{achievement.description}</span>
+                                            </div>
+                                        </td>
+                                        <td className="text-center">
+                                            <div style={{ marginRight: "40px", marginBottom: "15px" }}>
+                                                <span style={{ fontSize: "13px" }}>{formattedDate}</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                );
+                            })
                         ) : (
                             <tr>
-                                <td colSpan="4">No achievements found.</td>
+                                <td colSpan="4">No achievements found</td>
                             </tr>
                         )}
                     </tbody>
