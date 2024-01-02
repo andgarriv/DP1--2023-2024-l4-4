@@ -327,7 +327,7 @@ public class GameService {
                 .collect(Collectors.toList());
 
         Card ultimaCartaEchada = ultimasCartasEchadas.get(0);
-        if (game.getEffect() == Hability.REVERSE)
+        if (game.getEffect() == Hability.REVERSE && nInHand.equals(5))
             ultimaCartaEchada = ultimasCartasEchadas.get(1);
 
         Integer n = ultimaCartaEchada.getColumn();
