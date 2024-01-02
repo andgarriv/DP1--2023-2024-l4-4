@@ -58,6 +58,12 @@ export default function AchievementList() {
     const [visible, setVisible] = useState(false);
     const [alerts, setAlerts] = useState([]);
 
+    function formatCategory(category) {
+        const words = category.split("_");
+        const formattedWords = words.map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase());
+        return formattedWords.join(" ");
+    }
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -89,21 +95,23 @@ export default function AchievementList() {
             <div className="hero-div">
                 <h1 style={{ textAlign: 'center', color: "#EF87E0" }}>Achievements</h1>
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', marginBottom: '20px' }}>
-                    <div style={{ display: 'flex', width: '100%', padding: '10px' }}>
+                    <div style={{ display: 'flex', width: '100%', padding: '10px', boxSizing: 'border-box' }}>
                         <span style={{ flex: 3, textAlign: 'center' }}>Name</span>
                         <span style={{ flex: 5, textAlign: 'center' }}>Description</span>
                         <span style={{ flex: 2, textAlign: 'center' }}>Badge Image</span>
-                        <span style={{ flex: 2, textAlign: 'center' }}></span> 
+                        <span style={{ flex: 2, textAlign: 'center' }}>Category</span>
+                        <span style={{ flex: 2, textAlign: 'center' }}></span>
                     </div>
                     {currentAchievements.length > 0 ? (
                         currentAchievements.map((achievement) => (
-                            <div key={achievement.id} style={{ display: 'flex', width: '100%', padding: '10px', borderBottom: '1px solid #ddd' }}>
+                            <div key={achievement.id} style={{ display: 'flex', width: '100%', padding: '10px', borderBottom: '1px solid #ddd', boxSizing: 'border-box' }}>
                                 <span style={{ flex: 3, textAlign: 'center' }}>{achievement.name}</span>
                                 <span style={{ flex: 5, textAlign: 'center' }}>{achievement.description}</span>
                                 <span style={{ flex: 2, textAlign: 'center' }}>
                                     <img src={achievement.badgeAchieved} alt="badge_achieved" style={{ borderRadius: "50%", width: "40px", height:"40px"}} />
                                 </span>
-                                <span style={{ flex: 2, textAllign: 'center', justifyContent: 'space_around', paddingRight: '10px' }}> 
+                                <span style={{ flex: 2, textAlign: 'center' }}>{formatCategory(achievement.category)}</span>
+                                <span style={{ flex: 2, display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
                                     <Button
                                         aria-label={"edit-" + achievement.id}
                                         size="sm"
@@ -130,15 +138,6 @@ export default function AchievementList() {
                                         Delete
                                     </Button>
                                 </span>
-                                <div style={{ position: 'fixed', bottom: '20px', right: '20px' }}>
-                                <Button color="success"
-                                size="lg"
-                                className="auth-button-eol-create">
-                                <Link to="" style={{ textDecoration: "none", color: "white"}}>
-                                    Create
-                                </Link>
-                                </Button>
-                                </div>
                             </div>
                         ))) : (
                         <div style={{ textAlign: 'center', width: '100%' }}>There are not achievements yet</div>
@@ -151,7 +150,17 @@ export default function AchievementList() {
                     currentPage={currentPage}
                 />
                 {modal}
+                <div style={{ position: 'fixed', bottom: '20px', right: '20px' }}>
+                <Button color="success"
+                size="lg"
+                className="auth-button-eol-create">
+                <Link to={`/achievements/new`} style={{ textDecoration: "none", color: "white"}}>
+                    Create
+                </Link>
+                </Button>
+                </div>
             </div>
         </div>
     );
+    
 };
