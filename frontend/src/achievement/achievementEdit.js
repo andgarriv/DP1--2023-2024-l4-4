@@ -1,10 +1,11 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Form, Input, Label } from "reactstrap";
+import { Button, Form, Input, Label } from "reactstrap";
 import tokenService from "../services/token.service";
-import getErrorModal from "./../util/getErrorModal";
-import getIdFromUrl from "./../util/getIdFromUrl";
-import useFetchState from "./../util/useFetchState";
+import getErrorModal from "../util/getErrorModal";
+import getIdFromUrl from "../util/getIdFromUrl";
+import useFetchState from "../util/useFetchState";
+
 const jwt = tokenService.getLocalAccessToken();
 
 export default function AchievementEdit() {
@@ -13,12 +14,13 @@ export default function AchievementEdit() {
         id: id === "new" ? null : id,
         name: "",
         description: "",
-        badgeAchieved: "",
-        badgeNotAchieved: "",
-        threshold: 1,
+        badgeNotAchieved: "https://cdn-icons-png.flaticon.com/128/5730/5730459.png",
+        badgeAchieved: "https://cdn-icons-png.flaticon.com/512/5778/5778223.png",
+        threshold: "",
         category: "GAMES_PLAYED",
         actualDescription: ""
     };
+
     const [message, setMessage] = useState(null);
     const [visible, setVisible] = useState(false);
     const [achievement, setAchievement] = useFetchState(
@@ -29,154 +31,154 @@ export default function AchievementEdit() {
         setVisible,
         id
     );
-    const modal = getErrorModal(setVisible, visible, message);
-    function handleSubmit(event) {
-        event.preventDefault();
-        fetch(
-            "/api/v1/achievements" + (achievement.id ? "/" + achievement.id : ""),
-            {
-                method: achievement.id ? "PUT" : "POST",
-                headers: {
-                    Authorization: `Bearer ${jwt}`,
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(achievement),
-            }
-        )
-            .then((response) => response.text())
-            .then((data) => {
-                if (data === "")
-                    window.location.href = "/achievements";
-                else {
-                    let json = JSON.parse(data);
-                    if (json.message) {
-                        setMessage(JSON.parse(data).message);
-                        setVisible(true);
-                    } else
-                        window.location.href = "/achievements";
-                }
-            })
-            .catch((message) => alert(message));
-    }
-    function handleChange(event) {
-        const target = event.target;
-        const value = target.value;
-        const name = target.name;
-        setAchievement({ ...achievement, [name]: value });
-    }
-    return (
-        <div className="home-page-container" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
 
-            <div className="hero-div">
-                {modal}
-                <h2 className="text-center" style={{ color: 'white' }}>
-                    {achievement.id ? "Edit Achievement" : "Add Achievement"}
-                </h2>
-                <Form onSubmit={handleSubmit} style={{ width: '100%' }}>
-                    <div className="custom-form-input">
-                        <Label for="name" className="custom-form-input-label-achievements">
-                            Name
-                        </Label>
-                        <Input
-                            type="text"
-                            required
-                            name="name"
-                            id="name"
-                            value={achievement.name || ""}
-                            onChange={handleChange}
-                            className="custom-input"
-                        />
-                    </div>
-                    <div className="custom-form-input">
-                        <Label for="description" className="custom-form-input-label-achievements">
-                            Description
-                        </Label>
-                        <Input
-                            type="text"
-                            required
-                            name="description"
-                            id="descripction"
-                            value={achievement.description || ""}
-                            onChange={handleChange}
-                            className="custom-input"
-                        />
-                    </div>
-                    <div className="custom-form-input">
-                        <Label for="badgeAchieved" className="custom-form-input-label-achievements">
-                            Badge Image Url:
-                        </Label>
-                        <Input
-                            type="text"
-                            required
-                            name="badgeAchieved"
-                            id="badgeAchieved"
-                            value={achievement.badgeAchieved || ""}
-                            onChange={handleChange}
-                            className="custom-input"
-                        />
-                    </div>
-                    <div className="custom-form-input">
-                        <Label for="badgeNotAchieved" className="custom-form-input-label-achievements">
-                            Badge Image Url:
-                        </Label>
-                        <Input
-                            type="text"
-                            required
-                            name="badgeNotAchieved"
-                            id="badgeNotAchieved"
-                            value={achievement.badgeNotAchieved || ""}
-                            onChange={handleChange}
-                            className="custom-input"
-                        />
-                    </div>
-                    <div className="custom-form-input">
-                        <Label for="category" className="custom-form-input-label-achievements" >
-                            Category
-                        </Label>
-                        <Input
-                            type="select"
-                            required
-                            name="category"
-                            id="category"
-                            value={achievement.category || ""}
-                            onChange={handleChange}
-                            className="custom-input"
-                        >
-                            <option value="">None</option>
-                            <option value="GAMES_PLAYED">GAMES_PLAYED</option>
-                            <option value="VICTORIES">VICTORIES</option>
-                            <option value="TOTAL_PLAY_TIME">TOTAL_PLAY_TIME</option>
-                        </Input>
-                    </div>
-                    <div className="custom-form-input">
-                        <Label for="theshold" className="custom-form-input-label-achievements">
-                            Threshold value:
-                        </Label>
-                        <Input
-                            type="number"
-                            required
-                            name="threshold"
-                            id="threshold"
-                            value={achievement.threshold || ""}
-                            onChange={handleChange}
-                            className="custom-input"
-                        />
-                    </div>
-                    <div className="custom-button-row">
-                        <Link
-                            to={`/achievements`}
-                            className="auth-button-eol"
-                            style={{ textDecoration: "none" }}
-                        >
-                            Cancel
-                        </Link>
-                        <button className="auth-button-eol">
-                            Save
-                        </button>
-                    </div>
-                </Form>
+    const modal = getErrorModal(setVisible, visible, message);
+
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+        setAchievement({ ...achievement, [name]: value });
+    };
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        try {
+            const response = await fetch(
+                `/api/v1/achievements${achievement.id ? "/" + achievement.id : ""}`,
+                {
+                    method: achievement.id ? "PUT" : "POST",
+                    headers: {
+                        Authorization: `Bearer ${jwt}`,
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(achievement),
+                }
+            );
+
+            const data = await response.text();
+            if (data === "")
+                window.location.href = "/achievements";
+            else {
+                let json = JSON.parse(data);
+                if (json.message) {
+                    setMessage(json.message);
+                    setVisible(true);
+                } else
+                    window.location.href = "/achievements";
+            }
+        } catch (error) {
+            alert(error.message);
+        }
+    };
+
+    return (
+        <div className="home-page-container">
+            <div className="scrollable-content" style={scrollbarStyles}> 
+                <div className="hero-div">
+                    <h1 className="text-center">{achievement.id ? "Edit Achievement" : "Add Achievement"}</h1>
+                    {modal}
+                    <Form onSubmit={handleSubmit}>
+                        <div className="custom-form-input">
+                            <Label for="name">Name</Label>
+                            <Input
+                                type="text"
+                                required
+                                name="name"
+                                id="name"
+                                value={achievement.name || ""}
+                                onChange={handleChange}
+                            />
+                        </div>
+                        <div className="custom-form-input">
+                            <Label for="description">Description</Label>
+                            <Input
+                                type="text"
+                                required
+                                name="description"
+                                id="description"
+                                value={achievement.description || ""}
+                                onChange={handleChange}
+                            />
+                        </div>
+                        <div className="custom-form-input">
+                            <Label for="name">Badge not achieved image URL</Label>
+                            <Input
+                                type="text"
+                                required
+                                name="badgeNotAchieved"
+                                id="badgeNotAchieved"
+                                value={achievement.badgeNotAchieved || ""}
+                                onChange={handleChange}
+                            />
+                        </div>
+                        <div className="custom-form-input">
+                            <Label for="name">Badge achieved image URL</Label>
+                            <Input
+                                type="text"
+                                required
+                                name="badgeAchieved"
+                                id="badgeAchieved"
+                                value={achievement.badgeAchieved || ""}
+                                onChange={handleChange}
+                            />
+                        </div>
+                        <div className="custom-form-input">
+                            <Label for="name">Threshold</Label>
+                            <Input
+                                type="text"
+                                required
+                                name="threshold"
+                                id="threshold"
+                                value={achievement.threshold || ""}
+                                onChange={handleChange}
+                            />
+                        </div>
+                        <div className="custom-form-input">
+                            <Label for="name">Category</Label>
+                            <Input
+                                type="text"
+                                required
+                                name="category"
+                                id="category"
+                                value={achievement.category || ""}
+                                onChange={handleChange}
+                            />
+                        </div>
+                        <div style={{ display: "flex", justifyContent: "space-between", marginTop: "20px" }}>
+                            <Button outline color="danger">
+                                <Link to="/achievements" style={{ textDecoration: "none", color: "white" }}>
+                                    Cancel
+                                </Link>
+                            </Button>
+                            <div style={{ width: "10px" }}></div>
+                            <Button outline color="success" style={{ textDecoration: "none", color: "white"}} type="submit">
+                            {achievement.id ? "Save" : "Create"}
+                            </Button>
+                        </div>
+                    </Form>
+                </div>
             </div>
         </div>
     );
 }
+
+const scrollbarStyles = {
+    maxHeight: "900px",
+    overflowY: "auto",
+    scrollbarWidth: "thin",
+    scrollbarColor: "#222222",
+    WebkitOverflowScrolling: "touch",
+    "&::-webkit-scrollbar": {
+        width: "1px",
+    },
+    "&::-webkit-scrollbar-thumb": {
+        backgroundColor: "#222",
+        borderRadius: "1px",
+    },
+    "&::-webkit-scrollbar-thumb:hover": {
+        backgroundColor: "#555",
+    },
+    "&::-webkit-scrollbar-track": {
+        backgroundColor: "transparent",
+    },
+};

@@ -35,14 +35,10 @@ export default function PlayerProfile() {
 
   const modal = getErrorModal(setVisible, visible, message);
 
-  const date_format = (date) => {
-    // eslint-disable-next-line no-new-wrappers
-    const d = new String(date);
-    const year = d.substring(0, 4);
-    const month = d.substring(5, 7);
-    const day = d.substring(8, 10);
-    return `${day}/${month}/${year}`;
-    };
+  const formatDate = (date) => {
+    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+    return new Date(date).toLocaleDateString(undefined, options);
+  };
 
   return (
     <div className="home-page-container">
@@ -71,7 +67,7 @@ export default function PlayerProfile() {
               <p style={{ color: "white" }}>{player.surname || 'No surname provided'}</p>
               <p style={{ color: "white" }}>{player.nickname || 'No nickname provided'}</p>
               <p style={{ color: "white" }}>{player.email || 'No email provided'}</p>
-              <p style={{ color: "white" }}>{date_format(player.birthDate) || 'No birthdate provided'}</p>
+              <p style={{ color: "white" }}>{formatDate(player.birthDate) || 'No birthdate provided'}</p>
             </div>
             </div>
           </div>

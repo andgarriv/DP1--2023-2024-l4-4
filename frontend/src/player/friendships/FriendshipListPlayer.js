@@ -135,7 +135,7 @@ export default function FriendshipList() {
                     currentPage={currentPage}
                 />
                 {modal}
-                <div style={{bottom: '20px', right: '20px', display: 'flex', justifyContent: 'flex-end' }}>
+                <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
                 <Button 
                 className="auth-button-eol-edit"
                 color="warning" 

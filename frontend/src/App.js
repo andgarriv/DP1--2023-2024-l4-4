@@ -110,11 +110,11 @@ function App() {
     if (role === "PLAYER") {
       playerRoutes = (
         <>
-          {/* <Route path="/dashboard" element={<PrivateRoute><OwnerDashboard /></PrivateRoute>} /> */}
           <Route path="/games" exact={true} element={<PrivateRoute><PlayerGamesList /></PrivateRoute>} />
           <Route path="/profile" exact={true} element={<PrivateRoute><PlayerProfile /></PrivateRoute>} />
           <Route path="/profile/edit" exact={true} element={<PrivateRoute><PlayerProfileEdit /></PrivateRoute>} />
           <Route path="/achievements" exact={true} element={<PrivateRoute><AchievementPlayer /></PrivateRoute>} />
+          <Route path="/achievements/:achievementId" exact={true} element={<PrivateRoute><AchievementPlayer /></PrivateRoute>} />
           <Route path="/stats" exact={true} element={<PrivateRoute><PlayerStats /></PrivateRoute>} />
           <Route path="/play" exact={true} element={<PrivateRoute><NewGame /></PrivateRoute>} />
           <Route path="/game/:id" exact={true} element={<PrivateRoute><Board /></PrivateRoute>} />
@@ -138,7 +138,6 @@ function App() {
   } else {
     userRoutes = (
       <>
-        {/* <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} /> */}
         <Route path="/logout" element={<Logout />} />
         <Route path="/login" element={<Login />} />
       </>

@@ -32,17 +32,17 @@ INSERT INTO achievements(id, name, description, threshold, badge_not_achieved, b
 
                                                                                          (7, 'First Journey', 'First half hour of contact with the game', 0.5, 'https://cdn-icons-png.flaticon.com/128/6198/6198482.png', 'https://cdn-icons-png.flaticon.com/128/6198/6198463.png', 'TOTAL_PLAY_TIME'),
                                                                                          (8, 'Hour of Skillful Maneuvering', 'Dedicate a whole hour to mastering the game', 1.0, 'https://cdn-icons-png.flaticon.com/128/6117/6117105.png', 'https://cdn-icons-png.flaticon.com/128/6116/6116661.png', 'TOTAL_PLAY_TIME'),
-                                                                                         (9, 'Marathon of Mastery', 'Invest 4 hours as a deep expertise in the games strategic depth', 4.0, 'https://cdn-icons-png.flaticon.com/128/1837/1837562.png', 'https://cdn-icons-png.flaticon.com/128/1837/1837573.png', 'TOTAL_PLAY_TIME');
+                                                                                         (9, 'Marathon of Mastery', 'Invest 5 hours as a deep expertise in the games strategic depth', 5.0, 'https://cdn-icons-png.flaticon.com/128/1837/1837562.png', 'https://cdn-icons-png.flaticon.com/128/1837/1837573.png', 'TOTAL_PLAY_TIME');
                                                                                          
 -- Player Achievements
 INSERT INTO player_achievements(id, achieve_at) VALUES (1, '2023-09-01'),
-                                                       (2, '2023-09-02'),
+                                                       (2, '2023-09-01'),
                                                        (3, '2023-09-02'),
-                                                       (4, '2023-09-27'),                                      
+                                                       (4, '2023-09-19'),
                                                        (5, '2023-10-09'),
                                                        (6, '2023-10-09'),
-                                                       (7, '2023-11-01'),
-                                                       (8, '2023-11-25'),
+                                                       (7, '2023-11-01'),                                                     
+                                                       (8, '2023-11-25'),                                                    
                                                        (9, '2023-12-19');
 
 
@@ -59,20 +59,18 @@ INSERT INTO players_player_achievement(player_achievement_id, player_id) VALUES 
 
 --Achievement PlayerAchievements
 INSERT INTO achievements_player_achievements(achievement_id, player_achievements_id) VALUES (1, 1),
-                                                                                            (4, 2),
-                                                                                            (7, 3),
+                                                                                            (7, 2),
+                                                                                            (4, 3),
                                                                                             (8, 4),
-                                                                                            (5, 5),
-                                                                                            (2, 6),
+                                                                                            (2, 5),
+                                                                                            (5, 6),
                                                                                             (3, 7),
                                                                                             (6, 8),
                                                                                             (9, 9);
 
 -- GamePlayers
-INSERT INTO game_players(id, energy, player_id, color) VALUES -- Player con id 5 y 6 son los game_players 1 y 2, respectivamente
-                                                              (1, 3, 5,'VIOLET'), 
-                                                              (2, 2, 6,'ORANGE'), 
-                                                              
+INSERT INTO game_players(id, energy, player_id, color) VALUES (1, 3, 5,'VIOLET'), 
+                                                              (2, 2, 6,'ORANGE'),                                                               
                                                               (3, 1, 5,'GREEN'),
                                                               (4, 3, 6,'RED'), 
                                                               (5, 1, 7,'ORANGE'), 
@@ -112,26 +110,24 @@ INSERT INTO games(id, round, winner, started, ended, game_player_turn_id, effect
                                                                                          (3, 24, 7, '2023-09-01 10:00:00', '2023-09-01 10:28:39', 8, 'NONE'),
                                                                                          (4, 20, 10, '2023-09-01 14:18:32', '2023-09-01 14:52:20', 11, 'NONE'),
 
-                                                                                         (5, 27, 6, '2023-09-01 19:14:25', '2023-09-01 19:41:38', 3, 'NONE'),
-                                                                                         (6, 28, 3, '2023-09-02 14:03:07', '2023-09-02 14:18:07', 4, 'NONE'),
-                                                                                         (7, 20, 3, '2023-09-19 04:13:56', '2023-09-19 04:27:56', 10, 'NONE'),
-                                                                                         (8, 27, 3, '2023-09-27 09:49:44', '2023-09-27 10:13:44', 7, 'NONE'),                                     
-                                                                                         (9, 18, 3, '2023-10-09 08:30:29', '2023-10-09 08:47:29', 7, 'NONE'),
-                                                                                         (10, 20, 3, '2023-10-09 09:07:00', '2023-10-09 09:23:00', 8, 'NONE'),
-                                                                                         (11, 26, 3, '2023-10-12 07:08:07', '2023-10-12 07:19:07', 6, 'NONE'),
-                                                                                         (12, 20, 3, '2023-10-20 00:51:04', '2023-10-20 01:20:04', 5, 'NONE'),
-                                                                                         (13, 23, 3, '2023-10-30 22:34:55', '2023-10-30 22:49:55', 9, 'NONE'),
-                                                                                         (14, 27, 3, '2023-11-01 13:44:27', '2023-11-01 14:01:27', 8, 'NONE'),
-                                                                                         (15, 26, 3, '2023-11-25 03:59:03', '2023-11-25 04:22:03', 10, 'NONE'),
-                                                                                         (16, 28, 3, '2023-12-19 17:33:57', '2023-12-19 18:08:57', 8, 'NONE'),
+                                                                                         (5, 27, 6, '2023-09-01 19:14:25', '2023-09-01 19:47:38', 3, 'NONE'),
+                                                                                         (6, 28, 3, '2023-09-02 14:03:07', '2023-09-02 14:24:07', 4, 'NONE'),
+                                                                                         (7, 20, 3, '2023-09-19 04:13:56', '2023-09-19 04:32:56', 10, 'NONE'),
+                                                                                         (8, 27, 3, '2023-09-27 09:49:44', '2023-09-27 10:17:44', 7, 'NONE'),                                     
+                                                                                         (9, 18, 3, '2023-10-09 08:30:29', '2023-10-09 08:53:29', 7, 'NONE'),
+                                                                                         (10, 20, 3, '2023-10-09 09:07:00', '2023-10-09 09:27:00', 8, 'NONE'),
+                                                                                         (11, 26, 3, '2023-10-12 07:08:07', '2023-10-12 07:25:07', 6, 'NONE'),
+                                                                                         (12, 20, 3, '2023-10-20 00:51:04', '2023-10-20 01:27:04', 5, 'NONE'),
+                                                                                         (13, 23, 3, '2023-10-30 22:34:55', '2023-10-30 22:54:55', 9, 'NONE'),
+                                                                                         (14, 27, 3, '2023-11-01 13:44:27', '2023-11-01 14:06:27', 8, 'NONE'),
+                                                                                         (15, 26, 3, '2023-11-25 03:59:03', '2023-11-25 04:24:03', 10, 'NONE'),
+                                                                                         (16, 28, 3, '2023-12-19 17:33:57', '2023-12-19 18:10:57', 8, 'NONE'),
 
-                                                                                         (17, 5, null, '2023-12-21 17:35:45', null, 6, 'NONE');
+                                                                                         (17, 1, null, '2023-12-21 17:35:45', null, 6, 'NONE');
 
 -- Games_Game_Players
-INSERT INTO games_game_players(game_id, game_players_id) VALUES --Player con id 5 y 6 juegan la partida 1
-                                                                (1, 1),
+INSERT INTO games_game_players(game_id, game_players_id) VALUES (1, 1),
                                                                 (1, 2),
-
                                                                 (2, 3),
                                                                 (2, 4),
                                                                 (3, 5),
