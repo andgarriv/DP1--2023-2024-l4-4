@@ -174,7 +174,7 @@ public class GameService {
 
     public List<Card> giveNeededCardsToGetFive(Integer gamePlayerId) {
         GamePlayer gamePlayer = gamePlayerRepository.findById(gamePlayerId)
-                .orElseThrow(() -> new ResourceNotFoundException("GamePlayer", "id", gamePlayerId));  
+                .orElseThrow(() -> new ResourceNotFoundException("GamePlayer", "id", gamePlayerId));
         List<Card> cards = gamePlayer.getCards();
         List<Card> cardsInDeck = cards.stream()
                 .filter(card -> card.getCardState() == CardStatus.IN_DECK)
@@ -303,7 +303,7 @@ public class GameService {
         Game game = gameRepository.findById(gameId).get();
         List<Card> cartasInHand = gamePlayerRepository.findById(gamePlayerId).get().getCards().stream()
                 .filter(card -> card.getCardState() == CardStatus.IN_HAND)
-                .collect(Collectors.toList()); 
+                .collect(Collectors.toList());
         Integer nInHand = cartasInHand.size();
         // todas las cartas que estan en el tablero
         List<String> cartasON_BOARD = gamePlayerRepository.findGamePlayersByGameId(gameId)
@@ -474,45 +474,58 @@ public class GameService {
             giveNeededCardsToGetFive(turnPlayerId);
             game.setRound(round + 1);
             game.setGamePlayerTurnId(otherPlayerId);
+            game.setEffect(Hability.NONE);
 
         } else if (round == 2) {
-            giveNeededCardsToGetFive(turnPlayerId);
             game.setRound(round + 1);
+            giveNeededCardsToGetFive(turnPlayerId);
+            giveNeededCardsToGetFive(otherPlayerId);
             game.setGamePlayerTurnId(whoIsNext(turnPlayerId, otherPlayerId));
+            game.setEffect(Hability.NONE);
+
 
         } else if (round < 5) {
             if (round == 3 && cartas.size() == 3) {
-                giveNeededCardsToGetFive(turnPlayerId);
                 game.setRound(round + 1);
+                giveNeededCardsToGetFive(turnPlayerId);
                 game.setGamePlayerTurnId(otherPlayerId);
+                game.setEffect(Hability.NONE);
+
 
             } else if (round == 4 && cartas.size() == 3) {
-                giveNeededCardsToGetFive(turnPlayerId);
                 game.setRound(round + 1);
+                giveNeededCardsToGetFive(turnPlayerId);
                 game.setGamePlayerTurnId(whoIsNext(turnPlayerId, otherPlayerId));
+                game.setEffect(Hability.NONE);
+
 
             }
         } else if (round > 4) {
-
             if (round % 2 == 1) {
                 if (game.getEffect() == Hability.SPEED_UP) {
                     if (cartas.size() == 2) {
-                        giveNeededCardsToGetFive(turnPlayerId);
                         game.setRound(round + 1);
+                        giveNeededCardsToGetFive(turnPlayerId);
                         game.setGamePlayerTurnId(otherPlayerId);
+                        game.setEffect(Hability.NONE);
+
                     }
                 } else if (game.getEffect() == Hability.BRAKE) {
                     if (cartas.size() == 4) {
-                        giveNeededCardsToGetFive(turnPlayerId);
                         game.setRound(round + 1);
+                        giveNeededCardsToGetFive(turnPlayerId);
                         game.setGamePlayerTurnId(otherPlayerId);
+                        game.setEffect(Hability.NONE);
+
                     }
 
                 } else {
                     if (cartas.size() == 3) {
-                        giveNeededCardsToGetFive(turnPlayerId);
                         game.setRound(round + 1);
+                        giveNeededCardsToGetFive(turnPlayerId);
                         game.setGamePlayerTurnId(otherPlayerId);
+                        game.setEffect(Hability.NONE);
+
                     }
 
                 }
@@ -521,22 +534,28 @@ public class GameService {
 
                 if (game.getEffect() == Hability.SPEED_UP) {
                     if (cartas.size() == 2) {
-                        giveNeededCardsToGetFive(turnPlayerId);
                         game.setRound(round + 1);
+                        giveNeededCardsToGetFive(turnPlayerId);
                         game.setGamePlayerTurnId(whoIsNext(turnPlayerId, otherPlayerId));
+                        game.setEffect(Hability.NONE);
+
                     }
                 } else if (game.getEffect() == Hability.BRAKE) {
                     if (cartas.size() == 4) {
-                        giveNeededCardsToGetFive(turnPlayerId);
                         game.setRound(round + 1);
+                        giveNeededCardsToGetFive(turnPlayerId);
                         game.setGamePlayerTurnId(whoIsNext(turnPlayerId, otherPlayerId));
+                        game.setEffect(Hability.NONE);
+
                     }
 
                 } else {
                     if (cartas.size() == 3) {
-                        giveNeededCardsToGetFive(turnPlayerId);
                         game.setRound(round + 1);
+                        giveNeededCardsToGetFive(turnPlayerId);
                         game.setGamePlayerTurnId(whoIsNext(turnPlayerId, otherPlayerId));
+                        game.setEffect(Hability.NONE);
+
                     }
                 }
 
@@ -551,24 +570,23 @@ public class GameService {
     public Game updateGameEffect(Integer gameId, ChangeEffectRequest changeEffectRequest) {
         Game game = gameRepository.findById(gameId).get();
         GamePlayer gp = gamePlayerRepository.findById(game.getGamePlayerTurnId()).get();
-        if( gp.getEnergy() <= 0 ){
+        if (gp.getEnergy() <= 0) {
             throw new BadRequestException("No tienes suficiente energia para cambiar el efecto");
-        }
-        else if (changeEffectRequest.getEffect() != null) {
+        } else if (changeEffectRequest.getEffect() != null) {
             Hability effect = Hability.valueOf(changeEffectRequest.getEffect());
             game.setEffect(effect);
             gp.setEnergy(gp.getEnergy() - 1);
-            if(effect == Hability.EXTRA_GAS){
-                extraGasEffect(gameId);     
+            if (effect == Hability.EXTRA_GAS) {
+                extraGasEffect(gameId);
             }
         } else {
             game.setEffect(Hability.NONE);
         }
-        return gameRepository.save(game); 
+        return gameRepository.save(game);
     }
 
     @Transactional
-    public Card extraGasEffect(Integer gameId){
+    public Card extraGasEffect(Integer gameId) {
         Game game = gameRepository.findById(gameId).get();
         Integer gamePlayerId = game.getGamePlayerTurnId();
         List<Card> cards = gamePlayerRepository.findById(gamePlayerId).get().getCards();
@@ -576,15 +594,15 @@ public class GameService {
                 .filter(card -> card.getCardState() == CardStatus.IN_HAND)
                 .collect(Collectors.toList());
         Card cardToAdd = new Card();
-        if(cardsInHand.size() < 6){
+        if (cardsInHand.size() < 6) {
             cardToAdd = cards.stream()
-                .filter(card -> card.getCardState() == CardStatus.IN_DECK)
-                .findFirst()
-                .orElseThrow(() -> new ResourceNotFoundException("Card", "id", gamePlayerId));
-        cardToAdd.setCardState(CardStatus.IN_HAND);
-        cardRepository.save(cardToAdd);
+                    .filter(card -> card.getCardState() == CardStatus.IN_DECK)
+                    .findFirst()
+                    .orElseThrow(() -> new ResourceNotFoundException("Card", "id", gamePlayerId));
+            cardToAdd.setCardState(CardStatus.IN_HAND);
+            cardRepository.save(cardToAdd);
         }
-       
+
         return cardToAdd;
     }
 }
