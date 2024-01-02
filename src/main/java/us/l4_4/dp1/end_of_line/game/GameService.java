@@ -57,6 +57,11 @@ public class GameService {
     }
 
     @Transactional
+    public void deleteGame(Integer id) {
+        gameRepository.deleteById(id);;
+    }
+
+    @Transactional
     public Game createNewGame(Integer playerID1, Integer playerID2, Color c1, Color c2) throws DataAccessException {
 
         if (checkOnlyOneGameForEachPlayer(playerID1)) {
