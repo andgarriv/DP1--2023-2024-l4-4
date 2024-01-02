@@ -14,7 +14,6 @@ const handlePlayNowClick = async (setMessage, setVisible) => {
       }
 
       const playerData = await playerResponse.json();
-
       const ongoingGame = playerData.find((game) => !game.endedAt);
 
       if (ongoingGame) {
