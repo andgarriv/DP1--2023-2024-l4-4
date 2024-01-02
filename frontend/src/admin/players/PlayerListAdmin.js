@@ -107,6 +107,7 @@ export default function PlayerList() {
                                         aria-label={"delete-" + player.id}
                                         size="sm"
                                         color="danger"
+                                        className="auth-buyyon-eol-delete"
                                         onClick={() => deleteFromList(
                                             `/api/v1/players/${player.id}`,
                                             player.id,

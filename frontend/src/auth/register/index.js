@@ -10,7 +10,6 @@ export default function Register() {
   function handleSubmit({ values }) {
     if (!registerFormRef.current.validate()) return;
     const playerData = values;
-    console.log("Player data:", playerData);
     playerData["authority"] = { id: 2, authority: "PLAYER" };
 
     fetch("/api/v1/players", {
@@ -37,7 +36,6 @@ export default function Register() {
     <div className="auth-page-container">
       <div className="custom-container">
       <h2 style={{ color: "#75FBFD", whiteSpace: "nowrap"  }}>Register</h2>
-
       <div className="auth-form-container">
           <FormGenerator
             ref={registerFormRef}
