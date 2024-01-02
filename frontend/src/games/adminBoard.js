@@ -5,10 +5,26 @@ import { gameLogic, getRotationStyle } from "./services/boardService.js";
 import "./styles/Board.css";
 
 function Box({ content }) {
+  const getRotationClass = (orientation) => {
+    switch (orientation) {
+      case 'N':
+        return 'rotate-north';
+      case 'S':
+        return 'rotate-south';
+      case 'E':
+        return 'rotate-east';
+      case 'W':
+        return 'rotate-west';
+      default:
+        return '';
+    }
+  };
   return (
-    <div className="box">
-      {content ? <img src={content.image} alt="Card" /> : null}
-    </div>
+    <button
+      className={`box`}
+    >
+      {content ? <img src={content.image} alt="Card" className={`card-image ${getRotationClass(content.orientation)}`} /> : null}
+    </button>
   );
 }
 
@@ -35,14 +51,14 @@ export default function AdminBoard() {
   const [isMyTurn, setIsMyTurn] = useState(false);
 
   useEffect(() => {
-    
     const interval = setInterval(() => {
-      gameLogic(gameId, jwt, user, setDataGamePlayer, setHandCardsPlayer1, setHandCardsPlayer2, setBoard, setIsLoading, setEnergyCards, setPlayer1CardPossiblePositions, setPlayer2CardPossiblePositions,
-        setDataGame, setIsMyTurn);
+      gameLogic(gameId, jwt, user, setDataGamePlayer, setHandCardsPlayer1, setHandCardsPlayer2, setBoard,
+        setIsLoading, setEnergyCards, setPlayer1CardPossiblePositions, setPlayer2CardPossiblePositions,
+        setIsMyTurn, setDataGame);
     }, 1000); // Actualization every second
     return () => clearInterval(interval);
 
-  }, [jwt, user]);
+  }, [gameId, jwt, user]);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -62,13 +78,13 @@ export default function AdminBoard() {
           ))}
           <div className="hand">
             <img
-            src={energyCards[0].image}
-            alt="EnergyCard0"
-            style={{
-              ...getRotationStyle(dataGamePlayer.length > 0 ? dataGamePlayer[0].energy : 0),
-              marginTop: '40px'
-            }}
-          />
+              src={energyCards[0].image}
+              alt="EnergyCard0"
+              style={{
+                ...getRotationStyle(dataGamePlayer.length > 0 ? dataGamePlayer[0].energy : 0),
+                marginTop: '40px'
+              }}
+            />
           </div>
         </div>
         <div className="board">
@@ -91,13 +107,13 @@ export default function AdminBoard() {
           )}
           <div className="hand">
             <img
-            src={energyCards[1].image}
-            alt="EnergyCard1"
-            style={{
-              ...getRotationStyle(dataGamePlayer.length > 0 ? dataGamePlayer[1].energy : 0),
-              marginTop: '40px'
-            }}
-          />
+              src={energyCards[1].image}
+              alt="EnergyCard1"
+              style={{
+                ...getRotationStyle(dataGamePlayer.length > 0 ? dataGamePlayer[1].energy : 0),
+                marginTop: '40px'
+              }}
+            />
           </div>
         </div>
       </div>
