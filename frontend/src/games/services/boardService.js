@@ -135,15 +135,20 @@ export async function gameLogic(gameId, jwt, user, setDataGamePlayer, setHandCar
     }
     );
 
+
     setPlayer1CardPossiblePositions(parsedPlayer1Positions);
     setPlayer2CardPossiblePositions(parsedPlayer2Positions);
 
     const myGamePlayer = dataGamePlayer.find((gamePlayer) => gamePlayer.player.id === user.id);
-    if (myGamePlayer.id === dataGame.gamePlayerTurnId) {
-      setIsMyTurn(true);
-    } else {
-      setIsMyTurn(false);
+
+    if (myGamePlayer !== undefined) {
+      if (myGamePlayer.id === dataGame.gamePlayerTurnId) {
+        setIsMyTurn(true);
+      } else {
+        setIsMyTurn(false);
+      }
     }
+
 
     setIsLoading(false);
   } catch (error) {
@@ -324,7 +329,7 @@ export async function updateTurn(gameId, gamePlayerId, jwt) {
   }
 }
 
-export async function changeEffect(jwt, gameId, effect){
+export async function changeEffect(jwt, gameId, effect) {
   const response = await fetch(`/api/v1/games/${gameId}/effect`, {
     method: "PUT",
     headers: {
