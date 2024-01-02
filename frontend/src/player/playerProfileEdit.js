@@ -6,7 +6,6 @@ import getErrorModal from "../util/getErrorModal";
 import useFetchState from "../util/useFetchState";
 
 const user = tokenService.getUser();
-const defaultImage = "https://cdn-icons-png.flaticon.com/512/5778/5778223.png";
 
 export default function EditPlayerProfile() {
   const jwt = tokenService.getLocalAccessToken();
@@ -73,19 +72,14 @@ export default function EditPlayerProfile() {
 
   const modal = getErrorModal(setVisible, visible, message);
 
-  const date_format = (date) => {
-    // eslint-disable-next-line no-new-wrappers
-    const d = new String(date);
-    const year = d.substring(0, 4);
-    const month = d.substring(5, 7);
-    const day = d.substring(8, 10);
-    return `${day}/${month}/${year}`;
-    };
+  const formatDate = (date) => {
+  const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+  return new Date(date).toLocaleDateString(undefined, options);
+};
 
   const handleNameChange = (event) => {
     const newName = event.target.value;
     setName(newName);
-    // Verificación del rango de longitud del nombre
     if (newName.length < 3 || newName.length > 15) {
       setNameError("Name must be between 3 and 15 characters");
     } else {
@@ -96,7 +90,6 @@ export default function EditPlayerProfile() {
   const handleSurnameChange = (event) => {
     const newSurname = event.target.value;
     setSurname(newSurname);
-    // Verificación del rango de longitud del apellido
     if (newSurname.length < 3 || newSurname.length > 15) {
       setSurnameError("Surname must be between 3 and 15 characters");
     }
@@ -108,7 +101,6 @@ export default function EditPlayerProfile() {
   const handleAvatarChange = (event) => {
     const newAvatar = event.target.value;
     setAvatar(newAvatar);
-    // Verificación de formato de URL de avatar
     const avatarPattern = /^https?:\/\/.*\.(jpg|png|jpeg)$/i;
     if(newAvatar.length > 0 && !avatarPattern.test(newAvatar)) {
       setAvatarError("Invalid avatar URL");
@@ -177,23 +169,14 @@ export default function EditPlayerProfile() {
             <p style={{ marginBottom: "-2px", color: "white" }}>Email:</p>
             <Input readOnly style={{ marginBottom: "10px", background: "transparent", color: "white", border: "none" }} type="text" value={email}/>
             <p style={{ marginBottom: "-2px", color: "white" }}>Birthdate:</p>
-            <p readOnly style={{ marginBottom: "10px", background: "transparent", color: "white", border: "none" }} type="text" value={birthDate}>{date_format(player.birthDate)}</p>
+            <p readOnly style={{ marginBottom: "10px", background: "transparent", color: "white", border: "none" }} type="text" value={birthDate}>{formatDate(player.birthDate)}</p>
             <p style={{ marginBottom: "-2px", color: "white" }}>Avatar:</p>
-            <Input style={{ marginBottom: "20px" }} type="text" value={avatar?avatar:defaultImage} onChange={handleAvatarChange} />
+            <Input style={{ marginBottom: "20px" }} type="text" value={avatar} onChange={handleAvatarChange} />
             {avatarError && <p style={{ color: "red" }}>{avatarError}</p>}
             {!avatarError && avatar && (
             <div style={{ textAlign: "center", marginTop: "10px" }}>
               <img
                 src={avatar}
-                alt="avatar"
-                style={{ width: "100px", height: "100px", borderRadius: "50%" }}
-              />
-            </div>
-          )}
-          {!avatarError && !avatar && (
-            <div style={{ textAlign: "center", marginTop: "10px" }}>
-              <img
-                src={defaultImage}
                 alt="avatar"
                 style={{ width: "100px", height: "100px", borderRadius: "50%" }}
               />
