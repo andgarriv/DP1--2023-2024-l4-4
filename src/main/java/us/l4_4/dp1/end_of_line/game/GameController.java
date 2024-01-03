@@ -77,10 +77,10 @@ public class GameController {
         return gameService.findAllGames();
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteGame(@PathVariable Integer id) {
+    @DeleteMapping("/{gameId}/{gamePlayerId}")
+    public ResponseEntity<?> deleteGame(@PathVariable Integer gameId, @PathVariable Integer gamePlayerId) {
         try {
-            gameService.deleteGame(id);
+            gameService.deleteGame(gameId, gamePlayerId);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

@@ -12,4 +12,8 @@ public interface GamePlayerRepository extends CrudRepository<GamePlayer, Integer
 
     @Query("SELECT g.gamePlayers FROM Game g WHERE g.id = ?1")
     List<GamePlayer> findGamePlayersByGameId(Integer id);
+    
+
+    @Query("SELECT gp FROM GamePlayer gp WHERE gp.player.id = :playerId AND gp IN (SELECT g.gamePlayers FROM Game g WHERE g.id = :gameId)")
+    GamePlayer findGamePlayerByGameAndPlayer(Integer gameId, Integer playerId);
 }

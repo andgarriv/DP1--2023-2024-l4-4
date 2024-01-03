@@ -31,13 +31,12 @@ public class GamePlayer extends BaseEntity {
     @Enumerated(EnumType.STRING)
     Color color;
 
-    @NotNull 
+    @NotNull
     @Range(min = 0, max = 3)
     Integer energy;
 
     @ManyToOne(optional = true)
-    @JoinColumn(name = "player_id", nullable = true, 
-                foreignKey = @ForeignKey(name = "FK_player", value = ConstraintMode.NO_CONSTRAINT))
+    @JoinColumn(name = "player_id", nullable = true, foreignKey = @ForeignKey(name = "FK_player", value = ConstraintMode.NO_CONSTRAINT))
     Player player;
 
     @NotNull
