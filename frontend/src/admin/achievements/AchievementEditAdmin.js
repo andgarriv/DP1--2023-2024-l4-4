@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button, Form, Input, Label } from "reactstrap";
-import tokenService from "../services/token.service";
-import getErrorModal from "../util/getErrorModal";
-import getIdFromUrl from "../util/getIdFromUrl";
-import useFetchState from "../util/useFetchState";
+import tokenService from "../../services/token.service";
+import getErrorModal from "../../util/getErrorModal";
+import getIdFromUrl from "../../util/getIdFromUrl";
+import useFetchState from "../../util/useFetchState";
 
 const jwt = tokenService.getLocalAccessToken();
 

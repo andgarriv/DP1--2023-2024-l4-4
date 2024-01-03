@@ -4,18 +4,16 @@ import { ErrorBoundary } from "react-error-boundary";
 import { Route, Routes, useLocation } from 'react-router-dom';
 import AppNavbar from "./AppNavbar";
 import GameNavbar from "./GameNavbar";
-import AchievementEdit from "./achievement/achievementEdit";
-import AchievementList from "./achievement/achievementList";
 import AchievementPlayer from "./achievement/achievementListPlayer";
+import AchievementEditAdmin from "./admin/achievements/AchievementEditAdmin";
+import AchievementListAdmin from "./admin/achievements/AchievementListAdmin";
 import FriendshipListAdmin from "./admin/friendships/FriendshipListAdmin";
+import GameBoardAdmin from "./admin/games/GameBoardAdmin";
+import GameListAdmin from "./admin/games/GameListAdmin";
 import PlayerListAdmin from "./admin/players/PlayerListAdmin";
-import UserEditAdmin from "./admin/users/UserEditAdmin";
-import UserListAdmin from "./admin/users/UserListAdmin";
 import Login from "./auth/login";
 import Logout from "./auth/logout";
 import Register from "./auth/register";
-import AdminBoard from "./games/adminBoard";
-import AdminGamesList from "./games/adminGamesList";
 import Board from "./games/board";
 import NewGame from "./games/newGame";
 import PlayerGamesList from "./games/playerGamesList";
@@ -25,7 +23,6 @@ import PlayerProfile from "./player/playerProfile";
 import PlayerProfileEdit from "./player/playerProfileEdit";
 import PlayerStats from "./player/playerStats";
 import PrivateRoute from "./privateRoute";
-import PlanList from "./public/plan";
 import SwaggerDocs from "./public/swagger";
 import PDFViewer from "./rules";
 import tokenService from "./services/token.service";
@@ -63,14 +60,12 @@ function App() {
     if (role === "ADMIN") {
       adminRoutes = (
         <>
-          <Route path="/users" exact={true} element={<PrivateRoute><UserListAdmin /></PrivateRoute>} />
-          <Route path="/users/:username" exact={true} element={<PrivateRoute><UserEditAdmin /></PrivateRoute>} />
-          <Route path="/achievements" exact={true} element={<PrivateRoute><AchievementList /></PrivateRoute>} />
-          <Route path="/achievements/:achievementId" exact={true} element={<PrivateRoute><AchievementEdit /></PrivateRoute>} />
-          <Route path="/games" exact={true} element={<PrivateRoute><AdminGamesList /></PrivateRoute>} />
+          <Route path="/achievements" exact={true} element={<PrivateRoute><AchievementListAdmin /></PrivateRoute>} />
+          <Route path="/achievements/:achievementId" exact={true} element={<PrivateRoute><AchievementEditAdmin /></PrivateRoute>} />
+          <Route path="/games" exact={true} element={<PrivateRoute><GameListAdmin /></PrivateRoute>} />
           <Route path="/players" exact={true} element={<PrivateRoute><PlayerListAdmin /></PrivateRoute>} />
           <Route path="/friendships" exact={true} element={<PrivateRoute><FriendshipListAdmin /></PrivateRoute>} />
-          <Route path="/game/:id" exact={true} element={<PrivateRoute><AdminBoard /></PrivateRoute>} />
+          <Route path="/game/:id" exact={true} element={<PrivateRoute><GameBoardAdmin /></PrivateRoute>} />
         </>)
     }
     if (role === "PLAYER") {
@@ -128,7 +123,6 @@ function App() {
         {(isGameRoute || isRulesInGameRoute) ? <GameNavbar /> : <AppNavbar />}
         <Routes>
           <Route path="/" exact={true} element={<Home />} />
-          <Route path="/plans" element={<PlanList />} />
           <Route path="/docs" element={<SwaggerDocs />} />
           <Route path="/rules" element={<PDFViewer />} />
           {publicRoutes}

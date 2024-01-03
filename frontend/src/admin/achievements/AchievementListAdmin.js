@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "reactstrap";
-import tokenService from "../services/token.service";
-import deleteFromList from "../util/deleteFromList";
-import getErrorModal from "../util/getErrorModal";
-import useFetchState from "../util/useFetchState";
+import tokenService from "../../services/token.service";
+import deleteFromList from "../../util/deleteFromList";
+import getErrorModal from "../../util/getErrorModal";
+import useFetchState from "../../util/useFetchState";
 
 const Pagination = ({ achievementsPerPage, totalAchievements, paginate, currentPage }) => {
     const pageNumbers = [];

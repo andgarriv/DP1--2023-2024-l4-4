@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import tokenService from "../services/token.service.js";
-import { gameLogic, getRotationStyle } from "./services/boardService.js";
+import { gameLogic, getRotationStyle } from "../../games/services/boardService.js";
+import tokenService from "../../services/token.service.js";
 
-import "./styles/Board.css";
+import "../../static/css/board/Board.css";
 
 function Box({ content }) {
   const getRotationClass = (orientation) => {
@@ -55,7 +55,7 @@ export default function AdminBoard() {
       gameLogic(gameId, jwt, user, setDataGamePlayer, setHandCardsPlayer1, setHandCardsPlayer2, setBoard,
         setIsLoading, setEnergyCards, setPlayer1CardPossiblePositions, setPlayer2CardPossiblePositions,
         setIsMyTurn, setDataGame);
-    }, 1000); // Actualization every second
+    }, 1000); 
     return () => clearInterval(interval);
 
   }, [gameId, jwt, user]);

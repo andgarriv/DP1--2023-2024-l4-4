@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "reactstrap";
-import tokenService from "../services/token.service";
-import getErrorModal from "../util/getErrorModal";
-import useFetchState from "../util/useFetchState";
+import tokenService from "../../services/token.service";
+import getErrorModal from "../../util/getErrorModal";
+import useFetchState from "../../util/useFetchState";
 
 const Pagination = ({ gamesPerPage, totalGames, paginate, currentPage }) => {
     const pageNumbers = [];
