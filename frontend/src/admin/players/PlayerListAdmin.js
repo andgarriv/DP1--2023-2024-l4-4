@@ -51,7 +51,7 @@ export default function PlayerList() {
     const jwt = tokenService.getLocalAccessToken();
     const [players, setPlayers] = useFetchState(null, "/api/v1/players/all", jwt);
     const [currentPage, setCurrentPage] = useState(1);
-    const [playersPerPage] = useState(4);
+    const [playersPerPage] = useState(5);
 
     const [message, setMessage] = useState("");
     const [visible, setVisible] = useState(false);
@@ -89,17 +89,17 @@ export default function PlayerList() {
             <h1 style={{ textAlign: 'center', color: "#EF87E0" }}>Registered Players</h1>
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', marginBottom: '20px' }}>
                     <div style={{ display: 'flex', width: '100%', padding: '10px' }}>
-                        <span style={{ flex: 2, textAlign: 'left', paddingLeft: '10px' }}>Nickname</span>
-                        <span style={{ flex: 3, textAlign: 'left', paddingLeft: '10px' }}>Email</span>
-                        <span style={{ flex: 2, textAlign: 'center' }}>Avatar</span>
-                        <span style={{ flex: 1, textAlign: 'center' }}>Actions</span>
+                        <span style={{ flex: 2, textAlign: 'center', paddingLeft: '10px' }}>{currentPlayers.length > 0 ? "Nickname" : ""}</span>
+                        <span style={{ flex: 3, textAlign: 'center', paddingLeft: '10px' }}>{currentPlayers.length > 0 ? "Email" : ""}</span>
+                        <span style={{ flex: 1.5, textAlign: 'center' }}>{currentPlayers.length > 0 ? "Avatar" : ""}</span>
+                        <span style={{ flex: 1, textAlign: 'center' }}></span>
                     </div>
                     {currentPlayers.length > 0 ? (
                         currentPlayers.map((player) => (
                             <div key={player.id} style={{ display: 'flex', width: '100%', padding: '10px', borderBottom: '1px solid #ddd' }}>
-                                <span style={{ flex: 2, textAlign: 'left', paddingLeft: '10px' }}>{player.nickname}</span>
-                                <span style={{ flex: 3, textAlign: 'left', paddingLeft: '10px' }}>{player.email}</span>
-                                <span style={{ flex: 2, textAlign: 'center' }}>
+                                <span style={{ flex: 2, textAlign: 'center', paddingLeft: '10px' }}>{player.nickname}</span>
+                                <span style={{ flex: 3, textAlign: 'center', paddingLeft: '10px' }}>{player.email}</span>
+                                <span style={{ flex: 1.5, textAlign: 'center' }}>
                                     <img src={player.avatar} alt="avatar" style={{ borderRadius: "50%", width: "40px", height: "40px" }} />
                                 </span>
                                 <span style={{ flex: 1, textAlign: 'center' }}>
