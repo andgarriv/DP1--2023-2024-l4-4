@@ -102,7 +102,7 @@ function AppNavbar() {
         if (role === "PLAYER") {
             playerLinks = (
                 <>
-                    {pendingGame && (
+                    {pendingGame ? (
                         <>
                             <NavItem>
                                 <div className="fuente" style={{ color: "white", display: "flex", alignItems: "center", justifyContent: "center", height: "100%" }}>
@@ -128,12 +128,13 @@ function AppNavbar() {
                                     Accept
                                 </Button>
                             </NavItem>
-                            <span style={{ display: "block", margin: "5px 20px" }}></span>
+                            <span style={{ display: "block", margin: "5px 5px" }}></span>
                         </>
+                    ) : (
+                        <NavItem>
+                            <NavLink className="fuente" style={{ color: "#75FBFD" }} tag={Link} onClick={handlePlayNowClick}>Play Now!</NavLink>
+                        </NavItem>
                     )}
-                    <NavItem>
-                        <NavLink className="fuente" style={{ color: "#75FBFD" }} tag={Link} onClick={handlePlayNowClick}>Play Now!</NavLink>
-                    </NavItem>
                     <NavItem>
                         <NavLink className="fuente" style={{ color: "#75FBFD" }} tag={Link} to="/rules">Rules</NavLink>
                     </NavItem>
