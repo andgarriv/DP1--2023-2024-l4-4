@@ -57,8 +57,13 @@ public class GameService {
     }
 
     @Transactional
-    public void deleteGame(Integer id) {
-        gameRepository.deleteById(id);;
+    public void deleteGame(Integer gameId) {
+        List<GamePlayer> gamePlayers = gamePlayerRepository.findGamePlayersByGameId(gameId);
+        for (GamePlayer gamePlayer : gamePlayers) {
+            gamePlayerRepository.delete(gamePlayer);
+        }
+        gameRepository.deleteById(gameId);
+        ;
     }
 
     @Transactional
@@ -488,7 +493,6 @@ public class GameService {
             game.setGamePlayerTurnId(whoIsNext(turnPlayerId, otherPlayerId));
             game.setEffect(Hability.NONE);
 
-
         } else if (round < 5) {
             if (round == 3 && cartas.size() == 3) {
                 game.setRound(round + 1);
@@ -496,13 +500,11 @@ public class GameService {
                 game.setGamePlayerTurnId(otherPlayerId);
                 game.setEffect(Hability.NONE);
 
-
             } else if (round == 4 && cartas.size() == 3) {
                 game.setRound(round + 1);
                 giveNeededCardsToGetFive(turnPlayerId);
                 game.setGamePlayerTurnId(whoIsNext(turnPlayerId, otherPlayerId));
                 game.setEffect(Hability.NONE);
-
 
             }
         } else if (round > 4) {
