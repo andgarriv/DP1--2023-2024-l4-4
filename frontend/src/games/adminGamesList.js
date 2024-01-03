@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { Button } from "reactstrap";
 import tokenService from "../services/token.service";
 import getErrorModal from "../util/getErrorModal";
 import useFetchState from "../util/useFetchState";
@@ -13,7 +14,7 @@ const Pagination = ({ gamesPerPage, totalGames, paginate, currentPage }) => {
 
     const getPageStyle = (pageNumber) => {
         return {
-            backgroundColor: '#343F4B', 
+            backgroundColor: '#343F4B',
             color: currentPage === pageNumber ? "#75FBFD" : '#EF87E0',
             border: 'none',
             padding: '5px 10px',
@@ -23,34 +24,35 @@ const Pagination = ({ gamesPerPage, totalGames, paginate, currentPage }) => {
         };
     };
 
-        return (
-            <nav>
-                <ul className='pagination'>
-                    {pageNumbers.map(number => (
-                        <li key={number} className='page-item'>
-                            <a 
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    paginate(number);
-                                }} 
-                                href="!#" 
-                                style={getPageStyle(number)}
-                                className='page-link'
-                            >
-                                {number}
-                            </a>
-                        </li>
-                    ))}
-                </ul>
-            </nav>
-        );
+    return (
+        <nav>
+            <ul className='pagination'>
+                {pageNumbers.map(number => (
+                    <li key={number} className='page-item'>
+                        <a
+                            onClick={(e) => {
+                                e.preventDefault();
+                                paginate(number);
+                            }}
+                            href="!#"
+                            style={getPageStyle(number)}
+                            className='page-link'
+                        >
+                            {number}
+                        </a>
+                    </li>
+                ))}
+            </ul>
+        </nav>
+    );
 };
 
 export default function AdminGamesList() {
     const jwt = tokenService.getLocalAccessToken();
     const [games, setGames] = useFetchState(null, "/api/v1/games/all", jwt);
     const [currentPage, setCurrentPage] = useState(1);
-    const [gamesPerPage] = useState(4);
+    const [gamesPerPage] = useState(5);
+    const NotWinnerImage = "https://cdn-icons-png.flaticon.com/128/5978/5978100.png";
 
     const [message, setMessage] = useState("");
     const [visible, setVisible] = useState(false);
@@ -75,9 +77,11 @@ export default function AdminGamesList() {
         fetchData();
     }, [jwt, setGames]);
 
+    const sortedGames = games ? [...games].sort((a, b) => (!b.winner ? 1 : 0) - (!a.winner ? 1 : 0)) : [];
+
     const indexOfLastGame = currentPage * gamesPerPage;
     const indexOfFirstGame = indexOfLastGame - gamesPerPage;
-    const currentGames = games ? games.slice(indexOfFirstGame, indexOfLastGame) : [];
+    const currentGames = sortedGames.slice(indexOfFirstGame, indexOfLastGame);
 
     const paginate = pageNumber => setCurrentPage(pageNumber);
 
@@ -86,42 +90,52 @@ export default function AdminGamesList() {
     return (
         <div className="home-page-container">
             <div className="hero-div">
-            <h1 style={{ textAlign: 'center', color: "#EF87E0" }}>Games</h1>
+                <h1 style={{ textAlign: 'center', color: "#EF87E0" }}>Games</h1>
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', marginBottom: '20px' }}>
-                    <div style={{ display: 'flex', width: '100%', padding: '10px' }}>
-                        <span style={{ flex: 1, textAlign: 'center', paddingLeft: '10px' }}>Game</span>
-                        <span style={{ flex: 2, textAlign: 'center', paddingLeft: '10px', paddingRight: '10px' }}>Winner</span>
-                        <span style={{ flex: 2, textAlign: 'center', paddingLeft: '20px' }}>Players</span>
-                        <span style={{ flex: 2, textAlign: 'center' }}></span>
+                    <div style={{ display: 'flex', width: '100%', padding: '10px', justifyContent: 'space-between' }}>
+                        <span style={{ flex: 2.5, textAlign: 'center', margin: '0 10px' }}>{currentGames.length > 0 ? "Game" : ""}</span>
+                        <span style={{ flex: 6.5, textAlign: 'center', margin: '0 10px' }}>{currentGames.length > 0 ? "Winner" : ""}</span>
+                        <span style={{ flex: 5, textAlign: 'center', margin: '0 10px' }}>{currentGames.length > 0 ? "Players" : ""}</span>
+                        <span style={{ flex: 3, textAlign: 'center', margin: '0 10px' }}></span>
                     </div>
                     {currentGames.length > 0 ? (
-                        currentGames.map((game) => (
-                            <div key={game.id} style={{ display: 'flex', width: '100%', padding: '10px', borderBottom: '1px solid #ddd' }}>
-                                <span style={{ flex: 2, textAlign: 'center', paddingLeft: '10px' }}>{game.id}</span>
-                                <span style={{ flex: 5, textAlign: 'center', paddingLeft: '15px' }}>{game.winner ? game.winner.nickname : "----"}</span>
-                                <span style={{ flex: 5, textAlign: 'center', paddingLeft: '20px' }}>{game.gamePlayers[0].player.nickname + "\n" + game.gamePlayers[1].player.nickname}</span>
-                                <span style={{ flex: 5, textAlign: 'center'}}> 
-                                  {game.winner ? 
-                                  (
-                                    ""
-                                  ) : (
-                                    
-                                    <Link
-                                      className="auth-button-eol-watch"
-                                      to={`/game/${game.id}`}
-                                      style={{ textDecoration: "none" }}
-                                    >
-                                      Watch
-                                    </Link>
-                                  )}
-                                  <br />
-                                  <br />
-                                  <br />
-                                </span>
-                            </div>
-                        ))
+                        currentGames
+                            .map((game) => (
+                                <div key={game.id} style={{ display: 'flex', width: '100%', padding: '10px', borderBottom: '1px solid #ddd', justifyContent: 'space-between' }}>
+                                    <span style={{ flex: 2.5, textAlign: 'center', margin: '0 10px' }}>{game.id}</span>
+                                    <span style={{ flex: 6.5, textAlign: 'center', margin: '0 10px' }}>
+                                        <img
+                                            src={game.winner ? game.winner.avatar : NotWinnerImage}
+                                            alt=""
+                                            style={{ borderRadius: "50%", width: "35px", height: "35px", marginRight: "15px" }} 
+                                        />
+                                        <span>{game.winner ? game.winner.nickname : "----"}</span>
+                                    </span>
+                                    <span style={{ flex: 5, textAlign: 'center', margin: '0 10px' }}>{game.gamePlayers.map(p => p.player.nickname).join(' ')}</span>
+                                    <div style={{ flex: 3, textAlign: 'center', margin: '0 10px' }}>
+                                        {!game.winner ? (
+                                            <Button
+                                                color="success"
+                                                size="sm"
+                                                tag={Link}
+                                                to={`/game/${game.id}`}
+                                                className="auth-button-eol-create">
+                                                Watch
+                                            </Button>
+                                        ) : (
+                                            <Button
+                                                color="secondary"
+                                                size="sm"
+                                                disabled={true}
+                                                className="auth-button-eol-create">
+                                                Watch
+                                            </Button>
+                                        )}
+                                    </div>
+                                </div>
+                            ))
                     ) : (
-                        <div style={{ textAlign: 'center', width: '100%' }}>There are no games to show</div>
+                        <div style={{ textAlign: 'center', width: '100%' }}>There are no games yet</div>
                     )}
                 </div>
                 <Pagination
