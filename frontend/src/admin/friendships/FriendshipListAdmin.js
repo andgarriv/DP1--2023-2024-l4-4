@@ -12,7 +12,7 @@ const Pagination = ({ friendshipsPerPage, totalFriendships, paginate, currentPag
 
     const getPageStyle = (pageNumber) => {
         return {
-            backgroundColor: '#343F4B', 
+            backgroundColor: '#343F4B',
             color: currentPage === pageNumber ? "#75FBFD" : '#EF87E0',
             border: 'none',
             padding: '5px 10px',
@@ -22,27 +22,27 @@ const Pagination = ({ friendshipsPerPage, totalFriendships, paginate, currentPag
         };
     };
 
-        return (
-            <nav>
-                <ul className='pagination'>
-                    {pageNumbers.map(number => (
-                        <li key={number} className='page-item'>
-                            <a 
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    paginate(number);
-                                }} 
-                                href="!#" 
-                                style={getPageStyle(number)}
-                                className='page-link'
-                            >
-                                {number}
-                            </a>
-                        </li>
-                    ))}
-                </ul>
-            </nav>
-        );
+    return (
+        <nav>
+            <ul className='pagination'>
+                {pageNumbers.map(number => (
+                    <li key={number} className='page-item'>
+                        <a
+                            onClick={(e) => {
+                                e.preventDefault();
+                                paginate(number);
+                            }}
+                            href="!#"
+                            style={getPageStyle(number)}
+                            className='page-link'
+                        >
+                            {number}
+                        </a>
+                    </li>
+                ))}
+            </ul>
+        </nav>
+    );
 };
 
 export default function FriendshipList() {
@@ -89,47 +89,52 @@ export default function FriendshipList() {
             default:
                 return { color: "yellow" };
         }
-    };    
-
+    };
     return (
         <div className="home-page-container">
-            <div className="hero-div">
-            <h1 style={{ textAlign: 'center', color: "#EF87E0" }}>Friendships</h1>
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', marginBottom: '20px' }}>
-                    <div style={{ display: 'flex', width: '100%', padding: '10px' }}>
-                        <span style={{ flex: 3, textAlign: 'center' }}>Sender's nickname</span>
-                        <span style={{ flex: 2, textAlign: 'center' }}>Sender's avatar</span>
-                        <span style={{ flex: 3, textAlign: 'center' }}>Receiver's nickname</span>
-                        <span style={{ flex: 2, textAlign: 'center' }}>Receiver's avatar</span>
-                        <span style={{ flex: 2, textAlign: 'center' }}>Status</span>
-                    </div>
-                    {currentFriendships.length > 0 ? (
-                        currentFriendships.map((friendship) => (
-                            <div key={friendship.id} style={{ display: 'flex', width: '100%', padding: '10px', borderBottom: '1px solid #ddd' }}>
-                                <span style={{ flex: 3, textAlign: 'center' }}>{friendship.sender.nickname}</span>
-                                <span style={{ flex: 2, textAlign: 'center' }}>
-                                    <img src={friendship.sender.avatar} alt="sender avatar" style={{ borderRadius: "50%", width: "40px", height: "40px" }} />
-                                </span>
-                                <span style={{ flex: 3, textAlign: 'center' }}>{friendship.receiver.nickname}</span>
-                                <span style={{ flex: 2, textAlign: 'center' }}>
-                                    <img src={friendship.receiver.avatar} alt="receiver avatar" style={{ borderRadius: "50%", width: "40px", height: "40px" }} />
-                                </span>
-                                <span style={{ flex: 2, textAlign: 'center', paddingLeft: '10px' , ...getFriendStateStyle(friendship.friendState) }}>{friendship.friendState}
-                                </span>
-                            </div>
-                        ))
-                    ) : (
-                        <div style={{ textAlign: 'center', width: '100%' }}>There are not friendships yet</div>
-                    )}
-                </div>
-                <Pagination
-                    friendshipsPerPage={friendshipsPerPage}
-                    totalFriendships={friendships ? friendships.length : 0}
-                    paginate={paginate}
-                    currentPage={currentPage}
-                />
-                {modal}
+    <div className="hero-div">
+    <h1 style={{ textAlign: 'center', color: "#EF87E0" }}>Friendships</h1>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', marginBottom: '20px' }}>
+            <div style={{ display: 'flex', width: '100%', padding: '10px', justifyContent: 'space-evenly' }}>
+                <span style={{ flex: 3, textAlign: 'center', margin: '0 20px' }}>{currentFriendships.length > 0 ? "Sender" : ""}</span>
+                <span style={{ flex: 3, textAlign: 'center', margin: '0 20px' }}>{currentFriendships.length > 0 ? "Receiver" : ""}</span>
+                <span style={{ flex: 2, textAlign: 'center', margin: '0 20px' }}>{currentFriendships.length > 0 ? "Status" : ""}</span>
             </div>
+            {currentFriendships.length > 0 ? (
+                currentFriendships.map((friendship) => (
+                    <div key={friendship.id} style={{ display: 'flex', width: '100%', padding: '10px', borderBottom: '1px solid #ddd', justifyContent: 'space-evenly' }}>
+                        <div style={{ flex: 5, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 10px' }}>
+                            <img
+                                src={friendship.sender.avatar}
+                                alt=""
+                                style={{ borderRadius: "50%", width: "35px", height: "35px", marginRight: "15px" }} 
+                            />
+                            <span>{friendship.sender.nickname}</span>
+                        </div>
+                        <div style={{ flex: 6.5, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 20px' }}>
+                            <img
+                                src={friendship.receiver.avatar}
+                                alt=""
+                                style={{ borderRadius: "50%", width: "35px", height: "35px", marginRight: "15px" }} 
+                            />
+                            <span>{friendship.receiver.nickname}</span>
+                        </div>
+                        <span style={{ flex: 1, textAlign: 'center', margin: '0 10px', ...getFriendStateStyle(friendship.friendState) }}>{friendship.friendState}
+                        </span>
+                    </div>
+                ))
+            ) : (
+                <div style={{ textAlign: 'center', width: '100%' }}>There are not friendships yet</div>
+            )}
         </div>
-    );    
+        <Pagination
+            friendshipsPerPage={friendshipsPerPage}
+            totalFriendships={friendships ? friendships.length : 0}
+            paginate={paginate}
+            currentPage={currentPage}
+        />
+        {modal}
+    </div>
+</div>
+    );
 };

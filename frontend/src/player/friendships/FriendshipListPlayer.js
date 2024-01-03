@@ -118,8 +118,8 @@ export default function FriendshipList() {
                 <h1 style={{ textAlign: 'center', color: "#EF87E0" }}>Friendships</h1>
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
                     <div style={{ display: 'flex', width: '100%', padding: '10px', justifyContent: 'space-between' }}>
-                        <span style={{ flex: 3, textAlign: 'center' }}>Nickname</span>
-                        <span style={{ flex: 2, textAlign: 'center' }}>Avatar</span>
+                        <span style={{ flex: 3, textAlign: 'center' }}>{currentFriendships.length > 0 ? "Nickname" : ""}</span>
+                        <span style={{ flex: 2, textAlign: 'center' }}>{currentFriendships.length > 0 ? "Avatar" : ""}</span>
                         <span style={{ flex: 1.5, textAlign: 'center' }}></span> 
                     </div>
                     {currentFriendships.length > 0 ? (
