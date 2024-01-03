@@ -1,6 +1,6 @@
 import { formValidators } from "../../../validators/formValidators";
 
-export const registerFormPlayerInputs = [
+export const registerPlayerInputs = [
   {
     tag: "Name",
     name: "name",

@@ -7,27 +7,10 @@ import GameNavbar from "./GameNavbar";
 import AchievementEdit from "./achievement/achievementEdit";
 import AchievementList from "./achievement/achievementList";
 import AchievementPlayer from "./achievement/achievementListPlayer";
-import ClinicOwnerEditAdmin from "./admin/clinicOwners/ClinicOwnerEditAdmin";
-import ClinicOwnerListAdmin from "./admin/clinicOwners/ClinicOwnerListAdmin";
-import ClinicEditAdmin from "./admin/clinics/ClinicEditAdmin";
-import ClinicListAdmin from "./admin/clinics/ClinicListAdmin";
-import ConsultationEditAdmin from "./admin/consultations/ConsultationEditAdmin";
-import ConsultationListAdmin from "./admin/consultations/ConsultationListAdmin";
-import TicketListAdmin from "./admin/consultations/TicketListAdmin";
 import FriendshipListAdmin from "./admin/friendships/FriendshipListAdmin";
-import OwnerEditAdmin from "./admin/owners/OwnerEditAdmin";
-import OwnerListAdmin from "./admin/owners/OwnerListAdmin";
-import PetEditAdmin from "./admin/pets/PetEditAdmin";
-import PetListAdmin from "./admin/pets/PetListAdmin";
 import PlayerListAdmin from "./admin/players/PlayerListAdmin";
 import UserEditAdmin from "./admin/users/UserEditAdmin";
 import UserListAdmin from "./admin/users/UserListAdmin";
-import SpecialtyEditAdmin from "./admin/vets/SpecialtyEditAdmin";
-import SpecialtyListAdmin from "./admin/vets/SpecialtyListAdmin";
-import VetEditAdmin from "./admin/vets/VetEditAdmin";
-import VetListAdmin from "./admin/vets/VetListAdmin";
-import VisitEditAdmin from "./admin/visits/VisitEditAdmin";
-import VisitListAdmin from "./admin/visits/VisitListAdmin";
 import Login from "./auth/login";
 import Logout from "./auth/logout";
 import Register from "./auth/register";
@@ -82,23 +65,6 @@ function App() {
         <>
           <Route path="/users" exact={true} element={<PrivateRoute><UserListAdmin /></PrivateRoute>} />
           <Route path="/users/:username" exact={true} element={<PrivateRoute><UserEditAdmin /></PrivateRoute>} />
-          <Route path="/owners" exact={true} element={<PrivateRoute><OwnerListAdmin /></PrivateRoute>} />
-          <Route path="/owners/:id" exact={true} element={<PrivateRoute><OwnerEditAdmin /></PrivateRoute>} />
-          <Route path="/clinics" exact={true} element={<PrivateRoute><ClinicListAdmin /></PrivateRoute>} />
-          <Route path="/clinics/:id" exact={true} element={<PrivateRoute><ClinicEditAdmin /></PrivateRoute>} />
-          <Route path="/clinicOwners" exact={true} element={<PrivateRoute><ClinicOwnerListAdmin /></PrivateRoute>} />
-          <Route path="/clinicOwners/:id" exact={true} element={<PrivateRoute><ClinicOwnerEditAdmin /></PrivateRoute>} />
-          <Route path="/pets" exact={true} element={<PrivateRoute><PetListAdmin /></PrivateRoute>} />
-          <Route path="/pets/:id" exact={true} element={<PrivateRoute><PetEditAdmin /></PrivateRoute>} />
-          <Route path="/pets/:petId/visits" exact={true} element={<PrivateRoute><VisitListAdmin /></PrivateRoute>} />
-          <Route path="/pets/:petId/visits/:visitId" exact={true} element={<PrivateRoute><VisitEditAdmin /></PrivateRoute>} />
-          <Route path="/vets" exact={true} element={<PrivateRoute><VetListAdmin /></PrivateRoute>} />
-          <Route path="/vets/:id" exact={true} element={<PrivateRoute><VetEditAdmin /></PrivateRoute>} />
-          <Route path="/vets/specialties" exact={true} element={<PrivateRoute><SpecialtyListAdmin /></PrivateRoute>} />
-          <Route path="/vets/specialties/:specialtyId" exact={true} element={<PrivateRoute><SpecialtyEditAdmin /></PrivateRoute>} />
-          <Route path="/consultations" exact={true} element={<PrivateRoute><ConsultationListAdmin /></PrivateRoute>} />
-          <Route path="/consultations/:consultationId" exact={true} element={<PrivateRoute><ConsultationEditAdmin /></PrivateRoute>} />
-          <Route path="/consultations/:consultationId/tickets" exact={true} element={<PrivateRoute><TicketListAdmin /></PrivateRoute>} />
           <Route path="/achievements" exact={true} element={<PrivateRoute><AchievementList /></PrivateRoute>} />
           <Route path="/achievements/:achievementId" exact={true} element={<PrivateRoute><AchievementEdit /></PrivateRoute>} />
           <Route path="/games" exact={true} element={<PrivateRoute><AdminGamesList /></PrivateRoute>} />

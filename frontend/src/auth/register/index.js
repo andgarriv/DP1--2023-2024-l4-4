@@ -2,7 +2,7 @@ import { useRef } from "react";
 import FormGenerator from "../../components/formGenerator/formGenerator";
 import "../../static/css/auth/authButton.css";
 import "../../static/css/auth/authPage.css";
-import { registerFormPlayerInputs } from "./form/registerFormPlayerInputs";
+import { registerFormInputs } from "./form/registerFormInputs";
 
 export default function Register() {
   const registerFormRef = useRef();
@@ -39,7 +39,7 @@ export default function Register() {
       <div className="auth-form-container">
           <FormGenerator
             ref={registerFormRef}
-            inputs={registerFormPlayerInputs}
+            inputs={registerFormInputs}
             onSubmit={handleSubmit}
             numberOfColumns={1}
             listenEnterKey
