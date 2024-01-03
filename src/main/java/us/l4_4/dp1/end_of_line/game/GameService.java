@@ -57,13 +57,33 @@ public class GameService {
     }
 
     @Transactional
-    public void deleteGame(Integer gameId) {
-        List<GamePlayer> gamePlayers = gamePlayerRepository.findGamePlayersByGameId(gameId);
-        for (GamePlayer gamePlayer : gamePlayers) {
-            gamePlayerRepository.delete(gamePlayer);
+    public void deleteGame(Integer gameId, Integer gamePlayerId) {
+        Game game = gameRepository.findById(gameId).orElse(null);
+        if (game == null) {
+            throw new BadRequestException("No se puede eliminar una partida que no existe");
         }
-        gameRepository.deleteById(gameId);
-        ;
+        List<GamePlayer> gamePlayers = gamePlayerRepository.findGamePlayersByGameId(gameId);
+
+        if (game.getRound() < 3) {
+            gamePlayers.forEach(gamePlayerRepository::delete);
+
+            gameRepository.deleteById(gameId);
+            return;
+        } else {
+            GamePlayer winner = gamePlayers.stream()
+                    .filter(gp -> !gp.getId().equals(gamePlayerId))
+                    .findFirst()
+                    .orElse(null);
+
+            if (winner == null) { // Manejar el caso donde no hay un ganador válido
+                return;
+            }
+
+            game.setWinner(winner.getPlayer());
+            game.setEndedAt(Date.from(java.time.Instant.now()));
+            gameRepository.save(game);
+            return;
+        }
     }
 
     @Transactional

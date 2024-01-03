@@ -234,7 +234,7 @@ export default function Board() {
             EXTRA GAS
           </Button>
           <br />
-          <Button 
+          <Button
             outline style={{ textDecoration: "none", ...getButtonColorStyles(playerColor), width: "30%" }}
             onClick={() => {
               changeEffect(jwt, gameId, 'REVERSE');
@@ -242,7 +242,7 @@ export default function Board() {
             REVERSE
           </Button>
           <br />
-          <Button 
+          <Button
             outline style={{ textDecoration: "none", ...getButtonColorStyles(playerColor), width: "30%" }}
             onClick={() => {
               changeEffect(jwt, gameId, 'BRAKE');
@@ -250,7 +250,7 @@ export default function Board() {
             BRAKE
           </Button>
           <br />
-          <Button 
+          <Button
             outline style={{ textDecoration: "none", ...getButtonColorStyles(playerColor), width: "30%" }}
             onClick={() => {
               changeEffect(jwt, gameId, 'SPEED_UP');

@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import us.l4_4.dp1.end_of_line.card.Card;
 import us.l4_4.dp1.end_of_line.card.CardRepository;
@@ -74,5 +75,13 @@ public class GamePlayerService {
         gamePlayer.setCards(cards);
         gamePlayerRepository.save(gamePlayer);
         return gamePlayer;
+    }
+
+    @Transactional
+    public GamePlayer findGamePlayerByGameAndPlayer(Integer gameId, Integer playerId) throws DataAccessException{
+        GamePlayer gamePlayer = gamePlayerRepository.findGamePlayerByGameAndPlayer(gameId, playerId);
+        if(gamePlayer == null)
+            throw new ResourceNotFoundException("GamePlayer", "game_id", gameId);
+    return gamePlayer;
     }
 }

@@ -38,6 +38,12 @@ public class GamePlayerController {
         return gamePlayerService.findById(id);
     }
 
+    @GetMapping("/{gameId}/{playerId}")
+    @ResponseStatus(HttpStatus.OK)
+    public GamePlayer findGamePlayerByGameAndPlayer(@PathVariable Integer gameId, @PathVariable Integer playerId){
+        return gamePlayerService.findGamePlayerByGameAndPlayer(gameId, playerId);
+    }
+
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public GamePlayer update(@RequestBody @Valid GamePlayerDTO gamePlayerDTO, @PathVariable Integer id){

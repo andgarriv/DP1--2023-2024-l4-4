@@ -25,7 +25,7 @@ function GameNavbar() {
             const playerResponse = await fetch(`/api/v1/games/players/${user.id}/notended`, {
                 headers: { Authorization: `Bearer ${jwt}` },
             });
-           
+
             const playerData = await playerResponse.json();
             let gameId = 0;
 
@@ -37,8 +37,9 @@ function GameNavbar() {
                 const playerGame = playerData.find((game) => !game.endedAt);
                 if (playerGame) {
                     gameId = playerGame.id;
-            }}
-            
+                }
+            }
+
 
             const response = await fetch(`/api/v1/games/${gameId}`, {
                 method: "GET",
@@ -53,10 +54,10 @@ function GameNavbar() {
             setRound(data.round);
             setgameId(gameId);
 
-            if(data.gamePlayers[0].id === data.gamePlayerTurnId) {
+            if (data.gamePlayers[0].id === data.gamePlayerTurnId) {
                 setTurnColor(data.gamePlayers[0].color)
             }
-            if(data.gamePlayers[1].id === data.gamePlayerTurnId) {
+            if (data.gamePlayers[1].id === data.gamePlayerTurnId) {
                 setTurnColor(data.gamePlayers[1].color)
             }
 
@@ -91,28 +92,28 @@ function GameNavbar() {
         if (role === "ADMIN") {
             adminLinks = (
                 <>
-                <NavItem className="d-flex">
-                <NavLink className="fuente" style={{ color: "#EF87E0", marginLeft: "150px" }} id="logout" tag={Link} to="">Exit</NavLink>
-            </NavItem>
-         </>
+                    <NavItem className="d-flex">
+                        <NavLink className="fuente" style={{ color: "#EF87E0", marginLeft: "150px" }} id="logout" tag={Link} to="">Exit</NavLink>
+                    </NavItem>
+                </>
             )
         }
         if (role === "PLAYER") {
-            
-    playerLinks = (
-        <>
-                <NavItem>
-                    <NavLink className="fuente" style={{ color: "#75FBFD" }} tag={Link} to={`/game/${gameId}`}>Game</NavLink>
-                </NavItem>
-            <NavItem>
-                <NavLink className="fuente" style={{ color: "#75FBFD" }} tag={Link} to="/rulesInGame">Rules</NavLink>
-            </NavItem>
-            <span style={{ color: "gray", display: "inline-block", margin: "5px 10px" }}>|</span>
-            <NavItem className="d-flex">
-                <NavLink className="fuente" style={{ color: "#EF87E0" }} id="logout" tag={Link} to="">Exit</NavLink>
-            </NavItem>
-        </>
-    )
+
+            playerLinks = (
+                <>
+                    <NavItem>
+                        <NavLink className="fuente" style={{ color: "#75FBFD" }} tag={Link} to={`/game/${gameId}`}>Game</NavLink>
+                    </NavItem>
+                    <NavItem>
+                        <NavLink className="fuente" style={{ color: "#75FBFD" }} tag={Link} to="/rulesInGame">Rules</NavLink>
+                    </NavItem>
+                    <span style={{ color: "gray", display: "inline-block", margin: "5px 10px" }}>|</span>
+                    <NavItem className="d-flex">
+                        <NavLink className="fuente" style={{ color: "#EF87E0" }} id="logout" tag={Link} to="">Exit</NavLink>
+                    </NavItem>
+                </>
+            )
 
         }
     })

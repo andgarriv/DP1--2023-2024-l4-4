@@ -48,7 +48,20 @@ function AppNavbar() {
 
     const handleReject = async () => {
         try {
-            const response = await fetch(`/api/v1/games/${pendingGame.id}`, {
+            const gamePlayerResponse = await fetch(`/api/v1/gameplayers/${pendingGame.id}/${user.id}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${jwt}`,
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            if (!gamePlayerResponse.ok) {
+                throw new Error(`Error fetching GamePlayer: ${gamePlayerResponse.statusText}`);
+            }
+
+            const gamePlayer = await gamePlayerResponse.json();
+            const response = await fetch(`/api/v1/games/${pendingGame.id}/${gamePlayer.id}`, {
                 method: 'DELETE',
                 headers: {
                     Authorization: `Bearer ${jwt}`,

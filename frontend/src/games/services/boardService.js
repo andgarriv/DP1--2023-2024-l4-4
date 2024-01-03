@@ -32,6 +32,11 @@ export async function gameLogic(gameId, jwt, user, setDataGamePlayer, setHandCar
     }
 
     const dataGame = await responseGame.json();
+
+    if (dataGame.winner) {
+      window.location.href = '/';
+    }
+
     setDataGame(dataGame);
 
     const responseGamePlayer = await fetch(
@@ -149,9 +154,9 @@ export async function gameLogic(gameId, jwt, user, setDataGamePlayer, setHandCar
       }
     }
 
-
     setIsLoading(false);
   } catch (error) {
+    window.location.href = '/';
     console.error("Error al cargar los datos del juego.", error);
   }
 }
