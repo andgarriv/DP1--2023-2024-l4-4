@@ -24,7 +24,7 @@ export const registerFormPlayerInputs = [
     defaultValue: "",
     isRequired: true,
     validators: [formValidators.notBlankValidator,
-    formValidators.validNicknameValidator/*, formValidators.uniqueNicknameValidator*/],
+    formValidators.validNicknameValidator],
   },
   {
     tag: "Email",
@@ -32,7 +32,7 @@ export const registerFormPlayerInputs = [
     type: "text",
     defaultValue: "",
     isRequired: true,
-    validators: [formValidators.validEmailValidator/*, formValidators.uniqueEmailValidator*/],
+    validators: [formValidators.validEmailValidator],
   },
   {
     tag: "Password",
