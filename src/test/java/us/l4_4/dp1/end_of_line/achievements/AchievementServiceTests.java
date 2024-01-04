@@ -1,6 +1,7 @@
 package us.l4_4.dp1.end_of_line.achievements;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.List;
 
@@ -9,9 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import jakarta.transaction.Transactional;
 import us.l4_4.dp1.end_of_line.achievement.Achievement;
-import us.l4_4.dp1.end_of_line.achievement.AchievementRepository;
 import us.l4_4.dp1.end_of_line.achievement.AchievementService;
+import us.l4_4.dp1.end_of_line.enums.Category;
+import us.l4_4.dp1.end_of_line.exceptions.ResourceNotFoundException;
 
 @SpringBootTest
 @AutoConfigureTestDatabase
@@ -20,8 +23,16 @@ public class AchievementServiceTests {
     @Autowired
     private AchievementService achievementService;
 
-    @Autowired
-    private AchievementRepository achievementRepository;
+    private Achievement createAchievement(){
+        Achievement achievement = new Achievement();
+        achievement.setName("Test achievement");
+        achievement.setDescription("This is a test achievement");
+        achievement.setBadgeNotAchieved("https://example.com/badgeImage.jpg");
+        achievement.setBadgeAchieved("https://example.com/badgeImage.jpg");
+        achievement.setThreshold(100.0);
+        achievement.setCategory(Category.GAMES_PLAYED);
+        return this.achievementService.save(achievement);
+    }
 
     @Test
     void shouldFindAllAchievements() {
@@ -35,70 +46,43 @@ public class AchievementServiceTests {
         assertEquals("First crossing", achievement.getName());
     }
 
-    /* @Test
+    @Test
+    void shouldNotFindAchievementById(){
+        assertThrows(ResourceNotFoundException.class, () -> this.achievementService.findById(404));
+    }
+
+    @Test
     @Transactional
-    public void shouldCreateAchievement() {
-        // Crear un logro de prueba con propiedades válidas
-        Achievement newAchievement = new Achievement();
-        newAchievement.setName("Valid name");
-        newAchievement.setDescription("This is a valid description with more than 10 characters.");
-        newAchievement.setBadgeImage("https://example.com/badgeImage.jpg");
-        newAchievement.setThreshold(100.0);
-        newAchievement.setCategory(Category.GAMES_PLAYED);
-        // Llamada al método que se está probando
-        Achievement savedAchievement = achievementService.save(newAchievement);
-        // Verificación
-        assertEquals(newAchievement, savedAchievement);
-    } */
+    public void shouldInsertAchievement() {
+        Iterable<Achievement> achievements = achievementService.findAll();
+        long count = achievements.spliterator().getExactSizeIfKnown();
+        createAchievement();
+        Iterable<Achievement> achievements2 = achievementService.findAll();
+        long count2 = achievements2.spliterator().getExactSizeIfKnown();
+        assertEquals(count + 1, count2);
+    } 
 
-    /* @Test
+    @Test
     @Transactional
-    public void shouldEditAchievement() {
-        // Crear un logro de prueba
-        Achievement existingAchievement = new Achievement();
-        existingAchievement.setId(1);
-        existingAchievement.setName("Original Name");
-        existingAchievement.setDescription("Original Description");
-        existingAchievement.setBadgeImage("https://example.com/originalBadgeImage.jpg");
-        existingAchievement.setThreshold(100.0);
-        existingAchievement.setCategory(Category.GAMES_PLAYED);
+    public void shouldUpdateAchievement() {
+        Achievement achievement = this.achievementService.findById(1);
+        achievement.setName("Updated name");
+        achievement.setDescription("Updated description");
+        achievementService.update(1, achievement);
+        assertEquals("Updated name", achievement.getName());
+        assertEquals("Updated description", achievement.getDescription());
+    } 
 
-        // Suponer que este es el logro actualizado
-        Achievement updatedAchievement = new Achievement();
-        updatedAchievement.setId(1);
-        updatedAchievement.setName("Updated Name");
-        updatedAchievement.setDescription("Updated Description");
-        updatedAchievement.setBadgeImage("https://example.com/updatedBadgeImage.jpg");
-        updatedAchievement.setThreshold(200.0);
-        updatedAchievement.setCategory(Category.TOTAL_PLAY_TIME);
-
-        // Llamada al método que se está probando
-        Achievement result = achievementService.save(updatedAchievement);
-
-        // Verificación
-        assertEquals(updatedAchievement.getDescription(), result.getDescription());
-        assertEquals(updatedAchievement.getBadgeImage(), result.getBadgeImage());
-        assertEquals(updatedAchievement.getThreshold(), result.getThreshold(), 0.01);
-        assertEquals(updatedAchievement.getCategory(), result.getCategory());
-    } */
-
-    /* @Test
+    @Test
     @Transactional
     public void shouldDeleteAchievement() {
-        // Crear un logro de prueba
-        Achievement existingAchievement = new Achievement();
-        existingAchievement.setId(1);
-        existingAchievement.setName("Original Name");
-        existingAchievement.setDescription("Original Description");
-        existingAchievement.setBadgeImage("https://example.com/originalBadgeImage.jpg");
-        existingAchievement.setThreshold(100.0);
-        existingAchievement.setCategory(Category.GAMES_PLAYED);
-
-        // Llamada al método que se está probando
-        achievementService.delete(existingAchievement.getId());
-
-        // Verificación
-        assertNull(achievementRepository.findById(existingAchievement.getId()).orElse(null));
-    } */
+        Achievement achievement = createAchievement();
+        Iterable<Achievement> achievements = achievementService.findAll();
+        long count = achievements.spliterator().getExactSizeIfKnown();
+        achievementService.delete(achievement.getId());
+        Iterable<Achievement> achievements2 = achievementService.findAll();
+        long count2 = achievements2.spliterator().getExactSizeIfKnown();
+        assertEquals(count - 1, count2);
+    } 
 
 }
