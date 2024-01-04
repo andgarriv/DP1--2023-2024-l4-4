@@ -1,5 +1,6 @@
 package us.l4_4.dp1.end_of_line.game;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -8,12 +9,16 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import us.l4_4.dp1.end_of_line.achievement.Achievement;
+import us.l4_4.dp1.end_of_line.achievement.AchievementRepository;
+import us.l4_4.dp1.end_of_line.achievement.AchievementService;
 import us.l4_4.dp1.end_of_line.card.Card;
 import us.l4_4.dp1.end_of_line.card.CardRepository;
 import us.l4_4.dp1.end_of_line.card.CardService;
@@ -28,7 +33,11 @@ import us.l4_4.dp1.end_of_line.gameplayer.GamePlayer;
 import us.l4_4.dp1.end_of_line.gameplayer.GamePlayerRepository;
 import us.l4_4.dp1.end_of_line.message.Message;
 import us.l4_4.dp1.end_of_line.message.MessageRepository;
+import us.l4_4.dp1.end_of_line.player.Player;
 import us.l4_4.dp1.end_of_line.player.PlayerRepository;
+import us.l4_4.dp1.end_of_line.player.PlayerService;
+import us.l4_4.dp1.end_of_line.playerachievement.PlayerAchievement;
+import us.l4_4.dp1.end_of_line.playerachievement.PlayerAchievementService;
 
 @Service
 public class GameService {
@@ -39,16 +48,22 @@ public class GameService {
     MessageRepository messageRepository;
     CardRepository cardRepository;
     CardService cardService;
+    AchievementRepository achievementRepository;
+    PlayerAchievementService playerAchievementService;
+    AchievementService achievementService;
+    PlayerService playerService;
 
     @Autowired
     public GameService(GameRepository gameRepository, PlayerRepository playerRepository,
             MessageRepository messageRepository,
-            GamePlayerRepository gamePlayerRepository, CardRepository cardRepository) {
+            GamePlayerRepository gamePlayerRepository, CardRepository cardRepository, 
+            AchievementRepository achievementRepository) {
         this.gameRepository = gameRepository;
         this.playerRepository = playerRepository;
         this.messageRepository = messageRepository;
         this.gamePlayerRepository = gamePlayerRepository;
         this.cardRepository = cardRepository;
+        this.achievementRepository = achievementRepository;
     }
 
     @Transactional
@@ -81,6 +96,8 @@ public class GameService {
 
             game.setWinner(winner.getPlayer());
             game.setEndedAt(Date.from(java.time.Instant.now()));
+            //createPlayerAchievement(gamePlayers.get(0).getPlayer().getId());
+            //createPlayerAchievement(gamePlayers.get(1).getPlayer().getId());
             gameRepository.save(game);
             return;
         }
@@ -495,6 +512,8 @@ public class GameService {
         Integer turnPlayerId = game.getGamePlayerTurnId();
         Integer otherPlayerId = null;
         GamePlayer winner = null;
+        Integer player1Id = gps.get(0).getPlayer().getId();
+        Integer player2Id = gps.get(1).getPlayer().getId();
         // ---------------------------------------------------
         if (gps.get(0).getId().equals(game.getGamePlayerTurnId()))
             otherPlayerId = gps.get(1).getId();
@@ -525,6 +544,8 @@ public class GameService {
 
                     game.setWinner(gamePlayerRepository.findPlayerByGamePlayerId(otherPlayerId));
                     game.setEndedAt(Date.from(java.time.Instant.now()));
+                    //createPlayerAchievement(player1Id);
+                    //createPlayerAchievement(player2Id);
 
                 }
 
@@ -538,6 +559,8 @@ public class GameService {
 
                     game.setWinner(gamePlayerRepository.findPlayerByGamePlayerId(otherPlayerId));
                     game.setEndedAt(Date.from(java.time.Instant.now()));
+                    //createPlayerAchievement(player1Id);
+                    //createPlayerAchievement(player2Id);
 
                 }
 
@@ -555,6 +578,8 @@ public class GameService {
 
                             game.setWinner(gamePlayerRepository.findPlayerByGamePlayerId(otherPlayerId));
                             game.setEndedAt(Date.from(java.time.Instant.now()));
+                            //createPlayerAchievement(player1Id);
+                            //createPlayerAchievement(player2Id);
 
 
 
@@ -570,6 +595,8 @@ public class GameService {
 
                             game.setWinner(gamePlayerRepository.findPlayerByGamePlayerId(otherPlayerId));
                             game.setEndedAt(Date.from(java.time.Instant.now()));
+                            //createPlayerAchievement(player1Id);
+                            //createPlayerAchievement(player2Id);
 
 
 
@@ -586,6 +613,8 @@ public class GameService {
 
                             game.setWinner(gamePlayerRepository.findPlayerByGamePlayerId(otherPlayerId));
                             game.setEndedAt(Date.from(java.time.Instant.now()));
+                            //createPlayerAchievement(player1Id);
+                            //createPlayerAchievement(player2Id);
                     }
 
                 }
@@ -608,6 +637,8 @@ public class GameService {
 
                             game.setWinner(gamePlayerRepository.findPlayerByGamePlayerId(winner.getId()));
                             game.setEndedAt(Date.from(java.time.Instant.now()));
+                            //createPlayerAchievement(player1Id);
+                            //createPlayerAchievement(player2Id);
 
                         }
                         
@@ -615,6 +646,8 @@ public class GameService {
 
                             game.setWinner(gamePlayerRepository.findPlayerByGamePlayerId(otherPlayerId));
                             game.setEndedAt(Date.from(java.time.Instant.now()));
+                            //createPlayerAchievement(player1Id);
+                            //createPlayerAchievement(player2Id);
 
 
 
@@ -634,6 +667,8 @@ public class GameService {
 
                             game.setWinner(gamePlayerRepository.findPlayerByGamePlayerId(winner.getId()));
                             game.setEndedAt(Date.from(java.time.Instant.now()));
+                            //createPlayerAchievement(player1Id);
+                            //createPlayerAchievement(player2Id);
 
                         }
 
@@ -641,6 +676,8 @@ public class GameService {
 
                             game.setWinner(gamePlayerRepository.findPlayerByGamePlayerId(otherPlayerId));
                             game.setEndedAt(Date.from(java.time.Instant.now()));
+                            //createPlayerAchievement(player1Id);
+                            //createPlayerAchievement(player2Id);
 
 
 
@@ -661,6 +698,8 @@ public class GameService {
 
                             game.setWinner(gamePlayerRepository.findPlayerByGamePlayerId(winner.getId()));
                             game.setEndedAt(Date.from(java.time.Instant.now()));
+                            //createPlayerAchievement(player1Id);
+                            //createPlayerAchievement(player2Id);
 
                         }
 
@@ -668,6 +707,8 @@ public class GameService {
 
                             game.setWinner(gamePlayerRepository.findPlayerByGamePlayerId(otherPlayerId));
                             game.setEndedAt(Date.from(java.time.Instant.now()));
+                            //createPlayerAchievement(player1Id);
+                            //createPlayerAchievement(player2Id);
 
 
 
@@ -725,5 +766,56 @@ public class GameService {
         }
 
         return cardToAdd;
+    }
+
+    private List<Achievement> findAchievementsNotAchieved(Integer playerId) {
+        List<Achievement> achievements = StreamSupport.stream(achievementRepository.findAll().spliterator(), false).collect(Collectors.toList());
+        Player player = playerRepository.findById(playerId).get();
+        List<PlayerAchievement> playerAchievements = player.getPlayerAchievement();
+        for (int i = 0; i < achievements.size(); i++) {
+            for (PlayerAchievement pa: playerAchievements) {
+                if (achievements.get(i).getPlayerAchievements().contains(pa)) {
+                    achievements.remove(i);
+                }
+            }
+        }
+        return achievements;
+    }
+
+    private void createPlayerAchievement(Integer playerId) {
+        List<Achievement> achievements = findAchievementsNotAchieved(playerId);
+        Player player = playerRepository.findById(playerId).get();
+        for (Achievement achievement: achievements) {
+            String category = achievement.getCategory().toString();
+            PlayerAchievement playerAchievement = new PlayerAchievement();
+            switch(category) {
+                case "GAMES_PLAYED":
+                    Integer gamesPlayed = gameRepository.findGamesByPlayerId(playerId).size();
+                    if (achievement.getThreshold() < gamesPlayed) {
+                        playerAchievement.setAchieveAt(LocalDate.from(java.time.Instant.now()));
+                        playerAchievementService.save(playerAchievement);
+                    }
+                break;
+                case "VICTORIES":
+                    Integer victories = gameRepository.findGamesByPlayerId(playerId).stream().filter(g -> g.getWinner().getId().equals(playerId)).toList().size();
+                    if (achievement.getThreshold() < victories) {
+                        playerAchievement.setAchieveAt(LocalDate.from(java.time.Instant.now()));
+                        playerAchievementService.save(playerAchievement);
+                    }
+                break;
+                default:
+                    Integer totalMiliTime = gameRepository.findGamesByPlayerId(playerId).stream().mapToInt(g -> (int) (g.getEndedAt().getTime() - g.getStartedAt().getTime())).sum();
+                    Double totalHourTime = totalMiliTime / 1000*3600.0;
+                    if (achievement.getThreshold() < totalHourTime) {
+                        playerAchievement.setAchieveAt(LocalDate.from(java.time.Instant.now()));
+                        playerAchievementService.save(playerAchievement);
+                    }
+            }
+            achievement.getPlayerAchievements().add(playerAchievement);
+            achievementService.update(achievement.getId(), achievement);
+
+            player.getPlayerAchievement().add(playerAchievement);
+            playerService.update(playerId, player);
+        }
     }
 }
