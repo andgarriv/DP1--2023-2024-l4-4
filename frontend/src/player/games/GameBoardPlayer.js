@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "reactstrap";
-import tokenService from "../services/token.service.js";
-import "../static/css/board/Board.css";
-import { changeEffect, gameLogic, getButtonColorStyles, getColorStyles, getRotationStyle, isPlayerAuthorized, playCard, updateTurn } from "./services/boardService.js";
+import tokenService from "../../services/token.service.js";
+import "../../static/css/board/Board.css";
+import { changeEffect, gameLogic, getButtonColorStyles, getColorStyles, getRotationStyle, isPlayerAuthorized, playCard, updateTurn } from "./services/GameBoardService.js";
 
 function Box({ content, onClick, isHighlighted, playerColor }) {
   const getRotationClass = (orientation) => {
@@ -60,7 +60,6 @@ export default function Board() {
   const [gamePlayerId, setGamePlayerId] = useState(null);
 
   useEffect(() => {
-    // Calcular playerColor una vez que dataGamePlayer esté disponible
     if (dataGamePlayer.length > 0) {
       const calculatedPlayerColor =
         (dataGamePlayer[0].player.id === user.id && dataGamePlayer[0].color) ||
@@ -87,7 +86,6 @@ export default function Board() {
       return;
     }
 
-    // Verifica si la posición seleccionada coincide con una de las CardPossiblePositions
     const isPlayer1 = dataGamePlayer[0].player.id === user.id;
     const isPlayer2 = dataGamePlayer[1].player.id === user.id;
 

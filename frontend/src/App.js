@@ -13,12 +13,12 @@ import PlayerListAdmin from "./admin/players/PlayerListAdmin";
 import Login from "./auth/login";
 import Logout from "./auth/logout";
 import Register from "./auth/register";
-import Board from "./games/board";
-import NewGame from "./games/newGame";
 import Home from "./home";
 import AchievementListPlayer from "./player/achievements/AchievementListPlayer";
 import FriendshipListPlayer from "./player/friendships/FriendshipListPlayer";
+import GameBoardPlayer from "./player/games/GameBoardPlayer";
 import GameListPlayer from "./player/games/GameListPlayer";
+import GameNewPlayer from "./player/games/GameNewPlayer";
 import ProfileEditPlayer from "./player/profile/ProfileEditPlayer";
 import ProfileListPlayer from "./player/profile/ProfileListPlayer";
 import StatsListPlayer from "./player/stats/StatsListPlayer";
@@ -77,13 +77,13 @@ function App() {
           <Route path="/achievements" exact={true} element={<PrivateRoute><AchievementListPlayer /></PrivateRoute>} />
           <Route path="/achievements/:achievementId" exact={true} element={<PrivateRoute><AchievementListPlayer /></PrivateRoute>} />
           <Route path="/stats" exact={true} element={<PrivateRoute><StatsListPlayer /></PrivateRoute>} />
-          <Route path="/play" exact={true} element={<PrivateRoute><NewGame /></PrivateRoute>} />
-          <Route path="/games/:id" exact={true} element={<PrivateRoute><Board /></PrivateRoute>} />
+          <Route path="/play" exact={true} element={<PrivateRoute><GameNewPlayer /></PrivateRoute>} />
+          <Route path="/games/:id" exact={true} element={<PrivateRoute><GameBoardPlayer /></PrivateRoute>} />
           <Route path="/friendships" exact={true} element={<PrivateRoute><FriendshipListPlayer /></PrivateRoute>} />
         </>)
       gameRoutes = (
         <>
-          <Route path="/games/:id" exact={true} element={<PrivateRoute><Board /></PrivateRoute>} />
+          <Route path="/games/:id" exact={true} element={<PrivateRoute><GameBoardPlayer /></PrivateRoute>} />
           <Route path="/rulesInGame" element={<PDFViewer />} />
         </>
       )

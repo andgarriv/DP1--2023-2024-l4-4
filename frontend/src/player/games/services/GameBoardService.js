@@ -186,11 +186,11 @@ export function importGameCard(color, exit, initiative) {
       name = "C" + color.toUpperCase()[0] + "_" + exitSubstring;
     }
   }
-  return import(`../../static/images/GameCards/${name}.png`);
+  return import(`../../../static/images/GameCards/${name}.png`);
 }
 
 function importEnergyCard(color) {
-  return import(`../../static/images/GameCards/C${color.toUpperCase()[0]}_ENERGY.png`);
+  return import(`../../../static/images/GameCards/C${color.toUpperCase()[0]}_ENERGY.png`);
 }
 
 export function importEnergyCards(color1, color2, setEnergyCards) {

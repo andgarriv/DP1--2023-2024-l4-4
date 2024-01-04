@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "reactstrap";
-import tokenService from "../services/token.service";
-import getErrorModal from "../util/getErrorModal";
-import { gamePlayerFormInputs } from "./form/gamePlayerFormInputs";
+import tokenService from "../../services/token.service";
+import getErrorModal from "../../util/getErrorModal";
+import { GameGamePlayerFormInputs } from "./forms/GameGamePlayerFormInputs";
 
 export default function NewGame() {
   const user = tokenService.getUser();
@@ -231,7 +231,7 @@ export default function NewGame() {
 
               <div className="row">
                 <div className="colors">
-                  {gamePlayerFormInputs.map((choice) => (
+                  {GameGamePlayerFormInputs.map((choice) => (
                     <div
                       key={choice.color}
                       className={`color-image-container ${selectedColor1 === choice.color
@@ -253,7 +253,7 @@ export default function NewGame() {
                   ))}
                 </div>
                 <div className="colors">
-                  {gamePlayerFormInputs.map((choice) => (
+                  {GameGamePlayerFormInputs.map((choice) => (
                     <div
                       key={choice.color}
                       className={`color-image-container ${selectedColor2 === choice.color

@@ -1,7 +1,7 @@
 import jwt_decode from "jwt-decode";
 import React, { useEffect, useState } from "react";
 import "../App.css";
-import handlePlayNowClick from "../games/playNowHandler";
+import GamePlayNowPlayer from "../player/games/GamePlayNowPlayer";
 import tokenService from "../services/token.service";
 import "../static/css/home/home.css";
 
@@ -29,7 +29,7 @@ export default function Home() {
           </div>
           <div className="button-container">
             <button
-              onClick={handlePlayNowClick}
+              onClick={GamePlayNowPlayer}
               className="fuente button-style"
             >
               Play Now!

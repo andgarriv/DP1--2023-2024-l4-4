@@ -82,9 +82,9 @@ export default function FriendshipList() {
     const sortedPendingRequest = friendships ? [...friendships].sort((a, b) => {
         const isAReceiver = a.receiver.id === user.id;
         const isBReceiver = b.receiver.id === user.id;
-        if (isAReceiver && !isBReceiver)
+        if (isAReceiver && !isBReceiver && a.friendState === "PENDING")
             return -1;
-        else if (!isAReceiver && isBReceiver)
+        else if (!isAReceiver && isBReceiver && b.friendState === "PENDING")
             return 1;
         else
             return 0;
@@ -97,7 +97,7 @@ export default function FriendshipList() {
 
     const modal = getErrorModal(setVisible, visible, message);
 
-    const updateFriendshipStatus = async (friendshipId, senderId, receiverId) => {
+    const updateFriendshipStatus = async (friendshipId, senderId, receiverId, friendState) => {
         try {
             const response = await fetch(`/api/v1/friendships/${friendshipId}`, {
                 method: 'PUT',
@@ -108,7 +108,7 @@ export default function FriendshipList() {
                 body: JSON.stringify({
                     sender: senderId,
                     receiver: receiverId,
-                    friendship_state: "ACCEPTED"
+                    friendship_state: friendState
                 })
             });
     
@@ -144,7 +144,7 @@ export default function FriendshipList() {
                             size="sm"
                             color="success"
                             style={{ marginRight: '5px' }}
-                            onClick={() => updateFriendshipStatus(friendship.id, friendship.sender.id, friendship.receiver.id)}
+                            onClick={() => updateFriendshipStatus(friendship.id, friendship.sender.id, friendship.receiver.id, "ACCEPTED")}
                         >
                             Accept
                         </Button>
@@ -153,7 +153,7 @@ export default function FriendshipList() {
                             aria-label={"update-" + friendship.id}
                             size="sm"
                             color="danger"
-                            onClick={() => updateFriendshipStatus(friendship.id, friendship.sender.id, friendship.receiver.id)}
+                            onClick={() => updateFriendshipStatus(friendship.id, friendship.sender.id, friendship.receiver.id, "REJECTED")}
                         >
                             Deny
                         </Button>
