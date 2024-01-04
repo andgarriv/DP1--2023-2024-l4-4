@@ -537,7 +537,7 @@ public class GameService {
                         game.setEffect(Hability.NONE);
 
                     }
-                } else if (game.getEffect() == Hability.BRAKE) {
+                } else if (game.getEffect() == Hability.BRAKE || game.getEffect() == Hability.EXTRA_GAS) {
                     if (cartas.size() == 4) {
                         game.setRound(round + 1);
                         giveNeededCardsToGetFive(turnPlayerId);
@@ -567,7 +567,7 @@ public class GameService {
                         game.setEffect(Hability.NONE);
 
                     }
-                } else if (game.getEffect() == Hability.BRAKE) {
+                } else if (game.getEffect() == Hability.BRAKE || game.getEffect() == Hability.EXTRA_GAS) {
                     if (cartas.size() == 4) {
                         game.setRound(round + 1);
                         giveNeededCardsToGetFive(turnPlayerId);
@@ -597,18 +597,24 @@ public class GameService {
     public Game updateGameEffect(Integer gameId, ChangeEffectRequest changeEffectRequest) {
         Game game = gameRepository.findById(gameId).get();
         GamePlayer gp = gamePlayerRepository.findById(game.getGamePlayerTurnId()).get();
-        if (gp.getEnergy() <= 0) {
-            throw new BadRequestException("No tienes suficiente energia para cambiar el efecto");
-        } else if (changeEffectRequest.getEffect() != null) {
-            Hability effect = Hability.valueOf(changeEffectRequest.getEffect());
-            game.setEffect(effect);
-            gp.setEnergy(gp.getEnergy() - 1);
-            if (effect == Hability.EXTRA_GAS) {
-                extraGasEffect(gameId);
-            }
+
+        if (game.getEffect() != Hability.NONE) {
+            System.out.println("No se puede cambiar el efecto porque ya hay uno activo");
         } else {
-            game.setEffect(Hability.NONE);
+            if (gp.getEnergy() <= 0) {
+                System.out.println("No tienes suficiente energia para cambiar el efecto");
+            } else if (changeEffectRequest.getEffect() != null && game.getRound() > 4) {
+                Hability effect = Hability.valueOf(changeEffectRequest.getEffect());
+                game.setEffect(effect);
+                gp.setEnergy(gp.getEnergy() - 1);
+                if (effect == Hability.EXTRA_GAS) {
+                    extraGasEffect(gameId);
+                }
+            } else {
+                game.setEffect(Hability.NONE);
+            }
         }
+
         return gameRepository.save(game);
     }
 
