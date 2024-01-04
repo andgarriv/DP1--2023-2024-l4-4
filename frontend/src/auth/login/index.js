@@ -45,9 +45,8 @@ export default function Login() {
         <></>
       )}
 
-      <div className="custom-container-singin">
+      <div className="custom-container">
         <h2 style={{ color: "#75FBFD", whiteSpace: "nowrap" }}>Sign In</h2>
-
         <div className="auth-form-container">
           <FormGenerator
             ref={loginFormRef}

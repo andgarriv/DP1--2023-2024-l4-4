@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "reactstrap";
 import tokenService from "../services/token.service.js";
+import "../static/css/board/Board.css";
 import { changeEffect, gameLogic, getButtonColorStyles, getColorStyles, getRotationStyle, isPlayerAuthorized, playCard, updateTurn } from "./services/boardService.js";
-import "./styles/Board.css";
 
 function Box({ content, onClick, isHighlighted, playerColor }) {
   const getRotationClass = (orientation) => {

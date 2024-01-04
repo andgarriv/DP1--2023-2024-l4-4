@@ -12,3 +12,7 @@
     border-radius: 5px; /* bordes redondeados */
     transition: width 0.5s ease-in-out; /* transición suave al cambiar el ancho */
 }
+
+.custom-form-input {
+    position: relative;
+  }
