@@ -1,6 +1,5 @@
 package us.l4_4.dp1.end_of_line.achievement;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -51,9 +50,7 @@ public class AchievementController {
 	@PutMapping("/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	public Achievement update(@PathVariable("id") Integer id, @RequestBody @Valid Achievement achievement) {
-		Achievement achievementToUpdate = achievementService.findById(id);
-		BeanUtils.copyProperties(achievement, achievementToUpdate, "id");
-		return achievementService.save(achievementToUpdate);
+		return achievementService.update(id, achievement);
 	}
 
 	@DeleteMapping("/{id}")

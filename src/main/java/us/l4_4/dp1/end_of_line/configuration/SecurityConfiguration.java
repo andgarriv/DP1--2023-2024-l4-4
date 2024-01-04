@@ -61,6 +61,7 @@ public class SecurityConfiguration {
 			
 			.requestMatchers(HttpMethod.GET,"/api/v1/achievements/**").authenticated()
 			.requestMatchers("/api/v1/achievements/**").hasAuthority(ADMIN)
+			.requestMatchers(HttpMethod.POST,"/api/v1/achievements").hasAuthority(ADMIN)
 			.requestMatchers(HttpMethod.GET,"/api/v1/achievements").authenticated()
 			
 			.requestMatchers(HttpMethod.GET,"/api/v1/games/all").hasAuthority(ADMIN)

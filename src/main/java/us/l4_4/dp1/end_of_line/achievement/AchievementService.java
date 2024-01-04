@@ -1,5 +1,6 @@
 package us.l4_4.dp1.end_of_line.achievement;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +31,13 @@ public class AchievementService {
     @Transactional
     public Achievement save(@Valid Achievement newAchievement) {
         return achievementRepository.save(newAchievement);
+    }
+
+    @Transactional
+    public Achievement update(Integer id, Achievement achievement) {
+        Achievement achievementToUpdate = findById(id);
+        BeanUtils.copyProperties(achievement, achievementToUpdate, "id");
+        return achievementRepository.save(achievementToUpdate);
     }
 
     @Transactional
