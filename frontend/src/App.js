@@ -4,7 +4,6 @@ import { ErrorBoundary } from "react-error-boundary";
 import { Route, Routes, useLocation } from 'react-router-dom';
 import AppNavbar from "./AppNavbar";
 import GameNavbar from "./GameNavbar";
-import AchievementPlayer from "./achievement/achievementListPlayer";
 import AchievementEditAdmin from "./admin/achievements/AchievementEditAdmin";
 import AchievementListAdmin from "./admin/achievements/AchievementListAdmin";
 import FriendshipListAdmin from "./admin/friendships/FriendshipListAdmin";
@@ -16,12 +15,13 @@ import Logout from "./auth/logout";
 import Register from "./auth/register";
 import Board from "./games/board";
 import NewGame from "./games/newGame";
-import PlayerGamesList from "./games/playerGamesList";
 import Home from "./home";
+import AchievementListPlayer from "./player/achievements/AchievementListPlayer";
 import FriendshipListPlayer from "./player/friendships/FriendshipListPlayer";
-import PlayerProfile from "./player/playerProfile";
-import PlayerProfileEdit from "./player/playerProfileEdit";
-import PlayerStats from "./player/playerStats";
+import GameListPlayer from "./player/games/GameListPlayer";
+import ProfileEditPlayer from "./player/profile/ProfileEditPlayer";
+import ProfileListPlayer from "./player/profile/ProfileListPlayer";
+import StatsListPlayer from "./player/stats/StatsListPlayer";
 import PrivateRoute from "./privateRoute";
 import SwaggerDocs from "./public/swagger";
 import PDFViewer from "./rules";
@@ -71,12 +71,12 @@ function App() {
     if (role === "PLAYER") {
       playerRoutes = (
         <>
-          <Route path="/games" exact={true} element={<PrivateRoute><PlayerGamesList /></PrivateRoute>} />
-          <Route path="/profile" exact={true} element={<PrivateRoute><PlayerProfile /></PrivateRoute>} />
-          <Route path="/profile/edit" exact={true} element={<PrivateRoute><PlayerProfileEdit /></PrivateRoute>} />
-          <Route path="/achievements" exact={true} element={<PrivateRoute><AchievementPlayer /></PrivateRoute>} />
-          <Route path="/achievements/:achievementId" exact={true} element={<PrivateRoute><AchievementPlayer /></PrivateRoute>} />
-          <Route path="/stats" exact={true} element={<PrivateRoute><PlayerStats /></PrivateRoute>} />
+          <Route path="/games" exact={true} element={<PrivateRoute><GameListPlayer /></PrivateRoute>} />
+          <Route path="/profile" exact={true} element={<PrivateRoute><ProfileListPlayer /></PrivateRoute>} />
+          <Route path="/profile/edit" exact={true} element={<PrivateRoute><ProfileEditPlayer /></PrivateRoute>} />
+          <Route path="/achievements" exact={true} element={<PrivateRoute><AchievementListPlayer /></PrivateRoute>} />
+          <Route path="/achievements/:achievementId" exact={true} element={<PrivateRoute><AchievementListPlayer /></PrivateRoute>} />
+          <Route path="/stats" exact={true} element={<PrivateRoute><StatsListPlayer /></PrivateRoute>} />
           <Route path="/play" exact={true} element={<PrivateRoute><NewGame /></PrivateRoute>} />
           <Route path="/game/:id" exact={true} element={<PrivateRoute><Board /></PrivateRoute>} />
           <Route path="/friendships" exact={true} element={<PrivateRoute><FriendshipListPlayer /></PrivateRoute>} />

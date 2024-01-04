@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import tokenService from "../services/token.service";
+import tokenService from "../../services/token.service";
 
 export default function PlayerStats() {
   const [stats, setStats] = useState({

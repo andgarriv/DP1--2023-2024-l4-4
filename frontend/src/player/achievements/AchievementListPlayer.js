@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import tokenService from "../services/token.service";
+import tokenService from "../../services/token.service";
 const user = tokenService.getUser();
 
 const Pagination = ({ achievementsPerPage, totalAchievements, paginate, currentPage }) => {

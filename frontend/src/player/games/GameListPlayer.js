@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import tokenService from '../services/token.service';
+import tokenService from '../../services/token.service';
 
 const jwt = tokenService.getLocalAccessToken();
 const user = tokenService.getUser();
