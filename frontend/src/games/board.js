@@ -229,7 +229,7 @@ export default function Board() {
           <Button
             outline style={{ textDecoration: "none", ...getButtonColorStyles(playerColor), width: "30%" }}
             onClick={() => {
-              changeEffect(jwt, gameId, 'EXTRA_GAS');
+              changeEffect(jwt, gameId, 'EXTRA_GAS', isMyTurn);
             }}>
             EXTRA GAS
           </Button>
@@ -237,7 +237,7 @@ export default function Board() {
           <Button
             outline style={{ textDecoration: "none", ...getButtonColorStyles(playerColor), width: "30%" }}
             onClick={() => {
-              changeEffect(jwt, gameId, 'REVERSE');
+              changeEffect(jwt, gameId, 'REVERSE', isMyTurn);
             }}>
             REVERSE
           </Button>
@@ -245,7 +245,7 @@ export default function Board() {
           <Button
             outline style={{ textDecoration: "none", ...getButtonColorStyles(playerColor), width: "30%" }}
             onClick={() => {
-              changeEffect(jwt, gameId, 'BRAKE');
+              changeEffect(jwt, gameId, 'BRAKE', isMyTurn);
             }}>
             BRAKE
           </Button>
@@ -253,7 +253,7 @@ export default function Board() {
           <Button
             outline style={{ textDecoration: "none", ...getButtonColorStyles(playerColor), width: "30%" }}
             onClick={() => {
-              changeEffect(jwt, gameId, 'SPEED_UP');
+              changeEffect(jwt, gameId, 'SPEED_UP', isMyTurn);
             }}>
             SPEED UP
           </Button>
