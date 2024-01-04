@@ -334,17 +334,26 @@ export async function updateTurn(gameId, gamePlayerId, jwt) {
   }
 }
 
-export async function changeEffect(jwt, gameId, effect) {
-  const response = await fetch(`/api/v1/games/${gameId}/effect`, {
-    method: "PUT",
-    headers: {
-      Authorization: `Bearer ${jwt}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ effect }),
-  });
-
-  if (!response.ok) {
-    throw new Error("Error al cambiar el efecto.");
+export async function changeEffect(jwt, gameId, effect, isMyTurn) {
+  if (!isMyTurn) {
+    console.log("No es tu turno");
+    return;
+  }
+  try {
+    const response = await fetch(`/api/v1/games/${gameId}/effect`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ effect }),
+    });
+  
+    if (!response.ok) {
+      throw new Error("Error al cambiar el efecto.");
+    }
+  }
+  catch (error) {
+    console.error(error);
   }
 }
