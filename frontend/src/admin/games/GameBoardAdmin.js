@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { gameLogic, getRotationStyle } from "../../games/services/boardService.js";
+import { gameLogic, getRotationStyle } from "../../player/games/services/GameBoardService.js";
 import tokenService from "../../services/token.service.js";
 
 import "../../static/css/board/Board.css";

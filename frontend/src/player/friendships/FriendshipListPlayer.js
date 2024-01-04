@@ -47,10 +47,13 @@ const Pagination = ({ friendshipsPerPage, totalFriendships, paginate, currentPag
     );
 };
 
+
+
 export default function FriendshipList() {
     const jwt = tokenService.getLocalAccessToken();
     const user = tokenService.getUser();
-    const [friendships, setFriendships] = useFetchState(null, `/api/v1/friendships/players/${user.id}/ACCEPTED`, jwt);
+    const [friendshipType, setFriendshipType] = useState("ACCEPTED");
+    const [friendships, setFriendships] = useFetchState(null, `/api/v1/friendships/players/${user.id}/${friendshipType}`, jwt);
     const [currentPage, setCurrentPage] = useState(1);
     const [friendshipsPerPage] = useState(5);
 
@@ -61,7 +64,7 @@ export default function FriendshipList() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch(`/api/v1/friendships/players/${user.id}/ACCEPTED`, {
+                const response = await fetch(`/api/v1/friendships/players/${user.id}/${friendshipType}`, {
                     headers: {
                         Authorization: `Bearer ${jwt}`,
                     },
@@ -74,14 +77,55 @@ export default function FriendshipList() {
             }
         };
         fetchData();
-    }, [jwt, setFriendships, user.id]);
+    }, [jwt, setFriendships, user.id, setFriendshipType]);
+
+    const sortedPendingRequest = friendships ? [...friendships].sort((a, b) => {
+        const isAReceiver = a.receiver.id === user.id;
+        const isBReceiver = b.receiver.id === user.id;
+        if (isAReceiver && !isBReceiver && a.friendState === "PENDING")
+            return -1;
+        else if (!isAReceiver && isBReceiver && b.friendState === "PENDING")
+            return 1;
+        else
+            return 0;
+    }) : [];
 
     const indexOfLastFriendship = currentPage * friendshipsPerPage;
     const indexOfFirstFriendship = indexOfLastFriendship - friendshipsPerPage;
-    const currentFriendships = friendships ? friendships.slice(indexOfFirstFriendship, indexOfLastFriendship) : [];
+    const currentFriendships = friendships ? sortedPendingRequest.slice(indexOfFirstFriendship, indexOfLastFriendship) : [];
     const paginate = pageNumber => setCurrentPage(pageNumber);
 
     const modal = getErrorModal(setVisible, visible, message);
+
+    const updateFriendshipStatus = async (friendshipId, senderId, receiverId, friendState) => {
+        try {
+            const response = await fetch(`/api/v1/friendships/${friendshipId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${jwt}`,
+                },
+                body: JSON.stringify({
+                    sender: senderId,
+                    receiver: receiverId,
+                    friendship_state: friendState
+                })
+            });
+    
+            if (response.ok) {
+                setFriendships(friendships.map(friendship =>
+                    friendship.id === friendshipId ? { ...friendship, friendState: 'ACCEPTED' } : friendship
+                ));
+                setMessage("Friendship accepted successfully");
+            } else {
+                throw new Error('Failed to update friendship status');
+            }
+        } catch (error) {
+            setMessage(`Error: ${error}`);
+            setVisible(true);
+        }
+    };
+    
 
     const displayUserDetails = (friendship) => {
         const isSender = friendship.sender.id === user.id;
@@ -93,21 +137,44 @@ export default function FriendshipList() {
                 <span style={{ flex: 1, textAlign: 'center' }}>
                     <img src={otherUser.avatar} alt={`${otherUser.nickname}'s avatar`} style={{ borderRadius: "50%", width: "40px", height: "40px" }} />
                 </span>
-                <Button
-                    aria-label={"delete-" + friendship.id}
-                    size="sm"
-                    color="danger"
-                    onClick={() => deleteFromList(
-                        `/api/v1/friendships/${friendship.id}`,
-                        friendship.id,
-                        [friendships, setFriendships],
-                        [alerts, setAlerts],
-                        setMessage,
-                        setVisible
-                    )}
-                >
-                    Delete
-                </Button>
+                {friendshipType === "PENDING" && !isSender ? (
+                    <div>
+                        <Button
+                            aria-label={"update-" + friendship.id}
+                            size="sm"
+                            color="success"
+                            style={{ marginRight: '5px' }}
+                            onClick={() => updateFriendshipStatus(friendship.id, friendship.sender.id, friendship.receiver.id, "ACCEPTED")}
+                        >
+                            Accept
+                        </Button>
+
+                        <Button
+                            aria-label={"update-" + friendship.id}
+                            size="sm"
+                            color="danger"
+                            onClick={() => updateFriendshipStatus(friendship.id, friendship.sender.id, friendship.receiver.id, "REJECTED")}
+                        >
+                            Deny
+                        </Button>
+                    </div>
+                ) : (
+                    <Button
+                        aria-label={"delete-" + friendship.id}
+                        size="sm"
+                        color="danger"
+                        onClick={() => deleteFromList(
+                            `/api/v1/friendships/${friendship.id}`,
+                            friendship.id,
+                            [friendships, setFriendships],
+                            [alerts, setAlerts],
+                            setMessage,
+                            setVisible
+                        )}
+                    >
+                        Delete
+                    </Button>
+                )}
             </div>
         );
     };
@@ -115,12 +182,12 @@ export default function FriendshipList() {
     return (
         <div className="home-page-container">
             <div className="hero-div">
-                <h1 style={{ textAlign: 'center', color: "#EF87E0" }}>Friendships</h1>
+                <h1 style={{ textAlign: 'center', color: "#EF87E0" }}>{friendshipType === "ACCEPTED" ? "Friendships" : "Pending requests"}</h1>
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
                     <div style={{ display: 'flex', width: '100%', padding: '10px', justifyContent: 'space-between' }}>
                         <span style={{ flex: 3, textAlign: 'center' }}>{currentFriendships.length > 0 ? "Nickname" : ""}</span>
                         <span style={{ flex: 2, textAlign: 'center' }}>{currentFriendships.length > 0 ? "Avatar" : ""}</span>
-                        <span style={{ flex: 1.5, textAlign: 'center' }}></span> 
+                        <span style={{ flex: 1.5, textAlign: 'center' }}></span>
                     </div>
                     {currentFriendships.length > 0 ? (
                         currentFriendships.map((friendship) => displayUserDetails(friendship))
@@ -136,20 +203,21 @@ export default function FriendshipList() {
                 />
                 {modal}
                 <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
-                <Button 
-                className="auth-button-eol-edit"
-                color="warning" 
-                size='lg' 
-                style={{ marginRight: '10px' }}
-                >
-                    Pending
-                </Button>
-                <Button 
-                className="auth-button-eol-create"
-                color="success" 
-                size='lg' 
-                >
-                    Create
+                    <Button
+                        className="auth-button-eol-edit"
+                        color="warning"
+                        size='lg'
+                        style={{ marginRight: '10px' }}
+                        onClick={() => setFriendshipType(friendshipType === "PENDING" ? "ACCEPTED" : "PENDING")}
+                    >
+                        {friendshipType === "PENDING" ? "Friendships" : "Pending"}
+                    </Button>
+                    <Button
+                        className="auth-button-eol-create"
+                        color="success"
+                        size='lg'
+                    >
+                        Create
                     </Button>
                 </div>
             </div>
