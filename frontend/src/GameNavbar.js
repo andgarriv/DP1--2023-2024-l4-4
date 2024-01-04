@@ -14,6 +14,8 @@ function GameNavbar() {
     const [gameTime, setGameTime] = useState(0);
     const [turnColor, setTurnColor] = useState(null);
     const [gameId, setgameId] = useState(null);
+    const [confirmExit, setConfirmExit] = useState(false);
+
 
     useEffect(() => {
         if (jwt) {
@@ -79,6 +81,21 @@ function GameNavbar() {
         return () => clearInterval(intervalId);
     }, [jwt]);
 
+    const handleExitClick = () => {
+        // Show confirmation dialog
+        const userConfirmed = window.confirm("Are you sure you want to exit?");
+        if (userConfirmed) {
+            setConfirmExit(true);
+        }
+    };
+
+    useEffect(() => {
+        if (confirmExit) {
+            // Redirect to the desired location, like home or login page
+            window.location.href = '/'; // or your desired route
+        }
+    }, [confirmExit]);
+
 
     // Convert gameTime to minutes:seconds format
     const minutes = Math.floor(gameTime / 60);
@@ -110,7 +127,14 @@ function GameNavbar() {
                     </NavItem>
                     <span style={{ color: "gray", display: "inline-block", margin: "5px 10px" }}>|</span>
                     <NavItem className="d-flex">
-                        <NavLink className="fuente" style={{ color: "#EF87E0" }} id="logout" tag={Link} to="">Exit</NavLink>
+                        <NavLink
+                            className="fuente"
+                            style={{ color: "#EF87E0" }}
+                            tag={Link}
+                            onClick={handleExitClick}
+                        >
+                            Exit
+                        </NavLink>
                     </NavItem>
                 </>
             )
