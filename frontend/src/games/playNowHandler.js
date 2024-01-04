@@ -18,7 +18,7 @@ const handlePlayNowClick = async (setMessage, setVisible) => {
 
       if (ongoingGame) {
         if (window.confirm("Do you want to join the ongoing game?")) {
-          window.location.href = `/game/${ongoingGame.id}`;
+          window.location.href = `/games/${ongoingGame.id}`;
         }
       } else {
         window.location.href = "/play";

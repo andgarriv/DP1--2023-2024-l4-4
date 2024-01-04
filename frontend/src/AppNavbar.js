@@ -137,7 +137,7 @@ function AppNavbar() {
                                 <Button color="success"
                                     size="sm"
                                     className="auth-button-eol-create"
-                                    onClick={() => window.location.href = `/game/${pendingGame.id}`}>
+                                    onClick={() => window.location.href = `/games/${pendingGame.id}`}>
                                     Accept
                                 </Button>
                             </NavItem>

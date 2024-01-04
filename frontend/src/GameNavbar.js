@@ -103,7 +103,7 @@ function GameNavbar() {
             playerLinks = (
                 <>
                     <NavItem>
-                        <NavLink className="fuente" style={{ color: "#75FBFD" }} tag={Link} to={`/game/${gameId}`}>Game</NavLink>
+                        <NavLink className="fuente" style={{ color: "#75FBFD" }} tag={Link} to={`/games/${gameId}`}>Game</NavLink>
                     </NavItem>
                     <NavItem>
                         <NavLink className="fuente" style={{ color: "#75FBFD" }} tag={Link} to="/rulesInGame">Rules</NavLink>

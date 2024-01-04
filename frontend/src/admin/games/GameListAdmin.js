@@ -118,7 +118,7 @@ export default function AdminGamesList() {
                                                 color="success"
                                                 size="sm"
                                                 tag={Link}
-                                                to={`/game/${game.id}`}
+                                                to={`/games/${game.id}`}
                                                 className="auth-button-eol-create">
                                                 Watch
                                             </Button>
