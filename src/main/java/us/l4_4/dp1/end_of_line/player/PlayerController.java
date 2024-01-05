@@ -47,6 +47,24 @@ public class PlayerController {
         return playerService.findAll();
     }
 
+     @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Player findById(@PathVariable Integer id) {
+            return playerService.findById(id);
+    }
+
+    @GetMapping("/nickname/{nickname}")
+    @ResponseStatus(HttpStatus.OK)
+    public Player findByNickname(@PathVariable String nickname) {
+            return playerService.findByNickname(nickname);
+    }
+
+    @GetMapping("/{id}/friends")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Player> findAllFriendsByPlayerId(@PathVariable Integer id) {
+        return playerService.findAllFriendsByPlayerId(id);
+    }
+
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public Player create(@RequestBody @Valid Player player) {
@@ -55,30 +73,6 @@ public class PlayerController {
         player.setAuthority(authoritiesService.findByAuthority("PLAYER"));
         playerService.save(player);
         return player;
-    }
-
-    @GetMapping("/nickname/{nickname}")
-    @ResponseStatus(HttpStatus.OK)
-    public Player findByNickname(@PathVariable String nickname) {
-        if (playerService.findByNickname(nickname) != null)
-            return playerService.findByNickname(nickname);
-        else
-            return null;
-    }
-
-    @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public Player findById(@PathVariable Integer id) {
-        if (playerService.findById(id) != null)
-            return playerService.findById(id);
-        else
-            return null;
-    }
-
-    @GetMapping("/{id}/friends")
-    @ResponseStatus(HttpStatus.OK)
-    public List<Player> findAllFriendsByPlayerId(@PathVariable Integer id) {
-        return playerService.findAllFriendsByPlayerId(id);
     }
 
     @PutMapping("/{id}")
