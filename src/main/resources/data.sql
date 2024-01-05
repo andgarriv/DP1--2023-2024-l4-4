@@ -102,28 +102,28 @@ INSERT INTO game_players(id, energy, player_id, color) VALUES (1, 3, 5,'VIOLET')
                                                               (31, 2, 3,'BLUE'), 
                                                               (32, 2, 8,'GREEN'),
                                                               (33, 3, 7,'ORANGE'), 
-                                                              (34, 3, 8,'RED');
+                                                              (34, 3, 8,'MAGENTA');
 
 -- Games 
-INSERT INTO games(id, round, winner, started, ended, game_player_turn_id, effect) VALUES (1, 16, 6, '2023-09-01 09:00:05', '2023-09-01 09:15:54', 5, 'NONE'),
-                                                                                         (2, 18, 5, '2023-09-01 09:05:17', '2023-09-01 09:23:17', 6, 'NONE'),
-                                                                                         (3, 24, 7, '2023-09-01 10:00:00', '2023-09-01 10:28:39', 8, 'NONE'),
-                                                                                         (4, 20, 10, '2023-09-01 14:18:32', '2023-09-01 14:52:20', 11, 'NONE'),
+INSERT INTO games(id, round, winner, started, ended, game_player_turn_id, effect) VALUES (1, 16, 6, '2023-09-01 09:00:05', '2023-09-01 09:15:54', 1, 'NONE'),
+                                                                                         (2, 18, 5, '2023-09-01 09:05:17', '2023-09-01 09:23:17', 4, 'NONE'),
+                                                                                         (3, 24, 7, '2023-09-01 10:00:00', '2023-09-01 10:28:39', 6, 'NONE'),
+                                                                                         (4, 20, 10, '2023-09-01 14:18:32', '2023-09-01 14:52:20', 8, 'NONE'),
 
-                                                                                         (5, 27, 6, '2023-09-01 19:14:25', '2023-09-01 19:47:38', 3, 'NONE'),
-                                                                                         (6, 28, 3, '2023-09-02 14:03:07', '2023-09-02 14:24:07', 4, 'NONE'),
-                                                                                         (7, 20, 3, '2023-09-19 04:13:56', '2023-09-19 04:32:56', 10, 'NONE'),
-                                                                                         (8, 27, 3, '2023-09-27 09:49:44', '2023-09-27 10:17:44', 7, 'NONE'),                                     
-                                                                                         (9, 18, 3, '2023-10-09 08:30:29', '2023-10-09 08:53:29', 7, 'NONE'),
-                                                                                         (10, 20, 3, '2023-10-09 09:07:00', '2023-10-09 09:27:00', 8, 'NONE'),
-                                                                                         (11, 26, 3, '2023-10-12 07:08:07', '2023-10-12 07:25:07', 6, 'NONE'),
-                                                                                         (12, 20, 3, '2023-10-20 00:51:04', '2023-10-20 01:27:04', 5, 'NONE'),
-                                                                                         (13, 23, 3, '2023-10-30 22:34:55', '2023-10-30 22:54:55', 9, 'NONE'),
-                                                                                         (14, 27, 3, '2023-11-01 13:44:27', '2023-11-01 14:06:27', 8, 'NONE'),
-                                                                                         (15, 26, 3, '2023-11-25 03:59:03', '2023-11-25 04:24:03', 10, 'NONE'),
-                                                                                         (16, 28, 3, '2023-12-19 17:33:57', '2023-12-19 18:10:57', 8, 'NONE'),
+                                                                                         (5, 22, 6, '2023-09-01 19:14:25', '2023-09-01 19:47:38', 9, 'NONE'),
+                                                                                         (6, 25, 3, '2023-09-02 14:03:07', '2023-09-02 14:24:07', 12, 'NONE'),
+                                                                                         (7, 20, 3, '2023-09-19 04:13:56', '2023-09-19 04:32:56', 14, 'NONE'),
+                                                                                         (8, 21, 3, '2023-09-27 09:49:44', '2023-09-27 10:17:44', 16, 'NONE'),                                     
+                                                                                         (9, 18, 3, '2023-10-09 08:30:29', '2023-10-09 08:53:29', 18, 'NONE'),
+                                                                                         (10, 20, 3, '2023-10-09 09:07:00', '2023-10-09 09:27:00', 20, 'NONE'),
+                                                                                         (11, 26, 3, '2023-10-12 07:08:07', '2023-10-12 07:25:07', 22, 'NONE'),
+                                                                                         (12, 20, 3, '2023-10-20 00:51:04', '2023-10-20 01:27:04', 24, 'NONE'),
+                                                                                         (13, 23, 3, '2023-10-30 22:34:55', '2023-10-30 22:54:55', 26, 'NONE'),
+                                                                                         (14, 27, 3, '2023-11-01 13:44:27', '2023-11-01 14:06:27', 28, 'NONE'),
+                                                                                         (15, 26, 3, '2023-11-25 03:59:03', '2023-11-25 04:24:03', 30, 'NONE'),
+                                                                                         (16, 24, 3, '2023-12-19 17:33:57', '2023-12-19 18:10:57', 32, 'NONE'),
 
-                                                                                         (17, 1, null, '2023-12-21 17:35:45', null, 6, 'NONE');
+                                                                                         (17, 1, null, '2024-01-05 12:48:33', null, 33, 'NONE');
 
 -- Games_Game_Players
 INSERT INTO games_game_players(game_id, game_players_id) VALUES (1, 1),
@@ -462,76 +462,78 @@ INSERT INTO cards (id, initiative, color, exit, orientation, is_template) VALUES
                                                                                         
                                                                                                         (199, 5, 'ORANGE', 'EXIT_111_B', 'S', 1),
 
-                                                                                                        (200, 0, 'ORANGE', 'START', 'S', 1),
+                                                                                                        (200, 0, 'ORANGE', 'START', 'S', 1);
 
-                                                                                                        (201, 2, 'MAGENTA', 'EXIT_001_A', 'S', 0),
-                                                                                                        (202, 2, 'MAGENTA', 'EXIT_001_B', 'S', 0),
-                                                                                                        (203, 2, 'MAGENTA', 'EXIT_001_C', 'S', 0),
-                                                                                                        (204, 2, 'MAGENTA', 'EXIT_001_D', 'S', 0),
+INSERT INTO cards (id, initiative, color, exit, orientation, is_template, card_state, card_row, card_column, updated_at) VALUES
+                                                                                                        (201, 2, 'ORANGE', 'EXIT_001_A', 'S', 0, 'IN_HAND', null, null, null),
+                                                                                                        (202, 2, 'ORANGE', 'EXIT_001_B', 'S', 0, 'IN_DECK', null, null, null),
+                                                                                                        (203, 2, 'ORANGE', 'EXIT_001_C', 'S', 0, 'IN_DECK', null, null, null),
+                                                                                                        (204, 2, 'ORANGE', 'EXIT_001_D', 'S', 0, 'IN_DECK', null, null, null),
 
-                                                                                                        (205, 1, 'MAGENTA', 'EXIT_010_A', 'S', 0),
-                                                                                                        (206, 1, 'MAGENTA', 'EXIT_010_B', 'S', 0),
-                                                                                                        (207, 1, 'MAGENTA', 'EXIT_010_C', 'S', 0),
-                                                                                                        (208, 1, 'MAGENTA', 'EXIT_010_D', 'S', 0),
-                                                                                                        (209, 1, 'MAGENTA', 'EXIT_010_E', 'S', 0),
-                                                                                                        (210, 1, 'MAGENTA', 'EXIT_010_F', 'S', 0),
-                                                                                                        (211, 1, 'MAGENTA', 'EXIT_010_G', 'S', 0),
-                                                                                                        (212, 1, 'MAGENTA', 'EXIT_010_H', 'S', 0),
+                                                                                                        (205, 1, 'ORANGE', 'EXIT_010_A', 'S', 0, 'IN_DECK', null, null, null),
+                                                                                                        (206, 1, 'ORANGE', 'EXIT_010_B', 'S', 0, 'IN_DECK', null, null, null),
+                                                                                                        (207, 1, 'ORANGE', 'EXIT_010_C', 'S', 0, 'IN_DECK', null, null, null),
+                                                                                                        (208, 1, 'ORANGE', 'EXIT_010_D', 'S', 0, 'IN_DECK', null, null, null),
+                                                                                                        (209, 1, 'ORANGE', 'EXIT_010_E', 'S', 0, 'IN_DECK', null, null, null),
+                                                                                                        (210, 1, 'ORANGE', 'EXIT_010_F', 'S', 0, 'IN_DECK', null, null, null),
+                                                                                                        (211, 1, 'ORANGE', 'EXIT_010_G', 'S', 0, 'IN_DECK', null, null, null),
+                                                                                                        (212, 1, 'ORANGE', 'EXIT_010_H', 'S', 0, 'IN_HAND', null, null, null),
 
-                                                                                                        (213, 3, 'MAGENTA', 'EXIT_011_A', 'S', 0),
-                                                                                                        (214, 3, 'MAGENTA', 'EXIT_011_B', 'S', 0),
+                                                                                                        (213, 3, 'ORANGE', 'EXIT_011_A', 'S', 0, 'IN_DECK', null, null, null),
+                                                                                                        (214, 3, 'ORANGE', 'EXIT_011_B', 'S', 0, 'IN_DECK', null, null, null),
 
-                                                                                                        (215, 2, 'MAGENTA', 'EXIT_100_A', 'S', 0),
-                                                                                                        (216, 2, 'MAGENTA', 'EXIT_100_B', 'S', 0),
-                                                                                                        (217, 2, 'MAGENTA', 'EXIT_100_C', 'S', 0),
-                                                                                                        (218, 2, 'MAGENTA', 'EXIT_100_D', 'S', 0),
+                                                                                                        (215, 2, 'ORANGE', 'EXIT_100_A', 'S', 0, 'IN_DECK', null, null, null),
+                                                                                                        (216, 2, 'ORANGE', 'EXIT_100_B', 'S', 0, 'IN_DECK', null, null, null),
+                                                                                                        (217, 2, 'ORANGE', 'EXIT_100_C', 'S', 0, 'IN_DECK', null, null, null),
+                                                                                                        (218, 2, 'ORANGE', 'EXIT_100_D', 'S', 0, 'IN_HAND', null, null, null),
 
-                                                                                                        (219, 4, 'MAGENTA', 'EXIT_101_A', 'S', 0),
-                                                                                                        (220, 4, 'MAGENTA', 'EXIT_101_B', 'S', 0),
+                                                                                                        (219, 4, 'ORANGE', 'EXIT_101_A', 'S', 0, 'IN_HAND', null, null, null),
+                                                                                                        (220, 4, 'ORANGE', 'EXIT_101_B', 'S', 0, 'IN_DECK', null, null, null),
 
-                                                                                                        (221, 3, 'MAGENTA', 'EXIT_110_A', 'S', 0),
-                                                                                                        (222, 3, 'MAGENTA', 'EXIT_110_B', 'S', 0),
+                                                                                                        (221, 3, 'ORANGE', 'EXIT_110_A', 'S', 0, 'IN_DECK', null, null, null),
+                                                                                                        (222, 3, 'ORANGE', 'EXIT_110_B', 'S', 0, 'IN_DECK', null, null, null),
 
-                                                                                                        (223, 0, 'MAGENTA', 'EXIT_111_A', 'S', 0),
+                                                                                                        (223, 0, 'ORANGE', 'EXIT_111_A', 'S', 0, 'IN_HAND', null, null, null),
 
-                                                                                                        (224, 5, 'MAGENTA', 'EXIT_111_B', 'S', 0),
+                                                                                                        (224, 5, 'ORANGE', 'EXIT_111_B', 'S', 0, 'IN_DECK', null, null, null),
 
-                                                                                                        (225, 0, 'MAGENTA', 'START', 'S', 0),
+                                                                                                        (225, 0, 'ORANGE', 'START', 'S', 0, 'ON_BOARD', 4, 2, '2024-01-05 12:48:33.328'),
 
-                                                                                                        (226, 2, 'ORANGE', 'EXIT_001_A', 'S', 0),
-                                                                                                        (227, 2, 'ORANGE', 'EXIT_001_B', 'S', 0),
-                                                                                                        (228, 2, 'ORANGE', 'EXIT_001_C', 'S', 0),
-                                                                                                        (229, 2, 'ORANGE', 'EXIT_001_D', 'S', 0),
+                                                                                                        (226, 2, 'MAGENTA', 'EXIT_001_A', 'S', 0, 'IN_DECK', null, null, null),
+                                                                                                        (227, 2, 'MAGENTA', 'EXIT_001_B', 'S', 0, 'IN_DECK', null, null, null),
+                                                                                                        (228, 2, 'MAGENTA', 'EXIT_001_C', 'S', 0, 'IN_DECK', null, null, null),
+                                                                                                        (229, 2, 'MAGENTA', 'EXIT_001_D', 'S', 0, 'IN_HAND', null, null, null),
 
-                                                                                                        (230, 1, 'ORANGE', 'EXIT_010_A', 'S', 0),
-                                                                                                        (231, 1, 'ORANGE', 'EXIT_010_B', 'S', 0),
-                                                                                                        (232, 1, 'ORANGE', 'EXIT_010_C', 'S', 0),
-                                                                                                        (233, 1, 'ORANGE', 'EXIT_010_D', 'S', 0),
-                                                                                                        (234, 1, 'ORANGE', 'EXIT_010_E', 'S', 0),
-                                                                                                        (235, 1, 'ORANGE', 'EXIT_010_F', 'S', 0),
-                                                                                                        (236, 1, 'ORANGE', 'EXIT_010_G', 'S', 0),
-                                                                                                        (237, 1, 'ORANGE', 'EXIT_010_H', 'S', 0),
+                                                                                                        (230, 1, 'MAGENTA', 'EXIT_010_A', 'S', 0, 'IN_HAND', null, null, null),
+                                                                                                        (231, 1, 'MAGENTA', 'EXIT_010_B', 'S', 0, 'IN_HAND', null, null, null),
+                                                                                                        (232, 1, 'MAGENTA', 'EXIT_010_C', 'S', 0, 'IN_DECK', null, null, null),
+                                                                                                        (233, 1, 'MAGENTA', 'EXIT_010_D', 'S', 0, 'IN_DECK', null, null, null),
+                                                                                                        (234, 1, 'MAGENTA', 'EXIT_010_E', 'S', 0, 'IN_DECK', null, null, null),
+                                                                                                        (235, 1, 'MAGENTA', 'EXIT_010_F', 'S', 0, 'IN_DECK', null, null, null),
+                                                                                                        (236, 1, 'MAGENTA', 'EXIT_010_G', 'S', 0, 'IN_DECK', null, null, null),
+                                                                                                        (237, 1, 'MAGENTA', 'EXIT_010_H', 'S', 0, 'IN_DECK', null, null, null),
 
-                                                                                                        (238, 3, 'ORANGE', 'EXIT_011_A', 'S', 0),
-                                                                                                        (239, 3, 'ORANGE', 'EXIT_011_B', 'S', 0),
+                                                                                                        (238, 3, 'MAGENTA', 'EXIT_011_A', 'S', 0, 'IN_DECK', null, null, null),
+                                                                                                        (239, 3, 'MAGENTA', 'EXIT_011_B', 'S', 0, 'IN_DECK', null, null, null),
 
-                                                                                                        (240, 2, 'ORANGE', 'EXIT_100_A', 'S', 0),
-                                                                                                        (241, 2, 'ORANGE', 'EXIT_100_B', 'S', 0),
-                                                                                                        (242, 2, 'ORANGE', 'EXIT_100_C', 'S', 0),
-                                                                                                        (243, 2, 'ORANGE', 'EXIT_100_D', 'S', 0),
+                                                                                                        (240, 2, 'MAGENTA', 'EXIT_100_A', 'S', 0, 'IN_DECK', null, null, null),
+                                                                                                        (241, 2, 'MAGENTA', 'EXIT_100_B', 'S', 0, 'IN_DECK', null, null, null),
+                                                                                                        (242, 2, 'MAGENTA', 'EXIT_100_C', 'S', 0, 'IN_DECK', null, null, null),
+                                                                                                        (243, 2, 'MAGENTA', 'EXIT_100_D', 'S', 0, 'IN_DECK', null, null, null),
 
-                                                                                                        (244, 4, 'ORANGE', 'EXIT_101_A', 'S', 0),
-                                                                                                        (245, 4, 'ORANGE', 'EXIT_101_B', 'S', 0),
+                                                                                                        (244, 4, 'MAGENTA', 'EXIT_101_A', 'S', 0, 'IN_HAND', null, null, null),
+                                                                                                        (245, 4, 'MAGENTA', 'EXIT_101_B', 'S', 0, 'IN_DECK', null, null, null),
 
-                                                                                                        (246, 3, 'ORANGE', 'EXIT_110_A', 'S', 0),
+                                                                                                        (246, 3, 'MAGENTA', 'EXIT_110_A', 'S', 0, 'IN_DECK', null, null, null),
 
-                                                                                                        (247, 3, 'ORANGE', 'EXIT_110_B', 'S', 0),
-                                                                                                        
-                                                                                                        (248, 0, 'ORANGE', 'EXIT_111_A', 'S', 0),
-                                                                                        
-                                                                                                        (249, 5, 'ORANGE', 'EXIT_111_B', 'S', 0),
+                                                                                                        (247, 3, 'MAGENTA', 'EXIT_110_B', 'S', 0, 'IN_HAND', null, null, null),
 
-                                                                                                        (250, 0, 'ORANGE', 'START', 'S', 0);
+                                                                                                        (248, 0, 'MAGENTA', 'EXIT_111_A', 'S', 0, 'IN_DECK', null, null, null),
+
+                                                                                                        (249, 5, 'MAGENTA', 'EXIT_111_B', 'S', 0, 'IN_DECK', null, null, null),
+
+                                                                                                        (250, 0, 'MAGENTA', 'START', 'S', 0, 'ON_BOARD', 4, 4, '2024-01-05 12:48:33.489');
+
 
 INSERT INTO game_players_cards (cards_id, game_player_id) VALUES (201, 33),
                                                                  (202, 33),
