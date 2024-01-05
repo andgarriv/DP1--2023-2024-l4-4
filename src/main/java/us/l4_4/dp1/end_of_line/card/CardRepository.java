@@ -11,14 +11,8 @@ import us.l4_4.dp1.end_of_line.enums.Color;
 @Repository
 public interface CardRepository extends CrudRepository<Card, Integer>{
 
-        /* @Query("SELECT c FROM Card c WHERE c.color = ?1")
-        List<Card> findAllCardsByColor(Color color); */
-
         @Query("SELECT c FROM Card c WHERE c.color = ?1 AND c.isTemplate = true")
         List<Card> findAllTemplatedCardsByColor(Color color);
-
-        /* @Query("SELECT c FROM GamePlayer g JOIN g.cards c WHERE g.id = ?1")
-        List<Card> findAllCardsByStatus(Status status); */
 
         @Query("SELECT c FROM GamePlayer g JOIN g.cards c WHERE g.id = ?1")
         List<Card> findAllCardsByGamePlayer(Integer id);

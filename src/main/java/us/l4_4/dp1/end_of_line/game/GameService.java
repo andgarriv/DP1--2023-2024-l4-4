@@ -21,7 +21,6 @@ import us.l4_4.dp1.end_of_line.achievement.AchievementRepository;
 import us.l4_4.dp1.end_of_line.achievement.AchievementService;
 import us.l4_4.dp1.end_of_line.card.Card;
 import us.l4_4.dp1.end_of_line.card.CardRepository;
-import us.l4_4.dp1.end_of_line.card.CardService;
 import us.l4_4.dp1.end_of_line.enums.CardStatus;
 import us.l4_4.dp1.end_of_line.enums.Color;
 import us.l4_4.dp1.end_of_line.enums.Exit;
@@ -47,7 +46,6 @@ public class GameService {
     GamePlayerRepository gamePlayerRepository;
     MessageRepository messageRepository;
     CardRepository cardRepository;
-    CardService cardService;
     AchievementRepository achievementRepository;
     PlayerAchievementService playerAchievementService;
     AchievementService achievementService;
