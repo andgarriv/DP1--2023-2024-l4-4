@@ -48,8 +48,4 @@ public class Achievement extends NamedEntity {
 
     @OneToMany()
     List<PlayerAchievement> playerAchievements;
-    
-    public String getActualDescription(){
-        return description.replace("<THRESHOLD>", String.valueOf(threshold));
-    }
 }
