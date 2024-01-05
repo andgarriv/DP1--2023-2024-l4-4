@@ -24,16 +24,16 @@ public class FriendshipController {
     @Autowired
     FriendshipService friendshipService;
 
-    @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public Friendship findById(@PathVariable Integer id) {
-        return friendshipService.findById(id);
-    }
-
     @GetMapping("/all")
     @ResponseStatus(HttpStatus.OK)
     public Iterable<Friendship> findAll() {
         return friendshipService.findAll();
+    }
+
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Friendship findById(@PathVariable Integer id) {
+        return friendshipService.findById(id);
     }
 
     @GetMapping("/players/{id}/{friendState}")
