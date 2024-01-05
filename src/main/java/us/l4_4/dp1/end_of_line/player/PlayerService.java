@@ -1,6 +1,5 @@
 package us.l4_4.dp1.end_of_line.player;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -57,13 +56,7 @@ public class PlayerService {
 
 	@Transactional
 	public Player save(Player player) throws DataAccessException {
-		LocalDate now = LocalDate.now();
-		LocalDate playerDate = player.getBirthDate();
-		LocalDate minDate = now.minusYears(7);
-		if (minDate.isBefore(playerDate))
-			throw new IllegalArgumentException("You must be at least 7 years old to register");
-		playerRepository.save(player);
-		return player;
+		return playerRepository.save(player);
 	}
 
 	@Transactional
