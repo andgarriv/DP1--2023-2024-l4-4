@@ -77,7 +77,7 @@ export default function FriendshipList() {
             }
         };
         fetchData();
-    }, [jwt, setFriendships, user.id, setFriendshipType]);
+    }, [jwt, user.id, friendshipType, setFriendships]);
 
     const sortedPendingRequest = friendships ? [...friendships].sort((a, b) => {
         const isAReceiver = a.receiver.id === user.id;
@@ -113,10 +113,8 @@ export default function FriendshipList() {
             });
     
             if (response.ok) {
-                setFriendships(friendships.map(friendship =>
-                    friendship.id === friendshipId ? { ...friendship, friendState: 'ACCEPTED' } : friendship
-                ));
-                setMessage("Friendship accepted successfully");
+                setFriendships(friendships.filter(friendship => friendship.id !== friendshipId));
+                setMessage(`Friendship ${friendState.toLowerCase()} successfully`);
             } else {
                 throw new Error('Failed to update friendship status');
             }
@@ -182,7 +180,7 @@ export default function FriendshipList() {
     return (
         <div className="home-page-container">
             <div className="hero-div">
-                <h1 style={{ textAlign: 'center', color: "#EF87E0" }}>{friendshipType === "ACCEPTED" ? "Friendships" : "Pending requests"}</h1>
+                <h1 style={{ textAlign: 'center', color: "#EF87E0" }}>{friendshipType === "ACCEPTED" ? "Friendships" : "Pending invites"}</h1>
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
                     <div style={{ display: 'flex', width: '100%', padding: '10px', justifyContent: 'space-between' }}>
                         <span style={{ flex: 3, textAlign: 'center' }}>{currentFriendships.length > 0 ? "Nickname" : ""}</span>
