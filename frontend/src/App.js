@@ -15,6 +15,7 @@ import Logout from "./auth/logout";
 import Register from "./auth/register";
 import Home from "./home";
 import AchievementListPlayer from "./player/achievements/AchievementListPlayer";
+import FriendshipCreatePlayer from "./player/friendships/FriendshipCreatePlayer";
 import FriendshipListPlayer from "./player/friendships/FriendshipListPlayer";
 import GameBoardPlayer from "./player/games/GameBoardPlayer";
 import GameListPlayer from "./player/games/GameListPlayer";
@@ -26,7 +27,6 @@ import PrivateRoute from "./privateRoute";
 import SwaggerDocs from "./public/swagger";
 import PDFViewer from "./rules";
 import tokenService from "./services/token.service";
-
 
 function ErrorFallback({ error, resetErrorBoundary }) {
   return (
@@ -80,6 +80,7 @@ function App() {
           <Route path="/play" exact={true} element={<PrivateRoute><GameNewPlayer /></PrivateRoute>} />
           <Route path="/games/:id" exact={true} element={<PrivateRoute><GameBoardPlayer /></PrivateRoute>} />
           <Route path="/friendships" exact={true} element={<PrivateRoute><FriendshipListPlayer /></PrivateRoute>} />
+          <Route path="/friendships/create" exact={true} element={<PrivateRoute><FriendshipCreatePlayer /></PrivateRoute>} />
         </>)
       gameRoutes = (
         <>
