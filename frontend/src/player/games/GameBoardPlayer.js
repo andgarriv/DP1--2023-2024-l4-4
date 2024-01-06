@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Button } from "reactstrap";
 import tokenService from "../../services/token.service.js";
 import "../../static/css/board/Board.css";
@@ -73,6 +73,15 @@ export default function Board() {
   const [playerColor, setPlayerColor] = useState(null);
   const [gamePlayerId, setGamePlayerId] = useState(null);
   const [messages, setMessages] = useState([]);
+  const [lastMessageCount, setLastMessageCount] = useState(0);
+  const messagesEndRef = useRef(null);
+  const scrollToBottom = () => {
+    if (messagesEndRef.current) {
+      const scrollHeight = messagesEndRef.current.scrollHeight;
+      messagesEndRef.current.scrollTop = scrollHeight;
+    }
+  };
+  
   const predefinedMessages = [
     "HI",
     "GG",
@@ -144,12 +153,21 @@ export default function Board() {
         }
       }
       playCard(selectedCard.id, colIndex, rowIndex, cardOrientation, jwt);
+      
       updateTurn(gameId, gamePlayerId, jwt);
       setSelectedCard(null);
     } else {
       console.log("No es una posición válida");
     }
   };
+
+  useEffect(() => {
+    if (messages.length > lastMessageCount) {
+      scrollToBottom();
+    }
+    setLastMessageCount(messages.length);
+  }, [messages, lastMessageCount]);
+    
 
   useEffect(() => {
     if (dataGamePlayer.length > 0) {
@@ -281,26 +299,53 @@ export default function Board() {
               padding: "2%",
             }}
           >
-            CHAT
-            <div style={{ overflowY: "scroll", maxHeight: "200px" }}>
+            <h5
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                color: "#c5c6c6",
+                padding: "10px 0",
+              }}
+            >
+              Chat with{" "}
+              {dataGamePlayer[0].player.id === user.id
+                ? dataGamePlayer[1].player.nickname
+                : dataGamePlayer[0].player.nickname}
+            </h5>
+
+            <div
+              style={{
+                overflowY: "scroll",
+                maxHeight: "150px",
+                minHeight: "150px",
+                marginBottom: "10px",
+              }}
+              className="scrollbar-minimalista"
+              ref={messagesEndRef}
+            >
               {messages.map((message) => (
                 <div
                   key={message.id}
                   style={{
                     color: getButtonColorStyles(message.color).color,
                     padding: "5px",
+                    marginLeft: "10px",
+                    marginRight: "10px",
                     textAlign: message.color === playerColor ? "right" : "left",
                   }}
                 >
-                  {message.reaction}
+                  {message.reaction.replaceAll("_", " ") + "!"}
                 </div>
               ))}
+              <div ref={messagesEndRef} />
             </div>
             <div
               style={{
                 display: "flex",
                 justifyContent: "center",
-                flexWrap: "wrap",
+                flexFlow: "row wrap",
+                padding: "5px",
               }}
             >
               {predefinedMessages.map((message, index) => (
@@ -310,21 +355,14 @@ export default function Board() {
                   style={{
                     textDecoration: "none",
                     ...getButtonColorStyles(playerColor),
-                    width: "30%",
+                    width: "auto",
                   }}
                   onClick={() => handleSendMessage(message)}
                 >
-                  {message}
+                  {message.replaceAll("_", " ") + "!"}
                 </Button>
               ))}
             </div>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                flexWrap: "wrap",
-              }}
-            ></div>
           </div>
           <br />
           <Button
