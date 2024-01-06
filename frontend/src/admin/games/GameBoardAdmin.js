@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { gameLogic, getRotationStyle } from "../../player/games/services/GameBoardService.js";
+import { gameLogicAdmin, getRotationStyle } from "./services/AdminGameBoardService.js";
 import tokenService from "../../services/token.service.js";
 
 import "../../static/css/board/Board.css";
@@ -44,17 +44,13 @@ export default function AdminBoard() {
   const [energyCards, setEnergyCards] = useState([]);
   const [handCardsPlayer1, setHandCardsPlayer1] = useState([]);
   const [handCardsPlayer2, setHandCardsPlayer2] = useState([]);
-  const [cardPlayer1PossiblePositions, setPlayer1CardPossiblePositions] = useState([]);
-  const [cardPlayer2PossiblePositions, setPlayer2CardPossiblePositions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [dataGame, setDataGame] = useState([]);
-  const [isMyTurn, setIsMyTurn] = useState(false);
+
 
   useEffect(() => {
     const interval = setInterval(() => {
-      gameLogic(gameId, jwt, user, setDataGamePlayer, setHandCardsPlayer1, setHandCardsPlayer2, setBoard,
-        setIsLoading, setEnergyCards, setPlayer1CardPossiblePositions, setPlayer2CardPossiblePositions,
-        setIsMyTurn, setDataGame);
+      gameLogicAdmin(gameId, jwt, setDataGamePlayer, setHandCardsPlayer1, setHandCardsPlayer2, setBoard,
+        setIsLoading, setEnergyCards);
     }, 1000); 
     return () => clearInterval(interval);
 
