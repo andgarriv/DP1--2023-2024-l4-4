@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Button } from "reactstrap";
 import tokenService from "../../services/token.service.js";
 import "../../static/css/board/Board.css";
@@ -73,6 +73,15 @@ export default function Board() {
   const [playerColor, setPlayerColor] = useState(null);
   const [gamePlayerId, setGamePlayerId] = useState(null);
   const [messages, setMessages] = useState([]);
+  const [lastMessageCount, setLastMessageCount] = useState(0);
+  const messagesEndRef = useRef(null);
+  const scrollToBottom = () => {
+    if (messagesEndRef.current) {
+      const scrollHeight = messagesEndRef.current.scrollHeight;
+      messagesEndRef.current.scrollTop = scrollHeight;
+    }
+  };
+  
   const predefinedMessages = [
     "HI",
     "GG",
@@ -144,12 +153,21 @@ export default function Board() {
         }
       }
       playCard(selectedCard.id, colIndex, rowIndex, cardOrientation, jwt);
+      
       updateTurn(gameId, gamePlayerId, jwt);
       setSelectedCard(null);
     } else {
       console.log("No es una posición válida");
     }
   };
+
+  useEffect(() => {
+    if (messages.length > lastMessageCount) {
+      scrollToBottom();
+    }
+    setLastMessageCount(messages.length);
+  }, [messages, lastMessageCount]);
+    
 
   useEffect(() => {
     if (dataGamePlayer.length > 0) {
@@ -304,6 +322,7 @@ export default function Board() {
                 marginBottom: "10px",
               }}
               className="scrollbar-minimalista"
+              ref={messagesEndRef}
             >
               {messages.map((message) => (
                 <div
@@ -319,6 +338,7 @@ export default function Board() {
                   {message.reaction.replaceAll("_", " ") + "!"}
                 </div>
               ))}
+              <div ref={messagesEndRef} />
             </div>
             <div
               style={{
