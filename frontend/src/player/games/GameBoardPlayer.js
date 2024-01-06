@@ -1,8 +1,9 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Button } from "reactstrap";
 import tokenService from "../../services/token.service.js";
 import "../../static/css/board/Board.css";
 import {
+  changeCardsInHand,
   changeEffect,
   gameLogic,
   getButtonColorStyles,
@@ -10,9 +11,8 @@ import {
   getRotationStyle,
   isPlayerAuthorized,
   playCard,
-  updateTurn,
   postMessage,
-  changeCardsInHand,
+  updateTurn,
 } from "./services/GameBoardService.js";
 
 function Box({ content, onClick, isHighlighted, playerColor }) {
@@ -75,6 +75,12 @@ export default function Board() {
   const [gamePlayerId, setGamePlayerId] = useState(null);
   const [messages, setMessages] = useState([]);
   const [changeDeckButtonVisible, setChangeDeckButtonVisible] = useState(true);
+  const [isExtraGasClicked, setIsExtraGasClicked] = useState(false);
+  const [isReverseClicked, setIsReverseClicked] = useState(false);
+  const [isBrakeClicked, setIsBrakeClicked] = useState(false);
+  const [isSpeedUpClicked, setIsSpeedUpClicked] = useState(false);
+  const [effectUsedInRound, setEffectUsedInRound] = useState(false);
+  const [previousRound, setPreviousRound] = useState(0);
   const [lastMessageCount, setLastMessageCount] = useState(0);
   const messagesEndRef = useRef(null);
   const scrollToBottom = () => {
@@ -112,6 +118,11 @@ export default function Board() {
       }
     }
   }, [dataGamePlayer, setGamePlayerId, user]);
+
+  if (dataGame.round !== previousRound) {
+    setEffectUsedInRound(false);
+    setPreviousRound(dataGame.round);
+  }
 
   const handleBoxClick = (colIndex, rowIndex) => {
     if (!isMyTurn) {
@@ -256,7 +267,7 @@ export default function Board() {
                 <img src={card.image} alt="Card" />
               </div>
             ))}
-            {/* Botón 'Change deck'*/}
+          {/* Botón 'Change deck'*/}
           {changeDeckButtonVisible && isMyTurn && (dataGame.round === 1 || dataGame.round === 2) && (
             <Button
               outline
@@ -386,11 +397,15 @@ export default function Board() {
             outline
             style={{
               textDecoration: "none",
-              ...getButtonColorStyles(playerColor),
+              ...getButtonColorStyles(isExtraGasClicked || dataGame.round < 5 ? "GREY" : playerColor, isExtraGasClicked),
               width: "30%",
             }}
             onClick={() => {
-              changeEffect(jwt, gameId, "EXTRA_GAS", isMyTurn);
+              if (dataGame.round >= 5 && !effectUsedInRound && isMyTurn) {
+                changeEffect(jwt, gameId, "EXTRA_GAS", isMyTurn);
+                setEffectUsedInRound(true);
+                setIsExtraGasClicked(true);
+              }
             }}
           >
             EXTRA GAS
@@ -400,11 +415,15 @@ export default function Board() {
             outline
             style={{
               textDecoration: "none",
-              ...getButtonColorStyles(playerColor),
+              ...getButtonColorStyles(isReverseClicked || dataGame.round < 5 ? "GREY" : playerColor, isReverseClicked),
               width: "30%",
             }}
             onClick={() => {
-              changeEffect(jwt, gameId, "REVERSE", isMyTurn);
+              if (dataGame.round >= 5 && !effectUsedInRound && isMyTurn) {
+                changeEffect(jwt, gameId, "REVERSE", isMyTurn);
+                setEffectUsedInRound(true);
+                setIsReverseClicked(true);
+              }
             }}
           >
             REVERSE
@@ -414,11 +433,15 @@ export default function Board() {
             outline
             style={{
               textDecoration: "none",
-              ...getButtonColorStyles(playerColor),
+              ...getButtonColorStyles(isBrakeClicked || dataGame.round < 5 ? "GREY" : playerColor, isBrakeClicked),
               width: "30%",
             }}
             onClick={() => {
-              changeEffect(jwt, gameId, "BRAKE", isMyTurn);
+              if (dataGame.round >= 5 && !effectUsedInRound && isMyTurn) {
+                changeEffect(jwt, gameId, "BRAKE", isMyTurn);
+                setEffectUsedInRound(true);
+                setIsBrakeClicked(true);
+              }
             }}
           >
             BRAKE
@@ -428,16 +451,19 @@ export default function Board() {
             outline
             style={{
               textDecoration: "none",
-              ...getButtonColorStyles(playerColor),
+              ...getButtonColorStyles(isSpeedUpClicked || dataGame.round < 5 ? "GREY" : playerColor, isSpeedUpClicked),
               width: "30%",
             }}
             onClick={() => {
-              changeEffect(jwt, gameId, "SPEED_UP", isMyTurn);
+              if (dataGame.round >= 5 && !effectUsedInRound && isMyTurn) {
+                changeEffect(jwt, gameId, "SPEED_UP", isMyTurn);
+                setIsSpeedUpClicked(true);
+                setEffectUsedInRound(true);
+              }
             }}
           >
             SPEED UP
           </Button>
-          <br />
           <br />
           {dataGamePlayer[0].player.id === user.id && (
             <div className="hand">

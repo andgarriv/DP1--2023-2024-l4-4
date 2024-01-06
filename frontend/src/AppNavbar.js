@@ -125,18 +125,17 @@ function AppNavbar() {
                             <span style={{ display: "block", margin: "5px 5px" }}></span>
                             <NavItem style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
                                 <Button
-                                    className="auth-button-eol-delete"
+                                    className="negative-button"
                                     size="sm"
-                                    color="danger"
                                     onClick={handleReject}>
                                     Reject
                                 </Button>
                             </NavItem>
                             <span style={{ display: "block", margin: "5px 5px" }}></span>
                             <NavItem style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-                                <Button color="success"
+                                <Button
+                                    className="positive-button"
                                     size="sm"
-                                    className="auth-button-eol-create"
                                     onClick={() => window.location.href = `/games/${pendingGame.id}`}>
                                     Accept
                                 </Button>

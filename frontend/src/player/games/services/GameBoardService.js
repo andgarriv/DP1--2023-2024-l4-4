@@ -315,6 +315,9 @@ export function getButtonColorStyles(colorName) {
     WHITE: {
       rgb: 'rgb(194, 194, 194)',
     },
+    GREY: {
+      rgb : 'rgb(128, 128, 128)',
+    }
   };
 
   const colorStyles = colors[colorName] || {};

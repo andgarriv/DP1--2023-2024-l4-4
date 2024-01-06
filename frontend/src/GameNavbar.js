@@ -2,6 +2,7 @@ import jwt_decode from "jwt-decode";
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Collapse, Nav, NavItem, NavLink, Navbar, NavbarBrand, NavbarToggler } from 'reactstrap';
+import ExitPopup from "./ExitPopup";
 import tokenService from "./services/token.service";
 import './static/css/home/home.css';
 
@@ -14,7 +15,7 @@ function GameNavbar() {
     const [gameTime, setGameTime] = useState(0);
     const [turnColor, setTurnColor] = useState(null);
     const [gameId, setgameId] = useState(null);
-    const [confirmExit, setConfirmExit] = useState(false);
+    const [visible, setVisible] = useState(false);
 
 
     useEffect(() => {
@@ -81,22 +82,6 @@ function GameNavbar() {
         return () => clearInterval(intervalId);
     }, [jwt]);
 
-    const handleExitClick = () => {
-        // Show confirmation dialog
-        const userConfirmed = window.confirm("Are you sure you want to exit?");
-        if (userConfirmed) {
-            setConfirmExit(true);
-        }
-    };
-
-    useEffect(() => {
-        if (confirmExit) {
-            // Redirect to the desired location, like home or login page
-            window.location.href = '/'; // or your desired route
-        }
-    }, [confirmExit]);
-
-
     // Convert gameTime to minutes:seconds format
     const minutes = Math.floor(gameTime / 60);
     const seconds = gameTime % 60;
@@ -131,7 +116,7 @@ function GameNavbar() {
                             className="fuente"
                             style={{ color: "#EF87E0" }}
                             tag={Link}
-                            onClick={handleExitClick}
+                            onClick={() => setVisible(true)}
                         >
                             Exit
                         </NavLink>
@@ -173,7 +158,12 @@ function GameNavbar() {
                     </Nav>
                 </Collapse>
             </Navbar>
+            <ExitPopup
+                visible={visible}
+                setVisible={setVisible}
+            />
         </div>
+
     );
 }
 
