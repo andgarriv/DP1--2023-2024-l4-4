@@ -539,11 +539,11 @@ public class GameService {
 
         } else if (round < 5) {
             if (round == 3) {
-                if (cartas.size() != 0) {
+                if (cartas.size() == 3) {
                     giveNeededCardsToGetFive(turnPlayerId);
                     giveNeededCardsToGetFive(otherPlayerId);
                     game.setRound(round + 1);
-                    game.setGamePlayerTurnId(whoIsNext(turnPlayerId, otherPlayerId));
+                    game.setGamePlayerTurnId(otherPlayerId);
                     game.setEffect(Hability.NONE);
                 } else if (findPosiblePositionOfAGamePlayerGiven(turnPlayerId, gameId).isEmpty()) {
 
@@ -553,7 +553,6 @@ public class GameService {
                     // createPlayerAchievement(player2Id);
 
                 }
-
 
             } else if (round == 4) {
                 if (cartas.size() == 3) {
@@ -731,7 +730,8 @@ public class GameService {
 
         if (game.getEffect() != Hability.NONE) {
             System.out.println("No se puede cambiar el efecto porque ya hay uno activo");
-        } else {
+
+        } else if(gp.getCards().stream().filter(card -> card.getCardState() == CardStatus.IN_HAND).count() == 5) {
             if (gp.getEnergy() <= 0) {
                 System.out.println("No tienes suficiente energia para cambiar el efecto");
             } else if (changeEffectRequest.getEffect() != null && game.getRound() > 4) {
@@ -770,6 +770,37 @@ public class GameService {
         return cardToAdd;
     }
 
+    @Transactional
+    public List<Card> changeCardsInHand(Integer gameId) {
+        List<Card> newCardsInHand = new ArrayList<>();
+        Game game = gameRepository.findById(gameId).get();
+        Integer gamePlayerId = game.getGamePlayerTurnId();
+        List<Card> cards = gamePlayerRepository.findById(gamePlayerId).get().getCards();
+        List<Card> allCardsInHand = cards.stream()
+                .filter(card -> card.getCardState() == CardStatus.IN_HAND)
+                .collect(Collectors.toList());
+        if (game.getRound() == 1 || game.getRound() == 2) {
+            for (Card card : allCardsInHand) {
+                if (card.getCardState() == CardStatus.IN_HAND) {
+                    card.setCardState(CardStatus.IN_DECK);
+                    cardRepository.save(card);
+                }
+            }
+            Collections.shuffle(cards);
+            for (Card card : cards) {
+                if (card.getCardState() == CardStatus.IN_DECK) {
+                    card.setCardState(CardStatus.IN_HAND);
+                    cardRepository.save(card);
+                    newCardsInHand.add(card);
+                }
+                if (newCardsInHand.size() == 5) {
+                    break;
+                }
+            }
+        }
+        return newCardsInHand;
+    }
+
     private List<Achievement> findAchievementsNotAchieved(Integer playerId) {
         List<Achievement> achievements = StreamSupport.stream(achievementRepository.findAll().spliterator(), false)
                 .collect(Collectors.toList());
@@ -789,7 +820,8 @@ public class GameService {
     @Transactional
     public void createPlayerAchievement(Integer playerId) {
         List<Achievement> achievements = findAchievementsNotAchieved(playerId);
-        if(achievements.isEmpty()) return;
+        if (achievements.isEmpty())
+            return;
         Player player = playerRepository.findById(playerId).get();
         for (Achievement achievement : achievements) {
             String category = achievement.getCategory().toString();
@@ -830,7 +862,7 @@ public class GameService {
                         player.getPlayerAchievement().add(playerAchievement);
                         achievementService.update(achievement.getId(), achievement);
                     }
-            }                      
+            }
         }
         playerService.update(playerId, player);
     }

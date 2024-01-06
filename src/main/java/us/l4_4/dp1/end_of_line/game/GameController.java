@@ -138,4 +138,10 @@ public class GameController {
     public Game changeEffect(@PathVariable Integer gameId, @RequestBody @Valid ChangeEffectRequest changeEffectRequest) {
         return gameService.updateGameEffect(gameId, changeEffectRequest);
     }
+
+    @PutMapping("/{gameId}/changeCardsInHand")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Card> changeCardsInHand(@PathVariable Integer gameId) {
+        return gameService.changeCardsInHand(gameId);
+    }
 }
