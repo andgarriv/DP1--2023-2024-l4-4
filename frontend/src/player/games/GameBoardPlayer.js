@@ -12,6 +12,7 @@ import {
   playCard,
   updateTurn,
   postMessage,
+  changeCardsInHand,
 } from "./services/GameBoardService.js";
 
 function Box({ content, onClick, isHighlighted, playerColor }) {
@@ -56,7 +57,7 @@ export default function Board() {
   );
   const gameId =
     window.location.pathname.split("/")[
-      window.location.pathname.split("/").length - 1
+    window.location.pathname.split("/").length - 1
     ];
   const [dataGamePlayer, setDataGamePlayer] = useState([]);
   const [handCardsPlayer1, setHandCardsPlayer1] = useState([]);
@@ -81,7 +82,7 @@ export default function Board() {
       messagesEndRef.current.scrollTop = scrollHeight;
     }
   };
-  
+
   const predefinedMessages = [
     "HI",
     "GG",
@@ -153,7 +154,7 @@ export default function Board() {
         }
       }
       playCard(selectedCard.id, colIndex, rowIndex, cardOrientation, jwt);
-      
+
       updateTurn(gameId, gamePlayerId, jwt);
       setSelectedCard(null);
     } else {
@@ -167,7 +168,7 @@ export default function Board() {
     }
     setLastMessageCount(messages.length);
   }, [messages, lastMessageCount]);
-    
+
 
   useEffect(() => {
     if (dataGamePlayer.length > 0) {
@@ -215,9 +216,8 @@ export default function Board() {
           {dataGamePlayer[0].player.id === user.id &&
             handCardsPlayer1.map((card, index) => (
               <div
-                className={`hand ${
-                  selectedCard === card ? "selected-card" : ""
-                }`}
+                className={`hand ${selectedCard === card ? "selected-card" : ""
+                  }`}
                 style={{ marginBottom: "2%" }}
                 key={index}
                 onClick={() => {
@@ -234,13 +234,28 @@ export default function Board() {
                 <img src={card.image} alt="Card" />
               </div>
             ))}
+          {/* Botón 'Change deck' para el jugador 1 */}
+          {dataGamePlayer[0].player.id === user.id && (
+            <Button
+              outline
+              style={{
+                textDecoration: "none",
+                ...getButtonColorStyles(playerColor),
+                width: "30%",
+              }}
+              onClick={() => {
+                changeCardsInHand(jwt, gameId, isMyTurn);
+              }}
+            >
+              Change deck
+            </Button>
+          )}
           {/* SHOW PLAYER 2 CARDS IF PLAYER 2 */}
           {dataGamePlayer[1].player.id === user.id &&
             handCardsPlayer2.map((card, index) => (
               <div
-                className={`hand ${
-                  selectedCard === card ? "selected-card" : ""
-                }`}
+                className={`hand ${selectedCard === card ? "selected-card" : ""
+                  }`}
                 key={index}
                 onClick={() => {
                   if (selectedCard === card) {
@@ -255,7 +270,22 @@ export default function Board() {
               >
                 <img src={card.image} alt="Card" />
               </div>
-            ))}
+            ))}{/* Botón 'Change deck' para el jugador 1 */}
+          {dataGamePlayer[1].player.id === user.id && (
+            <Button
+              outline
+              style={{
+                textDecoration: "none",
+                ...getButtonColorStyles(playerColor),
+                width: "30%",
+              }}
+              onClick={() => {
+                changeCardsInHand(jwt, gameId, isMyTurn);
+              }}
+            >
+              Change deck
+            </Button>
+          )}
         </div>
         {/* SHOW BOARD */}
         <div className="board">

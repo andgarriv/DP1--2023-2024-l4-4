@@ -380,6 +380,29 @@ export async function changeEffect(jwt, gameId, effect, isMyTurn) {
   }
 }
 
+export async function changeCardsInHand(jwt, gameId, isMyTurn) {
+  if (!isMyTurn) {
+    console.log("No es tu turno");
+    return;
+  }
+  try {
+    const response = await fetch(`/api/v1/games/${gameId}/changeCardsInHand`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        "Content-Type": "application/json",
+      }
+    });
+  
+    if (!response.ok) {
+      throw new Error("Error al cambiar el mazo.");
+    }
+  }
+  catch (error) {
+    console.error(error);
+  }
+}
+
 export async function postMessage(jwt, gameId, reaction, color){
   try{
     console.log(JSON.stringify({ gameId, reaction, color }));
