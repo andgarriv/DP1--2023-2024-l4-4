@@ -162,14 +162,25 @@ INSERT INTO games_game_players(game_id, game_players_id) VALUES (1, 1),
                                                                 (17, 34);
 
 -- Message
-INSERT INTO messages(id, color, reaction) VALUES (1, null, 'HI'),
+ INSERT INTO messages(id, color, reaction) VALUES (1, null, 'HI'),
                                                  (2, null, 'WHAT_A_PITY'),
                                                  (3, null, 'SORRY'),
                                                  (4, null, 'THANKS'),
                                                  (5, null, 'NICE'),
                                                  (6, null, 'JAJAJAJA'),
                                                  (7, null, 'GG'),
-                                                 (8, null, 'GOOD_LUCK');
+                                                 (8, null, 'GOOD_LUCK'),
+                                                 (9, 'ORANGE', 'HI'),
+                                                 (10, 'MAGENTA', 'GOOD_LUCK'),
+                                                 (11, 'ORANGE', 'THANKS'),
+                                                 (12, 'ORANGE', 'NICE'),
+                                                 (13, 'MAGENTA', 'JAJAJAJA');
+
+INSERT INTO games_message(game_id, message_id) VALUES (17, 9),
+                                                       (17, 10),
+                                                       (17, 11),
+                                                       (17, 12),
+                                                       (17, 13);  
 
 -- Friendship
 INSERT INTO friendships(id, receiver, sender, friend_state) VALUES (1, 4, 3, 'ACCEPTED'),
@@ -188,6 +199,8 @@ INSERT INTO friendships(id, receiver, sender, friend_state) VALUES (1, 4, 3, 'AC
                                                                   (14, 9, 10, 'PENDING'),
                                                                   (15, 12, 3, 'ACCEPTED'),
                                                                   (16, 8, 12, 'PENDING');
+
+
                                                                   
 
 -- Cards

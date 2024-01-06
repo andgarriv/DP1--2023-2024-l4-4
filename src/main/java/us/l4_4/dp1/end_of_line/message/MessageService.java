@@ -20,11 +20,6 @@ public class MessageService {
     }
 
     @Transactional(readOnly = true)
-    public Iterable<Message> findAll() throws DataAccessException{
-        return messageRepository.findAll();
-    }
-
-    @Transactional(readOnly = true)
     public List<Message> findAllMessagesByGameId(Integer id) {
         return messageRepository.findAllMessagesByGameId(id);
     }
