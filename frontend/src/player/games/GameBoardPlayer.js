@@ -74,6 +74,7 @@ export default function Board() {
   const [playerColor, setPlayerColor] = useState(null);
   const [gamePlayerId, setGamePlayerId] = useState(null);
   const [messages, setMessages] = useState([]);
+  const [changeDeckButtonVisible, setChangeDeckButtonVisible] = useState(true);
   const [lastMessageCount, setLastMessageCount] = useState(0);
   const messagesEndRef = useRef(null);
   const scrollToBottom = () => {
@@ -234,22 +235,6 @@ export default function Board() {
                 <img src={card.image} alt="Card" />
               </div>
             ))}
-          {/* Botón 'Change deck' para el jugador 1 */}
-          {dataGamePlayer[0].player.id === user.id && (
-            <Button
-              outline
-              style={{
-                textDecoration: "none",
-                ...getButtonColorStyles(playerColor),
-                width: "30%",
-              }}
-              onClick={() => {
-                changeCardsInHand(jwt, gameId, isMyTurn);
-              }}
-            >
-              Change deck
-            </Button>
-          )}
           {/* SHOW PLAYER 2 CARDS IF PLAYER 2 */}
           {dataGamePlayer[1].player.id === user.id &&
             handCardsPlayer2.map((card, index) => (
@@ -270,8 +255,9 @@ export default function Board() {
               >
                 <img src={card.image} alt="Card" />
               </div>
-            ))}{/* Botón 'Change deck' para el jugador 1 */}
-          {dataGamePlayer[1].player.id === user.id && (
+            ))}
+            {/* Botón 'Change deck'*/}
+          {changeDeckButtonVisible && isMyTurn && (dataGame.round === 1 || dataGame.round === 2) && (
             <Button
               outline
               style={{
@@ -280,6 +266,7 @@ export default function Board() {
                 width: "30%",
               }}
               onClick={() => {
+                setChangeDeckButtonVisible(false);
                 changeCardsInHand(jwt, gameId, isMyTurn);
               }}
             >
