@@ -5,7 +5,7 @@
 
 export async function gameLogic(gameId, jwt, user, setDataGamePlayer, setHandCardsPlayer1, setHandCardsPlayer2,
   setBoard, setIsLoading, setEnergyCards, setPlayer1CardPossiblePositions, setPlayer2CardPossiblePositions,
-  setIsMyTurn, setDataGame) {
+  setIsMyTurn, setDataGame, setMessages) {
   try {
     const response = await fetch(`/api/v1/games/${gameId}/cards`, {
       method: "GET",
@@ -159,7 +159,29 @@ export async function gameLogic(gameId, jwt, user, setDataGamePlayer, setHandCar
     window.location.href = '/';
     console.error("Error al cargar los datos del juego.", error);
   }
+
+  try {
+    const responseMessages = await fetch(`/api/v1/messages/games/${gameId}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!responseMessages.ok) {
+      throw new Error('Error al cargar los mensajes.');
+    }
+
+    const messages = await responseMessages.json();
+    setMessages(messages);
+  }
+  catch (error) {
+    console.error(error);
+  }
+  
 }
+
 
 export function setHandCardsPlayer(cards, setHandCardsFunction) {
   const handCardImages = cards.map((card) => {
@@ -351,6 +373,27 @@ export async function changeEffect(jwt, gameId, effect, isMyTurn) {
   
     if (!response.ok) {
       throw new Error("Error al cambiar el efecto.");
+    }
+  }
+  catch (error) {
+    console.error(error);
+  }
+}
+
+export async function postMessage(jwt, gameId, reaction, color){
+  try{
+    console.log(JSON.stringify({ gameId, reaction, color }));
+    const response = await fetch(`/api/v1/messages`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ gameId, reaction, color }),
+    });
+  
+    if (!response.ok) {
+      throw new Error("Error al enviar el mensaje.");
     }
   }
   catch (error) {

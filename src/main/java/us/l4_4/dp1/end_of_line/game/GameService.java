@@ -297,12 +297,12 @@ public class GameService {
         }
         List<Card> player1Cards = gamePlayerRepository.findById(id1).get().getCards().stream()
                 .filter(card -> card.getCardState() == CardStatus.ON_BOARD)
-                .sorted(Comparator.comparing(Card::getUpdatedAt).reversed())
+                .sorted(Comparator.comparing(Card::getUpdatedAt))
                 .collect(Collectors.toList());
 
         List<Card> player2Cards = gamePlayerRepository.findById(id2).get().getCards().stream()
                 .filter(card -> card.getCardState() == CardStatus.ON_BOARD)
-                .sorted(Comparator.comparing(Card::getUpdatedAt).reversed())
+                .sorted(Comparator.comparing(Card::getUpdatedAt))
                 .collect(Collectors.toList());
 
         if (player1Cards.size() < player2Cards.size())
@@ -311,13 +311,12 @@ public class GameService {
             maxSize = player2Cards.size();
 
         for (int i = 0; i < maxSize; i++) {
-            if (res == null) {
-
-                if (player1Cards.get(i).getInitiative() > player2Cards.get(i).getInitiative()) {
-                    res = id2;
-                } else if (player1Cards.get(i).getInitiative() < player2Cards.get(i).getInitiative()) {
-                    res = id1;
-                }
+            if (player1Cards.get(i).getInitiative() > player2Cards.get(i).getInitiative()) {
+                res = id2;
+                break;
+            } else if (player1Cards.get(i).getInitiative() < player2Cards.get(i).getInitiative()) {
+                res = id1;
+                break;
             }
         }
         if (res == null) {
@@ -526,23 +525,25 @@ public class GameService {
         // ---------------------------------------------------
         if (round == 1) {
             giveNeededCardsToGetFive(turnPlayerId);
-            game.setRound(round + 1);
+            giveNeededCardsToGetFive(gamePlayerId);
             game.setGamePlayerTurnId(otherPlayerId);
+            game.setRound(2);
             game.setEffect(Hability.NONE);
 
         } else if (round == 2) {
-            game.setRound(round + 1);
             giveNeededCardsToGetFive(turnPlayerId);
             giveNeededCardsToGetFive(otherPlayerId);
             game.setGamePlayerTurnId(whoIsNext(turnPlayerId, otherPlayerId));
+            game.setRound(3);
             game.setEffect(Hability.NONE);
 
         } else if (round < 5) {
             if (round == 3) {
-                if (cartas.size() == 3) {
-                    game.setRound(round + 1);
+                if (cartas.size() != 0) {
                     giveNeededCardsToGetFive(turnPlayerId);
-                    game.setGamePlayerTurnId(otherPlayerId);
+                    giveNeededCardsToGetFive(otherPlayerId);
+                    game.setRound(round + 1);
+                    game.setGamePlayerTurnId(whoIsNext(turnPlayerId, otherPlayerId));
                     game.setEffect(Hability.NONE);
                 } else if (findPosiblePositionOfAGamePlayerGiven(turnPlayerId, gameId).isEmpty()) {
 
@@ -553,10 +554,12 @@ public class GameService {
 
                 }
 
+
             } else if (round == 4) {
                 if (cartas.size() == 3) {
-                    game.setRound(round + 1);
+                    giveNeededCardsToGetFive(gamePlayerId);
                     giveNeededCardsToGetFive(turnPlayerId);
+                    game.setRound(round + 1);
                     game.setGamePlayerTurnId(whoIsNext(turnPlayerId, otherPlayerId));
                     game.setEffect(Hability.NONE);
                 } else if (findPosiblePositionOfAGamePlayerGiven(turnPlayerId, gameId).isEmpty()) {
@@ -573,8 +576,9 @@ public class GameService {
             if (round % 2 == 1) {
                 if (game.getEffect() == Hability.SPEED_UP) {
                     if (cartas.size() == 2) {
-                        game.setRound(round + 1);
+                        giveNeededCardsToGetFive(gamePlayerId);
                         giveNeededCardsToGetFive(turnPlayerId);
+                        game.setRound(round + 1);
                         game.setGamePlayerTurnId(otherPlayerId);
                         game.setEffect(Hability.NONE);
 
@@ -588,8 +592,9 @@ public class GameService {
                     }
                 } else if (game.getEffect() == Hability.BRAKE || game.getEffect() == Hability.EXTRA_GAS) {
                     if (cartas.size() == 4) {
-                        game.setRound(round + 1);
+                        giveNeededCardsToGetFive(gamePlayerId);
                         giveNeededCardsToGetFive(turnPlayerId);
+                        game.setRound(round + 1);
                         game.setGamePlayerTurnId(otherPlayerId);
                         game.setEffect(Hability.NONE);
 
@@ -604,8 +609,9 @@ public class GameService {
 
                 } else {
                     if (cartas.size() == 3) {
-                        game.setRound(round + 1);
                         giveNeededCardsToGetFive(turnPlayerId);
+                        giveNeededCardsToGetFive(gamePlayerId);
+                        game.setRound(round + 1);
                         game.setGamePlayerTurnId(otherPlayerId);
                         game.setEffect(Hability.NONE);
 
@@ -623,8 +629,9 @@ public class GameService {
 
                 if (game.getEffect() == Hability.SPEED_UP) {
                     if (cartas.size() == 2) {
-                        game.setRound(round + 1);
                         giveNeededCardsToGetFive(turnPlayerId);
+                        giveNeededCardsToGetFive(gamePlayerId);
+                        game.setRound(round + 1);
                         game.setGamePlayerTurnId(whoIsNext(turnPlayerId, otherPlayerId));
                         game.setEffect(Hability.NONE);
                         Integer nextPlayerId = whoIsNext(turnPlayerId, otherPlayerId);
@@ -651,8 +658,9 @@ public class GameService {
                     }
                 } else if (game.getEffect() == Hability.BRAKE || game.getEffect() == Hability.EXTRA_GAS) {
                     if (cartas.size() == 4) {
-                        game.setRound(round + 1);
                         giveNeededCardsToGetFive(turnPlayerId);
+                        giveNeededCardsToGetFive(gamePlayerId);
+                        game.setRound(round + 1);
                         game.setGamePlayerTurnId(whoIsNext(turnPlayerId, otherPlayerId));
                         game.setEffect(Hability.NONE);
                         Integer nextPlayerId = whoIsNext(turnPlayerId, otherPlayerId);
@@ -680,8 +688,9 @@ public class GameService {
 
                 } else {
                     if (cartas.size() == 3) {
-                        game.setRound(round + 1);
+                        giveNeededCardsToGetFive(gamePlayerId);
                         giveNeededCardsToGetFive(turnPlayerId);
+                        game.setRound(round + 1);
                         game.setGamePlayerTurnId(whoIsNext(turnPlayerId, otherPlayerId));
                         game.setEffect(Hability.NONE);
                         Integer nextPlayerId = whoIsNext(turnPlayerId, otherPlayerId);
