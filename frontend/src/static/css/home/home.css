@@ -109,7 +109,7 @@
   /* Estilo para todos los navegadores */
 .scrollbar-minimalista {
   scrollbar-width: thin;
-  scrollbar-color: magenta #ffffff;
+  scrollbar-color: #75fbfd #ffffff;
   overflow: auto;
 }
 
@@ -118,11 +118,12 @@
 }
 
 .scrollbar-minimalista::-webkit-scrollbar-track {
-  background: #d23eb0;
+  background: #75fbfd;
+  border-radius: 20px;
 }
 
 .scrollbar-minimalista::-webkit-scrollbar-thumb {
-  background-color: rgb(38, 50, 60);
+  background-color: #306465;
   border-radius: 20px;
   border: none;
 }
