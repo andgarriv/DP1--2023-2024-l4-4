@@ -1,5 +1,8 @@
 package us.l4_4.dp1.end_of_line.message;
 
+import java.util.Comparator;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,22 +32,17 @@ public class MessageController {
         this.messageService = messageService;
     }
 
+    @GetMapping("/games/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Message> findAllMessagesByGameId(@PathVariable Integer id) {
+        return messageService.findAllMessagesByGameId(id).stream().sorted(Comparator.comparing(x -> x.getId()))
+                .toList();
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Message create(@RequestBody @Valid Message message) {
         return messageService.save(message);
-    }
-
-    @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public Iterable<Message> findAll() {
-        return messageService.findAll();
-    }
-
-    @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public Message findById(@PathVariable Integer id) {
-        return messageService.findById(id);
     }
 
     @PutMapping("/{id}")
