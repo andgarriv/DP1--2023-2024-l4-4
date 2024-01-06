@@ -314,7 +314,7 @@ export function getButtonColorStyles(colorName) {
 }
 
 export async function playCard(cardId, row, column, orientation, jwt) {
-  const response = await fetch(`/api/v1/cards/${cardId}/position`, {
+  const response = await fetch(`/api/v1/cards/${cardId}`, {
     method: "PUT",
     headers: {
       Authorization: `Bearer ${jwt}`,

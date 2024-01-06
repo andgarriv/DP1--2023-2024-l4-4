@@ -8,20 +8,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import us.l4_4.dp1.end_of_line.exceptions.ResourceNotFoundException;
+import us.l4_4.dp1.end_of_line.game.Game;
+import us.l4_4.dp1.end_of_line.game.GameService;
 
 @Service
 public class MessageService {
 
     private final MessageRepository messageRepository;
+    private GameService gameService;
 
     @Autowired
-    public MessageService(MessageRepository messageRepository) {
+    public MessageService(MessageRepository messageRepository, GameService gameService) {
         this.messageRepository = messageRepository;
-    }
-
-    @Transactional(readOnly = true)
-    public Iterable<Message> findAll() throws DataAccessException{
-        return messageRepository.findAll();
+        this.gameService = gameService;
     }
 
     @Transactional(readOnly = true)
@@ -30,8 +29,19 @@ public class MessageService {
     }
 
     @Transactional
-    public Message save(Message message) throws DataAccessException{
-        return messageRepository.save(message);
+    public Message save(MessageDTO messageDTO) throws DataAccessException{
+        Message newMessage = new Message();
+        newMessage.setColor(messageDTO.getColor());
+        newMessage.setReaction(messageDTO.getReaction());
+        messageRepository.save(newMessage);
+
+        Game gameToUpdate = gameService.findById(messageDTO.getGameId());
+        List<Message> ls = gameToUpdate.getMessage();
+        ls.add(newMessage);
+        gameToUpdate.setMessage(ls);
+        gameService.save(gameToUpdate);
+
+        return newMessage;
     }
 
     @Transactional

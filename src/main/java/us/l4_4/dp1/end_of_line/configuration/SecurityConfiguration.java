@@ -48,7 +48,7 @@ public class SecurityConfiguration {
 			
 			.authorizeHttpRequests(authorizeRequests ->	authorizeRequests
 			.requestMatchers("/resources/**", "/webjars/**", "/static/**", "/swagger-resources/**").permitAll()			
-			.requestMatchers( "/api/v1/clinics","/", "/oups","/api/v1/auth/**","/v3/api-docs/**","/swagger-ui.html","/swagger-ui/**").permitAll()												
+			.requestMatchers("/", "/oups","/api/v1/auth/**","/v3/api-docs/**","/swagger-ui.html","/swagger-ui/**").permitAll()												
 			.requestMatchers("/api/v1/developers").hasAuthority(ADMIN)	
 
 			.requestMatchers(HttpMethod.GET, "api/v1/players/all").hasAuthority(ADMIN)
@@ -72,7 +72,7 @@ public class SecurityConfiguration {
 			
 			.requestMatchers( "/api/v1/gameplayers/**").authenticated()
 
-			.requestMatchers(HttpMethod.POST,"/api/v1/messages").hasAuthority(ADMIN)
+			.requestMatchers(HttpMethod.POST,"/api/v1/messages").authenticated()
 			.requestMatchers("/api/v1/messages").authenticated()
 			.requestMatchers("/api/v1/messages/**").authenticated()
 
