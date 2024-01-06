@@ -38,11 +38,6 @@ export async function gameLogic(gameId, jwt, user, setDataGamePlayer, setHandCar
     }
 
     setDataGame(dataGame);
-    const messageList = [];
-    dataGame.messages.forEach(message => {
-      messageList.push({ message: message.message, color: message.color });
-    });
-    setMessages(messageList);
 
     const responseGamePlayer = await fetch(
       `/api/v1/games/${gameId}/gameplayers`,
@@ -165,6 +160,25 @@ export async function gameLogic(gameId, jwt, user, setDataGamePlayer, setHandCar
     console.error("Error al cargar los datos del juego.", error);
   }
 
+  try {
+    const responseMessages = await fetch(`/api/v1/messages/games/${gameId}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!responseMessages.ok) {
+      throw new Error('Error al cargar los mensajes.');
+    }
+
+    const messages = await responseMessages.json();
+    setMessages(messages);
+  }
+  catch (error) {
+    console.error(error);
+  }
   
 }
 
@@ -366,15 +380,16 @@ export async function changeEffect(jwt, gameId, effect, isMyTurn) {
   }
 }
 
-export async function postMessage(jwt, gameId, message, color){
+export async function postMessage(jwt, gameId, reaction, color){
   try{
+    console.log(JSON.stringify({ gameId, reaction, color }));
     const response = await fetch(`/api/v1/messages`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${jwt}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ gameId, message, color }),
+      body: JSON.stringify({ gameId, reaction, color }),
     });
   
     if (!response.ok) {

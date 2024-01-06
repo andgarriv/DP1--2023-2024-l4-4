@@ -72,18 +72,16 @@ export default function Board() {
   const [isMyTurn, setIsMyTurn] = useState(false);
   const [playerColor, setPlayerColor] = useState(null);
   const [gamePlayerId, setGamePlayerId] = useState(null);
-
-  // TODO: CHAT
   const [messages, setMessages] = useState([]);
   const predefinedMessages = [
-    "HI!",
-    "GG!",
-    "WHAT A PITTY!",
-    "SORRY!",
-    "THANKS!",
-    "GOOD LUCK!",
-    "NICE!",
-    "JAJAJAJA!",
+    "HI",
+    "GG",
+    "WHAT_A_PITY",
+    "SORRY",
+    "THANKS",
+    "GOOD_LUCK",
+    "NICE",
+    "JAJAJAJA",
   ];
   const handleSendMessage = (message) => {
     postMessage(jwt, gameId, message, playerColor);
@@ -285,25 +283,19 @@ export default function Board() {
           >
             CHAT
             <div style={{ overflowY: "scroll", maxHeight: "200px" }}>
-              {messages.map((message, index) => (
+              {messages.map((message) => (
                 <div
-                  key={index}
+                  key={message.id}
                   style={{
-                    color: message.color,
+                    color: getButtonColorStyles(message.color).color,
                     padding: "5px",
-                    textAlign:
-                      message.color === "blue"
-                        ? "right"
-                        : message.color === "green"
-                        ? "left"
-                        : "center", // Alinea los mensajes azules a la derecha y los verdes a la izquierda
+                    textAlign: message.color === playerColor ? "right" : "left",
                   }}
                 >
-                  {message}
+                  {message.reaction}
                 </div>
               ))}
             </div>
-            {/* Añade los botones de mensajes predefinidos aquí */}
             <div
               style={{
                 display: "flex",
