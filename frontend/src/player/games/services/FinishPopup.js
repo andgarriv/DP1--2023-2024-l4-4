@@ -56,7 +56,7 @@ function FinishPopup({ setVisible, visible, gameId }) {
                 <h1>{winner} Wins!</h1>
                 <br />
                 <p style={{ color: "white" }}>Time: {formattedGameTime}</p>
-                <p style={{ color: "white" }}>Rouns: {round}</p>
+                <p style={{ color: "white" }}>Rounds: {round}</p>
                 <div className="modal-footer-custom">
                     <Button
                         className="win-button"
