@@ -2,7 +2,8 @@ import jwt_decode from "jwt-decode";
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Collapse, DropdownItem, DropdownMenu, DropdownToggle, Nav, NavItem, NavLink, Navbar, NavbarBrand, NavbarToggler, UncontrolledDropdown } from 'reactstrap';
-import GamePlayNowPlayer from "./player/games/GamePlayNowPlayer";
+import OnGoingGamePopup from './OnGoingGamePopup';
+import PlayNowHandler from "./player/games/GamePlayNowPlayer";
 import tokenService from './services/token.service';
 import './static/css/home/home.css';
 
@@ -11,8 +12,9 @@ function AppNavbar() {
     const [username, setUsername] = useState("");
     const jwt = tokenService.getLocalAccessToken();
     const [collapsed, setCollapsed] = useState(true);
-    const [pendingGame, setPendingGame] = useState(null);
     const user = tokenService.getUser();
+    const [visible, setVisible] = useState(false);
+    const [gameId, setGameId] = useState(null);
     const toggleNavbar = () => setCollapsed(!collapsed);
 
 
@@ -34,7 +36,7 @@ function AppNavbar() {
 
                         const playerData = await playerResponse.json();
                         const ongoingGame = playerData.find((game) => !game.endedAt);
-                        setPendingGame(ongoingGame);
+                        setGameId(ongoingGame.id);
 
                     } catch (error) {
                         console.error('Error fetching pending games:', error);
@@ -46,9 +48,13 @@ function AppNavbar() {
         }
     }, [jwt])
 
+    const handleClick = () => {
+        PlayNowHandler(user, setVisible, setGameId);
+    };
+
     const handleReject = async () => {
         try {
-            const gamePlayerResponse = await fetch(`/api/v1/gameplayers/${pendingGame.id}/${user.id}`, {
+            const gamePlayerResponse = await fetch(`/api/v1/gameplayers/${gameId}/${user.id}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${jwt}`,
@@ -61,7 +67,7 @@ function AppNavbar() {
             }
 
             const gamePlayer = await gamePlayerResponse.json();
-            const response = await fetch(`/api/v1/games/${pendingGame.id}/${gamePlayer.id}`, {
+            const response = await fetch(`/api/v1/games/${gameId}/${gamePlayer.id}`, {
                 method: 'DELETE',
                 headers: {
                     Authorization: `Bearer ${jwt}`,
@@ -70,7 +76,7 @@ function AppNavbar() {
             });
 
             if (response.ok) {
-                setPendingGame(null);
+                setGameId(null);
             } else {
                 throw new Error('Failed to delete the game');
             }
@@ -115,7 +121,7 @@ function AppNavbar() {
         if (role === "PLAYER") {
             playerLinks = (
                 <>
-                    {pendingGame ? (
+                    {gameId ? (
                         <>
                             <NavItem>
                                 <div className="fuente" style={{ color: "white", display: "flex", alignItems: "center", justifyContent: "center", height: "100%" }}>
@@ -136,7 +142,7 @@ function AppNavbar() {
                                 <Button
                                     className="positive-button"
                                     size="sm"
-                                    onClick={() => window.location.href = `/games/${pendingGame.id}`}>
+                                    onClick={() => window.location.href = `/games/${gameId}`}>
                                     Accept
                                 </Button>
                             </NavItem>
@@ -144,9 +150,10 @@ function AppNavbar() {
                         </>
                     ) : (
                         <NavItem>
-                            <NavLink className="fuente" style={{ color: "#75FBFD" }} tag={Link} onClick={GamePlayNowPlayer}>Play Now!</NavLink>
+                            <NavLink className="fuente" style={{ color: "#75FBFD" }} tag={Link} onClick={handleClick}>Play Now!</NavLink>
                         </NavItem>
                     )}
+                    {visible && <OnGoingGamePopup setVisible={setVisible} visible={visible} gameId={gameId} />}
                     <NavItem>
                         <NavLink className="fuente" style={{ color: "#75FBFD" }} tag={Link} to="/rules">Rules</NavLink>
                     </NavItem>
@@ -173,7 +180,6 @@ function AppNavbar() {
                                     <NavLink className="fuente" style={{ color: "#EF87E0" }} tag={Link} to="/friendships">Friendships</NavLink>
                                 </NavItem>
                             </DropdownItem>
-
                             <DropdownItem style={{ borderBottom: '1px solid gray', padding: '10px' }}>
                                 <NavItem>
                                     <NavLink className="fuente" style={{ color: "#EF87E0" }} tag={Link} to="/achievements">Achievements</NavLink>

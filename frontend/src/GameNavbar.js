@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Collapse, Nav, NavItem, NavLink, Navbar, NavbarBrand, NavbarToggler } from 'reactstrap';
 import ExitPopup from "./ExitPopup";
+import SurrenderPopup from './SurrenderPopup';
 import tokenService from "./services/token.service";
 import './static/css/home/home.css';
 
@@ -15,8 +16,8 @@ function GameNavbar() {
     const [gameTime, setGameTime] = useState(0);
     const [turnColor, setTurnColor] = useState(null);
     const [gameId, setgameId] = useState(null);
-    const [visible, setVisible] = useState(false);
-
+    const [visibleSurrender, setVisibleSurrender] = useState(false);
+    const [visibleExit, setVisibleExit] = useState(false);
 
     useEffect(() => {
         if (jwt) {
@@ -117,13 +118,25 @@ function GameNavbar() {
                     <NavItem>
                         <NavLink className="fuente" style={{ color: "#75FBFD" }} tag={Link} to="/rulesInGame">Rules</NavLink>
                     </NavItem>
+                    {round > 2 && (
+                        <NavItem className="d-flex">
+                            <NavLink
+                                className="fuente"
+                                style={{ color: "#75FBFD" }}
+                                tag={Link}
+                                onClick={() => setVisibleSurrender(true)}
+                            >
+                                Surrender
+                            </NavLink>
+                        </NavItem>
+                    )}
                     <span style={{ color: "gray", display: "inline-block", margin: "5px 10px" }}>|</span>
                     <NavItem className="d-flex">
                         <NavLink
                             className="fuente"
                             style={{ color: "#EF87E0" }}
                             tag={Link}
-                            onClick={() => setVisible(true)}
+                            onClick={() => setVisibleExit(true)}
                         >
                             Exit
                         </NavLink>
@@ -166,8 +179,13 @@ function GameNavbar() {
                 </Collapse>
             </Navbar>
             <ExitPopup
-                visible={visible}
-                setVisible={setVisible}
+                visible={visibleExit}
+                setVisible={setVisibleExit}
+            />
+            <SurrenderPopup
+                visible={visibleSurrender}
+                setVisible={setVisibleSurrender}
+                gameId={gameId}
             />
         </div>
 
