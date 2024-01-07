@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { gameLogicAdmin, getRotationStyle } from "./services/AdminGameBoardService.js";
 import tokenService from "../../services/token.service.js";
+import { gameLogicAdmin, getRotationStyle } from "./services/GameBoardServiceAdmin.js";
 
 import "../../static/css/board/Board.css";
 

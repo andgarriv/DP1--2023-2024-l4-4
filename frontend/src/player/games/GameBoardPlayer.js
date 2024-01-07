@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Button } from "reactstrap";
 import tokenService from "../../services/token.service.js";
 import "../../static/css/board/Board.css";
-import FinishPopup from "./services/FinishPopup.js";
+import FinishPopup from "./services/GameFinishPopUpService.js";
 
 import {
   changeCardsInHand,
@@ -15,7 +15,7 @@ import {
   playCard,
   postMessage,
   updateTurn,
-} from "./services/GameBoardService.js";
+} from "./services/GameBoardServicePlayer.js";
 
 function Box({ content, onClick, isHighlighted, playerColor }) {
   const getRotationClass = (orientation) => {
