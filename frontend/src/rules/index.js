@@ -30,7 +30,7 @@ const PDFViewer = () => {
 
   return (
     <div className="home-page-container">
-        <div dangerouslySetInnerHTML={{ __html: html }}></div>
+      <div dangerouslySetInnerHTML={{ __html: html }}></div>
     </div>
 
   );
