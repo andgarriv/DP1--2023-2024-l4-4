@@ -234,18 +234,26 @@ public class GameService {
                 .filter(card -> card.getCardState() == CardStatus.IN_HAND)
                 .collect(Collectors.toList());
         Integer cardsNeeded = 6 - cardsInHand.size(); //TODO: Revisar si es 5 o 6
+        List<Card> newCards = new ArrayList<>();
+        for (Card card : cards) {
+            newCards.add(card);
+            }
         if (cardsNeeded >= 0) {
             Collections.shuffle(cardsInDeck);
             Integer endIndex = Math.min(cardsInDeck.size(), cardsNeeded);
             List<Card> randomCards = cardsInDeck.subList(0, endIndex);
             for (Card card : randomCards) {
+                newCards.remove(card);
                 card.setCardState(CardStatus.IN_HAND);
+                newCards.add(card);
                 try {
                     cardRepository.save(card);
                 } catch (Exception e) {
                     System.out.println("Error al guardar la carta: " + e.getMessage());
                 }
             }
+            gamePlayer.setCards(cards);
+            gamePlayerRepository.save(gamePlayer);
         } else {
             System.out.println("No se necesitan cartas adicionales.");
         }
@@ -284,6 +292,7 @@ public class GameService {
         return gameRepository.save(game);
     }
 
+    @Transactional(readOnly = true)
     public Integer whoIsNext(Integer id1, Integer id2) {
         Integer res = null;
         Integer maxSize = null;
@@ -513,7 +522,7 @@ public class GameService {
         Integer nextGamePlayerId = otherGamePlayerId;
 
         if (round != 1 && round % 2 == 0) {
-            //nextGamePlayerId = whoIsNext(turnGamePlayerId, otherGamePlayerId); //TODO: REVISAR
+            nextGamePlayerId = whoIsNext(turnGamePlayerId, otherGamePlayerId); //TODO: REVISAR
         }
 
         giveNeededCardsToGetFive(turnGamePlayerId);
