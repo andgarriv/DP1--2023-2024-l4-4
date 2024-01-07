@@ -539,12 +539,18 @@ public class GameService {
 
         } else if (round < 5) {
             if (round == 3) {
+
                 if (cartas.size() == 3) {
                     giveNeededCardsToGetFive(turnPlayerId);
                     giveNeededCardsToGetFive(otherPlayerId);
                     game.setRound(round + 1);
                     game.setGamePlayerTurnId(otherPlayerId);
                     game.setEffect(Hability.NONE);
+                    if (findPosiblePositionOfAGamePlayerGiven(otherPlayerId, gameId).isEmpty()) {
+                        game.setWinner(gamePlayerRepository.findPlayerByGamePlayerId(turnPlayerId));
+                        game.setEndedAt(Date.from(java.time.Instant.now()));
+
+                    }
                 } else if (findPosiblePositionOfAGamePlayerGiven(turnPlayerId, gameId).isEmpty()) {
 
                     game.setWinner(gamePlayerRepository.findPlayerByGamePlayerId(otherPlayerId));
@@ -561,6 +567,17 @@ public class GameService {
                     game.setRound(round + 1);
                     game.setGamePlayerTurnId(whoIsNext(turnPlayerId, otherPlayerId));
                     game.setEffect(Hability.NONE);
+                    Integer nextPlayerId = whoIsNext(turnPlayerId, otherPlayerId);
+                    if (gps.get(0).getId().equals(nextPlayerId))
+                        winner = gps.get(1);
+                    if (gps.get(1).getId().equals(nextPlayerId))
+                        winner = gps.get(0);
+
+                    if (findPosiblePositionOfAGamePlayerGiven(nextPlayerId, gameId).isEmpty()) {
+                        game.setWinner(gamePlayerRepository.findPlayerByGamePlayerId(winner.getId()));
+                        game.setEndedAt(Date.from(java.time.Instant.now()));
+
+                    }
                 } else if (findPosiblePositionOfAGamePlayerGiven(turnPlayerId, gameId).isEmpty()) {
 
                     game.setWinner(gamePlayerRepository.findPlayerByGamePlayerId(otherPlayerId));
@@ -580,6 +597,11 @@ public class GameService {
                         game.setRound(round + 1);
                         game.setGamePlayerTurnId(otherPlayerId);
                         game.setEffect(Hability.NONE);
+                        if (findPosiblePositionOfAGamePlayerGiven(otherPlayerId, gameId).isEmpty()) {
+                            game.setWinner(gamePlayerRepository.findPlayerByGamePlayerId(turnPlayerId));
+                            game.setEndedAt(Date.from(java.time.Instant.now()));
+
+                        }
 
                     } else if (findPosiblePositionOfAGamePlayerGiven(turnPlayerId, gameId).isEmpty()) {
 
@@ -596,6 +618,11 @@ public class GameService {
                         game.setRound(round + 1);
                         game.setGamePlayerTurnId(otherPlayerId);
                         game.setEffect(Hability.NONE);
+                        if (findPosiblePositionOfAGamePlayerGiven(otherPlayerId, gameId).isEmpty()) {
+                            game.setWinner(gamePlayerRepository.findPlayerByGamePlayerId(turnPlayerId));
+                            game.setEndedAt(Date.from(java.time.Instant.now()));
+
+                        }
 
                     } else if (findPosiblePositionOfAGamePlayerGiven(turnPlayerId, gameId).isEmpty()) {
 
@@ -613,6 +640,11 @@ public class GameService {
                         game.setRound(round + 1);
                         game.setGamePlayerTurnId(otherPlayerId);
                         game.setEffect(Hability.NONE);
+                        if (findPosiblePositionOfAGamePlayerGiven(otherPlayerId, gameId).isEmpty()) {
+                            game.setWinner(gamePlayerRepository.findPlayerByGamePlayerId(turnPlayerId));
+                            game.setEndedAt(Date.from(java.time.Instant.now()));
+
+                        }
 
                     } else if (findPosiblePositionOfAGamePlayerGiven(turnPlayerId, gameId).isEmpty()) {
 
