@@ -130,7 +130,7 @@ public class GameController {
     @PutMapping("/{gameId}/{gamePlayerId}")
     @ResponseStatus(HttpStatus.OK)
     public Game pruebaTurn(@PathVariable Integer gamePlayerId,@PathVariable Integer gameId ) {
-    return gameService.updateGameTurn(gameId, gamePlayerId);
+    return gameService.updateGameTurn(gameId);
     }
 
     @PutMapping("/{gameId}/effect")
