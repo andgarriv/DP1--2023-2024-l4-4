@@ -5,7 +5,7 @@
 
 export async function gameLogic(gameId, jwt, user, setDataGamePlayer, setHandCardsPlayer1, setHandCardsPlayer2,
   setBoard, setIsLoading, setEnergyCards, setPlayer1CardPossiblePositions, setPlayer2CardPossiblePositions,
-  setIsMyTurn, setDataGame, setMessages, setVisible, setWinner) {
+  setIsMyTurn, setDataGame, setMessages, setVisible) {
   try {
 
     const responseGame = await fetch(`/api/v1/games/${gameId}`, {
@@ -23,7 +23,6 @@ export async function gameLogic(gameId, jwt, user, setDataGamePlayer, setHandCar
     const dataGame = await responseGame.json();
 
     if (dataGame.winner) {
-      setWinner(dataGame.winner.name);
       setVisible(true);
     }
 

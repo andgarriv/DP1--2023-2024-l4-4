@@ -1,7 +1,8 @@
 import jwt_decode from "jwt-decode";
 import React, { useEffect, useState } from "react";
 import "../App.css";
-import GamePlayNowPlayer from "../player/games/GamePlayNowPlayer";
+import OnGoingGamePopup from "../OnGoingGamePopup";
+import PlayNowHandler from "../player/games/GamePlayNowPlayer";
 import tokenService from "../services/token.service";
 import "../static/css/home/home.css";
 
@@ -9,12 +10,21 @@ export default function Home() {
   const [roles, setRoles] = useState([]);
   const [username, setUsername] = useState("");
   const jwt = tokenService.getLocalAccessToken();
+  const [visible, setVisible] = useState(false);
+  const [gameId, setGameId] = useState(null);
+  const [user, setUser] = useState(null);
+
   useEffect(() => {
     if (jwt) {
       setRoles(jwt_decode(jwt).authorities);
       setUsername(jwt_decode(jwt).sub);
+      setUser(tokenService.getUser());
     }
   }, [jwt]);
+
+  const handleClick = () => {
+    PlayNowHandler(user, setVisible, setGameId);
+  };
 
   let indexNotLogged = null;
   let indexLogged = null;
@@ -29,13 +39,15 @@ export default function Home() {
           </div>
           <div className="button-container">
             <button
-              onClick={GamePlayNowPlayer}
+              onClick={handleClick}
               className="fuente button-style"
             >
               Play Now!
             </button>
           </div>
+          {visible && <OnGoingGamePopup setVisible={setVisible} visible={visible} gameId={gameId} />}
         </div>
+        
       );
     } else {
       indexLogged = (

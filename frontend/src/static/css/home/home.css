@@ -163,6 +163,7 @@
   color: rgb(225, 28, 36) !important;
   border: 2px solid rgb(225, 28, 36) !important;
   background-color: transparent !important;
+  min-width: 20% !important;
 }
 
 .negative-button:hover {
@@ -174,6 +175,7 @@
   color: rgb(75, 178, 91) !important;
   border: 2px solid rgb(75, 178, 91) !important;
   background-color: transparent !important;
+  min-width: 20% !important;
 }
 
 .positive-button:hover {
@@ -205,10 +207,9 @@
 
 .modal-content-win {
   text-align: center;
-  font-weight: bold;
-  font-size: xx-large;
+  font-size: medium;
   padding: 1rem;
-  height: 200px;
+  height: fit-content;
   background-color: rgba(34, 34, 34, 0.8);
   backdrop-filter: blur(10px);
   border-radius: 20px;
@@ -220,6 +221,7 @@
   border: 2px solid !important;
   background-color: transparent !important;
   animation: colorChange 10s infinite;
+  margin-bottom: 3%;
 }
 
 
@@ -256,4 +258,16 @@
     color: rgb(194, 194, 194);
     border-color: rgb(194, 194, 194);
   }
+}
+
+.modal-content-ongoing {
+  text-align: center;
+  font-size: bold;
+  padding: 1rem;
+  height: fit-content;
+  color: #75FBFD;
+  background-color: rgba(34, 34, 34, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  border: 5px solid #75FBFD;
 }

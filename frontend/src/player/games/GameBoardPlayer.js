@@ -85,7 +85,6 @@ export default function Board() {
   const [previousRound, setPreviousRound] = useState(0);
   const [lastMessageCount, setLastMessageCount] = useState(0);
   const [visible, setVisible] = useState(false);
-  const [winner, setWinner] = useState(null);
   const messagesEndRef = useRef(null);
   const scrollToBottom = () => {
     if (messagesEndRef.current) {
@@ -207,7 +206,6 @@ export default function Board() {
         setDataGame,
         setMessages,
         setVisible,
-        setWinner
       );
     }, 1000); // Actualization every second
     return () => clearInterval(interval);
@@ -287,7 +285,7 @@ export default function Board() {
                 changeCardsInHand(jwt, gameId, isMyTurn);
               }}
             >
-              Change deck
+              CHANGE DECK
             </Button>
           )}
         </div>
@@ -504,7 +502,7 @@ export default function Board() {
       <FinishPopup
         visible={visible}
         setVisible={setVisible}
-        winner = {winner}
+        gameId={gameId}
       />
     </div>
   );
