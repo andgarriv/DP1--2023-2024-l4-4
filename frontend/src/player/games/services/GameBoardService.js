@@ -5,19 +5,8 @@
 
 export async function gameLogic(gameId, jwt, user, setDataGamePlayer, setHandCardsPlayer1, setHandCardsPlayer2,
   setBoard, setIsLoading, setEnergyCards, setPlayer1CardPossiblePositions, setPlayer2CardPossiblePositions,
-  setIsMyTurn, setDataGame, setMessages) {
+  setIsMyTurn, setDataGame, setMessages, setVisible, setWinner) {
   try {
-    const response = await fetch(`/api/v1/games/${gameId}/cards`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error('Error al cargar las cartas.');
-    }
 
     const responseGame = await fetch(`/api/v1/games/${gameId}`, {
       method: "GET",
@@ -34,10 +23,23 @@ export async function gameLogic(gameId, jwt, user, setDataGamePlayer, setHandCar
     const dataGame = await responseGame.json();
 
     if (dataGame.winner) {
-      window.location.href = '/';
+      setWinner(dataGame.winner.name);
+      setVisible(true);
     }
 
     setDataGame(dataGame);
+
+    const response = await fetch(`/api/v1/games/${gameId}/cards`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Error al cargar las cartas.');
+    }
 
     const responseGamePlayer = await fetch(
       `/api/v1/games/${gameId}/gameplayers`,
@@ -179,7 +181,7 @@ export async function gameLogic(gameId, jwt, user, setDataGamePlayer, setHandCar
   catch (error) {
     console.error(error);
   }
-  
+
 }
 
 
@@ -316,7 +318,7 @@ export function getButtonColorStyles(colorName) {
       rgb: 'rgb(194, 194, 194)',
     },
     GREY: {
-      rgb : 'rgb(128, 128, 128)',
+      rgb: 'rgb(128, 128, 128)',
     }
   };
 
@@ -373,7 +375,7 @@ export async function changeEffect(jwt, gameId, effect, isMyTurn) {
       },
       body: JSON.stringify({ effect }),
     });
-  
+
     if (!response.ok) {
       throw new Error("Error al cambiar el efecto.");
     }
@@ -396,7 +398,7 @@ export async function changeCardsInHand(jwt, gameId, isMyTurn) {
         "Content-Type": "application/json",
       }
     });
-  
+
     if (!response.ok) {
       throw new Error("Error al cambiar el mazo.");
     }
@@ -406,8 +408,8 @@ export async function changeCardsInHand(jwt, gameId, isMyTurn) {
   }
 }
 
-export async function postMessage(jwt, gameId, reaction, color){
-  try{
+export async function postMessage(jwt, gameId, reaction, color) {
+  try {
     console.log(JSON.stringify({ gameId, reaction, color }));
     const response = await fetch(`/api/v1/messages`, {
       method: "POST",
@@ -417,7 +419,7 @@ export async function postMessage(jwt, gameId, reaction, color){
       },
       body: JSON.stringify({ gameId, reaction, color }),
     });
-  
+
     if (!response.ok) {
       throw new Error("Error al enviar el mensaje.");
     }

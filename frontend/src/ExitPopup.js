@@ -3,7 +3,6 @@ import './static/css/home/home.css';
 
 function ExitPopup({ setVisible, visible }) {
 
-
     return (
         <Modal className="exit-popup" isOpen={visible} toggle={() => setVisible(false)} centered>
             <div className="modal-content-custom">

@@ -25,7 +25,7 @@ function GameNavbar() {
         async function fetchGameData() {
             const jwt = tokenService.getLocalAccessToken();
             const user = tokenService.getUser();
-            const playerResponse = await fetch(`/api/v1/games/players/${user.id}/notended`, {
+            const playerResponse = await fetch(`/api/v1/games/players/${user.id}`, {
                 headers: { Authorization: `Bearer ${jwt}` },
             });
 
@@ -37,7 +37,9 @@ function GameNavbar() {
                 const lastSegment = uriParts[uriParts.length - 1];
                 gameId = parseInt(lastSegment, 10);
             } else {
-                const playerGame = playerData.find((game) => !game.endedAt);
+                const playerGame = playerData.reduce((maxGame, game) => {
+                    return (maxGame && maxGame.id > game.id) ? maxGame : game;
+                }, null);
                 if (playerGame) {
                     gameId = playerGame.id;
                 }
@@ -65,10 +67,15 @@ function GameNavbar() {
             }
 
             const startedAt = new Date(data.startedAt);
-            const now = new Date();
-            const timeDifference = now - startedAt; // in milliseconds
-            setGameTime(Math.floor(timeDifference / 1000)); // convert to seconds
-            setGameTime(prevGameTime => prevGameTime + 1);
+            if (data.endedAt) {
+                const timeDifference = new Date(data.endedAt) - startedAt; // in milliseconds
+                setGameTime(Math.floor(timeDifference / 1000)); // convert to seconds
+            } else {
+                const now = new Date();
+                const timeDifference = now - startedAt; // in milliseconds
+                setGameTime(Math.floor(timeDifference / 1000)); // convert to seconds
+                setGameTime(prevGameTime => prevGameTime + 1);
+            }
 
         }
 
