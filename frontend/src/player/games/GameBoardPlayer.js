@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { Button } from "reactstrap";
 import tokenService from "../../services/token.service.js";
 import "../../static/css/board/Board.css";
+import FinishPopup from "./services/FinishPopup.js";
+
 import {
   changeCardsInHand,
   changeEffect,
@@ -82,6 +84,8 @@ export default function Board() {
   const [effectUsedInRound, setEffectUsedInRound] = useState(false);
   const [previousRound, setPreviousRound] = useState(0);
   const [lastMessageCount, setLastMessageCount] = useState(0);
+  const [visible, setVisible] = useState(false);
+  const [winner, setWinner] = useState(null);
   const messagesEndRef = useRef(null);
   const scrollToBottom = () => {
     if (messagesEndRef.current) {
@@ -201,7 +205,9 @@ export default function Board() {
         setPlayer2CardPossiblePositions,
         setIsMyTurn,
         setDataGame,
-        setMessages
+        setMessages,
+        setVisible,
+        setWinner
       );
     }, 1000); // Actualization every second
     return () => clearInterval(interval);
@@ -495,6 +501,11 @@ export default function Board() {
           )}
         </div>
       </div>
+      <FinishPopup
+        visible={visible}
+        setVisible={setVisible}
+        winner = {winner}
+      />
     </div>
   );
 }
