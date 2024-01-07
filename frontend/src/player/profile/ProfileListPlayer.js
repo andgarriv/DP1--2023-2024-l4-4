@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Button } from "reactstrap";
 import tokenService from "../../services/token.service";
 import getErrorModal from "../../util/getErrorModal";
@@ -14,6 +14,13 @@ export default function PlayerProfile() {
   const [player, setPlayer] = useFetchState(null, `/api/v1/players/{id}`, jwt);
   const [message, setMessage] = useState("");
   const [visible, setVisible] = useState(false);
+
+  let navigate = useNavigate();
+
+  const handleSubmit = () => {
+    navigate("/profile/edit");
+  };
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -74,10 +81,12 @@ export default function PlayerProfile() {
         ) : (
           <p style={{color: "white"}}>Loading player data...</p>
         )}
-        <Button outline color="warning">
-          <Link to="/profile/edit" className="btn sm" style={{ textDecoration: "none", color: "white"}}>
-            Edit Profile
-          </Link>
+        <Button 
+        className="normal-button"
+        size="lg"
+        onClick={handleSubmit}
+        >
+        Edit Profile
         </Button>
         {modal}
       </div>

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "reactstrap";
 import tokenService from "../../services/token.service";
 import deleteFromList from "../../util/deleteFromList";
@@ -61,6 +62,12 @@ export default function FriendshipList() {
     const [visible, setVisible] = useState(false);
     const [alerts, setAlerts] = useState([]);
 
+    let navigate = useNavigate();
+
+    const handleClick = () => {
+        navigate("/friendships/create");
+    };
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -111,7 +118,7 @@ export default function FriendshipList() {
                     friendship_state: friendState
                 })
             });
-    
+
             if (response.ok) {
                 setFriendships(friendships.filter(friendship => friendship.id !== friendshipId));
                 setMessage(`Friendship ${friendState.toLowerCase()} successfully`);
@@ -123,7 +130,7 @@ export default function FriendshipList() {
             setVisible(true);
         }
     };
-    
+
 
     const displayUserDetails = (friendship) => {
         const isSender = friendship.sender.id === user.id;
@@ -140,8 +147,8 @@ export default function FriendshipList() {
                         <Button
                             aria-label={"update-" + friendship.id}
                             size="sm"
-                            color="success"
                             style={{ marginRight: '5px' }}
+                            className="positive-button"
                             onClick={() => updateFriendshipStatus(friendship.id, friendship.sender.id, friendship.receiver.id, "ACCEPTED")}
                         >
                             Accept
@@ -151,6 +158,7 @@ export default function FriendshipList() {
                             aria-label={"update-" + friendship.id}
                             size="sm"
                             color="danger"
+                            className="negative-button"
                             onClick={() => updateFriendshipStatus(friendship.id, friendship.sender.id, friendship.receiver.id, "REJECTED")}
                         >
                             Deny
@@ -161,6 +169,7 @@ export default function FriendshipList() {
                         aria-label={"delete-" + friendship.id}
                         size="sm"
                         color="danger"
+                        className="negative-button"
                         onClick={() => deleteFromList(
                             `/api/v1/friendships/${friendship.id}`,
                             friendship.id,
@@ -180,9 +189,9 @@ export default function FriendshipList() {
     return (
         <div className="home-page-container">
             <div className="hero-div">
-                <h1 style={{ textAlign: 'center', color: "#EF87E0" }}>{friendshipType === "ACCEPTED" ? "Friendships" : "Pending invites"}</h1>
+                <h1> {friendshipType === "ACCEPTED" ? "Friendships" : "Pending invites"}</h1>
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
-                    <div style={{ display: 'flex', width: '100%', padding: '10px', justifyContent: 'space-between' }}>
+                    <div style={{ display: 'flex', width: '100%', padding: '10px', justifyContent: 'space-between', color: "#EF87E0" }}>
                         <span style={{ flex: 3, textAlign: 'center' }}>{currentFriendships.length > 0 ? "Nickname" : ""}</span>
                         <span style={{ flex: 2, textAlign: 'center' }}>{currentFriendships.length > 0 ? "Avatar" : ""}</span>
                         <span style={{ flex: 1.5, textAlign: 'center' }}></span>
@@ -202,19 +211,21 @@ export default function FriendshipList() {
                 {modal}
                 <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
                     <Button
-                        className="auth-button-eol-edit"
-                        color="warning"
+                        className="normal-button"
                         size='lg'
                         style={{ marginRight: '10px' }}
-                        onClick={() => setFriendshipType(friendshipType === "PENDING" ? "ACCEPTED" : "PENDING")}
+                        onClick={() => {setFriendshipType(friendshipType === "PENDING" ? "ACCEPTED" : "PENDING"); 
+                        setCurrentPage(1)}}
                     >
                         {friendshipType === "PENDING" ? "Friendships" : "Pending"}
                     </Button>
                     <Button
-                        className="auth-button-eol-create"
-                        color="success"
+                        className="positive-button"
                         size='lg'
+                        onClick={handleClick}
                     >
+                        <Link to="/friendships/create" style={{ textDecoration: "none", color: "#4BB25B" }}>                        
+                        </Link>
                         Create
                     </Button>
                 </div>

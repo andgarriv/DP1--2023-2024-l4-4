@@ -162,7 +162,7 @@ export async function gameLogic(gameId, jwt, user, setDataGamePlayer, setHandCar
   }
 
   try {
-    const responseMessages = await fetch(`/api/v1/messages/games/${gameId}`, {
+    const responseMessages = await fetch(`/api/v1/games/${gameId}/messages`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${jwt}`,

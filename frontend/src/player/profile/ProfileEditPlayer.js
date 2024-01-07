@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { Button, Input } from "reactstrap";
 import tokenService from "../../services/token.service";
 import getErrorModal from "../../util/getErrorModal";
@@ -187,13 +186,19 @@ export default function EditPlayerProfile() {
           <p style={{ color: "white" }}>Loading player data...</p>
         )}
         <div style={{ display: "flex", justifyContent: "space-between", marginTop: "20px" }}>
-        <Button outline color="danger">
-          <Link to="/profile" className="btn sm" style={{ textDecoration: "none", color: "white" }}>
-            Cancel
-          </Link>
+        <Button 
+        className="negative-button"
+        size="lg"
+        onClick={handleSaveChanges}
+        >
+          Cancel
         </Button>
         <div style={{ width: "10px" }}></div>
-        <Button outline color="success" style={{ textDecoration: "none", color: "white"}} onClick={handleSaveChanges}>
+        <Button 
+        className="positive-button"
+        size="lg"
+        onClick={handleSaveChanges}
+        >
           Save Changes
         </Button>
         </div>

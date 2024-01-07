@@ -32,8 +32,8 @@ function FinishPopup({ setVisible, visible, gameId }) {
                 setRound(dataGame.round);
                 const startedAt = new Date(dataGame.startedAt);
                 const endedAt = new Date(dataGame.endedAt);
-                const timeDifference = endedAt - startedAt; // in milliseconds
-                setGameTime(Math.floor(timeDifference / 1000)); // convert to seconds
+                const timeDifference = endedAt - startedAt; 
+                setGameTime(Math.floor(timeDifference / 1000));
 
 
             } catch (error) {
@@ -44,7 +44,6 @@ function FinishPopup({ setVisible, visible, gameId }) {
         fetchGameDetails();
     }, [gameId, jwt, visible]);
 
-    // Convert gameTime to minutes:seconds format
     const minutes = Math.floor(gameTime / 60);
     const seconds = gameTime % 60;
     const formattedGameTime = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
