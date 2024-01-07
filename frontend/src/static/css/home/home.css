@@ -163,7 +163,7 @@
   color: rgb(225, 28, 36) !important;
   border: 2px solid rgb(225, 28, 36) !important;
   background-color: transparent !important;
-  min-width: 20% !important;
+  min-width: 15% !important;
 }
 
 .negative-button:hover {
@@ -175,12 +175,24 @@
   color: rgb(75, 178, 91) !important;
   border: 2px solid rgb(75, 178, 91) !important;
   background-color: transparent !important;
-  min-width: 20% !important;
+  min-width: 15% !important;
 }
 
 .positive-button:hover {
   color: #222222 !important;
   background-color: rgb(75, 178, 91) !important;
+}
+
+.normal-button {
+  color: #EF87E0 !important;
+  border: 2px solid #EF87E0 !important;
+  background-color: transparent !important;
+  min-width: 15% !important;
+}
+
+.normal-button:hover {
+  color: #222222 !important;
+  background-color: #EF87E0 !important;
 }
 
 .exit-popup .modal-content {

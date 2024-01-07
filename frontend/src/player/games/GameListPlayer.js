@@ -89,9 +89,9 @@ export default function PlayerGamesList() {
     return (
         <div className="home-page-container">
             <div className="hero-div">
-                <h1 style={{ textAlign: 'center', color: "#EF87E0" }}>My Games</h1>
+                <h1>My Games</h1>
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', marginBottom: '20px' }}>
-                    <div style={{ display: 'flex', width: '100%', padding: '10px', justifyContent: 'space-between' }}>
+                    <div style={{ display: 'flex', width: '100%', padding: '10px', justifyContent: 'space-between', color: "#EF87E0" }}>
                         <span style={{ flex: 2.5, textAlign: 'center', margin: '0 10px' }}>{currentGames.length > 0 ? "Game" : ""}</span>
                         <span style={{ flex: 6.5, textAlign: 'center', margin: '0 10px' }}>{currentGames.length > 0 ? "Winner" : ""}</span>
                         <span style={{ flex: 5, textAlign: 'center', margin: '0 10px' }}>{currentGames.length > 0 ? "Players" : ""}</span>
@@ -121,7 +121,6 @@ export default function PlayerGamesList() {
                     paginate={paginate}
                     currentPage={currentPage}
                 />
-                {/* Aquí podrías incluir modales o alertas si son necesarios */}
             </div>
         </div>
     );
