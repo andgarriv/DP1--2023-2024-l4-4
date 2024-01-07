@@ -212,7 +212,9 @@ export default function Board() {
   }, [dataGamePlayer, gameId, jwt, user]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div className="home-page-container">
+      <div className="loading-container">Loading...</div>;
+    </div>;
   }
 
   if (!isAuthorized) {
