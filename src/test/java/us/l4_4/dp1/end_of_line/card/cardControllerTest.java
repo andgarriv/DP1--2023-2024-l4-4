@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -30,7 +31,10 @@ import us.l4_4.dp1.end_of_line.enums.CardStatus;
 import us.l4_4.dp1.end_of_line.enums.Color;
 import us.l4_4.dp1.end_of_line.enums.Exit;
 import us.l4_4.dp1.end_of_line.enums.FriendStatus;
+import us.l4_4.dp1.end_of_line.enums.Hability;
 import us.l4_4.dp1.end_of_line.enums.Orientation;
+import us.l4_4.dp1.end_of_line.game.Game;
+import us.l4_4.dp1.end_of_line.gameplayer.GamePlayer;
 import us.l4_4.dp1.end_of_line.player.Player;
 import us.l4_4.dp1.end_of_line.player.PlayerService;
 
@@ -43,11 +47,17 @@ class cardControllerTest {
     private Player player;
     private Authorities authority;
     private Card card;
-
+    private Card card2;
+    private Card card3;
+    private Card card4;
+    private Game game;
+    @SuppressWarnings("unused")
     @Autowired
     private CardController cardController;
     @MockBean
     private CardService cardService;
+    @MockBean
+    private PlayerService playerService;
     @Autowired
     private MockMvc mockMvc;
 
@@ -84,6 +94,83 @@ class cardControllerTest {
         card.setRow(4);
         card.setCardState(CardStatus.IN_HAND);
         
+        card2 = new Card();
+        card2.setId(2);
+        card2.setInitiative(2);
+        card2.setColor(Color.RED);
+        card2.setExit(Exit.EXIT_101_A);
+        card2.setIsTemplate(false);
+        card2.setOrientation(Orientation.S);
+        card2.setColumn(1);
+        card2.setRow(2);
+        card2.setCardState(CardStatus.IN_HAND);
+
+        card3 = new Card();
+        card3.setId(3);
+        card3.setInitiative(3);
+        card3.setColor(Color.BLUE);
+        card3.setExit(Exit.EXIT_011_A);
+        card3.setIsTemplate(false);
+        card3.setOrientation(Orientation.S);
+        card3.setColumn(1);
+        card3.setRow(3);
+        card3.setCardState(CardStatus.IN_HAND);
+
+
+        card4 = new Card();
+        card4.setId(4);
+        card4.setInitiative(4);
+        card4.setColor(Color.BLUE);
+        card4.setExit(Exit.EXIT_100_B);
+        card4.setIsTemplate(false);
+        card4.setOrientation(Orientation.S);
+        card4.setColumn(1);
+        card4.setRow(3);
+        card4.setCardState(CardStatus.IN_HAND);
+
+
+        Player player = new Player();
+        player.setId(1);
+
+
+        GamePlayer gp1 = new GamePlayer();
+        gp1.setId(1);
+        gp1.setColor(Color.RED);
+        gp1.setEnergy(3);
+        gp1.setPlayer(playerService.findById(1));
+        List<Card> cards = new ArrayList<>();
+        cards.add(card);
+        cards.add(card2);
+        gp1.setCards(cards);
+
+
+
+        Player player2 = new Player();
+        player2.setId(2);
+
+        GamePlayer gp2 = new GamePlayer();
+        gp1.setId(2);
+        gp1.setColor(Color.BLUE);
+        gp1.setEnergy(3);
+        gp1.setPlayer(playerService.findById(2));
+
+        List<Card> cards2 = new ArrayList<>();
+        cards.add(card3);
+        cards.add(card4);
+        gp2.setCards(cards2);
+
+
+        List<GamePlayer> gamePlayers = List.of(gp1,gp2);
+
+        game = new Game();
+        game.setRound(1);
+        game.setWinner(null);
+        game.setStartedAt(Date.from(java.time.Instant.now()));
+        game.setEndedAt(null);
+        game.setMessage(null);
+        game.setEffect(Hability.NONE);
+        game.setGamePlayers(gamePlayers);
+        
     }
 
     @Test
@@ -101,6 +188,54 @@ class cardControllerTest {
         .andExpect(jsonPath("$.column").value(3))
         .andExpect(jsonPath("$.row").value(4))
         .andExpect(jsonPath("$.cardState").value(CardStatus.IN_HAND.toString()));
+    }
+
+    @Test
+    @WithMockUser(username = "playerName", password = "Play3r!")
+    void shouldFindAllGameCards()throws Exception{
+        when(this.cardService.findAllCardsOfGame(1)).thenReturn(List.of(card, card2, card3,card4));
+
+        mockMvc.perform(get(BASE_URL + "/game/{id}", 1)).andExpect(status().isOk())
+        .andExpect(jsonPath("$.size()").value(4))
+        .andExpect(jsonPath("$[?(@.id == 1)].initiative").value(1))
+        .andExpect(jsonPath("$[?(@.id == 2)].initiative").value(2))
+        .andExpect(jsonPath("$[?(@.id == 3)].initiative").value(3))
+        .andExpect(jsonPath("$[?(@.id == 4)].initiative").value(4))
+        
+        .andExpect(jsonPath("$[?(@.id == 1)].color").value(Color.RED.toString()))
+        .andExpect(jsonPath("$[?(@.id == 2)].color").value(Color.RED.toString()))
+        .andExpect(jsonPath("$[?(@.id == 3)].color").value(Color.BLUE.toString()))
+        .andExpect(jsonPath("$[?(@.id == 4)].color").value(Color.BLUE.toString()))
+
+        .andExpect(jsonPath("$[?(@.id == 1)].exit").value(Exit.EXIT_001_A.toString()))
+        .andExpect(jsonPath("$[?(@.id == 2)].exit").value(Exit.EXIT_101_A.toString()))
+        .andExpect(jsonPath("$[?(@.id == 3)].exit").value(Exit.EXIT_011_A.toString()))
+        .andExpect(jsonPath("$[?(@.id == 4)].exit").value(Exit.EXIT_100_B.toString()))
+
+        .andExpect(jsonPath("$[?(@.id == 1)].isTemplate").value(false))
+        .andExpect(jsonPath("$[?(@.id == 2)].isTemplate").value(false))
+        .andExpect(jsonPath("$[?(@.id == 3)].isTemplate").value(false))
+        .andExpect(jsonPath("$[?(@.id == 4)].isTemplate").value(false))
+
+        .andExpect(jsonPath("$[?(@.id == 1)].orientation").value(Orientation.S.toString()))
+        .andExpect(jsonPath("$[?(@.id == 2)].orientation").value(Orientation.S.toString()))
+        .andExpect(jsonPath("$[?(@.id == 3)].orientation").value(Orientation.S.toString()))
+        .andExpect(jsonPath("$[?(@.id == 4)].orientation").value(Orientation.S.toString()))
+
+        .andExpect(jsonPath("$[?(@.id == 1)].column").value(3))
+        .andExpect(jsonPath("$[?(@.id == 2)].column").value(1))
+        .andExpect(jsonPath("$[?(@.id == 3)].column").value(1))
+        .andExpect(jsonPath("$[?(@.id == 4)].column").value(1))
+
+        .andExpect(jsonPath("$[?(@.id == 1)].row").value(4))
+        .andExpect(jsonPath("$[?(@.id == 2)].row").value(2))
+        .andExpect(jsonPath("$[?(@.id == 3)].row").value(3))
+        .andExpect(jsonPath("$[?(@.id == 4)].row").value(3))
+
+        .andExpect(jsonPath("$[?(@.id == 1)].cardState").value(CardStatus.IN_HAND.toString()))
+        .andExpect(jsonPath("$[?(@.id == 2)].cardState").value(CardStatus.IN_HAND.toString()))
+        .andExpect(jsonPath("$[?(@.id == 3)].cardState").value(CardStatus.IN_HAND.toString()))
+        .andExpect(jsonPath("$[?(@.id == 4)].cardState").value(CardStatus.IN_HAND.toString()));
     }
     
 }
