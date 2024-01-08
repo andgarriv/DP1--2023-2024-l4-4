@@ -169,7 +169,6 @@ export default function Board() {
         }
       }
       playCard(selectedCard.id, colIndex, rowIndex, cardOrientation, jwt);
-
       updateTurn(gameId, gamePlayerId, jwt);
       setSelectedCard(null);
     } else {

@@ -36,7 +36,7 @@ function AppNavbar() {
 
                         const playerData = await playerResponse.json();
                         const ongoingGame = playerData.find((game) => !game.endedAt);
-                        setGameId(ongoingGame.id);
+                        if(ongoingGame != null) setGameId(ongoingGame.id);
 
                     } catch (error) {
                         console.error('Error fetching pending games:', error);
