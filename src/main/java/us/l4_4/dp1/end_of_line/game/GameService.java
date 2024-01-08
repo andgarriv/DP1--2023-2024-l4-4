@@ -96,12 +96,13 @@ public class GameService {
             if (winner == null) { // Manejar el caso donde no hay un ganador válido
                 return;
             }
-
+            gamePlayerRepository.save(game.getGamePlayers().get(0));
+            gamePlayerRepository.save(game.getGamePlayers().get(1));
             game.setWinner(winner.getPlayer());
             game.setEndedAt(Date.from(java.time.Instant.now()));
             gameRepository.save(game);
-            createPlayerAchievement(gamePlayers.get(0).getPlayer().getId());
-            createPlayerAchievement(gamePlayers.get(1).getPlayer().getId());
+            //createPlayerAchievement(gamePlayers.get(0).getPlayer().getId());
+            //createPlayerAchievement(gamePlayers.get(1).getPlayer().getId());
             return;
         }
     }
@@ -119,6 +120,7 @@ public class GameService {
         game.setEndedAt(null);
         game.setMessage(null);
         game.setEffect(Hability.NONE);
+
         GamePlayer p1 = new GamePlayer();
         p1.setColor(c1);
         p1.setEnergy(3);
@@ -180,6 +182,8 @@ public class GameService {
         game.setGamePlayerTurnId(p1.getId());
         updateFiveRandomCards(p1.getId());
         updateFiveRandomCards(p2.getId());
+        gamePlayerRepository.save(p1);
+        gamePlayerRepository.save(p2);
         gameRepository.save(game);
         return game;
     }
@@ -252,10 +256,11 @@ public class GameService {
                 }
             }
             gamePlayer.setCards(cards);
-            gamePlayerRepository.save(gamePlayer);
+            
         } else {
             System.out.println("No se necesitan cartas adicionales.");
         }
+        gamePlayerRepository.save(gamePlayer);
     }
 
     @Transactional(readOnly = true)
@@ -342,10 +347,6 @@ public class GameService {
     public List<String> findPosiblePositionOfAGamePlayerGiven(Integer gamePlayerId, Integer gameId) {
         GamePlayer gp = gamePlayerRepository.findById(gamePlayerId).get();
         Game game = gameRepository.findById(gameId).get();
-        List<Card> cartasInHand = gamePlayerRepository.findById(gamePlayerId).get().getCards().stream()
-                .filter(card -> card.getCardState() == CardStatus.IN_HAND)
-                .collect(Collectors.toList());
-        Integer nInHand = cartasInHand.size();
         // todas las cartas que estan en el tablero
         List<String> cartasON_BOARD = gamePlayerRepository.findGamePlayersByGameId(gameId)
                 .get(0)
@@ -368,7 +369,7 @@ public class GameService {
                 .collect(Collectors.toList());
 
         Card ultimaCartaEchada = ultimasCartasEchadas.get(0);
-        if (game.getEffect() == Hability.REVERSE && nInHand.equals(5))
+        if (game.getEffect() == Hability.REVERSE)
             ultimaCartaEchada = ultimasCartasEchadas.get(1);
 
         Integer n = ultimaCartaEchada.getColumn();
@@ -513,6 +514,8 @@ public class GameService {
         game.setGamePlayerTurnId(nextGamePlayerId);
         game.setEffect(Hability.NONE);
         game.setRound(round + 1);
+        gamePlayerRepository.save(game.getGamePlayers().get(0));
+        gamePlayerRepository.save(game.getGamePlayers().get(1));
         gameRepository.save(game);
         return game;
     }
@@ -554,6 +557,8 @@ public class GameService {
         }
         if (findPosiblePositionOfAGamePlayerGiven(game.getGamePlayerTurnId(), gameId).isEmpty()
                 && checkIfGamePlayerCanReverse(game)) {
+            gamePlayerRepository.save(game.getGamePlayers().get(0));
+            gamePlayerRepository.save(game.getGamePlayers().get(1));
             game.setWinner(gamePlayerRepository
                     .findPlayerByGamePlayerId(game.getGamePlayers().get(0).getId().equals(game.getGamePlayerTurnId())
                             ? game.getGamePlayers().get(1).getId()
@@ -562,8 +567,8 @@ public class GameService {
             gameRepository.save(game);
             Integer playerId1 = game.getGamePlayers().get(0).getPlayer().getId();
             Integer playerId2 = game.getGamePlayers().get(1).getPlayer().getId();
-            createPlayerAchievement(playerId1);
-            createPlayerAchievement(playerId2);
+            //createPlayerAchievement(playerId1);
+            //createPlayerAchievement(playerId2);
         }
         return game;
     }
@@ -852,7 +857,7 @@ public class GameService {
         if (game.getEffect() != Hability.NONE) {
             System.out.println("No se puede cambiar el efecto porque ya hay uno activo");
 
-        } else if (gp.getCards().stream().filter(card -> card.getCardState() == CardStatus.IN_HAND).count() == 5) {
+        } else 
             if (gp.getEnergy() <= 0) {
                 System.out.println("No tienes suficiente energia para cambiar el efecto");
             } else if (changeEffectRequest.getEffect() != null && game.getRound() > 4) {
@@ -865,8 +870,8 @@ public class GameService {
             } else {
                 game.setEffect(Hability.NONE);
             }
-        }
-
+        
+            gamePlayerRepository.save(gp);
         return gameRepository.save(game);
     }
 
