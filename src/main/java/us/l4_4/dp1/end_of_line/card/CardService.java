@@ -39,18 +39,18 @@ public class CardService {
 
     @Transactional
     public Card save(@Valid Card card) throws DataAccessException {
-        return cardRepository.save(card);
+        return cardRepository.save(card); 
     }
 
     @Transactional(readOnly = true)
-    public List<Card> findAllCardsOfGame(Integer id) throws DataAccessException {
-        List<GamePlayer> gamePlayers = gameService.findById(id).getGamePlayers();
+    public List<Card> findAllCardsOfGame(Integer gameId) throws DataAccessException {
+        List<GamePlayer> gamePlayers = gameService.findById(gameId).getGamePlayers();
         Integer gamePlayerId1 = gamePlayers.get(0).getId();
         Integer gamePlayerId2 = gamePlayers.get(1).getId();
         List<Card> cards = cardRepository.findAllCardsByGamePlayer(gamePlayerId1);
         cards.addAll(cardRepository.findAllCardsByGamePlayer(gamePlayerId2));
         if (cards.isEmpty() || cards == null)
-            throw new ResourceNotFoundException("Card", "game_id", id);
+            throw new ResourceNotFoundException("Card", "game_id", gameId);
         return cards;
     }
 

@@ -1,5 +1,8 @@
 package us.l4_4.dp1.end_of_line.card;
 
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,6 +34,12 @@ public class CardController {
     @ResponseStatus(HttpStatus.OK)
     public Card findById(@PathVariable Integer id){
         return cardService.findById(id);
+    }
+    
+    @GetMapping("/game/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Card> findCardsByGameId(@PathVariable Integer id){
+        return cardService.findAllCardsOfGame(id);
     }
 
     @PutMapping("/{id}")
