@@ -83,9 +83,8 @@ public class GameService {
         }
         List<GamePlayer> gamePlayers = gamePlayerRepository.findGamePlayersByGameId(gameId);
 
-        if (game.getRound() < 3) {
+        if (game.getRound() <= 3) {
             gamePlayers.forEach(gamePlayerRepository::delete);
-
             gameRepository.deleteById(gameId);
             return;
         } else {
@@ -100,9 +99,9 @@ public class GameService {
 
             game.setWinner(winner.getPlayer());
             game.setEndedAt(Date.from(java.time.Instant.now()));
-            // createPlayerAchievement(gamePlayers.get(0).getPlayer().getId());
-            // createPlayerAchievement(gamePlayers.get(1).getPlayer().getId());
             gameRepository.save(game);
+            createPlayerAchievement(gamePlayers.get(0).getPlayer().getId());
+            createPlayerAchievement(gamePlayers.get(1).getPlayer().getId());
             return;
         }
     }
@@ -233,11 +232,11 @@ public class GameService {
         List<Card> cardsInHand = cards.stream()
                 .filter(card -> card.getCardState() == CardStatus.IN_HAND)
                 .collect(Collectors.toList());
-        Integer cardsNeeded = 6 - cardsInHand.size(); //TODO: Revisar si es 5 o 6
+        Integer cardsNeeded = 5 - cardsInHand.size(); // TODO: Revisar si es 5 o 6
         List<Card> newCards = new ArrayList<>();
         for (Card card : cards) {
             newCards.add(card);
-            }
+        }
         if (cardsNeeded >= 0) {
             Collections.shuffle(cardsInDeck);
             Integer endIndex = Math.min(cardsInDeck.size(), cardsNeeded);
@@ -293,9 +292,12 @@ public class GameService {
     }
 
     @Transactional(readOnly = true)
-    public Integer whoIsNext(Integer id1, Integer id2) {
-        Integer res = null;
-        Integer maxSize = null;
+    public Integer whoIsNext(Integer gameId) {
+        Game game = gameRepository.findById(gameId).get();
+        List<GamePlayer> gamePlayers = game.getGamePlayers();
+        Integer id1 = gamePlayers.get(0).getId();
+        Integer id2 = gamePlayers.get(1).getId();
+        Integer res = id1;
 
         if (gamePlayerRepository.findById(id1) == null) {
             throw new ResourceNotFoundException("GamePlayer", "id", id1);
@@ -312,10 +314,7 @@ public class GameService {
                 .sorted(Comparator.comparing(Card::getUpdatedAt).reversed())
                 .collect(Collectors.toList());
 
-        if (player1Cards.size() < player2Cards.size())
-            maxSize = player1Cards.size();
-        else
-            maxSize = player2Cards.size();
+        Integer maxSize = Math.min(player1Cards.size(), player2Cards.size());
 
         for (int i = 0; i < maxSize; i++) {
             if (player1Cards.get(i).getInitiative() > player2Cards.get(i).getInitiative()) {
@@ -324,21 +323,6 @@ public class GameService {
             } else if (player1Cards.get(i).getInitiative() < player2Cards.get(i).getInitiative()) {
                 res = id1;
                 break;
-            }
-        }
-        if (res == null) {
-            if (player1Cards.size() < player2Cards.size()) {
-                res = id1;
-            } else if (player1Cards.size() == player2Cards.size()) {
-
-                if (player1Cards.get(maxSize - 2).getUpdatedAt().before(player2Cards.get(maxSize - 2).getUpdatedAt()))
-                    res = id1;
-                else
-                    res = id2;
-
-            } else {
-
-                res = id2;
             }
         }
         return res;
@@ -492,12 +476,12 @@ public class GameService {
         return res;
     }
 
-    private static ArrayList<Integer> extraerNumerosDeSalida(String texto) {
+    private static ArrayList<Integer> extraerNumerosDeSalida(String carta) {
 
         ArrayList<Integer> digitos = new ArrayList<>();
 
         Pattern patron = Pattern.compile("_(\\d+)_");
-        Matcher coincidencias = patron.matcher(texto);
+        Matcher coincidencias = patron.matcher(carta);
 
         if (coincidencias.find()) {
 
@@ -522,7 +506,7 @@ public class GameService {
         Integer nextGamePlayerId = otherGamePlayerId;
 
         if (round != 1 && round % 2 == 0) {
-            nextGamePlayerId = whoIsNext(turnGamePlayerId, otherGamePlayerId); //TODO: REVISAR
+            nextGamePlayerId = whoIsNext(game.getId()); // TODO: REVISAR
         }
 
         giveNeededCardsToGetFive(turnGamePlayerId);
@@ -536,18 +520,19 @@ public class GameService {
     @Transactional
     public Game updateGameTurn(Integer gameId) {
         Game game = gameRepository.findById(gameId).get();
+        
         Hability effect = game.getEffect();
         Integer round = game.getRound();
         List<Card> cards = gamePlayerRepository.findById(game.getGamePlayerTurnId()).get().getCards().stream()
                 .filter(card -> card.getCardState() == CardStatus.IN_HAND)
                 .collect(Collectors.toList());
-        Integer cardsInHand = cards.size() - 1;
+        Integer cardsInHand = cards.size();
 
         switch (round) {
-            case 1, 2: // Pasar de la ronda 1 a la ronda 2
+            case 1, 2: // Pasar de la ronda 1 a la ronda 2 o de la ronda 2 a la ronda 3
                 game = nextRound(game);
                 break;
-            case 3, 4: // Pasar de la ronda 3 a la ronda 4
+            case 3, 4: // Pasar de la ronda 3 a la ronda 4 o de la ronda 4 a la ronda 5
                 if (cardsInHand <= 3) {
                     game = nextRound(game);
                 }
@@ -566,260 +551,298 @@ public class GameService {
                         game = nextRound(game);
                     }
                 }
-                break;
         }
-        return null;
+        if (findPosiblePositionOfAGamePlayerGiven(game.getGamePlayerTurnId(), gameId).isEmpty()
+                && checkIfGamePlayerCanReverse(game)) {
+            game.setWinner(gamePlayerRepository
+                    .findPlayerByGamePlayerId(game.getGamePlayers().get(0).getId().equals(game.getGamePlayerTurnId())
+                            ? game.getGamePlayers().get(1).getId()
+                            : game.getGamePlayers().get(0).getId()));
+            game.setEndedAt(Date.from(java.time.Instant.now()));
+            gameRepository.save(game);
+            Integer playerId1 = game.getGamePlayers().get(0).getPlayer().getId();
+            Integer playerId2 = game.getGamePlayers().get(1).getPlayer().getId();
+            createPlayerAchievement(playerId1);
+            createPlayerAchievement(playerId2);
+        }
+        return game;
     }
 
-    @Transactional
-    public Game updateGameTurn2(Integer gameId, Integer gamePlayerId) {
-        Game game = gameRepository.findById(gameId).get();
-        List<GamePlayer> gps = game.getGamePlayers();
-        List<Card> cartas = gamePlayerRepository.findById(gamePlayerId).get().getCards().stream()
-                .filter(card -> card.getCardState() == CardStatus.IN_HAND)
-                .collect(Collectors.toList());
-        Integer round = game.getRound();
-        Integer turnPlayerId = game.getGamePlayerTurnId();
-        Integer otherPlayerId = null;
-        GamePlayer winner = null;
-        Integer player1Id = gps.get(0).getPlayer().getId();
-        Integer player2Id = gps.get(1).getPlayer().getId();
-        // ---------------------------------------------------
-        if (gps.get(0).getId().equals(game.getGamePlayerTurnId()))
-            otherPlayerId = gps.get(1).getId();
-        if (gps.get(1).getId().equals(game.getGamePlayerTurnId()))
-            otherPlayerId = gps.get(0).getId();
-        // ---------------------------------------------------
-        if (round == 1) {
-            giveNeededCardsToGetFive(turnPlayerId);
-            giveNeededCardsToGetFive(gamePlayerId);
-            game.setGamePlayerTurnId(otherPlayerId);
-            game.setRound(2);
-            game.setEffect(Hability.NONE);
-
-        } else if (round == 2) {
-            giveNeededCardsToGetFive(turnPlayerId);
-            giveNeededCardsToGetFive(otherPlayerId);
-            game.setGamePlayerTurnId(whoIsNext(turnPlayerId, otherPlayerId));
-            game.setRound(3);
-            game.setEffect(Hability.NONE);
-
-        } else if (round < 5) {
-            if (round == 3) {
-
-                if (cartas.size() == 3) {
-                    giveNeededCardsToGetFive(turnPlayerId);
-                    giveNeededCardsToGetFive(otherPlayerId);
-                    game.setRound(round + 1);
-                    game.setGamePlayerTurnId(otherPlayerId);
-                    game.setEffect(Hability.NONE);
-                    if (findPosiblePositionOfAGamePlayerGiven(otherPlayerId, gameId).isEmpty()) {
-                        game.setWinner(gamePlayerRepository.findPlayerByGamePlayerId(turnPlayerId));
-                        game.setEndedAt(Date.from(java.time.Instant.now()));
-
-                    }
-                } else if (findPosiblePositionOfAGamePlayerGiven(turnPlayerId, gameId).isEmpty()) {
-
-                    game.setWinner(gamePlayerRepository.findPlayerByGamePlayerId(otherPlayerId));
-                    game.setEndedAt(Date.from(java.time.Instant.now()));
-                    // createPlayerAchievement(player1Id);
-                    // createPlayerAchievement(player2Id);
-
-                }
-
-            } else if (round == 4) {
-                if (cartas.size() == 3) {
-                    giveNeededCardsToGetFive(gamePlayerId);
-                    giveNeededCardsToGetFive(turnPlayerId);
-                    game.setRound(round + 1);
-                    game.setGamePlayerTurnId(whoIsNext(turnPlayerId, otherPlayerId));
-                    game.setEffect(Hability.NONE);
-                    Integer nextPlayerId = whoIsNext(turnPlayerId, otherPlayerId);
-                    if (gps.get(0).getId().equals(nextPlayerId))
-                        winner = gps.get(1);
-                    if (gps.get(1).getId().equals(nextPlayerId))
-                        winner = gps.get(0);
-
-                    if (findPosiblePositionOfAGamePlayerGiven(nextPlayerId, gameId).isEmpty()) {
-                        game.setWinner(gamePlayerRepository.findPlayerByGamePlayerId(winner.getId()));
-                        game.setEndedAt(Date.from(java.time.Instant.now()));
-
-                    }
-                } else if (findPosiblePositionOfAGamePlayerGiven(turnPlayerId, gameId).isEmpty()) {
-
-                    game.setWinner(gamePlayerRepository.findPlayerByGamePlayerId(otherPlayerId));
-                    game.setEndedAt(Date.from(java.time.Instant.now()));
-                    // createPlayerAchievement(player1Id);
-                    // createPlayerAchievement(player2Id);
-
-                }
-
-            }
-        } else if (round > 4) {
-            if (round % 2 == 1) {
-                if (game.getEffect() == Hability.SPEED_UP) {
-                    if (cartas.size() == 2) {
-                        giveNeededCardsToGetFive(gamePlayerId);
-                        giveNeededCardsToGetFive(turnPlayerId);
-                        game.setRound(round + 1);
-                        game.setGamePlayerTurnId(otherPlayerId);
-                        game.setEffect(Hability.NONE);
-                        if (findPosiblePositionOfAGamePlayerGiven(otherPlayerId, gameId).isEmpty()) {
-                            game.setWinner(gamePlayerRepository.findPlayerByGamePlayerId(turnPlayerId));
-                            game.setEndedAt(Date.from(java.time.Instant.now()));
-
-                        }
-
-                    } else if (findPosiblePositionOfAGamePlayerGiven(turnPlayerId, gameId).isEmpty()) {
-
-                        game.setWinner(gamePlayerRepository.findPlayerByGamePlayerId(otherPlayerId));
-                        game.setEndedAt(Date.from(java.time.Instant.now()));
-                        // createPlayerAchievement(player1Id);
-                        // createPlayerAchievement(player2Id);
-
-                    }
-                } else if (game.getEffect() == Hability.BRAKE || game.getEffect() == Hability.EXTRA_GAS) {
-                    if (cartas.size() == 4) {
-                        giveNeededCardsToGetFive(gamePlayerId);
-                        giveNeededCardsToGetFive(turnPlayerId);
-                        game.setRound(round + 1);
-                        game.setGamePlayerTurnId(otherPlayerId);
-                        game.setEffect(Hability.NONE);
-                        if (findPosiblePositionOfAGamePlayerGiven(otherPlayerId, gameId).isEmpty()) {
-                            game.setWinner(gamePlayerRepository.findPlayerByGamePlayerId(turnPlayerId));
-                            game.setEndedAt(Date.from(java.time.Instant.now()));
-
-                        }
-
-                    } else if (findPosiblePositionOfAGamePlayerGiven(turnPlayerId, gameId).isEmpty()) {
-
-                        game.setWinner(gamePlayerRepository.findPlayerByGamePlayerId(otherPlayerId));
-                        game.setEndedAt(Date.from(java.time.Instant.now()));
-                        // createPlayerAchievement(player1Id);
-                        // createPlayerAchievement(player2Id);
-
-                    }
-
-                } else {
-                    if (cartas.size() == 3) {
-                        giveNeededCardsToGetFive(turnPlayerId);
-                        giveNeededCardsToGetFive(gamePlayerId);
-                        game.setRound(round + 1);
-                        game.setGamePlayerTurnId(otherPlayerId);
-                        game.setEffect(Hability.NONE);
-                        if (findPosiblePositionOfAGamePlayerGiven(otherPlayerId, gameId).isEmpty()) {
-                            game.setWinner(gamePlayerRepository.findPlayerByGamePlayerId(turnPlayerId));
-                            game.setEndedAt(Date.from(java.time.Instant.now()));
-
-                        }
-
-                    } else if (findPosiblePositionOfAGamePlayerGiven(turnPlayerId, gameId).isEmpty()) {
-
-                        game.setWinner(gamePlayerRepository.findPlayerByGamePlayerId(otherPlayerId));
-                        game.setEndedAt(Date.from(java.time.Instant.now()));
-                        // createPlayerAchievement(player1Id);
-                        // createPlayerAchievement(player2Id);
-                    }
-
-                }
-
-            } else {
-
-                if (game.getEffect() == Hability.SPEED_UP) {
-                    if (cartas.size() == 2) {
-                        giveNeededCardsToGetFive(turnPlayerId);
-                        giveNeededCardsToGetFive(gamePlayerId);
-                        game.setRound(round + 1);
-                        game.setGamePlayerTurnId(whoIsNext(turnPlayerId, otherPlayerId));
-                        game.setEffect(Hability.NONE);
-                        Integer nextPlayerId = whoIsNext(turnPlayerId, otherPlayerId);
-                        if (gps.get(0).getId().equals(nextPlayerId))
-                            winner = gps.get(1);
-                        if (gps.get(1).getId().equals(nextPlayerId))
-                            winner = gps.get(0);
-                        if (findPosiblePositionOfAGamePlayerGiven(nextPlayerId, gameId).isEmpty()) {
-
-                            game.setWinner(gamePlayerRepository.findPlayerByGamePlayerId(winner.getId()));
-                            game.setEndedAt(Date.from(java.time.Instant.now()));
-                            // createPlayerAchievement(player1Id);
-                            // createPlayerAchievement(player2Id);
-
-                        }
-
-                    } else if (findPosiblePositionOfAGamePlayerGiven(turnPlayerId, gameId).isEmpty()) {
-
-                        game.setWinner(gamePlayerRepository.findPlayerByGamePlayerId(otherPlayerId));
-                        game.setEndedAt(Date.from(java.time.Instant.now()));
-                        // createPlayerAchievement(player1Id);
-                        // createPlayerAchievement(player2Id);
-
-                    }
-                } else if (game.getEffect() == Hability.BRAKE || game.getEffect() == Hability.EXTRA_GAS) {
-                    if (cartas.size() == 4) {
-                        giveNeededCardsToGetFive(turnPlayerId);
-                        giveNeededCardsToGetFive(gamePlayerId);
-                        game.setRound(round + 1);
-                        game.setGamePlayerTurnId(whoIsNext(turnPlayerId, otherPlayerId));
-                        game.setEffect(Hability.NONE);
-                        Integer nextPlayerId = whoIsNext(turnPlayerId, otherPlayerId);
-                        if (gps.get(0).getId().equals(nextPlayerId))
-                            winner = gps.get(1);
-                        if (gps.get(1).getId().equals(nextPlayerId))
-                            winner = gps.get(0);
-                        if (findPosiblePositionOfAGamePlayerGiven(nextPlayerId, gameId).isEmpty()) {
-
-                            game.setWinner(gamePlayerRepository.findPlayerByGamePlayerId(winner.getId()));
-                            game.setEndedAt(Date.from(java.time.Instant.now()));
-                            // createPlayerAchievement(player1Id);
-                            // createPlayerAchievement(player2Id);
-
-                        }
-
-                    } else if (findPosiblePositionOfAGamePlayerGiven(turnPlayerId, gameId).isEmpty()) {
-
-                        game.setWinner(gamePlayerRepository.findPlayerByGamePlayerId(otherPlayerId));
-                        game.setEndedAt(Date.from(java.time.Instant.now()));
-                        // createPlayerAchievement(player1Id);
-                        // createPlayerAchievement(player2Id);
-
-                    }
-
-                } else {
-                    if (cartas.size() == 3) {
-                        giveNeededCardsToGetFive(gamePlayerId);
-                        giveNeededCardsToGetFive(turnPlayerId);
-                        game.setRound(round + 1);
-                        game.setGamePlayerTurnId(whoIsNext(turnPlayerId, otherPlayerId));
-                        game.setEffect(Hability.NONE);
-                        Integer nextPlayerId = whoIsNext(turnPlayerId, otherPlayerId);
-                        if (gps.get(0).getId().equals(nextPlayerId))
-                            winner = gps.get(1);
-                        if (gps.get(1).getId().equals(nextPlayerId))
-                            winner = gps.get(0);
-                        if (findPosiblePositionOfAGamePlayerGiven(nextPlayerId, gameId).isEmpty()) {
-
-                            game.setWinner(gamePlayerRepository.findPlayerByGamePlayerId(winner.getId()));
-                            game.setEndedAt(Date.from(java.time.Instant.now()));
-                            // createPlayerAchievement(player1Id);
-                            // createPlayerAchievement(player2Id);
-
-                        }
-
-                    } else if (findPosiblePositionOfAGamePlayerGiven(turnPlayerId, gameId).isEmpty()) {
-
-                        game.setWinner(gamePlayerRepository.findPlayerByGamePlayerId(otherPlayerId));
-                        game.setEndedAt(Date.from(java.time.Instant.now()));
-                        // createPlayerAchievement(player1Id);
-                        // createPlayerAchievement(player2Id);
-
-                    }
-                }
-
-            }
-
-        }
-        return gameRepository.save(game);
+    private Boolean checkIfGamePlayerCanReverse(Game game) {
+        Hability effect = game.getEffect();
+        Integer energy = gamePlayerRepository.findById(game.getGamePlayerTurnId()).get().getEnergy();
+        game.setEffect(Hability.REVERSE);
+        List<String> posiciones = findPosiblePositionOfAGamePlayerGiven(game.getGamePlayerTurnId(), game.getId());
+        game.setEffect(effect);
+        return posiciones.isEmpty() && energy != 0 ? true : false;
     }
+
+    /*
+     * @Transactional
+     * public Game updateGameTurn2(Integer gameId, Integer gamePlayerId) {
+     * Game game = gameRepository.findById(gameId).get();
+     * List<GamePlayer> gps = game.getGamePlayers();
+     * List<Card> cartas =
+     * gamePlayerRepository.findById(gamePlayerId).get().getCards().stream()
+     * .filter(card -> card.getCardState() == CardStatus.IN_HAND)
+     * .collect(Collectors.toList());
+     * Integer round = game.getRound();
+     * Integer turnPlayerId = game.getGamePlayerTurnId();
+     * Integer otherPlayerId = null;
+     * GamePlayer winner = null;
+     * Integer player1Id = gps.get(0).getPlayer().getId();
+     * Integer player2Id = gps.get(1).getPlayer().getId();
+     * // ---------------------------------------------------
+     * if (gps.get(0).getId().equals(game.getGamePlayerTurnId()))
+     * otherPlayerId = gps.get(1).getId();
+     * if (gps.get(1).getId().equals(game.getGamePlayerTurnId()))
+     * otherPlayerId = gps.get(0).getId();
+     * // ---------------------------------------------------
+     * if (round == 1) {
+     * giveNeededCardsToGetFive(turnPlayerId);
+     * giveNeededCardsToGetFive(gamePlayerId);
+     * game.setGamePlayerTurnId(otherPlayerId);
+     * game.setRound(2);
+     * game.setEffect(Hability.NONE);
+     * 
+     * } else if (round == 2) {
+     * giveNeededCardsToGetFive(turnPlayerId);
+     * giveNeededCardsToGetFive(otherPlayerId);
+     * game.setGamePlayerTurnId(whoIsNext(turnPlayerId, otherPlayerId));
+     * game.setRound(3);
+     * game.setEffect(Hability.NONE);
+     * 
+     * } else if (round < 5) {
+     * if (round == 3) {
+     * 
+     * if (cartas.size() == 3) {
+     * giveNeededCardsToGetFive(turnPlayerId);
+     * giveNeededCardsToGetFive(otherPlayerId);
+     * game.setRound(round + 1);
+     * game.setGamePlayerTurnId(otherPlayerId);
+     * game.setEffect(Hability.NONE);
+     * if (findPosiblePositionOfAGamePlayerGiven(otherPlayerId, gameId).isEmpty()) {
+     * game.setWinner(gamePlayerRepository.findPlayerByGamePlayerId(turnPlayerId));
+     * game.setEndedAt(Date.from(java.time.Instant.now()));
+     * 
+     * }
+     * } else if (findPosiblePositionOfAGamePlayerGiven(turnPlayerId,
+     * gameId).isEmpty()) {
+     * 
+     * game.setWinner(gamePlayerRepository.findPlayerByGamePlayerId(otherPlayerId));
+     * game.setEndedAt(Date.from(java.time.Instant.now()));
+     * // createPlayerAchievement(player1Id);
+     * // createPlayerAchievement(player2Id);
+     * 
+     * }
+     * 
+     * } else if (round == 4) {
+     * if (cartas.size() == 3) {
+     * giveNeededCardsToGetFive(gamePlayerId);
+     * giveNeededCardsToGetFive(turnPlayerId);
+     * game.setRound(round + 1);
+     * game.setGamePlayerTurnId(whoIsNext(turnPlayerId, otherPlayerId));
+     * game.setEffect(Hability.NONE);
+     * Integer nextPlayerId = whoIsNext(turnPlayerId, otherPlayerId);
+     * if (gps.get(0).getId().equals(nextPlayerId))
+     * winner = gps.get(1);
+     * if (gps.get(1).getId().equals(nextPlayerId))
+     * winner = gps.get(0);
+     * 
+     * if (findPosiblePositionOfAGamePlayerGiven(nextPlayerId, gameId).isEmpty()) {
+     * game.setWinner(gamePlayerRepository.findPlayerByGamePlayerId(winner.getId()))
+     * ;
+     * game.setEndedAt(Date.from(java.time.Instant.now()));
+     * 
+     * }
+     * } else if (findPosiblePositionOfAGamePlayerGiven(turnPlayerId,
+     * gameId).isEmpty()) {
+     * 
+     * game.setWinner(gamePlayerRepository.findPlayerByGamePlayerId(otherPlayerId));
+     * game.setEndedAt(Date.from(java.time.Instant.now()));
+     * // createPlayerAchievement(player1Id);
+     * // createPlayerAchievement(player2Id);
+     * 
+     * }
+     * 
+     * }
+     * } else if (round > 4) {
+     * if (round % 2 == 1) {
+     * if (game.getEffect() == Hability.SPEED_UP) {
+     * if (cartas.size() == 2) {
+     * giveNeededCardsToGetFive(gamePlayerId);
+     * giveNeededCardsToGetFive(turnPlayerId);
+     * game.setRound(round + 1);
+     * game.setGamePlayerTurnId(otherPlayerId);
+     * game.setEffect(Hability.NONE);
+     * if (findPosiblePositionOfAGamePlayerGiven(otherPlayerId, gameId).isEmpty()) {
+     * game.setWinner(gamePlayerRepository.findPlayerByGamePlayerId(turnPlayerId));
+     * game.setEndedAt(Date.from(java.time.Instant.now()));
+     * 
+     * }
+     * 
+     * } else if (findPosiblePositionOfAGamePlayerGiven(turnPlayerId,
+     * gameId).isEmpty()) {
+     * 
+     * game.setWinner(gamePlayerRepository.findPlayerByGamePlayerId(otherPlayerId));
+     * game.setEndedAt(Date.from(java.time.Instant.now()));
+     * // createPlayerAchievement(player1Id);
+     * // createPlayerAchievement(player2Id);
+     * 
+     * }
+     * } else if (game.getEffect() == Hability.BRAKE || game.getEffect() ==
+     * Hability.EXTRA_GAS) {
+     * if (cartas.size() == 4) {
+     * giveNeededCardsToGetFive(gamePlayerId);
+     * giveNeededCardsToGetFive(turnPlayerId);
+     * game.setRound(round + 1);
+     * game.setGamePlayerTurnId(otherPlayerId);
+     * game.setEffect(Hability.NONE);
+     * if (findPosiblePositionOfAGamePlayerGiven(otherPlayerId, gameId).isEmpty()) {
+     * game.setWinner(gamePlayerRepository.findPlayerByGamePlayerId(turnPlayerId));
+     * game.setEndedAt(Date.from(java.time.Instant.now()));
+     * 
+     * }
+     * 
+     * } else if (findPosiblePositionOfAGamePlayerGiven(turnPlayerId,
+     * gameId).isEmpty()) {
+     * 
+     * game.setWinner(gamePlayerRepository.findPlayerByGamePlayerId(otherPlayerId));
+     * game.setEndedAt(Date.from(java.time.Instant.now()));
+     * // createPlayerAchievement(player1Id);
+     * // createPlayerAchievement(player2Id);
+     * 
+     * }
+     * 
+     * } else {
+     * if (cartas.size() == 3) {
+     * giveNeededCardsToGetFive(turnPlayerId);
+     * giveNeededCardsToGetFive(gamePlayerId);
+     * game.setRound(round + 1);
+     * game.setGamePlayerTurnId(otherPlayerId);
+     * game.setEffect(Hability.NONE);
+     * if (findPosiblePositionOfAGamePlayerGiven(otherPlayerId, gameId).isEmpty()) {
+     * game.setWinner(gamePlayerRepository.findPlayerByGamePlayerId(turnPlayerId));
+     * game.setEndedAt(Date.from(java.time.Instant.now()));
+     * 
+     * }
+     * 
+     * } else if (findPosiblePositionOfAGamePlayerGiven(turnPlayerId,
+     * gameId).isEmpty()) {
+     * 
+     * game.setWinner(gamePlayerRepository.findPlayerByGamePlayerId(otherPlayerId));
+     * game.setEndedAt(Date.from(java.time.Instant.now()));
+     * // createPlayerAchievement(player1Id);
+     * // createPlayerAchievement(player2Id);
+     * }
+     * 
+     * }
+     * 
+     * } else {
+     * 
+     * if (game.getEffect() == Hability.SPEED_UP) {
+     * if (cartas.size() == 2) {
+     * giveNeededCardsToGetFive(turnPlayerId);
+     * giveNeededCardsToGetFive(gamePlayerId);
+     * game.setRound(round + 1);
+     * game.setGamePlayerTurnId(whoIsNext(turnPlayerId, otherPlayerId));
+     * game.setEffect(Hability.NONE);
+     * Integer nextPlayerId = whoIsNext(turnPlayerId, otherPlayerId);
+     * if (gps.get(0).getId().equals(nextPlayerId))
+     * winner = gps.get(1);
+     * if (gps.get(1).getId().equals(nextPlayerId))
+     * winner = gps.get(0);
+     * if (findPosiblePositionOfAGamePlayerGiven(nextPlayerId, gameId).isEmpty()) {
+     * 
+     * game.setWinner(gamePlayerRepository.findPlayerByGamePlayerId(winner.getId()))
+     * ;
+     * game.setEndedAt(Date.from(java.time.Instant.now()));
+     * // createPlayerAchievement(player1Id);
+     * // createPlayerAchievement(player2Id);
+     * 
+     * }
+     * 
+     * } else if (findPosiblePositionOfAGamePlayerGiven(turnPlayerId,
+     * gameId).isEmpty()) {
+     * 
+     * game.setWinner(gamePlayerRepository.findPlayerByGamePlayerId(otherPlayerId));
+     * game.setEndedAt(Date.from(java.time.Instant.now()));
+     * // createPlayerAchievement(player1Id);
+     * // createPlayerAchievement(player2Id);
+     * 
+     * }
+     * } else if (game.getEffect() == Hability.BRAKE || game.getEffect() ==
+     * Hability.EXTRA_GAS) {
+     * if (cartas.size() == 4) {
+     * giveNeededCardsToGetFive(turnPlayerId);
+     * giveNeededCardsToGetFive(gamePlayerId);
+     * game.setRound(round + 1);
+     * game.setGamePlayerTurnId(whoIsNext(turnPlayerId, otherPlayerId));
+     * game.setEffect(Hability.NONE);
+     * Integer nextPlayerId = whoIsNext(turnPlayerId, otherPlayerId);
+     * if (gps.get(0).getId().equals(nextPlayerId))
+     * winner = gps.get(1);
+     * if (gps.get(1).getId().equals(nextPlayerId))
+     * winner = gps.get(0);
+     * if (findPosiblePositionOfAGamePlayerGiven(nextPlayerId, gameId).isEmpty()) {
+     * 
+     * game.setWinner(gamePlayerRepository.findPlayerByGamePlayerId(winner.getId()))
+     * ;
+     * game.setEndedAt(Date.from(java.time.Instant.now()));
+     * // createPlayerAchievement(player1Id);
+     * // createPlayerAchievement(player2Id);
+     * 
+     * }
+     * 
+     * } else if (findPosiblePositionOfAGamePlayerGiven(turnPlayerId,
+     * gameId).isEmpty()) {
+     * 
+     * game.setWinner(gamePlayerRepository.findPlayerByGamePlayerId(otherPlayerId));
+     * game.setEndedAt(Date.from(java.time.Instant.now()));
+     * // createPlayerAchievement(player1Id);
+     * // createPlayerAchievement(player2Id);
+     * 
+     * }
+     * 
+     * } else {
+     * if (cartas.size() == 3) {
+     * giveNeededCardsToGetFive(gamePlayerId);
+     * giveNeededCardsToGetFive(turnPlayerId);
+     * game.setRound(round + 1);
+     * game.setGamePlayerTurnId(whoIsNext(turnPlayerId, otherPlayerId));
+     * game.setEffect(Hability.NONE);
+     * Integer nextPlayerId = whoIsNext(turnPlayerId, otherPlayerId);
+     * if (gps.get(0).getId().equals(nextPlayerId))
+     * winner = gps.get(1);
+     * if (gps.get(1).getId().equals(nextPlayerId))
+     * winner = gps.get(0);
+     * if (findPosiblePositionOfAGamePlayerGiven(nextPlayerId, gameId).isEmpty()) {
+     * 
+     * game.setWinner(gamePlayerRepository.findPlayerByGamePlayerId(winner.getId()))
+     * ;
+     * game.setEndedAt(Date.from(java.time.Instant.now()));
+     * // createPlayerAchievement(player1Id);
+     * // createPlayerAchievement(player2Id);
+     * 
+     * }
+     * 
+     * } else if (findPosiblePositionOfAGamePlayerGiven(turnPlayerId,
+     * gameId).isEmpty()) {
+     * 
+     * game.setWinner(gamePlayerRepository.findPlayerByGamePlayerId(otherPlayerId));
+     * game.setEndedAt(Date.from(java.time.Instant.now()));
+     * // createPlayerAchievement(player1Id);
+     * // createPlayerAchievement(player2Id);
+     * 
+     * }
+     * }
+     * 
+     * }
+     * 
+     * }
+     * return gameRepository.save(game);
+     * }
+     */
 
     @Transactional
     public Game updateGameEffect(Integer gameId, ChangeEffectRequest changeEffectRequest) {

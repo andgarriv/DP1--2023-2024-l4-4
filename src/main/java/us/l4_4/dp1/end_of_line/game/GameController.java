@@ -109,18 +109,6 @@ public class GameController {
         return gameService.updateGame(id, gameDTO);
     }
 
-    @GetMapping("/fivecards/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public List<Card> findFiveCards(@PathVariable Integer id) {
-        return gameService.updateFiveRandomCards(id);
-    }
-
-    @GetMapping("/next/{id1}/{id2}")
-    @ResponseStatus(HttpStatus.OK)
-    public Integer whoIsNext(@PathVariable Integer id1, @PathVariable Integer id2) {
-        return gameService.whoIsNext(id1, id2);
-    }
-
     @GetMapping("/{gameId}/gameplayers/{gamePlayerId}/cardPositions")
     @ResponseStatus(HttpStatus.OK)
     public List<String> cardsPossiblePositions(@PathVariable Integer gameId, @PathVariable Integer gamePlayerId) {
@@ -144,4 +132,11 @@ public class GameController {
     public List<Card> changeCardsInHand(@PathVariable Integer gameId) {
         return gameService.changeCardsInHand(gameId);
     }
+
+    @PostMapping("/createGP/{playerId}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void createGamePlayer(@PathVariable Integer playerId) {
+        gameService.createPlayerAchievement(playerId);
+    }
 }
+
