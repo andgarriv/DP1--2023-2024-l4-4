@@ -32,7 +32,7 @@ public class cardServiceTests {
 
     @Test
     void shouldNotFindCardById(){
-        assertThrows(ResourceNotFoundException.class, () -> cardService.findById(1000));
+        assertThrows(ResourceNotFoundException.class, () -> cardService.findById(100000));
     }
 
     @Test
@@ -63,7 +63,6 @@ public class cardServiceTests {
     @Test
     void shouldCreateCard(){
         Card card = new Card();
-        Date date = Date.from(java.time.Instant.now());
         card.setInitiative(1);
         card.setColor(Color.YELLOW);
         card.setExit(Exit.EXIT_001_A);
