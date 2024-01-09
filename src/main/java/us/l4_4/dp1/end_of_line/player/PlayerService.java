@@ -80,12 +80,16 @@ public class PlayerService {
 		List<Game> games = gameRepository.findGamesByPlayerId(id);
 		Player deletePlayer = findById(15);
 		for (int i = 0; i < games.size(); i++) {
-			GamePlayer gp = gamePlayerRepository.findGamePlayerByGameAndPlayer(games.get(i).getId(), id);
-			gp.setPlayer(deletePlayer);
-			gamePlayerRepository.save(gp);
-			Game g = games.get(i);
-			g.setWinner(deletePlayer);
-			gameRepository.save(g);
+			if (games.get(i).getGamePlayers().stream().map(gp -> gp.getPlayer()).collect(Collectors.toList()).contains(deletePlayer)) {
+				gameRepository.delete(games.get(i));
+			} else {
+				GamePlayer gp = gamePlayerRepository.findGamePlayerByGameAndPlayer(games.get(i).getId(), id);
+				gp.setPlayer(deletePlayer);
+				gamePlayerRepository.save(gp);
+				Game g = games.get(i);
+				g.setWinner(deletePlayer);
+				gameRepository.save(g);
+			}
 		}
 		playerRepository.save(deletePlayer); 
 		playerRepository.deleteById(id);
