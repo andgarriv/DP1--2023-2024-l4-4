@@ -83,7 +83,7 @@ public class GameService {
         }
         List<GamePlayer> gamePlayers = gamePlayerRepository.findGamePlayersByGameId(gameId);
 
-        if (game.getRound() <= 3) {
+        if (game.getRound() < 3) {
             gamePlayers.forEach(gamePlayerRepository::delete);
             gameRepository.deleteById(gameId);
             return;

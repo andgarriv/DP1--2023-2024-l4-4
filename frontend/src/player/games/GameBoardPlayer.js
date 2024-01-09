@@ -124,6 +124,10 @@ export default function Board() {
 
   if (dataGame.round !== previousRound) {
     setEffectUsedInRound(false);
+    setIsExtraGasClicked(false);
+    setIsReverseClicked(false);
+    setIsBrakeClicked(false);
+    setIsSpeedUpClicked(false);
     setPreviousRound(dataGame.round);
   }
 
@@ -402,7 +406,7 @@ export default function Board() {
             outline
             style={{
               textDecoration: "none",
-              ...getButtonColorStyles(isExtraGasClicked || dataGame.round < 5 ? "GREY" : playerColor, isExtraGasClicked),
+              ...getButtonColorStyles(isExtraGasClicked || dataGame.round < 5 || (dataGame.round >= 5 && !isMyTurn) ? "GREY" : playerColor, isExtraGasClicked),
               width: "30%",
             }}
             onClick={() => {
@@ -420,7 +424,7 @@ export default function Board() {
             outline
             style={{
               textDecoration: "none",
-              ...getButtonColorStyles(isReverseClicked || dataGame.round < 5 ? "GREY" : playerColor, isReverseClicked),
+              ...getButtonColorStyles(isReverseClicked || dataGame.round < 5 || (dataGame.round >= 5 && !isMyTurn) ? "GREY" : playerColor, isReverseClicked),
               width: "30%",
             }}
             onClick={() => {
@@ -438,7 +442,7 @@ export default function Board() {
             outline
             style={{
               textDecoration: "none",
-              ...getButtonColorStyles(isBrakeClicked || dataGame.round < 5 ? "GREY" : playerColor, isBrakeClicked),
+              ...getButtonColorStyles(isBrakeClicked || dataGame.round < 5 || (dataGame.round >= 5 && !isMyTurn) ? "GREY" : playerColor, isBrakeClicked),
               width: "30%",
             }}
             onClick={() => {
@@ -456,7 +460,7 @@ export default function Board() {
             outline
             style={{
               textDecoration: "none",
-              ...getButtonColorStyles(isSpeedUpClicked || dataGame.round < 5 ? "GREY" : playerColor, isSpeedUpClicked),
+              ...getButtonColorStyles(isSpeedUpClicked || dataGame.round < 5 || (dataGame.round >= 5 && !isMyTurn) ? "GREY" : playerColor, isSpeedUpClicked),
               width: "30%",
             }}
             onClick={() => {
