@@ -83,7 +83,7 @@ public class GameService {
         }
         List<GamePlayer> gamePlayers = gamePlayerRepository.findGamePlayersByGameId(gameId);
 
-        if (game.getRound() <= 3) {
+        if (game.getRound() < 3) {
             gamePlayers.forEach(gamePlayerRepository::delete);
             gameRepository.deleteById(gameId);
             return;
@@ -100,8 +100,8 @@ public class GameService {
             game.setWinner(winner.getPlayer());
             game.setEndedAt(Date.from(java.time.Instant.now()));
             gameRepository.save(game);
-            createPlayerAchievement(gamePlayers.get(0).getPlayer().getId());
-            createPlayerAchievement(gamePlayers.get(1).getPlayer().getId());
+            //createPlayerAchievement(gamePlayers.get(0).getPlayer().getId());
+            //createPlayerAchievement(gamePlayers.get(1).getPlayer().getId());
             return;
         }
     }

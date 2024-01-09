@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
+import FinishPopup from "../../player/games/services/GameFinishPopUpService.js";
 import tokenService from "../../services/token.service.js";
-import { gameLogicAdmin, getRotationStyle } from "./services/GameBoardServiceAdmin.js";
-
 import "../../static/css/board/Board.css";
+import { gameLogicAdmin, getRotationStyle } from "./services/GameBoardServiceAdmin.js";
 
 function Box({ content }) {
   const getRotationClass = (orientation) => {
@@ -45,19 +45,21 @@ export default function AdminBoard() {
   const [handCardsPlayer1, setHandCardsPlayer1] = useState([]);
   const [handCardsPlayer2, setHandCardsPlayer2] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
       gameLogicAdmin(gameId, jwt, setDataGamePlayer, setHandCardsPlayer1, setHandCardsPlayer2, setBoard,
-        setIsLoading, setEnergyCards);
-    }, 1000); 
+        setIsLoading, setEnergyCards, setVisible);
+    }, 1000);
     return () => clearInterval(interval);
 
   }, [gameId, jwt, user]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div className="home-page-container">
+      <div className="loading-container">Loading...</div>;
+    </div>;
   }
 
   return (
@@ -113,6 +115,11 @@ export default function AdminBoard() {
           </div>
         </div>
       </div>
+      <FinishPopup
+        visible={visible}
+        setVisible={setVisible}
+        gameId={gameId}
+      />
     </div>
   );
 }
