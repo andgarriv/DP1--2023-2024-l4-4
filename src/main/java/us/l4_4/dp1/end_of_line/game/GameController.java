@@ -115,9 +115,9 @@ public class GameController {
         return gameService.findPosiblePositionOfAGamePlayerGiven(gamePlayerId, gameId);
     }
 
-    @PutMapping("/{gameId}/{gamePlayerId}")
+    @PutMapping("/{gameId}/test")
     @ResponseStatus(HttpStatus.OK)
-    public Game pruebaTurn(@PathVariable Integer gamePlayerId,@PathVariable Integer gameId ) {
+    public Game pruebaTurn(@PathVariable Integer gameId) {
     return gameService.updateGameTurn(gameId);
     }
 
@@ -131,12 +131,6 @@ public class GameController {
     @ResponseStatus(HttpStatus.OK)
     public List<Card> changeCardsInHand(@PathVariable Integer gameId) {
         return gameService.changeCardsInHand(gameId);
-    }
-
-    @PostMapping("/createGP/{playerId}")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void createGamePlayer(@PathVariable Integer playerId) {
-        gameService.createPlayerAchievement(playerId);
     }
 }
 

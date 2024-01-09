@@ -47,7 +47,7 @@ public class PlayerController {
         return playerService.findAll();
     }
 
-     @GetMapping("/{id}")
+    @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Player findById(@PathVariable Integer id) {
             return playerService.findById(id);

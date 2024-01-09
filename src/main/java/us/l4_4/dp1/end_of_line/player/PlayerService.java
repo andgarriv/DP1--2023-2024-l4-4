@@ -15,17 +15,26 @@ import org.springframework.transaction.annotation.Transactional;
 import us.l4_4.dp1.end_of_line.enums.FriendStatus;
 import us.l4_4.dp1.end_of_line.exceptions.ResourceNotFoundException;
 import us.l4_4.dp1.end_of_line.friendship.FriendshipRepository;
+import us.l4_4.dp1.end_of_line.game.Game;
+import us.l4_4.dp1.end_of_line.game.GameRepository;
+import us.l4_4.dp1.end_of_line.gameplayer.GamePlayer;
+import us.l4_4.dp1.end_of_line.gameplayer.GamePlayerRepository;
 
 @Service
 public class PlayerService {
 
 	private PlayerRepository playerRepository;
 	private FriendshipRepository friendshipRepository;
+	private GameRepository gameRepository;
+	private GamePlayerRepository gamePlayerRepository;
 
 	@Autowired
-	public PlayerService(PlayerRepository playerRepository, FriendshipRepository friendshipRepository) {
+	public PlayerService(PlayerRepository playerRepository, FriendshipRepository friendshipRepository, 
+			GameRepository gameRepository, GamePlayerRepository gamePlayerRepository) {
 		this.playerRepository = playerRepository;
 		this.friendshipRepository = friendshipRepository;
+		this.gameRepository = gameRepository;	
+		this.gamePlayerRepository = gamePlayerRepository;
 	}
 
 	@Transactional(readOnly = true)
@@ -68,6 +77,17 @@ public class PlayerService {
 
 	@Transactional
 	public void delete(Integer id) throws DataAccessException {
+		List<Game> games = gameRepository.findGamesByPlayerId(id);
+		Player deletePlayer = findById(15);
+		for (int i = 0; i < games.size(); i++) {
+			GamePlayer gp = gamePlayerRepository.findGamePlayerByGameAndPlayer(games.get(i).getId(), id);
+			gp.setPlayer(deletePlayer);
+			gamePlayerRepository.save(gp);
+			Game g = games.get(i);
+			g.setWinner(deletePlayer);
+			gameRepository.save(g);
+		}
+		playerRepository.save(deletePlayer); 
 		playerRepository.deleteById(id);
 	}
 

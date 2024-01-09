@@ -61,6 +61,18 @@ export default function AchievementPlayer() {
 
 useEffect(() => {
     async function fetchData() {
+        try{
+            const response = await fetch(`/api/v1/playerachievements/${user.id}`, {
+                headers: { Authorization: `Bearer ${jwt}` },
+                method: "POST",
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+        }
+        catch(error){
+            console.error("Error fetching data:", error);
+        }
         try {
             const playerResponse = await fetch(`/api/v1/players/${user.id}`, {
                 headers: { Authorization: `Bearer ${jwt}` },
