@@ -347,7 +347,7 @@ export async function playCard(cardId, row, column, orientation, jwt) {
 }
 
 export async function updateTurn(gameId, gamePlayerId, jwt) {
-  const response = await fetch(`/api/v1/games/${gameId}/${gamePlayerId}`, {
+  const response = await fetch(`/api/v1/games/${gameId}/test`, {
     method: "PUT",
     headers: {
       Authorization: `Bearer ${jwt}`,
