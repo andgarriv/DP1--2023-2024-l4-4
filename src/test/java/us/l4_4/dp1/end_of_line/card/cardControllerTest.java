@@ -1,5 +1,6 @@
 package us.l4_4.dp1.end_of_line.card;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -17,6 +18,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -24,6 +26,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import lombok.With;
 import us.l4_4.dp1.end_of_line.auth.AuthService;
 import us.l4_4.dp1.end_of_line.authorities.Authorities;
 import us.l4_4.dp1.end_of_line.authorities.AuthoritiesService;
@@ -51,6 +54,7 @@ class cardControllerTest {
     private Card card2;
     private Card card3;
     private Card card4;
+    private Card updateCard;
     private Game game;
     @SuppressWarnings("unused")
     @Autowired
@@ -61,6 +65,8 @@ class cardControllerTest {
     private PlayerService playerService;
     @Autowired
     private MockMvc mockMvc;
+    @Autowired
+	private ObjectMapper objectMapper;
 
 
 
@@ -152,6 +158,14 @@ class cardControllerTest {
         card4.setColumn(1);
         card4.setRow(3);
         card4.setCardState(CardStatus.IN_HAND);
+
+        updateCard = new Card();
+        card4.setId(5);
+        card4.setInitiative(4);
+        card4.setColor(Color.BLUE);
+        card4.setExit(Exit.EXIT_101_B);
+        card4.setIsTemplate(true);
+        card4.setOrientation(Orientation.S);
         
         
         List<Card> cards = new ArrayList<>();
@@ -245,6 +259,27 @@ class cardControllerTest {
         .andExpect(jsonPath("$[?(@.id == 2)].cardState").value(CardStatus.IN_HAND.toString()))
         .andExpect(jsonPath("$[?(@.id == 3)].cardState").value(CardStatus.IN_HAND.toString()))
         .andExpect(jsonPath("$[?(@.id == 4)].cardState").value(CardStatus.IN_HAND.toString()));
+    }
+
+
+    @Test
+    @WithMockUser(username = "playerName", password = "Play3r!")
+    void shlouldUpdateCard() throws Exception{
+        
+        updateCard.setColumn(4);
+        updateCard.setRow(3);
+        updateCard.setOrientation(Orientation.N);
+
+        when(this.cardService.findById(5)).thenReturn(updateCard);
+        when(this.cardService.update(any(Integer.class), any(CardDTO.class))).thenReturn(updateCard);
+
+
+        mockMvc.perform(put(BASE_URL + "/{id}", 5).with(csrf()).contentType(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(updateCard))).andExpect(status().isOk())
+        .andExpect(jsonPath("$.column").value(4))
+        .andExpect(jsonPath("$.row").value(3))
+        .andExpect(jsonPath("$.orientation").value(Orientation.N.toString()));
+
     }
     
 }
