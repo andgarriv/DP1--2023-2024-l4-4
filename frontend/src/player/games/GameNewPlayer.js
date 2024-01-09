@@ -125,8 +125,7 @@ export default function NewGame() {
       <div className="hero-div"
         style={{ width: '80%' }}>
         <h1>NEW GAME</h1>
-        <br />
-        <div>
+        <div style={{marginTop: "2%"}}>
           {players.length > 0 ? (
             <>
               <div style={{
@@ -191,10 +190,10 @@ export default function NewGame() {
                   </div>
                 ))}
               </div>
-              <br />
               <div className="pagination" style={{
                 display: "flex",
                 justifyContent: "flex-end",
+                marginTop: "2%",
               }}>
                 {[...Array(Math.ceil(players.length / playersPerPage)).keys()].map(number => (
                   <button

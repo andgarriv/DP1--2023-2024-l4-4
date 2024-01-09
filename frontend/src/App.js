@@ -22,7 +22,7 @@ import GameListPlayer from "./player/games/GameListPlayer";
 import GameNewPlayer from "./player/games/GameNewPlayer";
 import ProfileEditPlayer from "./player/profile/ProfileEditPlayer";
 import ProfileListPlayer from "./player/profile/ProfileListPlayer";
-import StatsListPlayer from "./player/stats/StatsListPlayer";
+import StatsSwitcher from "./player/stats/statsSwitch";
 import PrivateRoute from "./privateRoute";
 import SwaggerDocs from "./public/swagger";
 import PDFViewer from "./rules";
@@ -76,7 +76,7 @@ function App() {
           <Route path="/profile/edit" exact={true} element={<PrivateRoute><ProfileEditPlayer /></PrivateRoute>} />
           <Route path="/achievements" exact={true} element={<PrivateRoute><AchievementListPlayer /></PrivateRoute>} />
           <Route path="/achievements/:achievementId" exact={true} element={<PrivateRoute><AchievementListPlayer /></PrivateRoute>} />
-          <Route path="/stats" exact={true} element={<PrivateRoute><StatsListPlayer /></PrivateRoute>} />
+          <Route path="/stats" exact={true} element={<PrivateRoute><StatsSwitcher /></PrivateRoute>} />
           <Route path="/play" exact={true} element={<PrivateRoute><GameNewPlayer /></PrivateRoute>} />
           <Route path="/games/:id" exact={true} element={<PrivateRoute><GameBoardPlayer /></PrivateRoute>} />
           <Route path="/friendships" exact={true} element={<PrivateRoute><FriendshipListPlayer /></PrivateRoute>} />

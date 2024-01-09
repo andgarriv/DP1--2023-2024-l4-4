@@ -10,6 +10,8 @@ export default function PlayerStats() {
     totalTimePlayed: "",
     averageGameDuration: "",
     winRatio: 0,
+    longestGameDuration: "",
+    shortestGameDuration: "",
   });
   const [loading, setLoading] = useState(true);
 
@@ -46,21 +48,24 @@ export default function PlayerStats() {
         }
 
         let totalTimePlayedMillis = 0;
+        let longestGameMillis = 0;
+        let shortestGameMillis = Number.MAX_SAFE_INTEGER;
+
         playerData.forEach((game) => {
           if (game.startedAt && game.endedAt) {
-            totalTimePlayedMillis +=
-              new Date(game.endedAt).getTime() -
-              new Date(game.startedAt).getTime();
+            const gameDuration = new Date(game.endedAt).getTime() - new Date(game.startedAt).getTime();
+            totalTimePlayedMillis += gameDuration;
+            longestGameMillis = Math.max(longestGameMillis, gameDuration);
+            shortestGameMillis = Math.min(shortestGameMillis, gameDuration);
           }
         });
 
-        const averageGameDurationMillis =
-          gamesPlayed > 0 ? totalTimePlayedMillis / gamesPlayed : 0;
+        const averageGameDurationMillis = gamesPlayed > 0 ? totalTimePlayedMillis / gamesPlayed : 0;
 
-        let totalTimePlayed = convertMillisToTime(totalTimePlayedMillis);
-        let averageGameDuration = convertMillisToTime(
-          averageGameDurationMillis
-        );
+        const totalTimePlayed = convertMillisToTime(totalTimePlayedMillis);
+        const averageGameDuration = convertMillisToTime(averageGameDurationMillis);
+        const longestGameDuration = convertMillisToTime(longestGameMillis);
+        const shortestGameDuration = shortestGameMillis !== Number.MAX_SAFE_INTEGER ? convertMillisToTime(shortestGameMillis) : "N/A";
 
         setStats({
           gamesPlayed,
@@ -70,6 +75,8 @@ export default function PlayerStats() {
           totalTimePlayed,
           averageGameDuration,
           winRatio,
+          longestGameDuration,
+          shortestGameDuration,
         });
 
         setLoading(false);
@@ -94,40 +101,45 @@ export default function PlayerStats() {
   }
 
   return (
-    <div className="home-page-container" style={{ color: 'white', backgroundColor: 'black', padding: '20px' }}>
-      <div className="hero-div">
-        <h1 className="text-center">Stats</h1>
-        {!loading ? (
-          stats.gamesPlayed === 0 ? (
-            <p>You must play a game to see your stats</p>
-          ) : (
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', textAlign: 'left', gap: '10px' }}>
-              <span>Games played:</span>
-              <span style={{ textAlign: 'right' }}>{stats.gamesPlayed}</span>
-
-              <span>Wins:</span>
-              <span style={{ textAlign: 'right' }}>{stats.gamesWon}</span>
-
-              <span>Winning ratio:</span>
-              <span style={{ textAlign: 'right' }}>{stats.winRatio}%</span>
-
-              <span>Winning streak:</span>
-              <span style={{ textAlign: 'right' }}>{stats.currentWinStreak}</span>
-
-              <span>Maximum winning streak:</span>
-              <span style={{ textAlign: 'right' }}>{stats.maxWinStreak}</span>
-
-              <span>Average duration:</span>
-              <span style={{ textAlign: 'right' }}>{stats.averageGameDuration}</span>
-
-              <span>Time played:</span>
-              <span style={{ textAlign: 'right' }}>{stats.totalTimePlayed}</span>
-            </div>
-          )
+    <div>
+      <h1 className="text-center" style={{ marginBottom: "3%" }}>My Stats</h1>
+      {!loading ? (
+        stats.gamesPlayed === 0 ? (
+          <p style={{ textAlign: "center" }}>You must play a game to see your stats</p>
         ) : (
-          <p>Loading player data...</p>
-        )}
-      </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', textAlign: 'left', gap: '10px' }}>
+            <span>Games played:</span>
+            <span style={{ textAlign: 'right' }}>{stats.gamesPlayed}</span>
+
+            <span>Wins:</span>
+            <span style={{ textAlign: 'right' }}>{stats.gamesWon}</span>
+
+            <span>Winning ratio:</span>
+            <span style={{ textAlign: 'right' }}>{stats.winRatio}%</span>
+
+            <span>Winning streak:</span>
+            <span style={{ textAlign: 'right' }}>{stats.currentWinStreak}</span>
+
+            <span>Maximum winning streak:</span>
+            <span style={{ textAlign: 'right' }}>{stats.maxWinStreak}</span>
+
+            <span>Average duration:</span>
+            <span style={{ textAlign: 'right' }}>{stats.averageGameDuration}</span>
+
+            <span>Longest duration:</span>
+            <span style={{ textAlign: 'right' }}>{stats.longestGameDuration}</span>
+
+            <span>Shortest duration:</span>
+            <span style={{ textAlign: 'right' }}>{stats.shortestGameDuration}</span>
+
+            <span>Time played:</span>
+            <span style={{ textAlign: 'right' }}>{stats.totalTimePlayed}</span>
+          </div>
+        )
+      ) : (
+        <p style={{ textAlign: "center" }}>Loading player data...</p>
+      )}
     </div>
+
   );
 }
