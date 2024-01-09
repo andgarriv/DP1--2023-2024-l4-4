@@ -45,6 +45,7 @@ class cardControllerTest {
     private static final String BASE_URL = "/api/v1/cards";
 
     private Player player;
+    private Player player2;
     private Authorities authority;
     private Card card;
     private Card card2;
@@ -82,6 +83,30 @@ class cardControllerTest {
         player.setAuthority(authority);
         player.setAvatar(avatar);
 
+        GamePlayer gp1 = new GamePlayer();
+        gp1.setId(1);
+        gp1.setColor(Color.RED);
+        gp1.setEnergy(3);
+        gp1.setPlayer(playerService.findById(1));
+        
+
+
+        player2 = new Player();
+        player2.setId(1);
+        player2.setName("playerName");
+        player2.setSurname("playerSurname");
+        player2.setPassword("Play3r!");
+        player2.setEmail("player@gmail.com");
+        player2.setBirthDate(birthDate);
+        player2.setNickname("playerNickname");
+        player2.setAuthority(authority);
+        player2.setAvatar(avatar);
+
+        GamePlayer gp2 = new GamePlayer();
+        gp1.setId(2);
+        gp1.setColor(Color.BLUE);
+        gp1.setEnergy(3);
+        gp1.setPlayer(playerService.findById(2));
 
         card = new Card();
         card.setId(1);
@@ -127,17 +152,8 @@ class cardControllerTest {
         card4.setColumn(1);
         card4.setRow(3);
         card4.setCardState(CardStatus.IN_HAND);
-
-
-        Player player = new Player();
-        player.setId(1);
-
-
-        GamePlayer gp1 = new GamePlayer();
-        gp1.setId(1);
-        gp1.setColor(Color.RED);
-        gp1.setEnergy(3);
-        gp1.setPlayer(playerService.findById(1));
+        
+        
         List<Card> cards = new ArrayList<>();
         cards.add(card);
         cards.add(card2);
@@ -145,18 +161,9 @@ class cardControllerTest {
 
 
 
-        Player player2 = new Player();
-        player2.setId(2);
-
-        GamePlayer gp2 = new GamePlayer();
-        gp1.setId(2);
-        gp1.setColor(Color.BLUE);
-        gp1.setEnergy(3);
-        gp1.setPlayer(playerService.findById(2));
-
         List<Card> cards2 = new ArrayList<>();
-        cards.add(card3);
-        cards.add(card4);
+        cards2.add(card3);
+        cards2.add(card4);
         gp2.setCards(cards2);
 
 
@@ -170,6 +177,8 @@ class cardControllerTest {
         game.setMessage(null);
         game.setEffect(Hability.NONE);
         game.setGamePlayers(gamePlayers);
+
+
         
     }
 
