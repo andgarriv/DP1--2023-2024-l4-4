@@ -15,6 +15,7 @@ function AppNavbar() {
     const user = tokenService.getUser();
     const [visible, setVisible] = useState(false);
     const [gameId, setGameId] = useState(null);
+    const [otherPlayer, setOtherPlayer] = useState(null);
     const toggleNavbar = () => setCollapsed(!collapsed);
 
 
@@ -36,7 +37,11 @@ function AppNavbar() {
 
                         const playerData = await playerResponse.json();
                         const ongoingGame = playerData.find((game) => !game.endedAt);
-                        if(ongoingGame != null) setGameId(ongoingGame.id);
+                        if(ongoingGame != null) {
+                            setGameId(ongoingGame.id);
+                            setOtherPlayer(ongoingGame.gamePlayers.find((player) => player.player.id !== user.id).player);
+                            console.log(otherPlayer.nickname);
+                        } 
 
                     } catch (error) {
                         console.error('Error fetching pending games:', error);
@@ -125,7 +130,7 @@ function AppNavbar() {
                         <>
                             <NavItem>
                                 <div className="fuente" style={{ color: "white", display: "flex", alignItems: "center", justifyContent: "center", height: "100%" }}>
-                                    Game pending. Join now?
+                                    <span style={{ color: "#75FBFD" }}>{otherPlayer.nickname} </span> 's invited you to play! Join now?
                                 </div>
                             </NavItem>
                             <span style={{ display: "block", margin: "5px 5px" }}></span>
