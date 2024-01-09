@@ -1,16 +1,13 @@
 package us.l4_4.dp1.end_of_line.card;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,20 +17,13 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import lombok.With;
-import us.l4_4.dp1.end_of_line.auth.AuthService;
 import us.l4_4.dp1.end_of_line.authorities.Authorities;
-import us.l4_4.dp1.end_of_line.authorities.AuthoritiesService;
 import us.l4_4.dp1.end_of_line.enums.CardStatus;
 import us.l4_4.dp1.end_of_line.enums.Color;
 import us.l4_4.dp1.end_of_line.enums.Exit;
-import us.l4_4.dp1.end_of_line.enums.FriendStatus;
 import us.l4_4.dp1.end_of_line.enums.Hability;
 import us.l4_4.dp1.end_of_line.enums.Orientation;
 import us.l4_4.dp1.end_of_line.game.Game;
@@ -44,7 +34,7 @@ import us.l4_4.dp1.end_of_line.player.PlayerService;
 
 @WebMvcTest(controllers = CardController.class, excludeFilters = @ComponentScan.Filter(
     type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class))
-class cardControllerTest {
+class cardControllerTests {
     private static final String BASE_URL = "/api/v1/cards";
 
     private Player player;
@@ -75,7 +65,7 @@ class cardControllerTest {
         LocalDate birthDate = LocalDate.of(1999, 01, 01);
         String avatar = "https://cdn-icons-png.flaticon.com/512/147/147144.png";
         authority = new Authorities();
-        authority.setId(2);
+        authority.setId(1);
         authority.setAuthority("PLAYER");
 
         player = new Player();
@@ -160,12 +150,12 @@ class cardControllerTest {
         card4.setCardState(CardStatus.IN_HAND);
 
         updateCard = new Card();
-        card4.setId(5);
-        card4.setInitiative(4);
-        card4.setColor(Color.BLUE);
-        card4.setExit(Exit.EXIT_101_B);
-        card4.setIsTemplate(true);
-        card4.setOrientation(Orientation.S);
+        updateCard.setId(5);
+        updateCard.setInitiative(4);
+        updateCard.setColor(Color.BLUE);
+        updateCard.setExit(Exit.EXIT_101_B);
+        updateCard.setIsTemplate(true);
+        updateCard.setOrientation(Orientation.S);
         
         
         List<Card> cards = new ArrayList<>();
@@ -281,5 +271,20 @@ class cardControllerTest {
         .andExpect(jsonPath("$.orientation").value(Orientation.N.toString()));
 
     }
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    
     
 }
