@@ -77,10 +77,6 @@ export default function Board() {
   const [gamePlayerId, setGamePlayerId] = useState(null);
   const [messages, setMessages] = useState([]);
   const [changeDeckButtonVisible, setChangeDeckButtonVisible] = useState(true);
-  const [isExtraGasClicked, setIsExtraGasClicked] = useState(false);
-  const [isReverseClicked, setIsReverseClicked] = useState(false);
-  const [isBrakeClicked, setIsBrakeClicked] = useState(false);
-  const [isSpeedUpClicked, setIsSpeedUpClicked] = useState(false);
   const [effectUsedInRound, setEffectUsedInRound] = useState(false);
   const [previousRound, setPreviousRound] = useState(0);
   const [lastMessageCount, setLastMessageCount] = useState(0);
@@ -122,12 +118,14 @@ export default function Board() {
     }
   }, [dataGamePlayer, setGamePlayerId, user]);
 
+  const isEffectButtonDisabled = effectUsedInRound ||
+    dataGame.round < 5 ||
+    (dataGame.round >= 5 && !isMyTurn) ||
+    (dataGamePlayer.length > 0 && dataGamePlayer[0].player.id === user.id && dataGamePlayer[0].energy < 1) ||
+    (dataGamePlayer.length > 0 && dataGamePlayer[1].player.id === user.id && dataGamePlayer[1].energy < 1);
+
   if (dataGame.round !== previousRound) {
     setEffectUsedInRound(false);
-    setIsExtraGasClicked(false);
-    setIsReverseClicked(false);
-    setIsBrakeClicked(false);
-    setIsSpeedUpClicked(false);
     setPreviousRound(dataGame.round);
   }
 
@@ -229,17 +227,14 @@ export default function Board() {
       <br />
       <div style={{ display: "flex", flexDirection: "row" }}>
         <div className="player-column">
-          <br />
-          IN HAND
-          <br />
-          <br />
+          <div style={{ marginTop: "1%", marginBottom: "5%" }}>          IN HAND
+          </div>
           {/* SHOW PLAYER 1 CARDS IF PLAYER 1 */}
           {dataGamePlayer[0].player.id === user.id &&
             handCardsPlayer1.map((card, index) => (
               <div
                 className={`hand ${selectedCard === card ? "selected-card" : ""
                   }`}
-                style={{ marginBottom: "2%" }}
                 key={index}
                 onClick={() => {
                   if (selectedCard === card) {
@@ -284,6 +279,7 @@ export default function Board() {
                 textDecoration: "none",
                 ...getButtonColorStyles(playerColor),
                 width: "30%",
+                marginTop: "5%",
               }}
               onClick={() => {
                 setChangeDeckButtonVisible(false);
@@ -401,79 +397,75 @@ export default function Board() {
               ))}
             </div>
           </div>
-          <br />
           <Button
             outline
             style={{
               textDecoration: "none",
-              ...getButtonColorStyles(isExtraGasClicked || dataGame.round < 5 || (dataGame.round >= 5 && !isMyTurn) ? "GREY" : playerColor, isExtraGasClicked),
+              ...getButtonColorStyles(isEffectButtonDisabled ? "GREY" : playerColor),
               width: "30%",
+              marginTop: "3%",
+
             }}
             onClick={() => {
               if (dataGame.round >= 5 && !effectUsedInRound && isMyTurn) {
                 changeEffect(jwt, gameId, "EXTRA_GAS", isMyTurn);
                 setEffectUsedInRound(true);
-                setIsExtraGasClicked(true);
               }
             }}
           >
             EXTRA GAS
           </Button>
-          <br />
           <Button
             outline
             style={{
               textDecoration: "none",
-              ...getButtonColorStyles(isReverseClicked || dataGame.round < 5 || (dataGame.round >= 5 && !isMyTurn) ? "GREY" : playerColor, isReverseClicked),
+              ...getButtonColorStyles(isEffectButtonDisabled ? "GREY" : playerColor),
               width: "30%",
+              marginTop: "3%",
             }}
             onClick={() => {
               if (dataGame.round >= 5 && !effectUsedInRound && isMyTurn) {
                 changeEffect(jwt, gameId, "REVERSE", isMyTurn);
                 setEffectUsedInRound(true);
-                setIsReverseClicked(true);
               }
             }}
           >
             REVERSE
           </Button>
-          <br />
           <Button
             outline
             style={{
               textDecoration: "none",
-              ...getButtonColorStyles(isBrakeClicked || dataGame.round < 5 || (dataGame.round >= 5 && !isMyTurn) ? "GREY" : playerColor, isBrakeClicked),
+              ...getButtonColorStyles(isEffectButtonDisabled ? "GREY" : playerColor),
               width: "30%",
+              marginTop: "3%",
             }}
             onClick={() => {
               if (dataGame.round >= 5 && !effectUsedInRound && isMyTurn) {
                 changeEffect(jwt, gameId, "BRAKE", isMyTurn);
                 setEffectUsedInRound(true);
-                setIsBrakeClicked(true);
               }
             }}
           >
             BRAKE
           </Button>
-          <br />
           <Button
             outline
             style={{
               textDecoration: "none",
-              ...getButtonColorStyles(isSpeedUpClicked || dataGame.round < 5 || (dataGame.round >= 5 && !isMyTurn) ? "GREY" : playerColor, isSpeedUpClicked),
+              ...getButtonColorStyles(isEffectButtonDisabled ? "GREY" : playerColor),
               width: "30%",
+              marginTop: "3%",
             }}
             onClick={() => {
               if (dataGame.round >= 5 && !effectUsedInRound && isMyTurn) {
                 changeEffect(jwt, gameId, "SPEED_UP", isMyTurn);
-                setIsSpeedUpClicked(true);
                 setEffectUsedInRound(true);
               }
             }}
           >
             SPEED UP
           </Button>
-          <br />
           {dataGamePlayer[0].player.id === user.id && (
             <div className="hand">
               <img
@@ -483,7 +475,7 @@ export default function Board() {
                   ...getRotationStyle(
                     dataGamePlayer.length > 0 ? dataGamePlayer[0].energy : 0
                   ),
-                  marginTop: "40px",
+                  marginTop: "20%",
                 }}
               />
             </div>
@@ -497,7 +489,7 @@ export default function Board() {
                   ...getRotationStyle(
                     dataGamePlayer.length > 0 ? dataGamePlayer[1].energy : 0
                   ),
-                  marginTop: "40px",
+                  marginTop: "20%",
                 }}
               />
             </div>
