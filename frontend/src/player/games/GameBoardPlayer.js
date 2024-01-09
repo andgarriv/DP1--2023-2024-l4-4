@@ -224,10 +224,10 @@ export default function Board() {
 
   return (
     <div className="background">
-      <br />
       <div style={{ display: "flex", flexDirection: "row" }}>
         <div className="player-column">
-          <div style={{ marginTop: "1%", marginBottom: "5%" }}>          IN HAND
+          <div style={{ marginTop: "1%", marginBottom: "5%" }}>
+            IN HAND
           </div>
           {/* SHOW PLAYER 1 CARDS IF PLAYER 1 */}
           {dataGamePlayer[0].player.id === user.id &&

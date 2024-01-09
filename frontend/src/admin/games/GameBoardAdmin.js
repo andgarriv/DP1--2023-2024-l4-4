@@ -64,11 +64,11 @@ export default function AdminBoard() {
 
   return (
     <div className="background">
-      <br />
       <div style={{ display: "flex", flexDirection: "row" }}>
         <div className="player-column">
-          {dataGamePlayer.length > 0 ? dataGamePlayer[0].player.nickname : null}
-          <br />
+          <div style={{ marginTop: "1%", marginBottom: "2%" }}>
+            {dataGamePlayer.length > 0 ? dataGamePlayer[0].player.nickname : null}
+          </div>
           {handCardsPlayer1.map((card, index) => (
             <div className="hand" key={index}>
               <img src={card.image} alt="Card" />
@@ -95,8 +95,9 @@ export default function AdminBoard() {
           ))}
         </div>
         <div className="player-column">
-          {dataGamePlayer.length > 0 ? dataGamePlayer[1].player.nickname : null}
-          <br />
+          <div style={{ marginTop: "1%", marginBottom: "2%" }}>
+            {dataGamePlayer.length > 0 ? dataGamePlayer[1].player.nickname : null}
+          </div>
           {handCardsPlayer2.map((card, index) => (
             <div className="hand" key={index}>
               <img src={card.image} alt="Card" />
