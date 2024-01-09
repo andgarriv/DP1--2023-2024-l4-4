@@ -24,6 +24,30 @@ export async function gameLogic(gameId, jwt, user, setDataGamePlayer, setHandCar
 
     if (dataGame.winner) {
       setVisible(true);
+      const playerId1 = dataGame.gamePlayers[0].player.id;
+      const playerId2 = dataGame.gamePlayers[1].player.id;
+      const response = await fetch(`/api/v1/playerachievements/${playerId1}`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+          "Content-Type": "application/json",
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error('Error al cargar el jugador 1.');
+      }
+      const response2 = await fetch(`/api/v1/playerachievements/${playerId2}`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+          "Content-Type": "application/json",
+        },
+      });
+  
+      if (!response2.ok) {
+        throw new Error('Error al cargar el jugador 2.');
+      }
     }
 
     setDataGame(dataGame);
