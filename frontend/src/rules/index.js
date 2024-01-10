@@ -3,7 +3,7 @@ import 'whatwg-fetch';
 import '../static/css/home/home.css';
 
 
-const PDFViewer = () => {
+const RulesViewer = () => {
   const [html, setHtml] = useState(null);
 
   useEffect(() => {
@@ -36,4 +36,4 @@ const PDFViewer = () => {
   );
 };
 
-export default PDFViewer;
+export default RulesViewer;

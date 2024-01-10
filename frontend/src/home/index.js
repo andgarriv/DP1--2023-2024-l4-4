@@ -13,6 +13,7 @@ export default function Home() {
   const [visible, setVisible] = useState(false);
   const [gameId, setGameId] = useState(null);
   const [user, setUser] = useState(null);
+  const [otherPlayer, setOtherPlayer] = useState(null);
 
   useEffect(() => {
     if (jwt) {
@@ -23,7 +24,7 @@ export default function Home() {
   }, [jwt]);
 
   const handleClick = () => {
-    PlayNowHandler(user, setVisible, setGameId);
+    PlayNowHandler(user, setVisible, setGameId, setOtherPlayer);
   };
 
   let indexNotLogged = null;
@@ -45,7 +46,7 @@ export default function Home() {
               Play Now!
             </button>
           </div>
-          {visible && <OnGoingGamePopup setVisible={setVisible} visible={visible} gameId={gameId} />}
+          {visible && otherPlayer && <OnGoingGamePopup setVisible={setVisible} visible={visible} gameId={gameId} player={otherPlayer} />}
         </div>
         
       );

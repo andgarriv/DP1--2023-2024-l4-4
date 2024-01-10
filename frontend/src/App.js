@@ -25,7 +25,7 @@ import ProfileListPlayer from "./player/profile/ProfileListPlayer";
 import StatsSwitcher from "./player/stats/statsSwitch";
 import PrivateRoute from "./privateRoute";
 import SwaggerDocs from "./public/swagger";
-import PDFViewer from "./rules";
+import RulesViewer from "./rules";
 import tokenService from "./services/token.service";
 
 function ErrorFallback({ error, resetErrorBoundary }) {
@@ -85,7 +85,7 @@ function App() {
       gameRoutes = (
         <>
           <Route path="/games/:id" exact={true} element={<PrivateRoute><GameBoardPlayer /></PrivateRoute>} />
-          <Route path="/rulesInGame" element={<PDFViewer />} />
+          <Route path="/rulesInGame" element={<RulesViewer />} />
         </>
       )
     }
@@ -125,7 +125,7 @@ function App() {
         <Routes>
           <Route path="/" exact={true} element={<Home />} />
           <Route path="/docs" element={<SwaggerDocs />} />
-          <Route path="/rules" element={<PDFViewer />} />
+          <Route path="/rules" element={<RulesViewer />} />
           {publicRoutes}
           {userRoutes}
           {adminRoutes}

@@ -1,12 +1,23 @@
 import { Button, Modal } from "reactstrap";
 import './static/css/home/home.css';
 
-function OnGoingGamePopup({ setVisible, visible, gameId }) {
+function OnGoingGamePopup({ setVisible, visible, gameId, player }) {
 
     return (
+        console.log(player),
         <Modal className="exit-popup" isOpen={visible} toggle={() => setVisible(false)} centered>
             <div className="modal-content-ongoing">
                 <p>GAME PENDING. DO YOU WANT TO JOIN IT?</p>
+                {player && <p style={{ color: "#FFFFFF" }}>{player.nickname}</p>}
+                {player && <img
+                    src={player.avatar}
+                    alt="avatar"
+                    style={{
+                        borderRadius: "40%",
+                        width: "15%",
+                        height: "15%",
+                    }}
+                />}
                 <div className="modal-footer-custom">
                     <Button
                         className="negative-button"
@@ -16,7 +27,7 @@ function OnGoingGamePopup({ setVisible, visible, gameId }) {
                     <Button
                         className="positive-button"
                         size="lg"
-                        onClick={() =>window.location.href = `/games/${gameId}`}>YES</Button>
+                        onClick={() => window.location.href = `/games/${gameId}`}>YES</Button>
                 </div>
             </div>
         </Modal>

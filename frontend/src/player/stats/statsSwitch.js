@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Button } from 'reactstrap';
 import PlayerStats from './StatsListPlayer';
 import GlobalStats from './statsListGlobal';
 
@@ -13,13 +14,13 @@ export default function StatsSwitcher() {
         <div className="home-page-container" style={{ color: 'white', backgroundColor: 'black', padding: '20px' }}>
             <div className="hero-div">
                 {showGlobalStats ? <GlobalStats /> : <PlayerStats />}
-                <button
+                <Button
                     className="normal-button"
                     size="lg"
                     style={{ marginTop: "5%", borderRadius: "5px" }}
                     onClick={toggleStatsView}>
                     {showGlobalStats ? 'Personal Stats' : 'Global Stats'}
-                </button>
+                </Button>
             </div>
         </div>
     );

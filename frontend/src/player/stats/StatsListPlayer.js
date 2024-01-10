@@ -12,6 +12,12 @@ export default function PlayerStats() {
     winRatio: 0,
     longestGameDuration: "",
     shortestGameDuration: "",
+    maxRounds: 0,
+    minRounds: 0,
+    avgRounds: 0,
+    mostCommonColor: '',
+    leastCommonColor: '',
+    avgEnergyUsed: 0,
   });
   const [loading, setLoading] = useState(true);
 
@@ -46,10 +52,24 @@ export default function PlayerStats() {
             currentWinStreak = 0;
           }
         }
+        const colorFrequency = {
+          BLUE: 0, GREEN: 0, RED: 0, YELLOW: 0, VIOLET: 0, ORANGE: 0, WHITE: 0, MAGENTA: 0
+        };
+
+        let totalRounds = 0;
+        let maxRound = 0;
+        let minRound = Number.MAX_SAFE_INTEGER;
+
+        let mostCommonColor = 'N/A';
+        let leastCommonColor = 'N/A';
+        let maxColorCount = 0;
+        let minColorCount = Number.MAX_SAFE_INTEGER;
 
         let totalTimePlayedMillis = 0;
         let longestGameMillis = 0;
         let shortestGameMillis = Number.MAX_SAFE_INTEGER;
+
+        let totalEnergyUsed = 0;
 
         playerData.forEach((game) => {
           if (game.startedAt && game.endedAt) {
@@ -58,7 +78,24 @@ export default function PlayerStats() {
             longestGameMillis = Math.max(longestGameMillis, gameDuration);
             shortestGameMillis = Math.min(shortestGameMillis, gameDuration);
           }
+          totalRounds += game.round;
+          maxRound = Math.max(maxRound, game.round);
+          minRound = Math.min(minRound, game.round);
+          game.gamePlayers.forEach((gamePlayer) => {
+            if (gamePlayer.player.id === user.id) {
+              const energyUsed = 3 - gamePlayer.energy;
+              totalEnergyUsed += energyUsed;
+              const color = gamePlayer.color;
+              if (colorFrequency.hasOwnProperty(color)) {
+                colorFrequency[color]++;
+              }
+            }
+          });
         });
+
+        const avgRound = gamesPlayed > 0 ? Math.round(totalRounds / gamesPlayed) : 0;
+
+        const avgEnergyUsed = gamesPlayed > 0 ? Math.round(totalEnergyUsed / gamesPlayed) : 0;
 
         const averageGameDurationMillis = gamesPlayed > 0 ? totalTimePlayedMillis / gamesPlayed : 0;
 
@@ -66,6 +103,17 @@ export default function PlayerStats() {
         const averageGameDuration = convertMillisToTime(averageGameDurationMillis);
         const longestGameDuration = convertMillisToTime(longestGameMillis);
         const shortestGameDuration = shortestGameMillis !== Number.MAX_SAFE_INTEGER ? convertMillisToTime(shortestGameMillis) : "N/A";
+
+        Object.entries(colorFrequency).forEach(([color, count]) => {
+          if (count > maxColorCount) {
+            maxColorCount = count;
+            mostCommonColor = color;
+          }
+          if (count < minColorCount) {
+            minColorCount = count;
+            leastCommonColor = color;
+          }
+        });
 
         setStats({
           gamesPlayed,
@@ -77,6 +125,12 @@ export default function PlayerStats() {
           winRatio,
           longestGameDuration,
           shortestGameDuration,
+          maxRound,
+          minRound,
+          avgRound,
+          mostCommonColor,
+          leastCommonColor,
+          avgEnergyUsed,
         });
 
         setLoading(false);
@@ -123,6 +177,15 @@ export default function PlayerStats() {
             <span>Maximum winning streak:</span>
             <span style={{ textAlign: 'right' }}>{stats.maxWinStreak}</span>
 
+            <span>Average rounds:</span>
+            <span style={{ textAlign: 'right' }}>{stats.avgRound}</span>
+
+            <span>Max rounds:</span>
+            <span style={{ textAlign: 'right' }}>{stats.maxRound}</span>
+
+            <span>Min rounds:</span>
+            <span style={{ textAlign: 'right' }}>{stats.minRound}</span>
+
             <span>Average duration:</span>
             <span style={{ textAlign: 'right' }}>{stats.averageGameDuration}</span>
 
@@ -134,6 +197,15 @@ export default function PlayerStats() {
 
             <span>Time played:</span>
             <span style={{ textAlign: 'right' }}>{stats.totalTimePlayed}</span>
+
+            <span>Average energy used:</span>
+            <span style={{ textAlign: 'right' }}>{stats.avgEnergyUsed}</span>
+
+            <span>Most color used:</span>
+            <span style={{ textAlign: 'right' }}>{stats.mostCommonColor}</span>
+
+            <span>Least color used:</span>
+            <span style={{ textAlign: 'right' }}>{stats.leastCommonColor}</span>
           </div>
         )
       ) : (
