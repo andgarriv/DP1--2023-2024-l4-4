@@ -85,6 +85,7 @@ public class GameService {
 
         if (game.getRound() < 3) {
             gamePlayers.forEach(gamePlayerRepository::delete);
+
             gameRepository.deleteById(gameId);
             return;
         } else {
@@ -96,10 +97,11 @@ public class GameService {
             if (winner == null) { // Manejar el caso donde no hay un ganador válido
                 return;
             }
-            gamePlayerRepository.save(game.getGamePlayers().get(0));
-            gamePlayerRepository.save(game.getGamePlayers().get(1));
+
             game.setWinner(winner.getPlayer());
             game.setEndedAt(Date.from(java.time.Instant.now()));
+            // createPlayerAchievement(gamePlayers.get(0).getPlayer().getId());
+            // createPlayerAchievement(gamePlayers.get(1).getPlayer().getId());
             gameRepository.save(game);
             return;
         }
@@ -118,7 +120,6 @@ public class GameService {
         game.setEndedAt(null);
         game.setMessage(null);
         game.setEffect(Hability.NONE);
-
         GamePlayer p1 = new GamePlayer();
         p1.setColor(c1);
         p1.setEnergy(3);
@@ -180,8 +181,6 @@ public class GameService {
         game.setGamePlayerTurnId(p1.getId());
         updateFiveRandomCards(p1.getId());
         updateFiveRandomCards(p2.getId());
-        gamePlayerRepository.save(p1);
-        gamePlayerRepository.save(p2);
         gameRepository.save(game);
         return game;
     }
@@ -234,7 +233,7 @@ public class GameService {
         List<Card> cardsInHand = cards.stream()
                 .filter(card -> card.getCardState() == CardStatus.IN_HAND)
                 .collect(Collectors.toList());
-        Integer cardsNeeded = 5 - cardsInHand.size(); // TODO: Revisar si es 5 o 6
+        Integer cardsNeeded = 6 - cardsInHand.size(); // TODO: Revisar si es 5 o 6
         List<Card> newCards = new ArrayList<>();
         for (Card card : cards) {
             newCards.add(card);
@@ -254,11 +253,10 @@ public class GameService {
                 }
             }
             gamePlayer.setCards(cards);
-            
+            gamePlayerRepository.save(gamePlayer);
         } else {
             System.out.println("No se necesitan cartas adicionales.");
         }
-        gamePlayerRepository.save(gamePlayer);
     }
 
     @Transactional(readOnly = true)
@@ -295,12 +293,9 @@ public class GameService {
     }
 
     @Transactional(readOnly = true)
-    public Integer whoIsNext(Integer gameId) {
-        Game game = gameRepository.findById(gameId).get();
-        List<GamePlayer> gamePlayers = game.getGamePlayers();
-        Integer id1 = gamePlayers.get(0).getId();
-        Integer id2 = gamePlayers.get(1).getId();
-        Integer res = id1;
+    public Integer whoIsNext(Integer id1, Integer id2) {
+        Integer res = null;
+        Integer maxSize = null;
 
         if (gamePlayerRepository.findById(id1) == null) {
             throw new ResourceNotFoundException("GamePlayer", "id", id1);
@@ -317,7 +312,10 @@ public class GameService {
                 .sorted(Comparator.comparing(Card::getUpdatedAt).reversed())
                 .collect(Collectors.toList());
 
-        Integer maxSize = Math.min(player1Cards.size(), player2Cards.size());
+        if (player1Cards.size() < player2Cards.size())
+            maxSize = player1Cards.size();
+        else
+            maxSize = player2Cards.size();
 
         for (int i = 0; i < maxSize; i++) {
             if (player1Cards.get(i).getInitiative() > player2Cards.get(i).getInitiative()) {
@@ -326,6 +324,21 @@ public class GameService {
             } else if (player1Cards.get(i).getInitiative() < player2Cards.get(i).getInitiative()) {
                 res = id1;
                 break;
+            }
+        }
+        if (res == null) {
+            if (player1Cards.size() < player2Cards.size()) {
+                res = id1;
+            } else if (player1Cards.size() == player2Cards.size()) {
+
+                if (player1Cards.get(maxSize - 2).getUpdatedAt().before(player2Cards.get(maxSize - 2).getUpdatedAt()))
+                    res = id1;
+                else
+                    res = id2;
+
+            } else {
+
+                res = id2;
             }
         }
         return res;
@@ -345,6 +358,10 @@ public class GameService {
     public List<String> findPosiblePositionOfAGamePlayerGiven(Integer gamePlayerId, Integer gameId) {
         GamePlayer gp = gamePlayerRepository.findById(gamePlayerId).get();
         Game game = gameRepository.findById(gameId).get();
+        List<Card> cartasInHand = gamePlayerRepository.findById(gamePlayerId).get().getCards().stream()
+                .filter(card -> card.getCardState() == CardStatus.IN_HAND)
+                .collect(Collectors.toList());
+        Integer nInHand = cartasInHand.size();
         // todas las cartas que estan en el tablero
         List<String> cartasON_BOARD = gamePlayerRepository.findGamePlayersByGameId(gameId)
                 .get(0)
@@ -367,7 +384,7 @@ public class GameService {
                 .collect(Collectors.toList());
 
         Card ultimaCartaEchada = ultimasCartasEchadas.get(0);
-        if (game.getEffect() == Hability.REVERSE && gp.getEnergy() > 0)
+        if (game.getEffect() == Hability.REVERSE && nInHand.equals(5))
             ultimaCartaEchada = ultimasCartasEchadas.get(1);
 
         Integer n = ultimaCartaEchada.getColumn();
@@ -475,12 +492,12 @@ public class GameService {
         return res;
     }
 
-    private static ArrayList<Integer> extraerNumerosDeSalida(String carta) {
+    private static ArrayList<Integer> extraerNumerosDeSalida(String texto) {
 
         ArrayList<Integer> digitos = new ArrayList<>();
 
         Pattern patron = Pattern.compile("_(\\d+)_");
-        Matcher coincidencias = patron.matcher(carta);
+        Matcher coincidencias = patron.matcher(texto);
 
         if (coincidencias.find()) {
 
@@ -494,88 +511,6 @@ public class GameService {
         return digitos;
     }
 
-    private Game nextRound(Game game) {
-        Integer round = game.getRound();
-        Integer turnGamePlayerId = game.getGamePlayerTurnId();
-        Integer otherGamePlayerId = game.getGamePlayers().stream()
-                .filter(gp -> !gp.getId().equals(turnGamePlayerId))
-                .findFirst()
-                .orElseThrow(() -> new ResourceNotFoundException("GamePlayer", "id", turnGamePlayerId))
-                .getId();
-        Integer nextGamePlayerId = otherGamePlayerId;
-
-        if (round != 1 && round % 2 == 0) {
-            nextGamePlayerId = whoIsNext(game.getId()); // TODO: REVISAR
-        }
-
-        giveNeededCardsToGetFive(turnGamePlayerId);
-        game.setGamePlayerTurnId(nextGamePlayerId);
-        game.setEffect(Hability.NONE);
-        game.setRound(round + 1);
-        gamePlayerRepository.save(game.getGamePlayers().get(0));
-        gamePlayerRepository.save(game.getGamePlayers().get(1));
-        gameRepository.save(game);
-        return game;
-    }
-
-    @Transactional
-    public Game updateGameTurn(Integer gameId) {
-        Game game = gameRepository.findById(gameId).get();
-        
-        Hability effect = game.getEffect();
-        Integer round = game.getRound();
-        List<Card> cards = gamePlayerRepository.findById(game.getGamePlayerTurnId()).get().getCards().stream()
-                .filter(card -> card.getCardState() == CardStatus.IN_HAND)
-                .collect(Collectors.toList());
-        Integer cardsInHand = cards.size();
-
-        switch (round) {
-            case 1, 2: // Pasar de la ronda 1 a la ronda 2 o de la ronda 2 a la ronda 3
-                game = nextRound(game);
-                break;
-            case 3, 4: // Pasar de la ronda 3 a la ronda 4 o de la ronda 4 a la ronda 5
-                if (cardsInHand <= 3) {
-                    game = nextRound(game);
-                }
-                break;
-            default:
-                if (effect == Hability.SPEED_UP) {
-                    if (cardsInHand <= 2) {
-                        game = nextRound(game);
-                    }
-                } else if (effect == Hability.BRAKE || effect == Hability.EXTRA_GAS) {
-                    if (cardsInHand <= 4) {
-                        game = nextRound(game);
-                    }
-                } else {
-                    if (cardsInHand <= 3) {
-                        game = nextRound(game);
-                    }
-                }
-        }
-        if (findPosiblePositionOfAGamePlayerGiven(game.getGamePlayerTurnId(), gameId).isEmpty()
-                && checkIfGamePlayerCanReverse(game)) {
-            gamePlayerRepository.save(game.getGamePlayers().get(0));
-            gamePlayerRepository.save(game.getGamePlayers().get(1));
-            game.setWinner(gamePlayerRepository
-                    .findPlayerByGamePlayerId(game.getGamePlayers().get(0).getId().equals(game.getGamePlayerTurnId())
-                            ? game.getGamePlayers().get(1).getId()
-                            : game.getGamePlayers().get(0).getId()));
-            game.setEndedAt(Date.from(java.time.Instant.now()));
-            gameRepository.save(game);
-        }
-        return game;
-    }
-
-    private Boolean checkIfGamePlayerCanReverse(Game game) {
-        Hability effect = game.getEffect();
-        Integer energy = gamePlayerRepository.findById(game.getGamePlayerTurnId()).get().getEnergy();
-        game.setEffect(Hability.REVERSE);
-        List<String> posiciones = findPosiblePositionOfAGamePlayerGiven(game.getGamePlayerTurnId(), game.getId());
-        game.setEffect(effect);
-        return posiciones.isEmpty() && energy > 0 ? true : false;
-    }
-
     @Transactional
     public Game updateGameEffect(Integer gameId, ChangeEffectRequest changeEffectRequest) {
         Game game = gameRepository.findById(gameId).get();
@@ -584,7 +519,7 @@ public class GameService {
         if (game.getEffect() != Hability.NONE) {
             System.out.println("No se puede cambiar el efecto porque ya hay uno activo");
 
-        } else 
+        } else if (gp.getCards().stream().filter(card -> card.getCardState() == CardStatus.IN_HAND).count() == 5) {
             if (gp.getEnergy() <= 0) {
                 System.out.println("No tienes suficiente energia para cambiar el efecto");
             } else if (changeEffectRequest.getEffect() != null && game.getRound() > 4) {
@@ -597,8 +532,8 @@ public class GameService {
             } else {
                 game.setEffect(Hability.NONE);
             }
-        
-            gamePlayerRepository.save(gp);
+        }
+
         return gameRepository.save(game);
     }
 
@@ -719,4 +654,98 @@ public class GameService {
         }
         playerService.update(playerId, player);
     }
+
+    private Game nextRound(Game game, Integer cardsToGive) {
+        Integer round = game.getRound();
+        Integer turnGamePlayerId = game.getGamePlayerTurnId();
+        Integer otherGamePlayerId = game.getGamePlayers().stream()
+                .filter(gp -> !gp.getId().equals(turnGamePlayerId))
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("GamePlayer", "id", turnGamePlayerId))
+                .getId();
+        Integer nextGamePlayerId = otherGamePlayerId;
+
+        if (findPosiblePositionOfAGamePlayerGiven(turnGamePlayerId, game.getId()).isEmpty()) {
+            game.setEndedAt(Date.from(java.time.Instant.now()));
+            game.setWinner(gamePlayerRepository.findById(otherGamePlayerId).get().getPlayer());
+        } else {
+            if (round != 1 && round % 2 == 0) {
+                nextGamePlayerId = whoIsNext(turnGamePlayerId, otherGamePlayerId);
+            }
+            giveCards(turnGamePlayerId, cardsToGive);
+            game.setGamePlayerTurnId(nextGamePlayerId);
+            game.setEffect(Hability.NONE);
+            game.setRound(round + 1);
+
+        }
+        gameRepository.save(game);
+        return game;
+    }
+
+    @Transactional
+    public Game updateGameTurn(Integer gameId) {
+        Game game = gameRepository.findById(gameId).get();
+        Hability effect = game.getEffect();
+        Integer round = game.getRound();
+        List<Card> cards = gamePlayerRepository.findById(game.getGamePlayerTurnId()).get().getCards().stream()
+                .filter(card -> card.getCardState() == CardStatus.IN_HAND)
+                .collect(Collectors.toList());
+        Integer cardsInHand = cards.size();
+
+        switch (round) {
+            case 1, 2: // Pasar de la ronda 1 a la ronda 2
+                game = nextRound(game, 1);
+                break;
+            case 3, 4: // Pasar de la ronda 3 a la ronda 4
+                if (cardsInHand <= 3) {
+                    game = nextRound(game, 2);
+                }
+                break;
+            default:
+                if (effect == Hability.SPEED_UP) {
+                    if (cardsInHand <= 2) {
+                        game = nextRound(game, 3);
+                    }
+                } else if (effect == Hability.BRAKE || effect == Hability.EXTRA_GAS) {
+                    if (cardsInHand <= 4) {
+                        game = nextRound(game, 1);
+                    }
+                } else {
+                    if (cardsInHand <= 3) {
+                        game = nextRound(game, 2);
+                    }
+                }
+                break;
+        }
+        return game;
+    }
+
+    @Transactional
+    private void giveCards(Integer gamePlayerId, Integer numCards) {
+        GamePlayer gamePlayer = gamePlayerRepository.findById(gamePlayerId).get();
+        List<Card> cards = gamePlayer.getCards();
+        List<Card> cardsInDeck = cards.stream()
+                .filter(card -> card.getCardState() == CardStatus.IN_DECK)
+                .collect(Collectors.toList());
+        List<Card> newCards = new ArrayList<>();
+        for (Card card : cards) {
+            newCards.add(card);
+        }
+        // Collections.shuffle(cardsInDeck);
+        // Integer endIndex = Math.min(cardsInDeck.size(), cardsNeeded);
+        List<Card> randomCards = cardsInDeck.subList(0, numCards);
+        for (Card card : randomCards) {
+            newCards.remove(card);
+            card.setCardState(CardStatus.IN_HAND);
+            newCards.add(card);
+            try {
+                cardRepository.save(card);
+            } catch (Exception e) {
+                System.out.println("Error al guardar la carta: " + e.getMessage());
+            }
+        }
+        gamePlayer.setCards(cards);
+        gamePlayerRepository.save(gamePlayer);
+    }
+
 }

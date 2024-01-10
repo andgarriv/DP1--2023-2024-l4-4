@@ -129,7 +129,7 @@ export default function Board() {
     setPreviousRound(dataGame.round);
   }
 
-  const handleBoxClick = (colIndex, rowIndex) => {
+  const handleBoxClick = async (colIndex, rowIndex) => {
     if (!isMyTurn) {
       console.log("No es tu turno");
       return;
@@ -170,9 +170,13 @@ export default function Board() {
           cardOrientation = position.orientation;
         }
       }
-      playCard(selectedCard.id, colIndex, rowIndex, cardOrientation, jwt);
-      updateTurn(gameId, gamePlayerId, jwt);
-      setSelectedCard(null);
+      try {
+        await playCard(selectedCard.id, colIndex, rowIndex, cardOrientation, jwt);
+        updateTurn(gameId, gamePlayerId, jwt);
+        setSelectedCard(null);
+      } catch (error) {
+        console.log(error);
+      }
     } else {
       console.log("No es una posición válida");
     }
