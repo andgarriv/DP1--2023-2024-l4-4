@@ -665,14 +665,19 @@ public class GameService {
                 .getId();
         Integer nextGamePlayerId = otherGamePlayerId;
 
-        if (round != 1 && round % 2 == 0) {
-            nextGamePlayerId = whoIsNext(turnGamePlayerId, otherGamePlayerId);
-        }
+        if (findPosiblePositionOfAGamePlayerGiven(turnGamePlayerId, game.getId()).isEmpty()) {
+            game.setEndedAt(Date.from(java.time.Instant.now()));
+            game.setWinner(gamePlayerRepository.findById(otherGamePlayerId).get().getPlayer());
+        } else {
+            if (round != 1 && round % 2 == 0) {
+                nextGamePlayerId = whoIsNext(turnGamePlayerId, otherGamePlayerId);
+            }
+            giveCards(turnGamePlayerId, cardsToGive);
+            game.setGamePlayerTurnId(nextGamePlayerId);
+            game.setEffect(Hability.NONE);
+            game.setRound(round + 1);
 
-        giveCards(turnGamePlayerId, cardsToGive);
-        game.setGamePlayerTurnId(nextGamePlayerId);
-        game.setEffect(Hability.NONE);
-        game.setRound(round + 1);
+        }
         gameRepository.save(game);
         return game;
     }
@@ -712,7 +717,7 @@ public class GameService {
                 }
                 break;
         }
-        return null;
+        return game;
     }
 
     @Transactional

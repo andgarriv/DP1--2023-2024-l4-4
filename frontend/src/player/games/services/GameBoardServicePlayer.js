@@ -1,13 +1,26 @@
 /* Board Service
  * =============
  * Script to manage the board of the game. The long functions of board are here.
-*/
+ */
 
-export async function gameLogic(gameId, jwt, user, setDataGamePlayer, setHandCardsPlayer1, setHandCardsPlayer2,
-  setBoard, setIsLoading, setEnergyCards, setPlayer1CardPossiblePositions, setPlayer2CardPossiblePositions,
-  setIsMyTurn, setDataGame, setMessages, setVisible) {
+export async function gameLogic(
+  gameId,
+  jwt,
+  user,
+  setDataGamePlayer,
+  setHandCardsPlayer1,
+  setHandCardsPlayer2,
+  setBoard,
+  setIsLoading,
+  setEnergyCards,
+  setPlayer1CardPossiblePositions,
+  setPlayer2CardPossiblePositions,
+  setIsMyTurn,
+  setDataGame,
+  setMessages,
+  setVisible
+) {
   try {
-
     const responseGame = await fetch(`/api/v1/games/${gameId}`, {
       method: "GET",
       headers: {
@@ -17,7 +30,7 @@ export async function gameLogic(gameId, jwt, user, setDataGamePlayer, setHandCar
     });
 
     if (!responseGame.ok) {
-      throw new Error('Error al cargar los datos del juego.');
+      throw new Error("Error al cargar los datos del juego.");
     }
 
     const dataGame = await responseGame.json();
@@ -26,27 +39,29 @@ export async function gameLogic(gameId, jwt, user, setDataGamePlayer, setHandCar
       setVisible(true);
       const playerId1 = dataGame.gamePlayers[0].player.id;
       const playerId2 = dataGame.gamePlayers[1].player.id;
-      const response = await fetch(`/api/v1/playerachievements/${playerId1}`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-          "Content-Type": "application/json",
-        },
-      });
-  
-      if (!response.ok) {
-        throw new Error('Error al cargar el jugador 1.');
-      }
-      const response2 = await fetch(`/api/v1/playerachievements/${playerId2}`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-          "Content-Type": "application/json",
-        },
-      });
-  
-      if (!response2.ok) {
-        throw new Error('Error al cargar el jugador 2.');
+      try {
+        await fetch(
+          `/api/v1/playerachievements/${playerId1}`,
+          {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${jwt}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        await fetch(
+          `/api/v1/playerachievements/${playerId2}`,
+          {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${jwt}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+      } catch (error) {
+        console.error(error);
       }
     }
 
@@ -61,7 +76,7 @@ export async function gameLogic(gameId, jwt, user, setDataGamePlayer, setHandCar
     });
 
     if (!response.ok) {
-      throw new Error('Error al cargar las cartas.');
+      throw new Error("Error al cargar las cartas.");
     }
 
     const responseGamePlayer = await fetch(
@@ -81,26 +96,36 @@ export async function gameLogic(gameId, jwt, user, setDataGamePlayer, setHandCar
     const data = await response.json();
     const handCardsPlayer1 = data.filter(
       (card) =>
-        card.color === dataGamePlayer[0].color &&
-        card.cardState === "IN_HAND"
+        card.color === dataGamePlayer[0].color && card.cardState === "IN_HAND"
     );
     const handCardsPlayer2 = data.filter(
       (card) =>
-        card.color === dataGamePlayer[1].color &&
-        card.cardState === "IN_HAND"
+        card.color === dataGamePlayer[1].color && card.cardState === "IN_HAND"
     );
 
     setHandCardsPlayer(handCardsPlayer1, setHandCardsPlayer1);
     setHandCardsPlayer(handCardsPlayer2, setHandCardsPlayer2);
-    setEnergyCards(dataGamePlayer[0].color, dataGamePlayer[1].color, setEnergyCards);
-    importEnergyCards(dataGamePlayer[0].color, dataGamePlayer[1].color, setEnergyCards);
+    setEnergyCards(
+      dataGamePlayer[0].color,
+      dataGamePlayer[1].color,
+      setEnergyCards
+    );
+    importEnergyCards(
+      dataGamePlayer[0].color,
+      dataGamePlayer[1].color,
+      setEnergyCards
+    );
 
     const cardsOnBoard = data.filter((card) => card.cardState === "ON_BOARD");
 
     const cardsOnBoardImages = await Promise.all(
       cardsOnBoard.map((card) =>
         importGameCard(card.color, card.exit, card.initiative).then(
-          (module) => ({ ...card, image: module.default, orientation: card.orientation })
+          (module) => ({
+            ...card,
+            image: module.default,
+            orientation: card.orientation,
+          })
         )
       )
     );
@@ -111,65 +136,80 @@ export async function gameLogic(gameId, jwt, user, setDataGamePlayer, setHandCar
 
       cardsOnBoardImages.forEach((card) => {
         if (card.color === dataGamePlayer[0].color) {
-          newBoard[card.row][card.column] = { image: card.image, orientation: card.orientation };
+          newBoard[card.row][card.column] = {
+            image: card.image,
+            orientation: card.orientation,
+          };
         }
         if (card.color === dataGamePlayer[1].color) {
-          newBoard[card.row][card.column] = { image: card.image, orientation: card.orientation };
+          newBoard[card.row][card.column] = {
+            image: card.image,
+            orientation: card.orientation,
+          };
         }
       });
       return newBoard;
     });
 
     // Actualizar las posiciones posibles de las cartas
-    const responsePlayer1CardPossiblePositions = await fetch(
-      `/api/v1/games/${gameId}/gameplayers/${dataGamePlayer[0].id}/cardPositions`,
-      {
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-        },
+    try {
+      const responsePlayer1CardPossiblePositions = await fetch(
+        `/api/v1/games/${gameId}/gameplayers/${dataGamePlayer[0].id}/cardPositions`,
+        {
+          headers: {
+            Authorization: `Bearer ${jwt}`,
+          },
+        }
+      );
+      if (!responsePlayer1CardPossiblePositions.ok) {
+        throw new Error(
+          "Error al cargar las posiciones posibles de las cartas del jugador 1."
+        );
       }
-    );
-    if (!responsePlayer1CardPossiblePositions.ok) {
-      throw new Error("Error al cargar las posiciones posibles de las cartas del jugador 1.");
-    }
-    const responsePlayer2CardPossiblePositions = await fetch(
-      `/api/v1/games/${gameId}/gameplayers/${dataGamePlayer[1].id}/cardPositions`,
-      {
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-        },
+      const responsePlayer2CardPossiblePositions = await fetch(
+        `/api/v1/games/${gameId}/gameplayers/${dataGamePlayer[1].id}/cardPositions`,
+        {
+          headers: {
+            Authorization: `Bearer ${jwt}`,
+          },
+        }
+      );
+      if (!responsePlayer2CardPossiblePositions.ok) {
+        throw new Error(
+          "Error al cargar las posiciones posibles de las cartas del jugador 2."
+        );
       }
-    );
-    if (!responsePlayer2CardPossiblePositions.ok) {
-      throw new Error("Error al cargar las posiciones posibles de las cartas del jugador 2.");
+      const cardPlayer1PossiblePositions =
+        await responsePlayer1CardPossiblePositions.json();
+      const cardPlayer2PossiblePositions =
+        await responsePlayer2CardPossiblePositions.json();
+
+      const parsedPlayer1Positions = cardPlayer1PossiblePositions.map((pos) => {
+        const parts = pos.split(",");
+        return {
+          row: parseInt(parts[0], 10), // Convertir la fila a número
+          col: parseInt(parts[1], 10), // Convertir la columna a número
+          orientation: parts[2], // Obtener la orientación
+        };
+      });
+
+      const parsedPlayer2Positions = cardPlayer2PossiblePositions.map((pos) => {
+        const parts = pos.split(",");
+        return {
+          row: parseInt(parts[0], 10), // Convertir la fila a número
+          col: parseInt(parts[1], 10), // Convertir la columna a número
+          orientation: parts[2], // Obtener la orientación
+        };
+      });
+      setPlayer1CardPossiblePositions(parsedPlayer1Positions);
+      setPlayer2CardPossiblePositions(parsedPlayer2Positions);
+    } catch (error) {
+      console.error(error);
     }
-    const cardPlayer1PossiblePositions = await responsePlayer1CardPossiblePositions.json();
-    const cardPlayer2PossiblePositions = await responsePlayer2CardPossiblePositions.json();
 
-    const parsedPlayer1Positions = cardPlayer1PossiblePositions.map(pos => {
-      const parts = pos.split(',');
-      return {
-        row: parseInt(parts[0], 10), // Convertir la fila a número
-        col: parseInt(parts[1], 10),  // Convertir la columna a número
-        orientation: parts[2] // Obtener la orientación
-      };
-    });
-
-    const parsedPlayer2Positions = cardPlayer2PossiblePositions.map(pos => {
-      const parts = pos.split(',');
-      return {
-        row: parseInt(parts[0], 10), // Convertir la fila a número
-        col: parseInt(parts[1], 10),  // Convertir la columna a número
-        orientation: parts[2] // Obtener la orientación
-      };
-    }
+    const myGamePlayer = dataGamePlayer.find(
+      (gamePlayer) => gamePlayer.player.id === user.id
     );
-
-
-    setPlayer1CardPossiblePositions(parsedPlayer1Positions);
-    setPlayer2CardPossiblePositions(parsedPlayer2Positions);
-
-    const myGamePlayer = dataGamePlayer.find((gamePlayer) => gamePlayer.player.id === user.id);
 
     if (myGamePlayer !== undefined) {
       if (myGamePlayer.id === dataGame.gamePlayerTurnId) {
@@ -181,7 +221,7 @@ export async function gameLogic(gameId, jwt, user, setDataGamePlayer, setHandCar
 
     setIsLoading(false);
   } catch (error) {
-    window.location.href = '/';
+    window.location.href = "/";
     console.error("Error al cargar los datos del juego.", error);
   }
 
@@ -195,18 +235,15 @@ export async function gameLogic(gameId, jwt, user, setDataGamePlayer, setHandCar
     });
 
     if (!responseMessages.ok) {
-      throw new Error('Error al cargar los mensajes.');
+      throw new Error("Error al cargar los mensajes.");
     }
 
     const messages = await responseMessages.json();
     setMessages(messages);
-  }
-  catch (error) {
+  } catch (error) {
     console.error(error);
   }
-
 }
-
 
 export function setHandCardsPlayer(cards, setHandCardsFunction) {
   const handCardImages = cards.map((card) => {
@@ -218,8 +255,6 @@ export function setHandCardsPlayer(cards, setHandCardsFunction) {
     setHandCardsFunction(images);
   });
 }
-
-
 
 export function importGameCard(color, exit, initiative) {
   let name = "";
@@ -237,7 +272,9 @@ export function importGameCard(color, exit, initiative) {
 }
 
 function importEnergyCard(color) {
-  return import(`../../../static/images/GameCards/C${color.toUpperCase()[0]}_ENERGY.png`);
+  return import(
+    `../../../static/images/GameCards/C${color.toUpperCase()[0]}_ENERGY.png`
+  );
 }
 
 export function importEnergyCards(color1, color2, setEnergyCards) {
@@ -260,13 +297,13 @@ export function isPlayerAuthorized(user, dataGamePlayer) {
 export function getRotationStyle(energy) {
   switch (energy) {
     case 3:
-      return { transform: 'rotate(0deg)' };
+      return { transform: "rotate(0deg)" };
     case 2:
-      return { transform: 'rotate(90deg)' };
+      return { transform: "rotate(90deg)" };
     case 1:
-      return { transform: 'rotate(180deg)' };
+      return { transform: "rotate(180deg)" };
     case 0:
-      return { transform: 'rotate(270deg)' };
+      return { transform: "rotate(270deg)" };
     default:
       return {};
   }
@@ -275,83 +312,85 @@ export function getRotationStyle(energy) {
 export function getColorStyles(colorName) {
   const colors = {
     RED: {
-      border: '2px solid rgb(225, 28, 36)',
-      backgroundColor: 'rgba(225, 28, 36, 0.2)',
+      border: "2px solid rgb(225, 28, 36)",
+      backgroundColor: "rgba(225, 28, 36, 0.2)",
     },
     ORANGE: {
-      border: '2px solid rgb(239, 145, 20)',
-      backgroundColor: 'rgba(239, 145, 20, 0.2)',
+      border: "2px solid rgb(239, 145, 20)",
+      backgroundColor: "rgba(239, 145, 20, 0.2)",
     },
     YELLOW: {
-      border: '2px solid rgb(251, 235, 68)',
-      backgroundColor: 'rgba(251, 235, 68, 0.2)',
+      border: "2px solid rgb(251, 235, 68)",
+      backgroundColor: "rgba(251, 235, 68, 0.2)",
     },
     GREEN: {
-      border: '2px solid rgb(75, 178, 91)',
-      backgroundColor: 'rgba(75, 178, 91, 0.2)',
+      border: "2px solid rgb(75, 178, 91)",
+      backgroundColor: "rgba(75, 178, 91, 0.2)",
     },
     BLUE: {
-      border: '2px solid rgb(4, 163, 227)',
-      backgroundColor: 'rgba(4, 163, 227, 0.2)',
+      border: "2px solid rgb(4, 163, 227)",
+      backgroundColor: "rgba(4, 163, 227, 0.2)",
     },
     MAGENTA: {
-      border: '2px solid rgb(225, 12, 123)',
-      backgroundColor: 'rgba(225, 12, 123, 0.2)',
+      border: "2px solid rgb(225, 12, 123)",
+      backgroundColor: "rgba(225, 12, 123, 0.2)",
     },
     VIOLET: {
-      border: '2px solid rgb(192, 138, 184)',
-      backgroundColor: 'rgba(192, 138, 184, 0.2)',
+      border: "2px solid rgb(192, 138, 184)",
+      backgroundColor: "rgba(192, 138, 184, 0.2)",
     },
     WHITE: {
-      border: '2px solid rgb(194, 194, 194)',
-      backgroundColor: 'rgba(194, 194, 194, 0.2)',
+      border: "2px solid rgb(194, 194, 194)",
+      backgroundColor: "rgba(194, 194, 194, 0.2)",
     },
   };
 
-  return colors[colorName] || {
-    border: '2px solid rgb(0, 0, 0)',
-    backgroundColor: 'rgba(0, 0, 0, 0.2)',
-  };
+  return (
+    colors[colorName] || {
+      border: "2px solid rgb(0, 0, 0)",
+      backgroundColor: "rgba(0, 0, 0, 0.2)",
+    }
+  );
 }
 
 export function getButtonColorStyles(colorName) {
   const colors = {
     RED: {
-      rgb: 'rgb(225, 28, 36)',
+      rgb: "rgb(225, 28, 36)",
     },
     ORANGE: {
-      rgb: 'rgb(239, 145, 20)',
+      rgb: "rgb(239, 145, 20)",
     },
     YELLOW: {
-      rgb: 'rgb(251, 235, 68)',
+      rgb: "rgb(251, 235, 68)",
     },
     GREEN: {
-      rgb: 'rgb(75, 178, 91)',
+      rgb: "rgb(75, 178, 91)",
     },
     BLUE: {
-      rgb: 'rgb(4, 163, 227)',
+      rgb: "rgb(4, 163, 227)",
     },
     MAGENTA: {
-      rgb: 'rgb(225, 12, 123)',
+      rgb: "rgb(225, 12, 123)",
     },
     VIOLET: {
-      rgb: 'rgb(192, 138, 184)',
+      rgb: "rgb(192, 138, 184)",
     },
     WHITE: {
-      rgb: 'rgb(194, 194, 194)',
+      rgb: "rgb(194, 194, 194)",
     },
     GREY: {
-      rgb: 'rgb(128, 128, 128)',
-    }
+      rgb: "rgb(128, 128, 128)",
+    },
   };
 
   const colorStyles = colors[colorName] || {};
-  const rgbValue = colorStyles.rgb || 'rgb(0, 0, 0)';
+  const rgbValue = colorStyles.rgb || "rgb(0, 0, 0)";
 
   return {
     color: rgbValue,
     outlineColor: rgbValue,
-    border: `2px solid ${rgbValue}`
+    border: `2px solid ${rgbValue}`,
   };
 }
 
@@ -402,8 +441,7 @@ export async function changeEffect(jwt, gameId, effect, isMyTurn) {
     if (!response.ok) {
       throw new Error("Error al cambiar el efecto.");
     }
-  }
-  catch (error) {
+  } catch (error) {
     console.error(error);
   }
 }
@@ -419,14 +457,13 @@ export async function changeCardsInHand(jwt, gameId, isMyTurn) {
       headers: {
         Authorization: `Bearer ${jwt}`,
         "Content-Type": "application/json",
-      }
+      },
     });
 
     if (!response.ok) {
       throw new Error("Error al cambiar el mazo.");
     }
-  }
-  catch (error) {
+  } catch (error) {
     console.error(error);
   }
 }
@@ -446,8 +483,7 @@ export async function postMessage(jwt, gameId, reaction, color) {
     if (!response.ok) {
       throw new Error("Error al enviar el mensaje.");
     }
-  }
-  catch (error) {
+  } catch (error) {
     console.error(error);
   }
 }
