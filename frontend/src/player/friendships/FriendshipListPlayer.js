@@ -19,7 +19,7 @@ const Pagination = ({ friendshipsPerPage, totalFriendships, paginate, currentPag
             color: currentPage === pageNumber ? "#75FBFD" : '#EF87E0',
             border: 'none',
             padding: '5px 10px',
-            margin: '0 5px',
+            margin: '10px 5px',
             borderRadius: '5px',
             cursor: 'pointer'
         };
@@ -131,57 +131,73 @@ export default function FriendshipList() {
         }
     };
 
+    const columnStyles = {
+        pending: {
+            nickname: { flex: 3, textAlign: 'center', paddingLeft: '10px' },
+            avatar: { flex: 2, textAlign: 'center' },
+            actions: { flex: 3, textAlign: 'center' } 
+        },
+        accepted: {
+            nickname: { flex: 3, textAlign: 'center', paddingLeft: '10px' }, 
+            avatar: { flex: 2, textAlign: 'center' }, 
+            actions: { flex: 1.5, textAlign: 'center' }
+        }
+    };
 
     const displayUserDetails = (friendship) => {
         const isSender = friendship.sender.id === user.id;
         const otherUser = isSender ? friendship.receiver : friendship.sender;
 
+        const currentColumnStyle = friendshipType === "PENDING" ? columnStyles.pending : columnStyles.accepted;
+
         return (
             <div key={friendship.id} style={{ display: 'flex', justifyContent: 'space-between', width: '100%', padding: '10px', borderBottom: '1px solid #ddd', alignItems: 'center' }}>
-                <span style={{ flex: 1, textAlign: 'center', paddingLeft: '10px' }}>{otherUser.nickname}</span>
-                <span style={{ flex: 1, textAlign: 'center' }}>
+                <span style={currentColumnStyle.nickname}>{otherUser.nickname}</span>
+                <span style={currentColumnStyle.avatar}>
                     <img src={otherUser.avatar} alt={`${otherUser.nickname}'s avatar`} style={{ borderRadius: "50%", width: "40px", height: "40px" }} />
                 </span>
-                {friendshipType === "PENDING" && !isSender ? (
-                    <div>
-                        <Button
-                            aria-label={"update-" + friendship.id}
-                            size="sm"
-                            style={{ marginRight: '5px' }}
-                            className="positive-button"
-                            onClick={() => updateFriendshipStatus(friendship.id, friendship.sender.id, friendship.receiver.id, "ACCEPTED")}
-                        >
-                            Accept
-                        </Button>
+                <span style={currentColumnStyle.actions}>
+                    {friendshipType === "PENDING" && !isSender ? (
+                        <div>
+                            <Button
+                                aria-label={"update-" + friendship.id}
+                                size="sm"
+                                style={{ marginRight: '5px' }}
+                                className="positive-button"
+                                onClick={() => updateFriendshipStatus(friendship.id, friendship.sender.id, friendship.receiver.id, "ACCEPTED")}
+                            >
+                                Accept
+                            </Button>
 
+                            <Button
+                                aria-label={"update-" + friendship.id}
+                                size="sm"
+                                color="danger"
+                                className="negative-button"
+                                onClick={() => updateFriendshipStatus(friendship.id, friendship.sender.id, friendship.receiver.id, "REJECTED")}
+                            >
+                                Deny
+                            </Button>
+                        </div>
+                    ) : (
                         <Button
-                            aria-label={"update-" + friendship.id}
+                            aria-label={"delete-" + friendship.id}
                             size="sm"
                             color="danger"
                             className="negative-button"
-                            onClick={() => updateFriendshipStatus(friendship.id, friendship.sender.id, friendship.receiver.id, "REJECTED")}
+                            onClick={() => deleteFromList(
+                                `/api/v1/friendships/${friendship.id}`,
+                                friendship.id,
+                                [friendships, setFriendships],
+                                [alerts, setAlerts],
+                                setMessage,
+                                setVisible
+                            )}
                         >
-                            Deny
+                            Delete
                         </Button>
-                    </div>
-                ) : (
-                    <Button
-                        aria-label={"delete-" + friendship.id}
-                        size="sm"
-                        color="danger"
-                        className="negative-button"
-                        onClick={() => deleteFromList(
-                            `/api/v1/friendships/${friendship.id}`,
-                            friendship.id,
-                            [friendships, setFriendships],
-                            [alerts, setAlerts],
-                            setMessage,
-                            setVisible
-                        )}
-                    >
-                        Delete
-                    </Button>
-                )}
+                    )}
+                </span>
             </div>
         );
     };
@@ -192,9 +208,14 @@ export default function FriendshipList() {
                 <h1> {friendshipType === "ACCEPTED" ? "Friendships" : "Pending invites"}</h1>
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
                     <div style={{ display: 'flex', width: '100%', padding: '10px', justifyContent: 'space-between', color: "#EF87E0" }}>
-                        <span style={{ flex: 3, textAlign: 'center' }}>{currentFriendships.length > 0 ? "Nickname" : ""}</span>
-                        <span style={{ flex: 2, textAlign: 'center' }}>{currentFriendships.length > 0 ? "Avatar" : ""}</span>
-                        <span style={{ flex: 1.5, textAlign: 'center' }}></span>
+                        <span style={friendshipType === "PENDING" ? columnStyles.pending.nickname : columnStyles.accepted.nickname}>
+                            {currentFriendships.length > 0 ? "Nickname" : ""}
+                        </span>
+                        <span style={friendshipType === "PENDING" ? columnStyles.pending.avatar : columnStyles.accepted.avatar}>
+                            {currentFriendships.length > 0 ? "Avatar" : ""}
+                        </span>
+                        <span style={friendshipType === "PENDING" ? columnStyles.pending.actions : columnStyles.accepted.actions}>
+                        </span>
                     </div>
                     {currentFriendships.length > 0 ? (
                         currentFriendships.map((friendship) => displayUserDetails(friendship))
@@ -214,8 +235,10 @@ export default function FriendshipList() {
                         className="normal-button"
                         size='lg'
                         style={{ marginRight: '10px' }}
-                        onClick={() => {setFriendshipType(friendshipType === "PENDING" ? "ACCEPTED" : "PENDING"); 
-                        setCurrentPage(1)}}
+                        onClick={() => {
+                            setFriendshipType(friendshipType === "PENDING" ? "ACCEPTED" : "PENDING");
+                            setCurrentPage(1)
+                        }}
                     >
                         {friendshipType === "PENDING" ? "Friendships" : "Pending"}
                     </Button>
@@ -224,7 +247,7 @@ export default function FriendshipList() {
                         size='lg'
                         onClick={handleClick}
                     >
-                        <Link to="/friendships/create" style={{ textDecoration: "none", color: "#4BB25B" }}>                        
+                        <Link to="/friendships/create" style={{ textDecoration: "none", color: "#4BB25B" }}>
                         </Link>
                         Create
                     </Button>

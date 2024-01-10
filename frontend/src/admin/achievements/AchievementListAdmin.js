@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "reactstrap";
 import tokenService from "../../services/token.service";
 import deleteFromList from "../../util/deleteFromList";
@@ -15,7 +15,7 @@ const Pagination = ({ achievementsPerPage, totalAchievements, paginate, currentP
 
     const getPageStyle = (pageNumber) => {
         return {
-            backgroundColor: '#343F4B', 
+            backgroundColor: '#343F4B',
             color: currentPage === pageNumber ? "#75FBFD" : '#EF87E0',
             border: 'none',
             padding: '5px 10px',
@@ -25,27 +25,27 @@ const Pagination = ({ achievementsPerPage, totalAchievements, paginate, currentP
         };
     };
 
-        return (
-            <nav>
-                <ul className='pagination'>
-                    {pageNumbers.map(number => (
-                        <li key={number} className='page-item'>
-                            <a 
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    paginate(number);
-                                }} 
-                                href="!#" 
-                                style={getPageStyle(number)}
-                                className='page-link'
-                            >
-                                {number}
-                            </a>
-                        </li>
-                    ))}
-                </ul>
-            </nav>
-        );
+    return (
+        <nav>
+            <ul className='pagination'>
+                {pageNumbers.map(number => (
+                    <li key={number} className='page-item'>
+                        <a
+                            onClick={(e) => {
+                                e.preventDefault();
+                                paginate(number);
+                            }}
+                            href="!#"
+                            style={getPageStyle(number)}
+                            className='page-link'
+                        >
+                            {number}
+                        </a>
+                    </li>
+                ))}
+            </ul>
+        </nav>
+    );
 };
 
 export default function AchievementList() {
@@ -57,6 +57,12 @@ export default function AchievementList() {
     const [message, setMessage] = useState("");
     const [visible, setVisible] = useState(false);
     const [alerts, setAlerts] = useState([]);
+
+    let navigate = useNavigate();
+
+    const handleEditClick = (achievement) => {
+        navigate("/achievements/" + achievement.id);
+    };
 
     function formatCategory(category) {
         const words = category.split("_");
@@ -93,9 +99,9 @@ export default function AchievementList() {
     return (
         <div className="home-page-container">
             <div className="hero-div">
-                <h1 style={{ textAlign: 'center', color: "#EF87E0" }}>Achievements</h1>
+                <h1>Achievements</h1>
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', marginBottom: '20px' }}>
-                    <div style={{ display: 'flex', width: '100%', padding: '10px', boxSizing: 'border-box' }}>
+                    <div style={{ display: 'flex', width: '100%', padding: '10px', boxSizing: 'border-box', color: "#EF87E0" }}>
                         <span style={{ flex: 3, textAlign: 'center' }}>Name</span>
                         <span style={{ flex: 5, textAlign: 'center' }}>Description</span>
                         <span style={{ flex: 2, textAlign: 'center' }}>Badge Image</span>
@@ -108,24 +114,23 @@ export default function AchievementList() {
                                 <span style={{ flex: 3, textAlign: 'center' }}>{achievement.name}</span>
                                 <span style={{ flex: 5, textAlign: 'center' }}>{achievement.description}</span>
                                 <span style={{ flex: 2, textAlign: 'center' }}>
-                                    <img src={achievement.badgeAchieved} alt="badge_achieved" style={{ borderRadius: "50%", width: "40px", height:"40px"}} />
+                                    <img src={achievement.badgeAchieved} alt="badge_achieved" style={{ borderRadius: "50%", width: "40px", height: "40px" }} />
                                 </span>
                                 <span style={{ flex: 2, textAlign: 'center' }}>{formatCategory(achievement.category)}</span>
                                 <span style={{ flex: 2, display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
                                     <Button
                                         aria-label={"edit-" + achievement.id}
                                         size="sm"
-                                        color="warning"
-                                        className="auth-button-eol-edit"
-                                        style={{ marginRight: '5px'}} 
+                                        className="caution-button"
+                                        style={{ marginRight: '5px' }}
+                                        onClick={() => handleEditClick(achievement)}
                                     >
-                                        <Link to={`/achievements/` + achievement.id} style={{textDecoration: "none", color: 'black'}}>Edit</Link>
+                                        Edit
                                     </Button>
                                     <Button
-                                        className="auth-button-eol-delete"
+                                        className="negative-button"
                                         aria-label={"delete-" + achievement.id}
                                         size="sm"
-                                        color="danger"
                                         onClick={() => deleteFromList(
                                             `/api/v1/achievements/${achievement.id}`,
                                             achievement.id,
@@ -151,16 +156,16 @@ export default function AchievementList() {
                 />
                 {modal}
                 <div style={{ position: 'fixed', bottom: '20px', right: '20px' }}>
-                <Button color="success"
-                size="lg"
-                className="auth-button-eol-create">
-                <Link to={`/achievements/new`} style={{ textDecoration: "none", color: "white"}}>
-                    Create
-                </Link>
-                </Button>
+                    <Button color="success"
+                        size="lg"
+                        className="positive-button">
+                        <Link to={`/achievements/new`} style={{ textDecoration: "none", color: "white" }}>
+                            Create
+                        </Link>
+                    </Button>
                 </div>
             </div>
         </div>
     );
-    
+
 };

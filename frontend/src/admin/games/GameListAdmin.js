@@ -90,9 +90,9 @@ export default function AdminGamesList() {
     return (
         <div className="home-page-container">
             <div className="hero-div">
-                <h1 style={{ textAlign: 'center', color: "#EF87E0" }}>Games</h1>
+                <h1>Games</h1>
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', marginBottom: '20px' }}>
-                    <div style={{ display: 'flex', width: '100%', padding: '10px', justifyContent: 'space-between' }}>
+                    <div style={{ display: 'flex', width: '100%', padding: '10px', justifyContent: 'space-between', color: "#EF87E0" }}>
                         <span style={{ flex: 2.5, textAlign: 'center', margin: '0 10px' }}>{currentGames.length > 0 ? "Game" : ""}</span>
                         <span style={{ flex: 6.5, textAlign: 'center', margin: '0 10px' }}>{currentGames.length > 0 ? "Winner" : ""}</span>
                         <span style={{ flex: 5, textAlign: 'center', margin: '0 10px' }}>{currentGames.length > 0 ? "Players" : ""}</span>
@@ -115,19 +115,17 @@ export default function AdminGamesList() {
                                     <div style={{ flex: 3, textAlign: 'center', margin: '0 10px' }}>
                                         {!game.winner ? (
                                             <Button
-                                                color="success"
                                                 size="sm"
                                                 tag={Link}
                                                 to={`/games/${game.id}`}
-                                                className="auth-button-eol-create">
+                                                className="positive-button">
                                                 Watch
                                             </Button>
                                         ) : (
                                             <Button
-                                                color="secondary"
                                                 size="sm"
                                                 disabled={true}
-                                                className="auth-button-eol-create">
+                                                className="disabled-button">
                                                 Watch
                                             </Button>
                                         )}

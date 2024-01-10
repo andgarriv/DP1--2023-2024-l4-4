@@ -159,6 +159,18 @@
   justify-content: space-evenly;
 }
 
+.caution-button {
+  color: orange !important;
+  border: 2px solid orange !important;
+  background-color: transparent !important;
+  min-width: 15% !important;
+}
+
+.caution-button:hover {
+  color: #222222 !important;
+  background-color: orange !important;
+}
+
 .negative-button {
   color: rgb(225, 28, 36) !important;
   border: 2px solid rgb(225, 28, 36) !important;
@@ -193,6 +205,18 @@
 .normal-button:hover {
   color: #222222 !important;
   background-color: #EF87E0 !important;
+}
+
+.disabled-button {
+  color: grey !important;
+  border: 2px solid grey!important;
+  background-color: transparent !important;
+  min-width: 15% !important;
+}
+
+.disabled-button:hover {
+  color: #222222 !important;
+  background-color: grey !important;
 }
 
 .exit-popup .modal-content {

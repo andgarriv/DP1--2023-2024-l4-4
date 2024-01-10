@@ -13,9 +13,9 @@ function OnGoingGamePopup({ setVisible, visible, gameId, player }) {
                     src={player.avatar}
                     alt="avatar"
                     style={{
-                        borderRadius: "40%",
-                        width: "15%",
-                        height: "15%",
+                        borderRadius: "50%",
+                        width: "75px",
+                        height: "75px",
                     }}
                 />}
                 <div className="modal-footer-custom">

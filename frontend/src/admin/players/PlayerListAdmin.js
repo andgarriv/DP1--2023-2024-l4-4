@@ -86,9 +86,9 @@ export default function PlayerList() {
     return (
         <div className="home-page-container">
             <div className="hero-div">
-            <h1 style={{ textAlign: 'center', color: "#EF87E0" }}>Registered Players</h1>
+            <h1>Registered Players</h1>
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', marginBottom: '20px' }}>
-                    <div style={{ display: 'flex', width: '100%', padding: '10px' }}>
+                    <div style={{ display: 'flex', width: '100%', padding: '10px', color: "#EF87E0" }}>
                         <span style={{ flex: 2, textAlign: 'center', paddingLeft: '10px' }}>{currentPlayers.length > 0 ? "Nickname" : ""}</span>
                         <span style={{ flex: 3, textAlign: 'center', paddingLeft: '10px' }}>{currentPlayers.length > 0 ? "Email" : ""}</span>
                         <span style={{ flex: 1.5, textAlign: 'center' }}>{currentPlayers.length > 0 ? "Avatar" : ""}</span>
@@ -106,8 +106,7 @@ export default function PlayerList() {
                                     <Button
                                         aria-label={"delete-" + player.id}
                                         size="sm"
-                                        color="danger"
-                                        className="auth-buyyon-eol-delete"
+                                        className="negative-button"
                                         onClick={() => deleteFromList(
                                             `/api/v1/players/${player.id}`,
                                             player.id,

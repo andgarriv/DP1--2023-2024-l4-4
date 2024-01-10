@@ -101,9 +101,7 @@ useEffect(() => {
         <div className="home-page-container">
             <div className="hero-div">
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <h1 style={{ textAlign: 'center', color: "#EF87E0", margin: 0 }}>
-                        Achievements {percentageCompleted}%
-                    </h1>
+                    <h1> Achievements {percentageCompleted}% </h1>
                     {percentageCompleted === 100 && (
                         <img 
                             src="https://cdn-icons-png.flaticon.com/128/5360/5360933.png" 
@@ -112,8 +110,8 @@ useEffect(() => {
                         />
                     )}
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', marginBottom: '20px' }}>
-                    <div style={{ display: 'flex', width: '100%', padding: '10px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', marginBottom: '20px'}}>
+                    <div style={{ display: 'flex', width: '100%', padding: '10px', color: "#EF87E0" }}>
                         <span style={{ flex: 3, textAlign: 'center' }}>Name</span>
                         <span style={{ flex: 5, textAlign: 'center' }}>Description</span>
                         <span style={{ flex: 2, textAlign: 'center' }}>Badge Image</span>
