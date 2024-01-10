@@ -400,7 +400,7 @@ public class GameService {
             }
         }
 
-        if (res.isEmpty()) {
+        if (res.isEmpty() && !checkIfGamePlayerCanReverse(game, gamePlayerId)) {
             Integer otherGamePlayerId = game.getGamePlayers().stream()
                     .filter(gameplayer -> !gameplayer.getId().equals(gamePlayerId))
                     .findFirst()
@@ -414,14 +414,18 @@ public class GameService {
         return res;
     }
 
+    @Transactional
     private Boolean checkIfGamePlayerCanReverse(Game game, Integer gamePlayerId) {
-        Hability effect = game.getEffect();
         Integer round = game.getRound();
+        Hability effect = game.getEffect();
         Integer energy = gamePlayerRepository.findById(gamePlayerId).get().getEnergy();
-        game.setEffect(Hability.REVERSE);
-        List<String> posiciones = findPosiblePositionOfAGamePlayerGiven(gamePlayerId, game.getId());
-        game.setEffect(effect);
-        return !posiciones.isEmpty() && energy > 0 && round > 4 ? true : false;
+        Boolean res = false;
+        if (round > 4 && energy > 0) {
+            game.setEffect(Hability.REVERSE);
+            res = !findPosiblePositionOfAGamePlayerGiven(gamePlayerId, game.getId()).isEmpty();
+            game.setEffect(effect);
+        }
+        return res;
     }
 
     private static ArrayList<Integer> extraerNumerosDeSalida(String texto) {
@@ -645,7 +649,8 @@ public class GameService {
                 }
                 break;
         }
-        if(findPosiblePositionOfAGamePlayerGiven(turnGamePlayerId, gameId).isEmpty()){
+        if(findPosiblePositionOfAGamePlayerGiven(turnGamePlayerId, gameId).isEmpty() 
+        && !checkIfGamePlayerCanReverse(game, turnGamePlayerId)){
             Integer otherGamePlayerId = game.getGamePlayers().stream()
                 .filter(gp -> !gp.getId().equals(turnGamePlayerId))
                 .findFirst()
