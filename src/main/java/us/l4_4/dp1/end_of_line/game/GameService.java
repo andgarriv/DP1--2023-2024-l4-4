@@ -666,18 +666,7 @@ public class GameService {
         Integer nextGamePlayerId = otherGamePlayerId;
 
         if (round != 1 && round % 2 == 0) {
-            nextGamePlayerId = whoIsNext(turnGamePlayerId, otherGamePlayerId); // TODO: REVISAR
-        }
-        switch (round) {
-            case 1,2:
-                cardsToGive = 1;
-                break;
-            case 3,4:
-                cardsToGive = 2;
-                break;
-            default:
-                cardsToGive = 3;
-                break;
+            nextGamePlayerId = whoIsNext(turnGamePlayerId, otherGamePlayerId);
         }
 
         giveCards(turnGamePlayerId, cardsToGive);
@@ -696,7 +685,7 @@ public class GameService {
         List<Card> cards = gamePlayerRepository.findById(game.getGamePlayerTurnId()).get().getCards().stream()
                 .filter(card -> card.getCardState() == CardStatus.IN_HAND)
                 .collect(Collectors.toList());
-        Integer cardsInHand = cards.size()-1; //TODO: Revisar esto
+        Integer cardsInHand = cards.size();
 
         switch (round) {
             case 1, 2: // Pasar de la ronda 1 a la ronda 2
