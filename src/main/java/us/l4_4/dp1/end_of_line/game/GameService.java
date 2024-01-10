@@ -400,7 +400,28 @@ public class GameService {
             }
         }
 
+        if (res.isEmpty()) {
+            Integer otherGamePlayerId = game.getGamePlayers().stream()
+                    .filter(gameplayer -> !gameplayer.getId().equals(gamePlayerId))
+                    .findFirst()
+                    .orElseThrow(() -> new ResourceNotFoundException("GamePlayer", "id", gamePlayerId))
+                    .getId();
+            game.setEndedAt(Date.from(java.time.Instant.now()));
+            game.setWinner(gamePlayerRepository.findById(otherGamePlayerId).get().getPlayer());
+            gameRepository.save(game);
+        }
+
         return res;
+    }
+
+    private Boolean checkIfGamePlayerCanReverse(Game game, Integer gamePlayerId) {
+        Hability effect = game.getEffect();
+        Integer round = game.getRound();
+        Integer energy = gamePlayerRepository.findById(gamePlayerId).get().getEnergy();
+        game.setEffect(Hability.REVERSE);
+        List<String> posiciones = findPosiblePositionOfAGamePlayerGiven(gamePlayerId, game.getId());
+        game.setEffect(effect);
+        return !posiciones.isEmpty() && energy > 0 && round > 4 ? true : false;
     }
 
     private static ArrayList<Integer> extraerNumerosDeSalida(String texto) {
@@ -576,19 +597,14 @@ public class GameService {
                 .getId();
         Integer nextGamePlayerId = otherGamePlayerId;
 
-        if (findPosiblePositionOfAGamePlayerGiven(turnGamePlayerId, game.getId()).isEmpty()) {
-            game.setEndedAt(Date.from(java.time.Instant.now()));
-            game.setWinner(gamePlayerRepository.findById(otherGamePlayerId).get().getPlayer());
-        } else {
-            if (round != 1 && round % 2 == 0) {
-                nextGamePlayerId = whoIsNext(game.getId());
-            }
-            giveCards(turnGamePlayerId, cardsToGive);
-            game.setGamePlayerTurnId(nextGamePlayerId);
-            game.setEffect(Hability.NONE);
-            game.setRound(round + 1);
-
+        if (round != 1 && round % 2 == 0) {
+            nextGamePlayerId = whoIsNext(game.getId());
         }
+        giveCards(turnGamePlayerId, cardsToGive);
+        game.setGamePlayerTurnId(nextGamePlayerId);
+        game.setEffect(Hability.NONE);
+        game.setRound(round + 1);
+
         gameRepository.save(game);
         return game;
     }
@@ -598,7 +614,8 @@ public class GameService {
         Game game = gameRepository.findById(gameId).get();
         Hability effect = game.getEffect();
         Integer round = game.getRound();
-        List<Card> cards = gamePlayerRepository.findById(game.getGamePlayerTurnId()).get().getCards().stream()
+        Integer turnGamePlayerId = game.getGamePlayerTurnId();
+        List<Card> cards = gamePlayerRepository.findById(turnGamePlayerId).get().getCards().stream()
                 .filter(card -> card.getCardState() == CardStatus.IN_HAND)
                 .collect(Collectors.toList());
         Integer cardsInHand = cards.size();
@@ -627,6 +644,16 @@ public class GameService {
                     }
                 }
                 break;
+        }
+        if(findPosiblePositionOfAGamePlayerGiven(turnGamePlayerId, gameId).isEmpty()){
+            Integer otherGamePlayerId = game.getGamePlayers().stream()
+                .filter(gp -> !gp.getId().equals(turnGamePlayerId))
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("GamePlayer", "id", turnGamePlayerId))
+                .getId();
+            game.setEndedAt(Date.from(java.time.Instant.now()));
+            game.setWinner(gamePlayerRepository.findById(otherGamePlayerId).get().getPlayer());
+            gameRepository.save(game);
         }
         return game;
     }
