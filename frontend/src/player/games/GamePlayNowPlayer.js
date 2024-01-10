@@ -1,7 +1,7 @@
 // PlayNowHandler.js
 import tokenService from "../../services/token.service";
 
-const PlayNowHandler = async (user, setVisible, setGameId) => {
+const PlayNowHandler = async (user, setVisible, setGameId, setOtherPlayer) => {
     try {
         const jwt = tokenService.getLocalAccessToken();
         const playerResponse = await fetch(`/api/v1/games/players/${user.id}/notended`, {
@@ -18,6 +18,8 @@ const PlayNowHandler = async (user, setVisible, setGameId) => {
         if (ongoingGame) {
             setGameId(ongoingGame.id);
             setVisible(true);
+            setOtherPlayer(ongoingGame.gamePlayers.find((player) => player.player.id !== user.id).player);
+
         } else {
             window.location.href = "/play";
         }

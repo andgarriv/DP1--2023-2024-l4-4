@@ -283,3 +283,15 @@
   border-radius: 20px;
   border: 5px solid #75FBFD;
 }
+
+.nav-link.fuente {
+  color: #EF87E0;
+}
+
+.nav-link.fuente:hover {
+  color: #75FBFD;
+}
+
+.dropdown-item:hover {
+  background-color: #333333 !important;
+}

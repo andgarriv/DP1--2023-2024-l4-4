@@ -37,16 +37,15 @@ function AppNavbar() {
 
                         const playerData = await playerResponse.json();
                         const ongoingGame = playerData.find((game) => !game.endedAt);
-                        if(ongoingGame != null) {
+                        if (ongoingGame != null) {
                             setGameId(ongoingGame.id);
                             setOtherPlayer(ongoingGame.gamePlayers.find((player) => player.player.id !== user.id).player);
-                            console.log(otherPlayer.nickname);
-                        } 
+                        }
 
                     } catch (error) {
                         console.error('Error fetching pending games:', error);
                     }
-                }, 5000); // Actualización cada 5 segundos
+                }, 5000);
 
                 return () => clearInterval(interval);
             }
@@ -130,7 +129,11 @@ function AppNavbar() {
                         <>
                             <NavItem>
                                 <div className="fuente" style={{ color: "white", display: "flex", alignItems: "center", justifyContent: "center", height: "100%" }}>
-                                    <span style={{ color: "#75FBFD" }}>{otherPlayer.nickname} </span> 's invited you to play! Join now?
+                                    {otherPlayer && otherPlayer.nickname ? (
+                                        <span style={{ color: "#75FBFD" }}>{otherPlayer.nickname}'s invited you to play! Join now?</span>
+                                    ) : (
+                                        <span style={{ color: "#75FBFD" }}>Game pending. Join now?</span>
+                                    )}
                                 </div>
                             </NavItem>
                             <span style={{ display: "block", margin: "5px 5px" }}></span>
@@ -158,7 +161,7 @@ function AppNavbar() {
                             <NavLink className="fuente" style={{ color: "#75FBFD" }} tag={Link} onClick={handleClick}>Play Now!</NavLink>
                         </NavItem>
                     )}
-                    {visible && <OnGoingGamePopup setVisible={setVisible} visible={visible} gameId={gameId} />}
+                    {visible && otherPlayer && <OnGoingGamePopup setVisible={setVisible} visible={visible} gameId={gameId} player={otherPlayer} />}
                     <NavItem>
                         <NavLink className="fuente" style={{ color: "#75FBFD" }} tag={Link} to="/rules">Rules</NavLink>
                     </NavItem>
@@ -170,30 +173,30 @@ function AppNavbar() {
                         <DropdownMenu end style={{ backgroundColor: "#222222", textAlign: 'center' }}>
                             <DropdownItem style={{ borderBottom: '1px solid gray', padding: '10px' }}>
                                 <NavItem>
-                                    <NavLink className="fuente" style={{ color: "#EF87E0" }} tag={Link} to="/profile">My Profile</NavLink>
+                                    <NavLink className="fuente" tag={Link} to="/profile">My Profile</NavLink>
                                 </NavItem>
                             </DropdownItem>
 
                             <DropdownItem style={{ borderBottom: '1px solid gray', padding: '10px' }}>
                                 <NavItem>
-                                    <NavLink className="fuente" style={{ color: "#EF87E0" }} tag={Link} to="/games">My Games</NavLink>
+                                    <NavLink className="fuente" tag={Link} to="/games">My Games</NavLink>
                                 </NavItem>
                             </DropdownItem>
 
                             <DropdownItem style={{ borderBottom: '1px solid gray', padding: '10px' }}>
                                 <NavItem>
-                                    <NavLink className="fuente" style={{ color: "#EF87E0" }} tag={Link} to="/friendships">Friendships</NavLink>
+                                    <NavLink className="fuente" tag={Link} to="/friendships">Friendships</NavLink>
                                 </NavItem>
                             </DropdownItem>
                             <DropdownItem style={{ borderBottom: '1px solid gray', padding: '10px' }}>
                                 <NavItem>
-                                    <NavLink className="fuente" style={{ color: "#EF87E0" }} tag={Link} to="/achievements">Achievements</NavLink>
+                                    <NavLink className="fuente" tag={Link} to="/achievements">Achievements</NavLink>
                                 </NavItem>
                             </DropdownItem>
 
                             <DropdownItem>
                                 <NavItem>
-                                    <NavLink className="fuente" style={{ color: "#EF87E0" }} tag={Link} to="/stats">Stats</NavLink>
+                                    <NavLink className="fuente" tag={Link} to="/stats">Stats</NavLink>
                                 </NavItem>
                             </DropdownItem>
                         </DropdownMenu>
