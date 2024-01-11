@@ -291,13 +291,15 @@ public class GameService {
     }
 
     @Transactional
-    public List<String> findPosiblePositionOfAGamePlayerGiven(Integer gamePlayerId, Integer gameId) {
+    public List<String> findPosiblePositionOfAGamePlayerGiven(Integer gamePlayerId, Integer gameId, Boolean reverse) {
         GamePlayer gp = gamePlayerRepository.findById(gamePlayerId).get();
         Game game = gameRepository.findById(gameId).get();
-        List<Card> cartasInHand = gamePlayerRepository.findById(gamePlayerId).get().getCards().stream()
+        Integer round = game.getRound();
+        Integer cardsInHand = gamePlayerRepository.findById(gamePlayerId).get().getCards().stream()
                 .filter(card -> card.getCardState() == CardStatus.IN_HAND)
-                .collect(Collectors.toList());
-        Integer nInHand = cartasInHand.size();
+                .collect(Collectors.toList()).size();
+        Integer energy = gp.getEnergy();
+        Boolean conditions = cardsInHand.equals(5) && energy > 0 && round > 4;
         List<String> cartasON_BOARD = gamePlayerRepository.findGamePlayersByGameId(gameId)
                 .get(0)
                 .getCards()
@@ -319,7 +321,10 @@ public class GameService {
                 .collect(Collectors.toList());
 
         Card ultimaCartaEchada = ultimasCartasEchadas.get(0);
-        if (game.getEffect() == Hability.REVERSE && nInHand.equals(5))
+        if (reverse && conditions)
+            ultimaCartaEchada = ultimasCartasEchadas.get(1);
+
+        if (game.getEffect() == Hability.REVERSE && conditions)
             ultimaCartaEchada = ultimasCartasEchadas.get(1);
 
         Integer n = ultimaCartaEchada.getColumn();
@@ -398,32 +403,6 @@ public class GameService {
                 res.add(sur + ",N");
 
             }
-        }
-
-        if (res.isEmpty() && !checkIfGamePlayerCanReverse(game, gamePlayerId)) {
-            Integer otherGamePlayerId = game.getGamePlayers().stream()
-                    .filter(gameplayer -> !gameplayer.getId().equals(gamePlayerId))
-                    .findFirst()
-                    .orElseThrow(() -> new ResourceNotFoundException("GamePlayer", "id", gamePlayerId))
-                    .getId();
-            game.setEndedAt(Date.from(java.time.Instant.now()));
-            game.setWinner(gamePlayerRepository.findById(otherGamePlayerId).get().getPlayer());
-            gameRepository.save(game);
-        }
-
-        return res;
-    }
-
-    @Transactional
-    private Boolean checkIfGamePlayerCanReverse(Game game, Integer gamePlayerId) {
-        Integer round = game.getRound();
-        Hability effect = game.getEffect();
-        Integer energy = gamePlayerRepository.findById(gamePlayerId).get().getEnergy();
-        Boolean res = false;
-        if (round > 4 && energy > 0) {
-            game.setEffect(Hability.REVERSE);
-            res = !findPosiblePositionOfAGamePlayerGiven(gamePlayerId, game.getId()).isEmpty();
-            game.setEffect(effect);
         }
         return res;
     }
@@ -647,19 +626,20 @@ public class GameService {
                         game = nextRound(game, 2);
                     }
                 }
-                break;
         }
-        if(findPosiblePositionOfAGamePlayerGiven(turnGamePlayerId, gameId).isEmpty() 
-        && !checkIfGamePlayerCanReverse(game, turnGamePlayerId)){
+
+        if (findPosiblePositionOfAGamePlayerGiven(turnGamePlayerId, gameId, false).isEmpty()
+                && (findPosiblePositionOfAGamePlayerGiven(turnGamePlayerId, gameId, true).isEmpty())) {
             Integer otherGamePlayerId = game.getGamePlayers().stream()
-                .filter(gp -> !gp.getId().equals(turnGamePlayerId))
-                .findFirst()
-                .orElseThrow(() -> new ResourceNotFoundException("GamePlayer", "id", turnGamePlayerId))
-                .getId();
+                    .filter(gp -> !gp.getId().equals(turnGamePlayerId))
+                    .findFirst()
+                    .orElseThrow(() -> new ResourceNotFoundException("GamePlayer", "id", turnGamePlayerId))
+                    .getId();
             game.setEndedAt(Date.from(java.time.Instant.now()));
             game.setWinner(gamePlayerRepository.findById(otherGamePlayerId).get().getPlayer());
             gameRepository.save(game);
         }
+        gameRepository.save(game);
         return game;
     }
 
@@ -674,9 +654,9 @@ public class GameService {
         for (Card card : cards) {
             newCards.add(card);
         }
-        // Collections.shuffle(cardsInDeck);
-        // Integer endIndex = Math.min(cardsInDeck.size(), cardsNeeded);
-        List<Card> randomCards = cardsInDeck.subList(0, numCards);
+        Collections.shuffle(cardsInDeck);
+        Integer max = Math.min(cardsInDeck.size(), numCards);
+        List<Card> randomCards = cardsInDeck.subList(0, max);
         for (Card card : randomCards) {
             newCards.remove(card);
             card.setCardState(CardStatus.IN_HAND);
