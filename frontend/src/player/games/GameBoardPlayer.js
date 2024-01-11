@@ -173,7 +173,6 @@ export default function Board() {
       try {
         await playCard(selectedCard.id, colIndex, rowIndex, cardOrientation, jwt);
         updateTurn(gameId, gamePlayerId, jwt);
-        console.log("Jugador: " + dataGame.gamePlayerTurnId + "\nFind: " + dataGame.find + "\nCheck: " + dataGame.comprobar);
         setSelectedCard(null);
       } catch (error) {
         console.log(error);

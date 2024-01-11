@@ -127,11 +127,9 @@ public class GameController {
         return gameService.changeCardsInHand(gameId);
     }
 
-    @GetMapping("/{gameId}/gameplayers/{gamePlayerId}/getCardsPositions")
+    @GetMapping("/{gameId}/gameplayers/{gamePlayerId}/cardPositions")
     @ResponseStatus(HttpStatus.OK)
-    public List<String> getCardsPositions(@PathVariable Integer gameId, @PathVariable Integer gamePlayerId) {
-        return gameService.findPosiblePositionOfAGamePlayerGiven(gamePlayerId, gameId, false);
+    public List<String> cardsPossiblePositions(@PathVariable Integer gameId, @PathVariable Integer gamePlayerId) {
+        return gameService.findPosiblePositionOfAGamePlayerGiven(gamePlayerId, gameId);
     }
-    
 }
-

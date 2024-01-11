@@ -290,6 +290,11 @@ public class GameService {
         return gameRepository.findGamesByPlayerId(playerId);
     }
 
+     @Transactional
+    public List<String> findPosiblePositionOfAGamePlayerGiven(Integer gamePlayerId, Integer gameId) {
+        return findPosiblePositionOfAGamePlayerGiven(gamePlayerId, gameId, false);
+    } 
+
     @Transactional
     public List<String> findPosiblePositionOfAGamePlayerGiven(Integer gamePlayerId, Integer gameId, Boolean reverse) {
         GamePlayer gp = gamePlayerRepository.findById(gamePlayerId).get();
@@ -628,7 +633,7 @@ public class GameService {
                 }
         }
 
-        if (findPosiblePositionOfAGamePlayerGiven(turnGamePlayerId, gameId, false).isEmpty()
+        if (findPosiblePositionOfAGamePlayerGiven(turnGamePlayerId, gameId).isEmpty()
                 && (findPosiblePositionOfAGamePlayerGiven(turnGamePlayerId, gameId, true).isEmpty())) {
             Integer otherGamePlayerId = game.getGamePlayers().stream()
                     .filter(gp -> !gp.getId().equals(turnGamePlayerId))
