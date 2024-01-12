@@ -88,13 +88,13 @@ class cardControllerTests {
 
 
         player2 = new Player();
-        player2.setId(1);
-        player2.setName("playerName");
-        player2.setSurname("playerSurname");
+        player2.setId(2);
+        player2.setName("playerName2");
+        player2.setSurname("playerSurname2");
         player2.setPassword("Play3r!");
-        player2.setEmail("player@gmail.com");
+        player2.setEmail("player2@gmail.com");
         player2.setBirthDate(birthDate);
-        player2.setNickname("playerNickname");
+        player2.setNickname("playerNickname2");
         player2.setAuthority(authority);
         player2.setAvatar(avatar);
 
