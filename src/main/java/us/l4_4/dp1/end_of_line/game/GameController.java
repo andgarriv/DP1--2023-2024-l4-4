@@ -1,6 +1,7 @@
 package us.l4_4.dp1.end_of_line.game;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -131,5 +132,11 @@ public class GameController {
     @ResponseStatus(HttpStatus.OK)
     public List<String> cardsPossiblePositions(@PathVariable Integer gameId, @PathVariable Integer gamePlayerId) {
         return gameService.findPosiblePositionOfAGamePlayerGiven(gamePlayerId, gameId);
+    }
+
+    @GetMapping("/statistics")
+    public ResponseEntity<Map<String, String>> getGameStatistics() {
+        Map<String, String> stats = gameService.calculateStatistics();
+        return ResponseEntity.ok(stats);
     }
 }
