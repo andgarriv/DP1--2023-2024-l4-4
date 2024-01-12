@@ -81,6 +81,7 @@ export default function Board() {
   const [previousRound, setPreviousRound] = useState(0);
   const [lastMessageCount, setLastMessageCount] = useState(0);
   const [visible, setVisible] = useState(false);
+  const [isPositionsListEmpty, setIsPositionsListEmpty] = useState(false);
   const messagesEndRef = useRef(null);
   const scrollToBottom = () => {
     if (messagesEndRef.current) {
@@ -105,6 +106,8 @@ export default function Board() {
 
   useEffect(() => {
     if (dataGamePlayer.length > 0) {
+      console.log(dataGamePlayer[0].color, player1CardPossiblePositions);
+      console.log(dataGamePlayer[1].color, player2CardPossiblePositions);
       const calculatedPlayerColor =
         (dataGamePlayer[0].player.id === user.id && dataGamePlayer[0].color) ||
         (dataGamePlayer[1].player.id === user.id && dataGamePlayer[1].color);
@@ -115,14 +118,23 @@ export default function Board() {
       if (dataGamePlayer[1].player.id === user.id) {
         setGamePlayerId(dataGamePlayer[1].id);
       }
+      if (dataGamePlayer[0].player.id === user.id && player1CardPossiblePositions.length === 0) {
+        setIsPositionsListEmpty(true);
+      } else if (dataGamePlayer[1].player.id === user.id && player2CardPossiblePositions.length === 0) {
+        setIsPositionsListEmpty(true);
+      } else {
+        setIsPositionsListEmpty(false);
+      }
+
     }
-  }, [dataGamePlayer, setGamePlayerId, user]);
+  }, [dataGamePlayer, setGamePlayerId, user, setIsPositionsListEmpty]);
 
   const isEffectButtonDisabled = effectUsedInRound ||
     dataGame.round < 5 ||
     (dataGame.round >= 5 && !isMyTurn) ||
     (dataGamePlayer.length > 0 && dataGamePlayer[0].player.id === user.id && dataGamePlayer[0].energy < 1) ||
     (dataGamePlayer.length > 0 && dataGamePlayer[1].player.id === user.id && dataGamePlayer[1].energy < 1);
+
 
   if (dataGame.round !== previousRound) {
     setEffectUsedInRound(false);
@@ -174,6 +186,7 @@ export default function Board() {
         await playCard(selectedCard.id, colIndex, rowIndex, cardOrientation, jwt);
         updateTurn(gameId, gamePlayerId, jwt);
         setSelectedCard(null);
+        setEffectUsedInRound(true);
       } catch (error) {
         console.log(error);
       }
@@ -405,7 +418,7 @@ export default function Board() {
             outline
             style={{
               textDecoration: "none",
-              ...getButtonColorStyles(isEffectButtonDisabled ? "GREY" : playerColor),
+              ...getButtonColorStyles(isEffectButtonDisabled || isPositionsListEmpty ? "GREY" : playerColor),
               width: "30%",
               marginTop: "3%",
 
@@ -420,6 +433,7 @@ export default function Board() {
             EXTRA GAS
           </Button>
           <Button
+            className={isPositionsListEmpty && !isEffectButtonDisabled ? "blink" : ""}
             outline
             style={{
               textDecoration: "none",
@@ -440,7 +454,7 @@ export default function Board() {
             outline
             style={{
               textDecoration: "none",
-              ...getButtonColorStyles(isEffectButtonDisabled ? "GREY" : playerColor),
+              ...getButtonColorStyles(isEffectButtonDisabled || isPositionsListEmpty ? "GREY" : playerColor),
               width: "30%",
               marginTop: "3%",
             }}
@@ -457,7 +471,7 @@ export default function Board() {
             outline
             style={{
               textDecoration: "none",
-              ...getButtonColorStyles(isEffectButtonDisabled ? "GREY" : playerColor),
+              ...getButtonColorStyles(isEffectButtonDisabled || isPositionsListEmpty ? "GREY" : playerColor),
               width: "30%",
               marginTop: "3%",
             }}
