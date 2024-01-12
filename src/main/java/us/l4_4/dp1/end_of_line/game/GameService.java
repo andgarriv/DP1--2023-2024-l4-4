@@ -188,7 +188,7 @@ public class GameService {
         return gameRepository.findAll();
     }
 
-    private Boolean checkOnlyOneGameForEachPlayer(Integer id1) {
+    public  Boolean checkOnlyOneGameForEachPlayer(Integer id1) {
         Boolean res = false;
         if (!gameRepository.findNotEndedGamesByPlayerId(id1).isEmpty()) {
             res = true;
@@ -282,11 +282,17 @@ public class GameService {
 
     @Transactional(readOnly = true)
     public List<Game> findNotEndedGamesByPlayerId(Integer playerId) {
+        if (playerRepository.findById(playerId) == null) {
+            throw new ResourceNotFoundException("Player", "id", playerId);
+        }
         return gameRepository.findNotEndedGamesByPlayerId(playerId);
     }
 
     @Transactional(readOnly = true)
     public List<Game> findAllGamesByPlayerId(Integer playerId) {
+        if (playerRepository.findById(playerId) == null) {
+            throw new ResourceNotFoundException("Player", "id", playerId);
+        }
         return gameRepository.findGamesByPlayerId(playerId);
     }
 
