@@ -140,7 +140,7 @@ class FriendshipControllerTests {
         friendship2.setId(2);
         friendship2.setSender(player3);
         friendship2.setReceiver(player);
-        friendship2.setFriendState(FriendStatus.REJECTED);
+        friendship2.setFriendState(FriendStatus.PENDING);
 
         friendship3 = new Friendship();
         friendship3.setId(3);
@@ -173,9 +173,9 @@ class FriendshipControllerTests {
     @Test
     @WithMockUser(username = "playerName", password = "Own3r!")
     void playerShouldFindAllFriendshipsByPlayerId() throws Exception {
-        when(this.friendshipService.findAllFriendshipsByPlayerId(TEST_PLAYER_ID, FriendStatus.REJECTED)).thenReturn(List.of(friendship2));
+        when(this.friendshipService.findAllFriendshipsByPlayerId(TEST_PLAYER_ID, FriendStatus.PENDING)).thenReturn(List.of(friendship2));
 
-        mockMvc.perform(get(BASE_URL + "/players/{id}/{friendState}", TEST_PLAYER_ID, FriendStatus.REJECTED)).andExpect(status().isOk())
+        mockMvc.perform(get(BASE_URL + "/players/{id}/{friendState}", TEST_PLAYER_ID, FriendStatus.PENDING)).andExpect(status().isOk())
         .andExpect(jsonPath("$.size()").value(1))
         .andExpect(jsonPath("$[?(@.id == 2)].sender.name").value("player3Name"))
         .andExpect(jsonPath("$[?(@.id == 2)].receiver.name").value("playerName"));
@@ -192,22 +192,6 @@ class FriendshipControllerTests {
 
         mockMvc.perform(post(BASE_URL).with(csrf()).contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(friendship))).andExpect(status().isCreated());
-    } 
-
-    @Test
-    @WithMockUser(username = "playerName", password = "Own3r!")
-    void playerShouldUpdateFriendship() throws Exception {
-        friendship.setFriendState(FriendStatus.REJECTED);
-
-        when(this.friendshipService.findById(TEST_PLAYER_ID)).thenReturn(friendship);
-		when(this.friendshipService.update(any(Integer.class), any(FriendshipDTO.class))).thenReturn(friendship);
-
-		mockMvc.perform(put(BASE_URL + "/{id}", TEST_FRIENDSHIP_ID).with(csrf()).contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(friendship))).andExpect(status().isOk())
-				.andExpect(jsonPath("$.sender").value("playerName"))
-                .andExpect(jsonPath("$.receiver").value("player2Name"))
-                .andExpect(jsonPath("$.friendship_state").value("REJECTED"));
-
     }*/ 
 
     @Test

@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button, Form, Input, Label } from "reactstrap";
 import tokenService from "../../services/token.service";
 import getErrorModal from "../../util/getErrorModal";
@@ -31,13 +31,34 @@ export default function AchievementEdit() {
         setVisible,
         id
     );
+    const [badgeAchieved, setBadgeAchieved] = useState(emptyAchievement.badgeAchieved);
+    const [badgeNotAchieved, setBadgeNotAchieved] = useState(emptyAchievement.badgeNotAchieved);
+    const categoriesEnum = ["GAMES_PLAYED", "VICTORIES", "TOTAL_PLAY_TIME"];
 
+
+    useEffect(() => {
+        if (achievement.badgeAchieved) {
+            setBadgeAchieved(achievement.badgeAchieved);
+        }
+        if (achievement.badgeNotAchieved) {
+            setBadgeNotAchieved(achievement.badgeNotAchieved);
+        }
+    }, [achievement.badgeAchieved, achievement.badgeNotAchieved]);
     const modal = getErrorModal(setVisible, visible, message);
 
     const handleChange = (event) => {
         const { name, value } = event.target;
         setAchievement({ ...achievement, [name]: value });
+
+        if (name === 'badgeAchieved') {
+            setBadgeAchieved(value);
+        } else if (name === 'badgeNotAchieved') {
+            setBadgeNotAchieved(value);
+        }
     };
+
+
+    let navigate = useNavigate();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -54,7 +75,6 @@ export default function AchievementEdit() {
                     body: JSON.stringify(achievement),
                 }
             );
-
             const data = await response.text();
             if (data === "")
                 window.location.href = "/achievements";
@@ -63,8 +83,11 @@ export default function AchievementEdit() {
                 if (json.message) {
                     setMessage(json.message);
                     setVisible(true);
+                    setBadgeAchieved(json.badgeAchieved);
+                    setBadgeNotAchieved(json.badgeNotAchieved);
+
                 } else
-                    window.location.href = "/achievements";
+                    navigate("/achievements");
             }
         } catch (error) {
             alert(error.message);
@@ -73,32 +96,60 @@ export default function AchievementEdit() {
 
     return (
         <div className="home-page-container">
-            <div className="scrollable-content" style={scrollbarStyles}> 
-                <div className="hero-div">
-                    <h1 className="text-center">{achievement.id ? "Edit Achievement" : "Add Achievement"}</h1>
-                    {modal}
-                    <Form onSubmit={handleSubmit}>
+            <div className="hero-div">
+                <h1 className="text-center">{achievement.id ? "Edit Achievement" : "Add Achievement"}</h1>
+                {modal}
+                <Form onSubmit={handleSubmit}>
+                    <div className="custom-form-input">
+                        <Label for="name">Name</Label>
+                        <Input
+                            type="text"
+                            required
+                            name="name"
+                            id="name"
+                            value={achievement.name || ""}
+                            onChange={handleChange}
+                        />
+                    </div>
+                    <div className="custom-form-input">
+                        <Label for="description">Description</Label>
+                        <Input
+                            type="text"
+                            required
+                            name="description"
+                            id="description"
+                            value={achievement.description || ""}
+                            onChange={handleChange}
+                        />
+                    </div>
+
+                    <div className="custom-form-input">
+                        <Label for="name">Threshold</Label>
+                        <Input
+                            type="text"
+                            required
+                            name="threshold"
+                            id="threshold"
+                            value={achievement.threshold || ""}
+                            onChange={handleChange}
+                        />
+                    </div>
                         <div className="custom-form-input">
-                            <Label for="name">Name</Label>
-                            <Input
-                                type="text"
+                            <Label for="category">Category</Label>
+                            <select
                                 required
-                                name="name"
-                                id="name"
-                                value={achievement.name || ""}
+                                name="category"
+                                id="category"
+                                value={achievement.category || ""}
                                 onChange={handleChange}
-                            />
-                        </div>
-                        <div className="custom-form-input">
-                            <Label for="description">Description</Label>
-                            <Input
-                                type="text"
-                                required
-                                name="description"
-                                id="description"
-                                value={achievement.description || ""}
-                                onChange={handleChange}
-                            />
+                                className="form-control select-style"
+                            >
+                                {categoriesEnum.map((category, index) => (
+                                    <option key={index} value={category}>
+                                        {category.replace(/_/g, ' ')}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
                         <div className="custom-form-input">
                             <Label for="name">Badge not achieved image URL</Label>
@@ -122,63 +173,41 @@ export default function AchievementEdit() {
                                 onChange={handleChange}
                             />
                         </div>
-                        <div className="custom-form-input">
-                            <Label for="name">Threshold</Label>
-                            <Input
-                                type="text"
-                                required
-                                name="threshold"
-                                id="threshold"
-                                value={achievement.threshold || ""}
-                                onChange={handleChange}
-                            />
-                        </div>
-                        <div className="custom-form-input">
-                            <Label for="name">Category</Label>
-                            <Input
-                                type="text"
-                                required
-                                name="category"
-                                id="category"
-                                value={achievement.category || ""}
-                                onChange={handleChange}
-                            />
+                        <div style={{ textAlign: "center", marginTop: "30px", marginBottom: "30px" }}>
+                            {badgeNotAchieved && <img
+                                src={badgeNotAchieved}
+                                alt="avatar"
+                                className="avatar"
+                                style={{ borderRadius: "50%", marginRight: "30px" }}
+                                width={"100px"}
+                            />}
+                            {badgeAchieved && <img
+                                src={badgeAchieved}
+                                alt="avatar"
+                                className="avatar"
+                                style={{ borderRadius: "50%" }}
+                                width={"100px"}
+                            />}
                         </div>
                         <div style={{ display: "flex", justifyContent: "space-between", marginTop: "20px" }}>
-                            <Button outline color="danger">
-                                <Link to="/achievements" style={{ textDecoration: "none", color: "white" }}>
-                                    Cancel
-                                </Link>
+                            <Button
+                                className="negative-button"
+                                size="lg"
+                                onClick={() => navigate("/achievements")}
+                            >
+                                Cancel
                             </Button>
                             <div style={{ width: "10px" }}></div>
-                            <Button outline color="success" style={{ textDecoration: "none", color: "white"}} type="submit">
-                            {achievement.id ? "Save" : "Create"}
+                            <Button
+                                className="positive-button"
+                                size="lg"
+                                type="submit">
+                                {achievement.id ? "Save" : "Create"}
                             </Button>
                         </div>
-                    </Form>
-                </div>
+                </Form>
             </div>
         </div>
     );
+    
 }
-
-const scrollbarStyles = {
-    maxHeight: "900px",
-    overflowY: "auto",
-    scrollbarWidth: "thin",
-    scrollbarColor: "#222222",
-    WebkitOverflowScrolling: "touch",
-    "&::-webkit-scrollbar": {
-        width: "1px",
-    },
-    "&::-webkit-scrollbar-thumb": {
-        backgroundColor: "#222",
-        borderRadius: "1px",
-    },
-    "&::-webkit-scrollbar-thumb:hover": {
-        backgroundColor: "#555",
-    },
-    "&::-webkit-scrollbar-track": {
-        backgroundColor: "transparent",
-    },
-};

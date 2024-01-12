@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Button } from "reactstrap";
 import tokenService from "../../services/token.service";
 import deleteFromList from "../../util/deleteFromList";
@@ -156,12 +156,13 @@ export default function AchievementList() {
                 />
                 {modal}
                 <div style={{ position: 'fixed', bottom: '20px', right: '20px' }}>
-                    <Button color="success"
+                    <Button
+                        aria-label="create-achievement"
                         size="lg"
-                        className="positive-button">
-                        <Link to={`/achievements/new`} style={{ textDecoration: "none", color: "white" }}>
-                            Create
-                        </Link>
+                        className="positive-button"
+                        onClick={() => navigate("/achievements/new")}
+                    >
+                        Create
                     </Button>
                 </div>
             </div>

@@ -10,16 +10,16 @@ INSERT INTO players(id, name, surname, password, email, birth_date, authority, n
                                                                                                         (14, 'David', 'Sanchez', '$2b$12$kjSsw.4pp2iBQn8PfwSmM.DiYv5r2d4.PwmpreyvPdZrvOJDzUjEK','admin4@gmail.com', '1988-12-05', 1, 'admin4', 'https://cdn-icons-png.flaticon.com/512/147/147139.png'),
                                                                                                         (15, 'NotNamed', 'NotSurnamed', '$2b$12$kjSsw.4pp2iBQn8PfwSmM.DiYv5r2d4.PwmpreyvPdZrvOJDzUjEK','notuser@gmial.com', '1998-09-10', 1, 'DeleteUser', 'https://cdn-icons-png.flaticon.com/128/12225/12225949.png'),
                                                                                                         -- Player Users
-                                                                                                        (3,'Ángel','García','$2b$12$EB6dhGe96Fx1dt4CMxkF/ONMXHMNGLwSD9vhOWMwhLqKNRU2IvoCa','angelgares6424@gmail.com', '2003-07-12', 2, 'Angelgares', 'https://i.pinimg.com/originals/09/69/c2/0969c2f8a87af926fcf912330b67206f.jpg'),
-                                                                                                        (4,'Jorge','Muñoz','$2b$12$EB6dhGe96Fx1dt4CMxkF/ONMXHMNGLwSD9vhOWMwhLqKNRU2IvoCa','jorgemr@pm.me', '1999-09-11', 2, 'Jorge_ADD', 'https://images.squarespace-cdn.com/content/v1/5e45d3a8e509f61738454469/81e0d83b-0fa6-48d0-801b-1f0c1515d786/logo+arus+cuadrado+web.png'),
-                                                                                                        (5,'Javier','Rodriguez','$2b$12$EB6dhGe96Fx1dt4CMxkF/ONMXHMNGLwSD9vhOWMwhLqKNRU2IvoCa','java@gmail.com', '2006-11-30', 2, 'javrodrei', 'https://cdn-icons-png.flaticon.com/512/147/147144.png'),
-                                                                                                        (6,'Isaac','Solis','$2b$12$EB6dhGe96Fx1dt4CMxkF/ONMXHMNGLwSD9vhOWMwhLqKNRU2IvoCa','princesita@gmail.com', '2002-07-12', 2, 'isasolpad', 'https://cdn-icons-png.flaticon.com/512/147/147144.png'),
-                                                                                                        (7,'Andres','Garcia','$2b$12$EB6dhGe96Fx1dt4CMxkF/ONMXHMNGLwSD9vhOWMwhLqKNRU2IvoCa','andres7212@gmail.com', '2001-12-23', 2, 'Andresisco', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHRfYlqLUzoJjY4CQnv2yIOwS7WAFuBZrs9w&usqp=CAU'),
-                                                                                                        (8,'Alejandro','Perez','$2b$12$EB6dhGe96Fx1dt4CMxkF/ONMXHMNGLwSD9vhOWMwhLqKNRU2IvoCa','alejandro@gmail.com', '2001-08-11', 2, 'alepersan', 'https://pbs.twimg.com/media/FTQBiYDXwAADvbp.jpg'),                                                                                          
-                                                                                                        (9, 'Maria', 'Herrero', '$2b$12$EB6dhGe96Fx1dt4CMxkF/ONMXHMNGLwSD9vhOWMwhLqKNRU2IvoCa', 'mariahm@gmail.com', '2005-05-02', 2, 'Mariia_hm25', 'https://pbs.twimg.com/profile_images/1729861116203810816/bcN6IZ0H_400x400.jpg'),
-                                                                                                        (10, 'Juan', 'Fernandez', '$2b$12$EB6dhGe96Fx1dt4CMxkF/ONMXHMNGLwSD9vhOWMwhLqKNRU2IvoCa', 'juanfg@gmail.com', '1985-05-20', 2, 'juanfer', 'https://cdn-icons-png.flaticon.com/512/147/147142.png'),
-                                                                                                        (11, 'Lucia', 'Martinez', '$2b$12$EB6dhGe96Fx1dt4CMxkF/ONMXHMNGLwSD9vhOWMwhLqKNRU2IvoCa', 'luciamn@gmail.com', '1995-03-30', 2, 'luciamart', 'https://cdn-icons-png.flaticon.com/512/147/147146.png'),
-                                                                                                        (12, 'Carlos', 'Garcia', '$2b$12$EB6dhGe96Fx1dt4CMxkF/ONMXHMNGLwSD9vhOWMwhLqKNRU2IvoCa', 'carlosgc@gmail.com', '1992-07-25', 2, 'carlosgar', 'https://cdn-icons-png.flaticon.com/512/147/147143.png');
+                                                                                                        (3,'Angel','Garcia','$2b$12$3XLFXRg97xdKsgFwVxoHMOdsQFbit2TS3fseApFHV1xs2e.acOQUa','angelgares6424@gmail.com', '2003-07-12', 2, 'Angelgares', 'https://i.pinimg.com/originals/09/69/c2/0969c2f8a87af926fcf912330b67206f.jpg'),
+                                                                                                        (4,'Jorge','Muñoz','$2b$12$3XLFXRg97xdKsgFwVxoHMOdsQFbit2TS3fseApFHV1xs2e.acOQUa','jorgemr@pm.me', '1999-09-11', 2, 'Jorge_ADD', 'https://images.squarespace-cdn.com/content/v1/5e45d3a8e509f61738454469/81e0d83b-0fa6-48d0-801b-1f0c1515d786/logo+arus+cuadrado+web.png'),
+                                                                                                        (5,'Javier','Rodriguez','$2b$12$3XLFXRg97xdKsgFwVxoHMOdsQFbit2TS3fseApFHV1xs2e.acOQUa','java@gmail.com', '2006-11-30', 2, 'javrodrei', 'https://cdn-icons-png.flaticon.com/512/147/147144.png'),
+                                                                                                        (6,'Isaac','Solis','$2b$12$3XLFXRg97xdKsgFwVxoHMOdsQFbit2TS3fseApFHV1xs2e.acOQUa','princesita@gmail.com', '2002-07-12', 2, 'isasolpad', 'https://cdn-icons-png.flaticon.com/512/147/147144.png'),
+                                                                                                        (7,'Andres','Garcia','$2b$12$3XLFXRg97xdKsgFwVxoHMOdsQFbit2TS3fseApFHV1xs2e.acOQUa','andres7212@gmail.com', '2001-12-23', 2, 'Andresisco', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHRfYlqLUzoJjY4CQnv2yIOwS7WAFuBZrs9w&usqp=CAU'),
+                                                                                                        (8,'Alejandro','Perez','$2b$12$3XLFXRg97xdKsgFwVxoHMOdsQFbit2TS3fseApFHV1xs2e.acOQUa','alejandro@gmail.com', '2001-08-11', 2, 'alepersan', 'https://pbs.twimg.com/media/FTQBiYDXwAADvbp.jpg'),                                                                                          
+                                                                                                        (9, 'Maria', 'Herrero', '$2b$12$3XLFXRg97xdKsgFwVxoHMOdsQFbit2TS3fseApFHV1xs2e.acOQUa', 'mariahm@gmail.com', '2005-05-02', 2, 'Mariia_hm25', 'https://pbs.twimg.com/profile_images/1729861116203810816/bcN6IZ0H_400x400.jpg'),
+                                                                                                        (10, 'Juan', 'Fernandez', '$2b$12$3XLFXRg97xdKsgFwVxoHMOdsQFbit2TS3fseApFHV1xs2e.acOQUa', 'juanfg@gmail.com', '1985-05-20', 2, 'juanfer', 'https://cdn-icons-png.flaticon.com/512/147/147142.png'),
+                                                                                                        (11, 'Lucia', 'Martinez', '$2b$12$3XLFXRg97xdKsgFwVxoHMOdsQFbit2TS3fseApFHV1xs2e.acOQUa', 'luciamn@gmail.com', '1995-03-30', 2, 'luciamar', 'https://cdn-icons-png.flaticon.com/512/147/147146.png'),
+                                                                                                        (12, 'Carlos', 'Garcia', '$2b$12$3XLFXRg97xdKsgFwVxoHMOdsQFbit2TS3fseApFHV1xs2e.acOQUa', 'carlosgc@gmail.com', '1992-07-25', 2, 'carlosgar', 'https://cdn-icons-png.flaticon.com/512/147/147143.png');
 
 
 -- Achievements
@@ -44,7 +44,37 @@ INSERT INTO player_achievements(id, achieve_at) VALUES (1, '2023-09-01'),
                                                        (6, '2023-10-09'),
                                                        (7, '2023-11-01'),                                                     
                                                        (8, '2023-11-25'),                                                    
-                                                       (9, '2023-12-19');
+                                                       (9, '2023-12-19'),
+                                                       (10, '2023-09-02'),
+                                                       (11, '2023-09-01'),
+                                                       (12, '2023-09-01'),
+                                                       (13, '2023-09-01'),
+                                                       (14, '2023-10-20'),
+                                                       (15, '2023-09-01'),
+                                                       (16, '2023-09-01'),
+                                                       (17, '2023-09-01'),
+                                                       (18, '2023-09-01'),
+                                                       (19, '2023-09-01'),
+                                                       (20, '2023-09-01'),
+                                                       (21, '2023-09-27'),
+                                                       (22, '2023-10-09'),
+                                                       (23, '2023-09-01'),
+                                                       (24, '2023-10-09'),
+                                                       (25, '2023-11-01'),
+                                                       (26, '2023-10-30'),
+                                                       (27, '2023-09-01'),
+                                                       (28, '2023-09-01'),
+                                                       (29, '2023-09-01'),
+                                                       (30, '2023-11-25'),
+                                                       (31, '2023-09-01'),
+                                                       (32, '2023-09-01');
+                                                       
+
+
+                                                       
+
+
+
 
 
 --Player PlayerAchievements
@@ -56,7 +86,39 @@ INSERT INTO players_player_achievement(player_achievement_id, player_id) VALUES 
                                                                                 (6, 3),
                                                                                 (7, 3),
                                                                                 (8, 3),
-                                                                                (9, 3);
+                                                                                (9, 3),
+                                                                                (10, 4),
+                                                                                (11, 5),
+                                                                                (12, 5),
+                                                                                (13, 5),
+                                                                                (14, 5),
+                                                                                (15, 6),
+                                                                                (16, 6),
+                                                                                (17, 6),
+                                                                                (18, 6),
+                                                                                (19, 7),
+                                                                                (20, 7),
+                                                                                (21, 7),
+                                                                                (22, 7),
+                                                                                (23, 8),
+                                                                                (24, 8),
+                                                                                (25, 8),
+                                                                                (26, 9),
+                                                                                (27, 10),
+                                                                                (28, 10),
+                                                                                (29, 10),
+                                                                                (30, 10),
+                                                                                (31, 11),
+                                                                                (32, 11);
+                                                                                
+
+
+
+
+
+
+
+
 
 --Achievement PlayerAchievements
 INSERT INTO achievements_player_achievements(achievement_id, player_achievements_id) VALUES (1, 1),
@@ -67,7 +129,33 @@ INSERT INTO achievements_player_achievements(achievement_id, player_achievements
                                                                                             (5, 6),
                                                                                             (3, 7),
                                                                                             (6, 8),
-                                                                                            (9, 9);
+                                                                                            (9, 9),
+                                                                                            (1, 10),
+                                                                                            (1, 11),
+                                                                                            (4, 12),
+                                                                                            (7, 13),
+                                                                                            (8, 14),
+                                                                                            (1, 15),
+                                                                                            (7, 16),
+                                                                                            (4, 17),
+                                                                                            (8, 18),
+                                                                                            (1, 19),
+                                                                                            (4, 20),
+                                                                                            (7, 21),
+                                                                                            (8, 22),
+                                                                                            (1, 23),
+                                                                                            (7, 24),
+                                                                                            (8, 25),
+                                                                                            (1, 26),
+                                                                                            (1, 27),
+                                                                                            (4, 28),
+                                                                                            (7, 29),
+                                                                                            (8, 30),
+                                                                                            (1, 31),
+                                                                                            (7, 32);
+
+
+
 
 -- GamePlayers
 INSERT INTO game_players(id, energy, player_id, color) VALUES (1, 3, 5,'VIOLET'), 
@@ -191,11 +279,11 @@ INSERT INTO friendships(id, receiver, sender, friend_state) VALUES (1, 4, 3, 'AC
                                                                   (5, 8, 3, 'ACCEPTED'),
                                                                   (6, 3, 9, 'ACCEPTED'),
                                                                   (7, 3, 10, 'PENDING'),
-                                                                  (8, 11, 3, 'REJECTED'),
+                                                                  (8, 11, 3, 'PENDING'),
                                                                   (9, 4, 5, 'ACCEPTED'),
                                                                   (10, 5, 6, 'ACCEPTED'),
-                                                                  (11, 5, 8, 'REJECTED'),
-                                                                  (12, 6, 8, 'REJECTED'),
+                                                                  (11, 5, 8, 'PENDING'),
+                                                                  (12, 6, 8, 'PENDING'),
                                                                   (13, 8, 9, 'ACCEPTED'),
                                                                   (14, 9, 10, 'PENDING'),
                                                                   (15, 12, 3, 'ACCEPTED'),

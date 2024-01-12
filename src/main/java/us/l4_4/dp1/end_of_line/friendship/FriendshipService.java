@@ -61,8 +61,6 @@ public class FriendshipService {
             switch (friendStatus) {
                 case PENDING:
                     throw new BadRequestException("There is already a pending friendship request with this player.");
-                case REJECTED:
-                    throw new BadRequestException("You cannot create a friendship with a player who has rejected you.");
                 default:
                     throw new BadRequestException("You are already friends with this player.");
             }
