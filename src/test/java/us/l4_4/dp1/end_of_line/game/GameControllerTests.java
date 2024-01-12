@@ -1,12 +1,16 @@
 package us.l4_4.dp1.end_of_line.game;
 
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import javax.swing.tree.ExpandVetoException;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +18,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -31,6 +36,7 @@ import us.l4_4.dp1.end_of_line.enums.Color;
 import us.l4_4.dp1.end_of_line.enums.Exit;
 import us.l4_4.dp1.end_of_line.enums.Hability;
 import us.l4_4.dp1.end_of_line.enums.Orientation;
+import us.l4_4.dp1.end_of_line.enums.Reaction;
 import us.l4_4.dp1.end_of_line.gameplayer.GamePlayer;
 import us.l4_4.dp1.end_of_line.gameplayer.GamePlayerService;
 import us.l4_4.dp1.end_of_line.message.Message;
@@ -42,7 +48,7 @@ import us.l4_4.dp1.end_of_line.player.PlayerService;
     type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class))
 public class GameControllerTests {
 
-    private static final String BASE_URL = "api/v1/games";
+    private static final String BASE_URL = "/api/v1/games";
 
     private Player player; 
     private Player player2;
@@ -56,6 +62,9 @@ public class GameControllerTests {
     private Card updateCard;
     private Game game; 
     private Game game2;
+    private Message message;
+    private Message message2;
+    private Game newGame;
 
     @SuppressWarnings("unused")
     @Autowired
@@ -88,6 +97,19 @@ public class GameControllerTests {
     @MockBean
     private MessageService messageService;
 
+    private Game createGame(Integer id, Integer id2, Color color, Color color2) {
+        Game game = new Game();
+        game.setId(id);
+        game.setRound(1);
+        game.setWinner(null);
+        game.setStartedAt(Date.from(java.time.Instant.now()));
+        game.setEndedAt(null);
+        game.setMessage(null);
+        game.setEffect(Hability.NONE);
+        game.setGamePlayers(null);
+        return game;
+    }
+
 
 
     @BeforeEach
@@ -116,13 +138,13 @@ public class GameControllerTests {
         gamePlayer1.setPlayer(playerService.findById(1));
 
         player2 = new Player();
-        player2.setId(1);
-        player2.setName("playerName");
-        player2.setSurname("playerSurname");
-        player2.setPassword("Play3r!");
-        player2.setEmail("player@gmail.com");
+        player2.setId(2);
+        player2.setName("playerName2");
+        player2.setSurname("playerSurname2");
+        player2.setPassword("Play3r2!");
+        player2.setEmail("player2@gmail.com");
         player2.setBirthDate(birthDate);
-        player2.setNickname("playerNickname");
+        player2.setNickname("playerNickname2");
         player2.setAuthority(authority);
         player2.setAvatar(avatar);
 
@@ -201,7 +223,19 @@ public class GameControllerTests {
 
         List<GamePlayer> gamePlayers = List.of(gamePlayer1,gamePlayer2);
 
+        message = new Message();
+        message.setId(1);
+        message.setColor(Color.RED);
+        message.setReaction(Reaction.GG);
+
+        message2 = new Message();
+        message2.setId(2);
+        message2.setColor(Color.BLUE);
+        message2.setReaction(Reaction.GG);
+
+
         game = new Game();
+        game.setId(1);
         game.setRound(1);
         game.setWinner(null);
         game.setStartedAt(Date.from(java.time.Instant.now()));
@@ -212,6 +246,7 @@ public class GameControllerTests {
         
 
         game2 = new Game();
+        game.setId(2);
         game2.setRound(10);
         game2.setWinner(playerService.findById(1));
         game2.setStartedAt(Date.from(java.time.Instant.now()));
@@ -224,27 +259,269 @@ public class GameControllerTests {
 
     @Test
     @WithMockUser(username = "playerName", password = "Play3r!")
-    void shouldFindAllGamesByPlayerId() throws Exception{
-        when (gameService.findAllGamesByPlayerId(1)).thenReturn(List.of(game,game2));
+    void shouldFindAllGamesByPlayerId() throws Exception {
+        // Configura los mocks para devolver los datos esperados
+        when(gameService.findAllGamesByPlayerId(1)).thenReturn(List.of(game, game2));
 
-        mockMvc.perform(get(BASE_URL + "/player/{id}", 1)).andExpect(status().isOk())
-        .andExpect(jsonPath("$.id").value(1))
-        .andExpect(jsonPath("$.round").value(1))
-        .andExpect(jsonPath("$.winner").value("null"))
-        .andExpect(jsonPath("$.startedAt").exists())
-        .andExpect(jsonPath("$.endedAt").value("null"))
-        .andExpect(jsonPath("$.message").value("null"))
-        .andExpect(jsonPath("$.effect").value("NONE"))
-        .andExpect(jsonPath("$.gamePlayers[0].id").value(1))
-        .andExpect(jsonPath("$.gamePlayers[0].color").value("RED"))
-        .andExpect(jsonPath("$.gamePlayers[0].energy").value(3))
-        .andExpect(jsonPath("$.gamePlayers[0].player.id").value(1))
-        .andExpect(jsonPath("$.gamePlayers[0].player.name").value("playerName"))
-        .andExpect(jsonPath("$.gamePlayers[0].player.surname").value("playerSurname"))
-        .andExpect(jsonPath("$.gamePlayers[0].player.password").value("Play3r!"))
-        .andExpect(jsonPath("$.gamePlayers[0].player.email").value(""));
+        // Realiza la llamada al endpoint y verifica la respuesta
+        mockMvc.perform(get(BASE_URL + "/players/{id}", 1))
+               .andExpect(status().isOk())
+               .andExpect(jsonPath("$[0].id").value(game.getId()))
+               .andExpect(jsonPath("$[0].round").value(game.getRound()))
+               .andExpect(jsonPath("$[0].gamePlayers[0].player.name").value(gamePlayer1.getPlayer().getName()));
+               // ... más aserciones según sea necesario para verificar los campos relevantes
     }
 
 
+    @Test
+    @WithMockUser(username = "playerName", password = "Play3r!")
+    void shouledFindNotEndedGamesByPlayerId() throws Exception{
+        when(gameService.findNotEndedGamesByPlayerId(null)).thenReturn(List.of(game));
+
+        mockMvc.perform(get(BASE_URL + "/players/{id}/notended", 1))
+               .andExpect(status().isOk())
+               .andExpect(jsonPath("$[0].id").value(game.getId()))
+               .andExpect(jsonPath("$[0].round").value(game.getRound()))
+               .andExpect(jsonPath("$[0].gamePlayers[0].player.name").value(gamePlayer1.getPlayer().getName()));
+    }
+
+    @Test
+    @WithMockUser(username = "playerName", password = "Play3r!")
+    void shouldFindCardsOfGame() throws Exception{
+        when(cardService.findAllCardsOfGame(1)).thenReturn(List.of(card, card2));
+
+        mockMvc.perform(get(BASE_URL + "/{id}/cards", 1))
+               .andExpect(status().isOk())
+               .andExpect(jsonPath("$[0].id").value(card.getId()))
+               .andExpect(jsonPath("$[0].initiative").value(card.getInitiative()))
+               .andExpect(jsonPath("$[0].color").value(card.getColor().toString()))
+               .andExpect(jsonPath("$[0].exit").value(card.getExit().toString()))
+               .andExpect(jsonPath("$[0].isTemplate").value(card.getIsTemplate()))
+               .andExpect(jsonPath("$[0].orientation").value(card.getOrientation().toString()))
+               .andExpect(jsonPath("$[0].column").value(card.getColumn()))
+               .andExpect(jsonPath("$[0].row").value(card.getRow()))
+               .andExpect(jsonPath("$[0].cardState").value(card.getCardState().toString()))
+               .andExpect(jsonPath("$[1].id").value(card2.getId()))
+               .andExpect(jsonPath("$[1].initiative").value(card2.getInitiative()))
+               .andExpect(jsonPath("$[1].color").value(card2.getColor().toString()))
+               .andExpect(jsonPath("$[1].exit").value(card2.getExit().toString()))
+               .andExpect(jsonPath("$[1].isTemplate").value(card2.getIsTemplate()))
+               .andExpect(jsonPath("$[1].orientation").value(card2.getOrientation().toString()))
+               .andExpect(jsonPath("$[1].column").value(card2.getColumn()))
+               .andExpect(jsonPath("$[1].row").value(card2.getRow()))
+               .andExpect(jsonPath("$[1].cardState").value(card2.getCardState().toString()));
+    }
+
+    @Test
+    @WithMockUser(username = "playerName", password = "Play3r!")
+    void shouldFindGamePlayersByGameId() throws Exception{
+        when(gamePlayerService.findGamePlayersByGameId(1)).thenReturn(List.of(gamePlayer1, gamePlayer2));
+
+        mockMvc.perform(get(BASE_URL + "/{id}/gameplayers", 1))
+               .andExpect(status().isOk())
+               .andExpect(jsonPath("$[0].id").value(gamePlayer1.getId()))
+               .andExpect(jsonPath("$[0].color").value(gamePlayer1.getColor().toString()))
+               .andExpect(jsonPath("$[0].energy").value(gamePlayer1.getEnergy()))
+               .andExpect(jsonPath("$[0].player.name").value(gamePlayer1.getPlayer().getName()))
+               .andExpect(jsonPath("$[1].id").value(gamePlayer2.getId()))
+               .andExpect(jsonPath("$[1].color").value(gamePlayer2.getColor().toString()))
+               .andExpect(jsonPath("$[1].energy").value(gamePlayer2.getEnergy()))
+               .andExpect(jsonPath("$[1].player.name").value(gamePlayer2.getPlayer().getName()));
+    }
+    @Test 
+    @WithMockUser(username = "playerName", password = "Play3r!")
+    void shouldFindAllMessagesByGameId() throws Exception {
+        // Assuming findAllMessagesByGameId is a method in messageService
+        when(messageService.findAllMessagesByGameId(1)).thenReturn(List.of(message, message2));
+    
+        // Perform the request and assert the expected results
+        mockMvc.perform(get(BASE_URL + "/{id}/messages", 1))
+               .andExpect(status().isOk())
+               .andExpect(jsonPath("$[0].id").value(message.getId()))
+               .andExpect(jsonPath("$[0].color").value(message.getColor().toString()))
+               .andExpect(jsonPath("$[0].reaction").value(message.getReaction().toString()));
+
+    }
+
+    @Test
+    @WithMockUser(username = "playerName", password = "Play3r!")
+    void shouldFindAllGames() throws Exception {
+        when(gameService.findAllGames()).thenReturn(List.of(game, game2));
+        mockMvc.perform(get(BASE_URL + "/all"))
+               .andExpect(status().isOk())
+               .andExpect(jsonPath("$[0].id").value(game.getId()))
+               .andExpect(jsonPath("$[0].round").value(game.getRound()))
+               .andExpect(jsonPath("$[0].gamePlayers[0].player.name").value(gamePlayer1.getPlayer().getName()))
+               .andExpect(jsonPath("$[1].id").value(game2.getId()))
+               .andExpect(jsonPath("$[1].round").value(game2.getRound()))
+               .andExpect(jsonPath("$[1].gamePlayers[0].player.name").value(gamePlayer1.getPlayer().getName()));
+    }
+
+    @Test
+    @WithMockUser(username = "playerName", password = "Play3r!")
+    void shouldDeteleGame() throws Exception {
+        when(gameService.findById(1)).thenReturn(game);
+
+        doNothing().when(this.gameService).deleteGame(1, 1);
+        mockMvc.perform(delete(BASE_URL + "/{gameId}/{gamePlayerId}", 1, 1).with(csrf()))
+               .andExpect(status().isOk());
+
+    }
+
+    @Test
+    @WithMockUser(username = "playerName", password = "Play3r!")
+    void shouldCreateGame() throws Exception{ 
+        newGame = createGame(1, 2, Color.RED, Color.BLUE);
+        when(gameService.createNewGame(1, 2, Color.RED, Color.BLUE)).thenReturn(newGame);
+
+        mockMvc.perform(post(BASE_URL).with(csrf()).contentType(MediaType.APPLICATION_JSON)
+               .content(objectMapper.writeValueAsString(newGame))).andExpect(status().isCreated());
+    }
+
+   @Test
+    @WithMockUser(username = "playerName", password = "Play3r!")
+    void shouldFindById() throws Exception {
+        when(gameService.findById(1)).thenReturn(game);
+
+        mockMvc.perform(get(BASE_URL + "/{id}", 1))
+               .andExpect(status().isOk())
+               .andExpect(jsonPath("$.id").value(game.getId()))
+               .andExpect(jsonPath("$.round").value(game.getRound()))
+               .andExpect(jsonPath("$.gamePlayers[0].player.name").value(gamePlayer1.getPlayer().getName()));
+    } 
+
+    @Test
+    @WithMockUser(username = "playerName", password = "Play3r!")
+    void shouldUpdateGame() throws Exception{ 
+        game.setRound(2);
+        game.setWinner(playerService.findById(1));
+        game.setStartedAt(Date.from(java.time.Instant.now()));
+        game.setEndedAt(Date.from(java.time.Instant.now()));
+        game.setMessage(null);
+        game.setEffect(Hability.NONE);
+        game.setGamePlayers(List.of(gamePlayer1, gamePlayer2));
+
+        when(gameService.findById(1)).thenReturn(game);
+        when(gameService.updateGame(any(Integer.class), any(GameDTO.class))).thenReturn(game);
+
+        mockMvc.perform(put(BASE_URL + "/{id}", 1).with(csrf()).contentType(MediaType.APPLICATION_JSON)
+               .content(objectMapper.writeValueAsString(game))).andExpect(status().isOk())
+               .andExpect(jsonPath("$.round").value(game.getRound()))
+               .andExpect(jsonPath("$.winner.name").value(game.getWinner().getName()))
+               .andExpect(jsonPath("$.startedAt").value(game.getStartedAt()))
+               .andExpect(jsonPath("$.endedAt").value(game.getEndedAt()))
+               .andExpect(jsonPath("$.message").value(game.getMessage()))
+               .andExpect(jsonPath("$.effect").value(game.getEffect().toString()))
+               .andExpect(jsonPath("$.gamePlayers[0].player.name").value(gamePlayer1.getPlayer().getName()))
+               .andExpect(jsonPath("$.gamePlayers[1].player.name").value(gamePlayer2.getPlayer().getName()));
+    }
+
+    @Test
+    @WithMockUser(username = "playerName", password = "Play3r!")
+    void shouldUpdateGameTurn() throws Exception{ 
+        game.setRound(5);
+        game.setWinner(null);
+        game.setStartedAt(Date.from(java.time.Instant.now()));
+        game.setEndedAt(null);
+        game.setMessage(null);
+        game.setEffect(Hability.NONE);
+        game.setGamePlayers(List.of(gamePlayer1, gamePlayer2));
+
+        when(gameService.findById(1)).thenReturn(game);
+        when(gameService.updateGameTurn(any(Integer.class))).thenReturn(game);
+
+        mockMvc.perform(put(BASE_URL + "/{gameId}/test", 1).with(csrf()).contentType(MediaType.APPLICATION_JSON)
+               .content(objectMapper.writeValueAsString(game))).andExpect(status().isOk())
+               .andExpect(jsonPath("$.round").value(game.getRound()))
+               .andExpect(jsonPath("$.winner.name").value(game.getWinner().getName()))
+               .andExpect(jsonPath("$.startedAt").value(game.getStartedAt()))
+               .andExpect(jsonPath("$.endedAt").value(game.getEndedAt()))
+               .andExpect(jsonPath("$.message").value(game.getMessage()))
+               .andExpect(jsonPath("$.effect").value(game.getEffect().toString()))
+               .andExpect(jsonPath("$.gamePlayers[0].player.name").value(gamePlayer1.getPlayer().getName()))
+               .andExpect(jsonPath("$.gamePlayers[1].player.name").value(gamePlayer2.getPlayer().getName()));
+    }
+
+    @Test
+    @WithMockUser(username = "playerName", password = "Play3r!")
+    void shouldChangeEffect() throws Exception{ 
+        game.setRound(5);
+        game.setWinner(null);
+        game.setStartedAt(Date.from(java.time.Instant.now()));
+        game.setEndedAt(null);
+        game.setMessage(null);
+        game.setEffect(Hability.NONE);
+        game.setGamePlayers(List.of(gamePlayer1, gamePlayer2));
+
+        when(gameService.findById(1)).thenReturn(game);
+        when(gameService.updateGameEffect(any(Integer.class), any(ChangeEffectRequest.class))).thenReturn(game);
+
+        mockMvc.perform(put(BASE_URL + "/{gameId}/effect", 1).with(csrf()).contentType(MediaType.APPLICATION_JSON)
+               .content(objectMapper.writeValueAsString(game))).andExpect(status().isOk())
+               .andExpect(jsonPath("$.round").value(game.getRound()))
+               .andExpect(jsonPath("$.winner.name").value(game.getWinner().getName()))
+               .andExpect(jsonPath("$.startedAt").value(game.getStartedAt()))
+               .andExpect(jsonPath("$.endedAt").value(game.getEndedAt()))
+               .andExpect(jsonPath("$.message").value(game.getMessage()))
+               .andExpect(jsonPath("$.effect").value(game.getEffect().toString()))
+               .andExpect(jsonPath("$.gamePlayers[0].player.name").value(gamePlayer1.getPlayer().getName()))
+               .andExpect(jsonPath("$.gamePlayers[1].player.name").value(gamePlayer2.getPlayer().getName()));
+    }
+
+    @Test
+    @WithMockUser(username = "playerName", password = "Play3r!")
+    void shouldChangeCardsInHand() throws Exception{ 
+        when(gameService.findById(1)).thenReturn(game);
+        when(gameService.changeCardsInHand(any(Integer.class))).thenReturn(List.of(card, card2));
+
+        mockMvc.perform(put(BASE_URL + "/{gameId}/changeCardsInHand", 1).with(csrf()).contentType(MediaType.APPLICATION_JSON)
+               .content(objectMapper.writeValueAsString(game))).andExpect(status().isOk())
+               .andExpect(jsonPath("$[0].id").value(card.getId()))
+               .andExpect(jsonPath("$[0].initiative").value(card.getInitiative()))
+               .andExpect(jsonPath("$[0].color").value(card.getColor().toString()))
+               .andExpect(jsonPath("$[0].exit").value(card.getExit().toString()))
+               .andExpect(jsonPath("$[0].isTemplate").value(card.getIsTemplate()))
+               .andExpect(jsonPath("$[0].orientation").value(card.getOrientation().toString()))
+               .andExpect(jsonPath("$[0].column").value(card.getColumn()))
+               .andExpect(jsonPath("$[0].row").value(card.getRow()))
+               .andExpect(jsonPath("$[0].cardState").value(card.getCardState().toString()))
+               .andExpect(jsonPath("$[1].id").value(card2.getId()))
+               .andExpect(jsonPath("$[1].initiative").value(card2.getInitiative()))
+               .andExpect(jsonPath("$[1].color").value(card2.getColor().toString()))
+               .andExpect(jsonPath("$[1].exit").value(card2.getExit().toString()))
+               .andExpect(jsonPath("$[1].isTemplate").value(card2.getIsTemplate()))
+               .andExpect(jsonPath("$[1].orientation").value(card2.getOrientation().toString()))
+               .andExpect(jsonPath("$[1].column").value(card2.getColumn()))
+               .andExpect(jsonPath("$[1].row").value(card2.getRow()))
+               .andExpect(jsonPath("$[1].cardState").value(card2.getCardState().toString()));
+    }
+
+    @Test
+    @WithMockUser(username = "playerName", password = "Play3r!")
+    void shouldCardsPossiblePositions() throws Exception{ 
+        when(gameService.findById(1)).thenReturn(game);
+        when(gameService.findPosiblePositionOfAGamePlayerGiven(any(Integer.class), any(Integer.class))).thenReturn(List.of("1,1,W", "1,2,E"));
+
+        mockMvc.perform(put(BASE_URL + "/{gameId}/gameplayers/{gamePlayerId}/cardPositions", 1,1).with(csrf()).contentType(MediaType.APPLICATION_JSON)
+               .content(objectMapper.writeValueAsString(game))).andExpect(status().isOk())
+               .andExpect(jsonPath("$[0].id").value(card.getId()))
+               .andExpect(jsonPath("$[0].initiative").value(card.getInitiative()))
+               .andExpect(jsonPath("$[0].color").value(card.getColor().toString()))
+               .andExpect(jsonPath("$[0].exit").value(card.getExit().toString()))
+               .andExpect(jsonPath("$[0].isTemplate").value(card.getIsTemplate()))
+               .andExpect(jsonPath("$[0].orientation").value(card.getOrientation().toString()))
+               .andExpect(jsonPath("$[0].column").value(card.getColumn()))
+               .andExpect(jsonPath("$[0].row").value(card.getRow()))
+               .andExpect(jsonPath("$[0].cardState").value(card.getCardState().toString()))
+               .andExpect(jsonPath("$[1].id").value(card2.getId()))
+               .andExpect(jsonPath("$[1].initiative").value(card2.getInitiative()))
+               .andExpect(jsonPath("$[1].color").value(card2.getColor().toString()))
+               .andExpect(jsonPath("$[1].exit").value(card2.getExit().toString()))
+               .andExpect(jsonPath("$[1].isTemplate").value(card2.getIsTemplate()))
+               .andExpect(jsonPath("$[1].orientation").value(card2.getOrientation().toString()))
+               .andExpect(jsonPath("$[1].column").value(card2.getColumn()))
+               .andExpect(jsonPath("$[1].row").value(card2.getRow()))
+               .andExpect(jsonPath("$[1].cardState").value(card2.getCardState().toString()));
+    }
 
 }
