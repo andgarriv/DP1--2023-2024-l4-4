@@ -15,12 +15,14 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.With;
 import us.l4_4.dp1.end_of_line.authorities.Authorities;
+import us.l4_4.dp1.end_of_line.authorities.AuthoritiesService;
 import us.l4_4.dp1.end_of_line.card.Card;
 import us.l4_4.dp1.end_of_line.card.CardController;
 import us.l4_4.dp1.end_of_line.card.CardService;
@@ -30,7 +32,9 @@ import us.l4_4.dp1.end_of_line.enums.Exit;
 import us.l4_4.dp1.end_of_line.enums.Hability;
 import us.l4_4.dp1.end_of_line.enums.Orientation;
 import us.l4_4.dp1.end_of_line.gameplayer.GamePlayer;
+import us.l4_4.dp1.end_of_line.gameplayer.GamePlayerService;
 import us.l4_4.dp1.end_of_line.message.Message;
+import us.l4_4.dp1.end_of_line.message.MessageService;
 import us.l4_4.dp1.end_of_line.player.Player;
 import us.l4_4.dp1.end_of_line.player.PlayerService;
 
@@ -68,6 +72,22 @@ public class GameControllerTests {
 
     @Autowired
     private ObjectMapper objectMapper;
+    
+    @MockBean
+    private CardService cardService;
+
+    @MockBean
+    private AuthoritiesService authoritiesService;
+
+    @MockBean
+    private PasswordEncoder passwordEncoder;
+
+    @MockBean
+    private GamePlayerService gamePlayerService;
+
+    @MockBean
+    private MessageService messageService;
+
 
 
     @BeforeEach
