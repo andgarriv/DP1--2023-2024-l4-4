@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import tokenService from "../../services/token.service";
+import "../../static/css/home/home.css";
 
 export default function PlayerStats() {
   const [stats, setStats] = useState({
@@ -155,57 +156,60 @@ export default function PlayerStats() {
   }
 
   return (
-    <div>
+    <div style={{ height: "90%" }}>
       <h1 className="text-center" style={{ marginBottom: "3%" }}>My Stats</h1>
       {!loading ? (
         stats.gamesPlayed === 0 ? (
           <p style={{ textAlign: "center" }}>You must play a game to see your stats</p>
         ) : (
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', textAlign: 'left', gap: '10px' }}>
-            <span>Games played:</span>
-            <span style={{ textAlign: 'right' }}>{stats.gamesPlayed}</span>
+          <div className="scrollable-content">
 
-            <span>Wins:</span>
-            <span style={{ textAlign: 'right' }}>{stats.gamesWon}</span>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', textAlign: 'left', gap: '10px' }}>
+              <span>Games played:</span>
+              <span style={{ textAlign: 'right' }}>{stats.gamesPlayed}</span>
 
-            <span>Winning ratio:</span>
-            <span style={{ textAlign: 'right' }}>{stats.winRatio}%</span>
+              <span>Wins:</span>
+              <span style={{ textAlign: 'right' }}>{stats.gamesWon}</span>
 
-            <span>Winning streak:</span>
-            <span style={{ textAlign: 'right' }}>{stats.currentWinStreak}</span>
+              <span>Winning ratio:</span>
+              <span style={{ textAlign: 'right' }}>{stats.winRatio}%</span>
 
-            <span>Maximum winning streak:</span>
-            <span style={{ textAlign: 'right' }}>{stats.maxWinStreak}</span>
+              <span>Winning streak:</span>
+              <span style={{ textAlign: 'right' }}>{stats.currentWinStreak}</span>
 
-            <span>Average rounds:</span>
-            <span style={{ textAlign: 'right' }}>{stats.avgRound}</span>
+              <span>Maximum winning streak:</span>
+              <span style={{ textAlign: 'right' }}>{stats.maxWinStreak}</span>
 
-            <span>Max rounds:</span>
-            <span style={{ textAlign: 'right' }}>{stats.maxRound}</span>
+              <span>Average rounds:</span>
+              <span style={{ textAlign: 'right' }}>{stats.avgRound}</span>
 
-            <span>Min rounds:</span>
-            <span style={{ textAlign: 'right' }}>{stats.minRound}</span>
+              <span>Max rounds:</span>
+              <span style={{ textAlign: 'right' }}>{stats.maxRound}</span>
 
-            <span>Average duration:</span>
-            <span style={{ textAlign: 'right' }}>{stats.averageGameDuration}</span>
+              <span>Min rounds:</span>
+              <span style={{ textAlign: 'right' }}>{stats.minRound}</span>
 
-            <span>Longest duration:</span>
-            <span style={{ textAlign: 'right' }}>{stats.longestGameDuration}</span>
+              <span>Average duration:</span>
+              <span style={{ textAlign: 'right' }}>{stats.averageGameDuration}</span>
 
-            <span>Shortest duration:</span>
-            <span style={{ textAlign: 'right' }}>{stats.shortestGameDuration}</span>
+              <span>Longest duration:</span>
+              <span style={{ textAlign: 'right' }}>{stats.longestGameDuration}</span>
 
-            <span>Time played:</span>
-            <span style={{ textAlign: 'right' }}>{stats.totalTimePlayed}</span>
+              <span>Shortest duration:</span>
+              <span style={{ textAlign: 'right' }}>{stats.shortestGameDuration}</span>
 
-            <span>Average energy used:</span>
-            <span style={{ textAlign: 'right' }}>{stats.avgEnergyUsed}</span>
+              <span>Time played:</span>
+              <span style={{ textAlign: 'right' }}>{stats.totalTimePlayed}</span>
 
-            <span>Most color used:</span>
-            <span style={{ textAlign: 'right' }}>{stats.mostCommonColor}</span>
+              <span>Average energy used:</span>
+              <span style={{ textAlign: 'right' }}>{stats.avgEnergyUsed}</span>
 
-            <span>Least color used:</span>
-            <span style={{ textAlign: 'right' }}>{stats.leastCommonColor}</span>
+              <span>Most color used:</span>
+              <span style={{ textAlign: 'right' }}>{stats.mostCommonColor}</span>
+
+              <span>Least color used:</span>
+              <span style={{ textAlign: 'right' }}>{stats.leastCommonColor}</span>
+            </div>
           </div>
         )
       ) : (
