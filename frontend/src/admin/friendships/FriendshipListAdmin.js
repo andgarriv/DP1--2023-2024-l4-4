@@ -84,8 +84,6 @@ export default function FriendshipList() {
         switch (state) {
             case "ACCEPTED":
                 return { color: "green" };
-            case "REJECTED":
-                return { color: "red" };
             default:
                 return { color: "yellow" };
         }

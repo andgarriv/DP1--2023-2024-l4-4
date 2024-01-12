@@ -1,87 +1,89 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button, Form, Input, Label } from "reactstrap";
 import tokenService from "../../services/token.service";
 import getErrorModal from "../../util/getErrorModal";
-import useFetchState from "../../util/useFetchState";
-
-
 
 export default function FriendshipEdit() {
     const jwt = tokenService.getLocalAccessToken();
-const user = tokenService.getUser();
+    const user = tokenService.getUser();
     const [message, setMessage] = useState(null);
     const [visible, setVisible] = useState(false);
-    const [nickname, setNickname] = useState(""); // Usar un estado separado para el nickname
-    const [friendship, setFriendship] = useFetchState(null);
+    const [nickname, setNickname] = useState("");
 
     const modal = getErrorModal(setVisible, visible, message);
 
     const handleChange = (event) => {
-        setNickname(event.target.value); // Actualizar el estado del nickname
+        setNickname(event.target.value);
     };
 
-    const handleSubmit = async (event) => {
-        event.preventDefault(); // Prevenir el comportamiento por defecto del formulario
-        try {/* 
-            // Verificar si el nickname existe
-            const existsResponse = await fetch(`/api/v1/players/exists/${nickname}`, {
-                headers: {
-                    Authorization: `Bearer ${jwt}`,
-                },
-            });
-            const exists = await existsResponse.json();
-            if (!exists) {
-                setMessage("Nickname does not exist.");
-                setVisible(true);
-                return;
-            } */
+    let navigate = useNavigate();
 
-            // Obtener el ID del player por nickname
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        try {
             const idResponse = await fetch(`/api/v1/players/nickname/${nickname}`, {
                 headers: {
                     Authorization: `Bearer ${jwt}`,
+                    "Content-Type": "application/json",
                 },
             });
+
+            if (!idResponse.ok)
+                throw new Error(`Player with nickname ${nickname} does not exist.`);
+
             const player = await idResponse.json();
-            if (!player) {
-                setMessage("Player not found.");
-                setVisible(true);
-                return;
-            }
+            const friendshipsResponse = await fetch(`/api/v1/friendships/players/${user.id}/ACCEPTED`, {
+                headers: {
+                    Authorization: `Bearer ${jwt}`,
+                    "Content-Type": "application/json",
+                },
+            });
 
-            // Enviar la solicitud de amistad
-            const response = await fetch(
-                `/api/v1/friendships`,
-                {
-                    method: "POST",
-                    headers: {
-                        Authorization: `Bearer ${jwt}`,
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        sender: user.id,
-                        receiver: player.id, 
-                        friendship_state: "PENDING",
-                    })
-                }
-            );
+            const friendshipsJson = await friendshipsResponse.json();
+            if (friendshipsJson.some(friendship => friendship.sender.id === player.id || friendship.receiver.id === player.id))
+                throw new Error('You are already friends with this player');
 
-            if (response.ok) {
-                setMessage("Friendship request sent successfully.");
-            } else {
+            const pendingFriendshipsResponse = await fetch(`/api/v1/friendships/players/${user.id}/PENDING`, {
+                headers: {
+                    Authorization: `Bearer ${jwt}`,
+                    "Content-Type": "application/json",
+                },
+            });
+
+            const pendingFriendshipsJson = await pendingFriendshipsResponse.json();
+            if (pendingFriendshipsJson.some(friendship => friendship.sender.id === player.id || friendship.receiver.id === player.id))
+                throw new Error('You already have a pending friendship request with this player');
+
+            const response = await fetch(`/api/v1/friendships`, {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${jwt}`,
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    sender: user.id,
+                    receiver: player.id,
+                    friendship_state: "PENDING",
+                })
+            });
+
+            if (!response.ok)
                 throw new Error('Failed to send friendship request.');
-            }
+
+            navigate("/friendships");
         } catch (error) {
-            setMessage(`Error: ${error.message}`);
+            setMessage(error.message);
         } finally {
             setVisible(true);
         }
     };
 
+
     return (
         <div className="home-page-container">
             <div className="hero-div">
-                <h1 className="text-center">Create Friendship</h1>
+                <h1 className="text-center">Send Friendship</h1>
                 {modal}
                 <Form onSubmit={handleSubmit}>
                     <div className="custom-form-input">
@@ -95,9 +97,22 @@ const user = tokenService.getUser();
                             onChange={handleChange}
                         />
                     </div>
-                    <Button outline color="success" type="submit">
-                        Save
-                    </Button>
+                    <div style={{ display: "flex", justifyContent: "space-between", marginTop: "20px" }}>
+                        <Button
+                            size="lg"
+                            className="negative-button"
+                            onClick={() => navigate("/friendships")}
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            size="lg"
+                            className="positive-button"
+                            type="submit"
+                        >
+                            Send
+                        </Button>
+                    </div>
                 </Form>
             </div>
         </div>

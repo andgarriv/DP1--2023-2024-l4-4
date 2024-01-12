@@ -170,11 +170,18 @@ export default function FriendshipList() {
                             </Button>
 
                             <Button
-                                aria-label={"update-" + friendship.id}
+                                aria-label={"delete-" + friendship.id}
                                 size="sm"
                                 color="danger"
                                 className="negative-button"
-                                onClick={() => updateFriendshipStatus(friendship.id, friendship.sender.id, friendship.receiver.id, "REJECTED")}
+                                onClick={() => deleteFromList(
+                                    `/api/v1/friendships/${friendship.id}`,
+                                    friendship.id,
+                                    [friendships, setFriendships],
+                                    [alerts, setAlerts],
+                                    setMessage,
+                                    setVisible
+                                )}
                             >
                                 Deny
                             </Button>
