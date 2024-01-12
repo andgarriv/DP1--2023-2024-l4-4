@@ -5,7 +5,7 @@ import tokenService from "../../services/token.service";
 import getErrorModal from "../../util/getErrorModal";
 import useFetchState from "../../util/useFetchState";
 
-const imgNotFound = "https://cdn-icons-png.flaticon.com/512/5778/5778223.png";
+const imgNotFound = "https://cdn-icons-png.flaticon.com/512/5556/5556468.png";
 const user = tokenService.getUser();
 
 
