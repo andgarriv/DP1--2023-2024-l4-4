@@ -486,31 +486,55 @@ export default function Board() {
             SPEED UP
           </Button>
           {dataGamePlayer[0].player.id === user.id && (
-            <div className="hand">
-              <img
-                src={energyCards[0].image}
-                alt="EnergyCard0"
-                style={{
-                  ...getRotationStyle(
-                    dataGamePlayer.length > 0 ? dataGamePlayer[0].energy : 0
-                  ),
-                  marginTop: "20%",
-                }}
-              />
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              <div className="hand">
+                <img
+                  src={energyCards[0].image}
+                  alt="EnergyCard0"
+                  style={{
+                    ...getRotationStyle(
+                      dataGamePlayer.length > 0 ? dataGamePlayer[0].energy : 0
+                    ),
+                    marginTop: "20%",
+                  }} />
+              </div>
+              <div className="hand">
+                <img
+                  src={energyCards[1].image}
+                  alt="EnergyCard0"
+                  style={{
+                    ...getRotationStyle(
+                      dataGamePlayer.length > 0 ? dataGamePlayer[1].energy : 0
+                    ),
+                    marginTop: "20%",
+                  }} />
+              </div>
             </div>
           )}
           {dataGamePlayer[1].player.id === user.id && (
-            <div className="hand">
-              <img
-                src={energyCards[1].image}
-                alt="EnergyCard0"
-                style={{
-                  ...getRotationStyle(
-                    dataGamePlayer.length > 0 ? dataGamePlayer[1].energy : 0
-                  ),
-                  marginTop: "20%",
-                }}
-              />
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              <div className="hand">
+                <img
+                  src={energyCards[1].image}
+                  alt="EnergyCard0"
+                  style={{
+                    ...getRotationStyle(
+                      dataGamePlayer.length > 0 ? dataGamePlayer[1].energy : 0
+                    ),
+                    marginTop: "20%",
+                  }} />
+              </div>
+              <div className="hand">
+                <img
+                  src={energyCards[0].image}
+                  alt="EnergyCard0"
+                  style={{
+                    ...getRotationStyle(
+                      dataGamePlayer.length > 0 ? dataGamePlayer[0].energy : 0
+                    ),
+                    marginTop: "20%",
+                  }} />
+              </div>
             </div>
           )}
         </div>

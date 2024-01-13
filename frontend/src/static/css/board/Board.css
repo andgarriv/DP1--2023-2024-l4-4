@@ -66,6 +66,8 @@
 .hand {
   width: 20%;
   height: auto;
+  margin-right: 5%;
+  margin-left: 5%;
 }
 
 .rotate-north {
