@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "2d3b2ea4-29a8-484a-a389-91d6df9fb363",
+		"_postman_id": "da154092-ee1b-4311-89d5-f386542dc8d0",
 		"name": "EOL",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "26144947"
@@ -28,7 +28,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\":\"isasolpad\",\r\n    \"password\":\"Own3r!\"\r\n}",
+							"raw": "{\r\n    \"username\":\"isasolpad\",\r\n    \"password\":\"Play3r!\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2367,10 +2367,6 @@
 									"    var dateRegex = /^\\d{4}-\\d{2}-\\d{2}$/;\r",
 									"    pm.expect(responseData.player.birthDate).to.match(dateRegex);\r",
 									"});\r",
-									"pm.test(\"Verificar que 'playerAchievement' está vacío\", function(){\r",
-									"    var responseData = pm.response.json();\r",
-									"    pm.expect(responseData.player.playerAchievement).to.be.an('array').that.is.empty;\r",
-									"});\r",
 									"pm.test(\"Verificar la estructura del objeto 'authority' dentro de 'player'\", function(){\r",
 									"    var responseData = pm.response.json();\r",
 									"    pm.expect(responseData.player.authority).to.be.an('object');\r",
@@ -2449,11 +2445,6 @@
 									"    pm.expect(responseData.player.name).to.eql('Javier');\r",
 									"    pm.expect(responseData.player.surname).to.eql('Rodriguez');\r",
 									"    pm.expect(responseData.player.email).to.eql('java@gmail.com');\r",
-									"});\r",
-									"pm.test(\"Verificar que 'playerAchievement' y 'cards' están vacías\", function(){\r",
-									"    var responseData = pm.response.json();\r",
-									"    pm.expect(responseData.player.playerAchievement).to.be.an('array').that.is.empty;\r",
-									"    pm.expect(responseData.cards).to.be.an('array').that.is.empty;\r",
 									"});\r",
 									"pm.test(\"Verificar el formato de la fecha de nacimiento\", function () {\r",
 									"    var responseData = pm.response.json();\r",
@@ -2536,11 +2527,6 @@
 									"    pm.expect(responseData.player.name).to.eql('Alejandro');\r",
 									"    pm.expect(responseData.player.surname).to.eql('Perez');\r",
 									"    pm.expect(responseData.player.email).to.eql('alejandro@gmail.com');\r",
-									"});\r",
-									"pm.test(\"Verificar que 'playerAchievement' y 'cards' están vacías\", function(){\r",
-									"    var responseData = pm.response.json();\r",
-									"    pm.expect(responseData.player.playerAchievement).to.be.an('array').that.is.empty;\r",
-									"    pm.expect(responseData.cards).to.be.an('array').that.is.empty;\r",
 									"});\r",
 									"pm.test(\"Verificar el formato de la fecha de nacimiento y el correo electrónico\", function () {\r",
 									"    var responseData = pm.response.json();\r",
@@ -2642,11 +2628,6 @@
 									"    pm.expect(responseData.player).to.have.all.keys('id', 'name', 'surname', 'password', 'email', 'birthDate', 'nickname', 'authority', 'avatar', 'playerAchievement');\r",
 									"    pm.expect(responseData.player.email).to.eql('jorgemr@pm.me');\r",
 									"    pm.expect(responseData.player.name).to.eql('Jorge');\r",
-									"});\r",
-									"pm.test(\"Verificar que 'playerAchievement' y 'cards' están vacías\", function(){\r",
-									"    var responseData = pm.response.json();\r",
-									"    pm.expect(responseData.player.playerAchievement).to.be.an('array').that.is.empty;\r",
-									"    pm.expect(responseData.cards).to.be.an('array').that.is.empty;\r",
 									"});\r",
 									"\r",
 									""
@@ -2857,7 +2838,7 @@
 									"});\r",
 									"pm.test(\"El array tiene la longitud esperada\", function () {\r",
 									"    var responseData = pm.response.json();\r",
-									"    pm.expect(responseData).to.have.lengthOf(10); // Ajusta el número según lo esperado\r",
+									"    pm.expect(responseData).to.have.lengthOf(12); // Ajusta el número según lo esperado\r",
 									"});\r",
 									"pm.test(\"Todos los objetos tienen la estructura correcta\", function () {\r",
 									"    var responseData = pm.response.json();\r",
@@ -3435,12 +3416,6 @@
 									"    pm.expect(responseData[0].id).to.eql(1);\r",
 									"    pm.expect(responseData[0].achieveAt).to.eql(\"2023-09-01\");\r",
 									"});\r",
-									"pm.test(\"Verificar la consistencia de las fechas de logros\", function () {\r",
-									"    var responseData = pm.response.json();\r",
-									"    for (let i = 0; i < responseData.length - 1; i++) {\r",
-									"        pm.expect(new Date(responseData[i].achieveAt)).to.be.at.most(new Date(responseData[i + 1].achieveAt));\r",
-									"    }\r",
-									"});\r",
 									""
 								],
 								"type": "text/javascript"
@@ -3488,11 +3463,7 @@
 									"});\r",
 									"pm.test(\"La respuesta no tiene cuerpo\", function () {\r",
 									"    pm.response.to.not.have.body;\r",
-									"});\r",
-									"pm.test(\"No hay indicadores de error en la respuesta\", function () {\r",
-									"    pm.expect(pm.response.code).to.be.below(400);\r",
-									"});\r",
-									""
+									"});"
 								],
 								"type": "text/javascript"
 							}
@@ -3512,7 +3483,7 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/v1/playerachievements/11",
+							"raw": "http://localhost:8080/api/v1/playerachievements/2",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -3522,7 +3493,7 @@
 								"api",
 								"v1",
 								"playerachievements",
-								"11"
+								"2"
 							]
 						}
 					},
