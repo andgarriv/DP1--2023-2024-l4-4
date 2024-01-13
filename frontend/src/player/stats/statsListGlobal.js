@@ -18,8 +18,8 @@ export default function GlobalStats() {
                 }
                 const stats = await response.json();
                 setStats(stats);
-                console.log(stats);
                 setLoading(false);
+
             } catch (error) {
                 console.error("Error fetching data:", error);
                 setLoading(false);
@@ -32,7 +32,7 @@ export default function GlobalStats() {
 
 
     return (
-        <div style={{ height: "90%" }}>
+        <div style={{ height: "90%", width: "100%", }}>
             <h1 className="text-center" style={{ marginBottom: "3%" }}>Global Stats</h1>
             {!loading ? (
                 !stats ? (
@@ -71,6 +71,15 @@ export default function GlobalStats() {
                             <span>Min rounds:</span>
                             <span style={{ textAlign: 'right' }}>{stats.minRounds}</span>
 
+                            <span>Average energy used:</span>
+                            <span style={{ textAlign: 'right' }}>{stats.averageEnergyUsed}</span>
+
+                            <span>Most color used:</span>
+                            <span style={{ textAlign: 'right' }}>{stats.mostUsedColor}</span>
+
+                            <span>Least color used:</span>
+                            <span style={{ textAlign: 'right' }}>{stats.leastUsedColor}</span>
+
                             <span>Average duration:</span>
                             <span style={{ textAlign: 'right' }}>{stats.averageGameDuration}</span>
 
@@ -82,15 +91,6 @@ export default function GlobalStats() {
 
                             <span>Time played:</span>
                             <span style={{ textAlign: 'right' }}>{stats.totalGameDuration}</span>
-
-                            <span>Average energy used:</span>
-                            <span style={{ textAlign: 'right' }}>{stats.averageEnergyUsed}</span>
-
-                            <span>Most color used:</span>
-                            <span style={{ textAlign: 'right' }}>{stats.mostUsedColor}</span>
-
-                            <span>Least color used:</span>
-                            <span style={{ textAlign: 'right' }}>{stats.leastUsedColor}</span>
                         </div>
                     </div>
                 )

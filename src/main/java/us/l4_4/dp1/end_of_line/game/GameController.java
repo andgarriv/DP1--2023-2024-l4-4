@@ -139,4 +139,10 @@ public class GameController {
         Map<String, String> stats = gameService.calculateStatistics();
         return ResponseEntity.ok(stats);
     }
+
+    @GetMapping("/statistics/{id}")
+    public ResponseEntity<Map<String, String>> getGameStatisticsByPlayerId(@PathVariable Integer id) {
+        Map<String, String> stats = gameService.calculateStatisticsByPlayerId(id);
+        return ResponseEntity.ok(stats);
+    }
 }
