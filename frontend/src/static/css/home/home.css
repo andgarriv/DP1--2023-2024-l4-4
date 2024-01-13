@@ -346,6 +346,10 @@
 
 .scrollable-content {
   height: 85%;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+
   padding: 2%;
   overflow-y: auto;
   scrollbar-width: thin;

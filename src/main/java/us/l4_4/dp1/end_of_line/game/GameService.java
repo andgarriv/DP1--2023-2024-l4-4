@@ -1,11 +1,15 @@
 package us.l4_4.dp1.end_of_line.game;
 
+import java.time.Duration;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -282,7 +286,7 @@ public class GameService {
 
     @Transactional(readOnly = true)
     public List<Game> findNotEndedGamesByPlayerId(Integer playerId) {
-        if (playerRepository.findById(playerId) == null) {
+        if (playerRepository.findById(playerId).equals(null)) {
             throw new ResourceNotFoundException("Player", "id", playerId);
         }
         return gameRepository.findNotEndedGamesByPlayerId(playerId);
@@ -296,10 +300,10 @@ public class GameService {
         return gameRepository.findGamesByPlayerId(playerId);
     }
 
-     @Transactional
+    @Transactional
     public List<String> findPosiblePositionOfAGamePlayerGiven(Integer gamePlayerId, Integer gameId) {
         return findPosiblePositionOfAGamePlayerGiven(gamePlayerId, gameId, false);
-    } 
+    }
 
     @Transactional
     public List<String> findPosiblePositionOfAGamePlayerGiven(Integer gamePlayerId, Integer gameId, Boolean reverse) {
@@ -418,7 +422,7 @@ public class GameService {
         return res;
     }
 
-    private static ArrayList<Integer> extraerNumerosDeSalida(String texto) {
+    public static ArrayList<Integer> extraerNumerosDeSalida(String texto) {
 
         ArrayList<Integer> digitos = new ArrayList<>();
 
@@ -680,6 +684,260 @@ public class GameService {
         }
         gamePlayer.setCards(cards);
         gamePlayerRepository.save(gamePlayer);
+    }
+
+    @Transactional(readOnly = true)
+    public Map<String, String> calculateStatistics() {
+        Map<String, String> stats = new HashMap<>();
+
+        Integer numberOfPlayers = gameRepository.getNumberOPlayers();
+        Integer numberOfGames = gameRepository.getTotalNumberOfGames();
+        Integer numberOfGamesFinished = gameRepository.getNumberOfGamesFinished();
+        Integer numberOfGamesPending = gameRepository.getTotalNumberOfGames() - numberOfGamesFinished;
+        Integer maxRounds = gameRepository.getMaxRounds();
+        Integer minRounds = gameRepository.getMinRounds();
+        Double avgRounds = gameRepository.getAverageRounds();
+        Integer maxGamesPlayed = gameRepository.getMaxGamesPlayedByPlayer();
+        Integer minGamesPlayed = gameRepository.getMinGamesPlayedByPlayer();
+        Duration maxGameDuration = gameRepository.getMaxGameDuration();
+        Duration minGameDuration = gameRepository.getMinGameDuration();
+        Double averageGameDurationInNanoseconds = gameRepository.getAverageGameDuration();
+        Long totalGameDurationInNanoseconds = gameRepository.getTotalGameDuration();
+        Double averageEnergyUsed = gameRepository.getAverageEnergyUsed();
+
+        Map<Color, Long> colorUsageMap = new HashMap<>();
+        for (Color color : Color.values()) {
+            colorUsageMap.put(color, 0L);
+        }
+
+        List<Object[]> colorUsage = gameRepository.getColorUsage();
+        for (Object[] usage : colorUsage) {
+            colorUsageMap.put((Color) usage[0], (Long) usage[1]);
+        }
+
+        Map.Entry<Color, Long> mostUsedColor = Collections.max(colorUsageMap.entrySet(), Map.Entry.comparingByValue());
+        Map.Entry<Color, Long> leastUsedColor = Collections.min(colorUsageMap.entrySet(), Map.Entry.comparingByValue());
+
+        if (numberOfPlayers != null) {
+            stats.put("totalPlayers", String.valueOf(numberOfPlayers));
+        } else {
+            stats.put("totalPlayers", "N/A");
+        }
+
+        if (numberOfGames != null) {
+            stats.put("totalGames", String.valueOf(numberOfGames));
+            stats.put("gamesFinished", String.valueOf(numberOfGamesFinished));
+            stats.put("gamesPending", String.valueOf(numberOfGamesPending));
+            stats.put("avgGames",
+                    String.format("%.1f", gameRepository.getTotalNumberOfGames().floatValue()
+                            / gameRepository.getNumberOPlayers().floatValue()));
+            stats.put("mostUsedColor", mostUsedColor.getKey().name());
+            stats.put("leastUsedColor", leastUsedColor.getKey().name());
+        } else {
+            stats.put("totalPlayers", "N/A");
+            stats.put("totalGames", "N/A");
+            stats.put("gamesFinished", "N/A");
+            stats.put("gamesPending", "N/A");
+            stats.put("avgGames", "N/A");
+            stats.put("mostUsedColor", "N/A");
+            stats.put("leastUsedColor", "N/A");
+        }
+
+        if (maxRounds != null) {
+            stats.put("maxRounds", String.valueOf(maxRounds));
+        } else {
+            stats.put("maxRounds", "N/A");
+        }
+
+        if (minRounds != null) {
+            stats.put("minRounds", String.valueOf(minRounds));
+        } else {
+            stats.put("minRounds", "N/A");
+        }
+
+        if (avgRounds != null) {
+            stats.put("avgRounds", String.format("%.1f", avgRounds));
+        } else {
+            stats.put("avgRounds", "N/A");
+        }
+
+        if (maxGamesPlayed != null) {
+            stats.put("maxGamesPlayed", String.valueOf(maxGamesPlayed));
+        } else {
+            stats.put("maxGamesPlayed", "N/A");
+        }
+
+        if (minGamesPlayed != null) {
+            stats.put("minGamesPlayed", String.valueOf(minGamesPlayed));
+        } else {
+            stats.put("minGamesPlayed", "N/A");
+        }
+
+        if (averageEnergyUsed != null) {
+            stats.put("averageEnergyUsed", String.format("%.2f", averageEnergyUsed));
+        } else {
+            stats.put("averageEnergyUsed", "N/A");
+
+        }
+
+        if (maxGameDuration != null) {
+            stats.put("maxGameDuration", formatDuration(maxGameDuration));
+        } else {
+            stats.put("maxGameDuration", "N/A");
+        }
+
+        if (minGameDuration != null) {
+            stats.put("minGameDuration", formatDuration(minGameDuration));
+        } else {
+            stats.put("minGameDuration", "N/A");
+        }
+
+        if (averageGameDurationInNanoseconds != null) {
+            Long averageGameDurationInSeconds = averageGameDurationInNanoseconds.longValue() / 1_000_000_000;
+            Duration averageGameDuration = Duration.ofSeconds(averageGameDurationInSeconds);
+            stats.put("averageGameDuration", formatDuration(averageGameDuration));
+        } else {
+            stats.put("averageGameDuration", "N/A");
+        }
+
+        if (totalGameDurationInNanoseconds != null) {
+            Long totalGameDurationInSeconds = totalGameDurationInNanoseconds / 1_000_000_000;
+            Duration totalGameDuration = Duration.ofSeconds(totalGameDurationInSeconds);
+            stats.put("totalGameDuration", formatDuration(totalGameDuration));
+        } else {
+            stats.put("totalGameDuration", "N/A");
+        }
+
+        return stats;
+    }
+
+    @Transactional(readOnly = true)
+    public Map<String, String> calculateStatisticsByPlayerId(Integer playerId) {
+        Map<String, String> stats = new HashMap<>();
+
+        Integer numberOfGames = gameRepository.getNumberOfGamesByPlayerId(playerId);
+        Integer numberOfGamesWon = gameRepository.getNumberOfGamesWonByPlayerId(playerId);
+        Integer maxRounds = gameRepository.getMaxRoundsByPlayerId(playerId);
+        Integer minRounds = gameRepository.getMinRoundsByPlayerId(playerId);
+        Double avgRounds = gameRepository.getAverageRoundsByPlayerId(playerId);
+        Duration maxGameDuration = gameRepository.getMaxGameDurationByPlayerId(playerId);
+        Duration minGameDuration = gameRepository.getMinGameDurationByPlayerId(playerId);
+        Double averageGameDurationInNanoseconds = gameRepository.getAverageGameDurationByPlayerId(playerId);
+        Long totalGameDurationInNanoseconds = gameRepository.getTotalGameDurationByPlayerId(playerId);
+        Double averageEnergyUsed = gameRepository.getAverageEnergyUsedByPlayerId(playerId);
+        Integer maxWinStreak = calculateWinStreak(playerId).get(0);
+        Integer currentWinStreak = calculateWinStreak(playerId).get(1);
+        List<Object[]> colorUsage = gameRepository.getColorUsageByPlayerId(playerId);
+        Map<Color, Long> colorUsageMap = new HashMap<>();
+
+        if (numberOfGames != null) {
+            stats.put("totalGames", String.valueOf(numberOfGames));
+        } else {
+            stats.put("totalGames", "N/A");
+        }
+
+        if (numberOfGamesWon != null) {
+            stats.put("gamesWon", String.valueOf(numberOfGamesWon));
+            stats.put("winRatio", Math.round(numberOfGamesWon * 100 / numberOfGames) + "%");
+        } else if (numberOfGames != null) {
+            stats.put("gamesWon", "0");
+            stats.put("winRatio", "0%");
+        } else {
+            stats.put("gamesWon", "N/A");
+            stats.put("winRatio", "N/A");
+        }
+
+        if (maxRounds != null) {
+            stats.put("maxRounds", String.valueOf(maxRounds));
+        } else {
+            stats.put("maxRounds", "N/A");
+        }
+
+        if (minRounds != null) {
+            stats.put("minRounds", String.valueOf(minRounds));
+        } else {
+            stats.put("minRounds", "N/A");
+        }
+
+        if (avgRounds != null) {
+            stats.put("avgRounds", String.format("%.1f", avgRounds));
+        } else {
+            stats.put("avgRounds", "N/A");
+        }
+
+        if (maxGameDuration != null) {
+            stats.put("maxGameDuration", formatDuration(maxGameDuration));
+        } else {
+            stats.put("maxGameDuration", "N/A");
+        }
+
+        if (minGameDuration != null) {
+            stats.put("minGameDuration", formatDuration(minGameDuration));
+        } else {
+            stats.put("minGameDuration", "N/A");
+        }
+
+        if (averageGameDurationInNanoseconds != null) {
+            Long averageGameDurationInSeconds = averageGameDurationInNanoseconds.longValue() / 1_000_000_000;
+            Duration averageGameDuration = Duration.ofSeconds(averageGameDurationInSeconds);
+            stats.put("avgGameDuration", formatDuration(averageGameDuration));
+        } else {
+            stats.put("avgGameDuration", "N/A");
+        }
+
+        if (totalGameDurationInNanoseconds != null) {
+            Long totalGameDurationInSeconds = totalGameDurationInNanoseconds / 1_000_000_000;
+            Duration totalGameDuration = Duration.ofSeconds(totalGameDurationInSeconds);
+            stats.put("totalGameDuration", formatDuration(totalGameDuration));
+        } else {
+            stats.put("totalGameDuration", "N/A");
+        }
+
+        if (averageEnergyUsed != null) {
+            stats.put("averageEnergyUsed", String.format("%.2f", averageEnergyUsed));
+        } else {
+            stats.put("averageEnergyUsed", "N/A");
+        }
+
+        stats.put("maxWinStreak", String.valueOf(maxWinStreak));
+        stats.put("currentWinStreak", String.valueOf(currentWinStreak));
+
+        for (Color color : Color.values()) {
+            colorUsageMap.put(color, 0L);
+        }
+
+        for (Object[] usage : colorUsage) {
+            colorUsageMap.put((Color) usage[0], (Long) usage[1]);
+        }
+
+        Map.Entry<Color, Long> mostUsedColor = Collections.max(colorUsageMap.entrySet(), Map.Entry.comparingByValue());
+        Map.Entry<Color, Long> leastUsedColor = Collections.min(colorUsageMap.entrySet(), Map.Entry.comparingByValue());
+
+        stats.put("mostUsedColor", mostUsedColor.getKey().name());
+        stats.put("leastUsedColor", leastUsedColor.getKey().name());
+
+        return stats;
+    }
+
+    private String formatDuration(Duration duration) {
+        return String.format("%dh %dm %ds", duration.toHours(), duration.toMinutesPart(), duration.toSecondsPart());
+    }
+
+    private List<Integer> calculateWinStreak(int playerId) {
+        List<Game> games = gameRepository.findGamesByPlayerId(playerId);
+        int maxStreak = 0;
+        int currentStreak = 0;
+
+        for (Game game : games) {
+            if (game.getWinner() != null && game.getWinner().getId() == playerId) {
+                currentStreak++;
+                maxStreak = Math.max(maxStreak, currentStreak);
+            } else {
+                currentStreak = 0;
+            }
+        }
+
+        return Arrays.asList(maxStreak, currentStreak);
     }
 
 }
