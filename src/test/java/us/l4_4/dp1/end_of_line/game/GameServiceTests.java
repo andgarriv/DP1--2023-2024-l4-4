@@ -15,6 +15,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 
 import us.l4_4.dp1.end_of_line.card.Card;
+import us.l4_4.dp1.end_of_line.card.CardDTO;
+import us.l4_4.dp1.end_of_line.card.CardService;
 import us.l4_4.dp1.end_of_line.enums.CardStatus;
 import us.l4_4.dp1.end_of_line.enums.Color;
 import us.l4_4.dp1.end_of_line.enums.Exit;
@@ -32,6 +34,8 @@ class GameServiceTests {
     private GameService gameService;
     @Autowired
     private GamePlayerService gpService;
+    @Autowired
+    private CardService cardService;
     private Game game;
     private ChangeEffectRequest changeEffectRequest ;
 
@@ -143,15 +147,18 @@ void shouldFindAllGamesByPlayerId(){
 
 
 
-/*@Test
+@Test
 void shouldUpdateGameEffect(){
 
     changeEffectRequest = new ChangeEffectRequest();
     changeEffectRequest.setEffect("REVERSE");
+    Game game = gameService.findById(17);
+    game.setRound(9);
+    gameService.save(game);
     Game g = gameService.updateGameEffect(17,changeEffectRequest);
     assertEquals(Hability.REVERSE, g.getEffect());
 
-}*/
+}
 @Test
 void shouldExtraGas(){
     Game game = gameService.createNewGame(9,10,Color.RED,Color.BLUE);
@@ -175,6 +182,20 @@ void shouldChangeCardsInHand(){
     assertEquals(5, cartas.size());
     assertNotEquals(player1Cards, cartas);
 
+}
+@Test
+void shouldUpdateGameTurn(){
+    Game game = gameService.createNewGame(17,16,Color.RED,Color.BLUE);
+    assertEquals(1, game.getRound());
+    Game updatedGame = gameService.updateGameTurn(game.getId());
+    assertEquals(2, updatedGame.getRound());
+    assertNotEquals(game.getGamePlayerTurnId(),updatedGame.getGamePlayerTurnId());
+    assertEquals(Hability.NONE, updatedGame.getEffect());
+    GamePlayer gp1 = game.getGamePlayers().get(0);
+    List<Card> player1Cards = gp1.getCards().stream()
+    .filter(card -> card.getCardState() == CardStatus.IN_HAND)
+    .collect(Collectors.toList());
+    assertEquals(5, player1Cards.size());
 }
 }
 
