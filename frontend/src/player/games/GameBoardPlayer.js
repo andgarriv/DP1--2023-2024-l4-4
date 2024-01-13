@@ -118,14 +118,15 @@ export default function Board() {
       if (dataGamePlayer[1].player.id === user.id) {
         setGamePlayerId(dataGamePlayer[1].id);
       }
-      if (dataGamePlayer[0].player.id === user.id && player1CardPossiblePositions.length === 0) {
+      if (dataGamePlayer[0].player.id === user.id && !dataGame.winner && player1CardPossiblePositions.length === 0) {
         setIsPositionsListEmpty(true);
-      } else if (dataGamePlayer[1].player.id === user.id && player2CardPossiblePositions.length === 0) {
+      } else if (dataGamePlayer[1].player.id === user.id && !dataGame.winner && player2CardPossiblePositions.length === 0) {
         setIsPositionsListEmpty(true);
       } else {
         setIsPositionsListEmpty(false);
       }
-
+      if (dataGame.winner)
+        setEffectUsedInRound(true);
     }
   }, [dataGamePlayer, setGamePlayerId, user, setIsPositionsListEmpty]);
 
