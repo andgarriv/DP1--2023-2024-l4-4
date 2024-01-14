@@ -106,8 +106,6 @@ export default function Board() {
 
   useEffect(() => {
     if (dataGamePlayer.length > 0) {
-      console.log(dataGamePlayer[0].color, player1CardPossiblePositions);
-      console.log(dataGamePlayer[1].color, player2CardPossiblePositions);
       const calculatedPlayerColor =
         (dataGamePlayer[0].player.id === user.id && dataGamePlayer[0].color) ||
         (dataGamePlayer[1].player.id === user.id && dataGamePlayer[1].color);
@@ -143,16 +141,6 @@ export default function Board() {
   }
 
   const handleBoxClick = async (colIndex, rowIndex) => {
-    if (!isMyTurn) {
-      console.log("No es tu turno");
-      return;
-    }
-
-    if (selectedCard === null) {
-      console.log("No has seleccionado una carta");
-      return;
-    }
-
     const isPlayer1 = dataGamePlayer[0].player.id === user.id;
     const isPlayer2 = dataGamePlayer[1].player.id === user.id;
 
@@ -189,10 +177,8 @@ export default function Board() {
         setSelectedCard(null);
         setEffectUsedInRound(true);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
-    } else {
-      console.log("No es una posición válida");
     }
   };
 
@@ -261,7 +247,6 @@ export default function Board() {
                   } else {
                     // Selecciona la carta si no está seleccionada
                     setSelectedCard(card);
-                    console.log("Has seleccionado una carta");
                   }
                 }}
               >
@@ -282,7 +267,6 @@ export default function Board() {
                   } else {
                     // Selecciona la carta si no está seleccionada
                     setSelectedCard(card);
-                    console.log("Has seleccionado una carta", card.id);
                   }
                 }}
               >

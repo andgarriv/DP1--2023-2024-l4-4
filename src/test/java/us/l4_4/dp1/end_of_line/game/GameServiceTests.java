@@ -1,9 +1,10 @@
 package us.l4_4.dp1.end_of_line.game;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,7 +26,6 @@ import us.l4_4.dp1.end_of_line.enums.Orientation;
 import us.l4_4.dp1.end_of_line.exceptions.ResourceNotFoundException;
 import us.l4_4.dp1.end_of_line.gameplayer.GamePlayer;
 import us.l4_4.dp1.end_of_line.gameplayer.GamePlayerService;
-import us.l4_4.dp1.end_of_line.player.Player;
 
 @SpringBootTest
 @AutoConfigureTestDatabase
@@ -37,7 +37,7 @@ class GameServiceTests {
     private GamePlayerService gpService;
     @Autowired
     private CardService cardService;
-    private ChangeEffectRequest changeEffectRequest;
+    private EffectDTO effectDTO;
 
     @Test
     public void shouldFindAllGames() {
@@ -60,12 +60,12 @@ class GameServiceTests {
     }
     @Test
     void shouldUpdateGameEffect() {
-        changeEffectRequest = new ChangeEffectRequest();
-        changeEffectRequest.setEffect("REVERSE");
+        effectDTO = new EffectDTO();
+        effectDTO.setEffect("REVERSE");
         Game game = gameService.createNewGame(22, 23, Color.RED, Color.BLUE);
         game.setRound(9);
         gameService.save(game);
-        Game g = gameService.updateGameEffect(game.getId(), changeEffectRequest);
+        Game g = gameService.updateGameEffect(game.getId(), effectDTO);
         assertEquals(Hability.REVERSE, g.getEffect());
         game.setRound(1);
         game.setEffect(Hability.NONE);
@@ -192,7 +192,7 @@ class GameServiceTests {
     @Test
     void shouldFindPosiblePosition() {
         Game g = gameService.createNewGame(18, 19, Color.RED, Color.BLUE);
-        List<String> posiciones = gameService.findPosiblePositionOfAGamePlayerGiven(g.getGamePlayers().get(0).getId(), g.getId());
+        List<String> posiciones = gameService.findPosiblePositionOfAGamePlayerGiven(g.getId(), g.getGamePlayers().get(0).getId());
         String[] partes = posiciones.get(0).split(",");
         Integer row = Integer.parseInt(partes[1]);
         Integer column = Integer.parseInt(partes[0]);
@@ -205,7 +205,7 @@ class GameServiceTests {
     @Test
     void shouldFindNoPosiblePosition() {
 
-        List<String> posiciones = gameService.findPosiblePositionOfAGamePlayerGiven(33, 17);
+        List<String> posiciones = gameService.findPosiblePositionOfAGamePlayerGiven(17, 33);
         assertEquals(0, posiciones.size());
 
     }

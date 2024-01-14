@@ -4,7 +4,6 @@ import './static/css/home/home.css';
 function OnGoingGamePopup({ setVisible, visible, gameId, player }) {
 
     return (
-        console.log(player),
         <Modal className="exit-popup" isOpen={visible} toggle={() => setVisible(false)} centered>
             <div className="modal-content-ongoing">
                 <p>GAME PENDING. DO YOU WANT TO JOIN IT?</p>

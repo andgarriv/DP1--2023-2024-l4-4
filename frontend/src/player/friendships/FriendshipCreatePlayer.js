@@ -33,7 +33,7 @@ export default function FriendshipEdit() {
                 throw new Error(`Player with nickname ${nickname} does not exist.`);
 
             const player = await idResponse.json();
-            const friendshipsResponse = await fetch(`/api/v1/friendships/players/${user.id}/ACCEPTED`, {
+            const friendshipsResponse = await fetch(`/api/v1/players/${user.id}/friendships/ACCEPTED`, {
                 headers: {
                     Authorization: `Bearer ${jwt}`,
                     "Content-Type": "application/json",
@@ -44,7 +44,7 @@ export default function FriendshipEdit() {
             if (friendshipsJson.some(friendship => friendship.sender.id === player.id || friendship.receiver.id === player.id))
                 throw new Error('You are already friends with this player');
 
-            const pendingFriendshipsResponse = await fetch(`/api/v1/friendships/players/${user.id}/PENDING`, {
+            const pendingFriendshipsResponse = await fetch(`/api/v1/players/${user.id}/friendships/PENDING`, {
                 headers: {
                     Authorization: `Bearer ${jwt}`,
                     "Content-Type": "application/json",

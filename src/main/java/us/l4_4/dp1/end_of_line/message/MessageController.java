@@ -2,8 +2,6 @@ package us.l4_4.dp1.end_of_line.message;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,11 +29,5 @@ public class MessageController {
     @ResponseStatus(HttpStatus.CREATED)
     public Message create(@RequestBody @Valid MessageDTO messageDTO) {
         return messageService.save(messageDTO);
-    }
-
-    @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public void delete(@PathVariable Integer id) {
-        messageService.delete(id);
     }
 }

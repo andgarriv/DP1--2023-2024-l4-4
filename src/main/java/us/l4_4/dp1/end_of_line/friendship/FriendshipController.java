@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import us.l4_4.dp1.end_of_line.enums.FriendStatus;
 
 @RestController
 @RequestMapping("/api/v1/friendships")
@@ -34,12 +33,6 @@ public class FriendshipController {
     @ResponseStatus(HttpStatus.OK)
     public Friendship findById(@PathVariable Integer id) {
         return friendshipService.findById(id);
-    }
-
-    @GetMapping("/players/{id}/{friendState}")
-    @ResponseStatus(HttpStatus.OK)
-    public Iterable<Friendship> findAllFriendshipsByPlayerId(@PathVariable @Valid Integer id, @PathVariable @Valid FriendStatus friendState) {
-        return friendshipService.findAllFriendshipsByPlayerId(id, friendState);
     }
     
     @PostMapping()
