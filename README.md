@@ -97,4 +97,4 @@ If you encounter an error during the installation of Newman, visit the following
 ```
 newman run '.\Postman Collection'
 ```
-5) To conclude, once the execution is finished, you will see the results of the tests.
+5) To conclude, once the execution is finished, you will see the results of the tests in the console.
