@@ -1,10 +1,10 @@
-import PropTypes from 'prop-types';
-import MultiRangeSlider from './inputs/multiRangeSlider';
+import FilePondPluginFileEncode from 'filepond-plugin-file-encode';
 import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orientation';
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
-import FilePondPluginFileEncode from 'filepond-plugin-file-encode';
+import PropTypes from 'prop-types';
+import MultiRangeSlider from './inputs/multiRangeSlider';
 
-import { useState, useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { FilePond, registerPlugin } from 'react-filepond';
 
 const FormInput = forwardRef(({ tag, name, type, defaultValue, values, isRequired, 
@@ -34,22 +34,35 @@ const FormInput = forwardRef(({ tag, name, type, defaultValue, values, isRequire
     }
 
     useEffect(() => {
-        if(type !== "interval" && type !== "files"){
-            inputField.current.addEventListener("change", () => {
-                let errors = [];
-                validators.forEach((validator) => {
-                    if(!validator.validate(inputField.current.value)){
-                        errors.push(validator.message);
-                    }
-                });
-                setInputErrors(errors);
-                if(onChange!==null){
-                    onChange({value: inputField.current.value});
+        const handleInputChange = () => {
+            let errors = [];
+            validators.forEach((validator) => {
+                if (!validator.validate(inputField.current.value)) {
+                    errors.push(validator.message);
                 }
             });
+            setInputErrors(errors);
+            if (onChange) {
+                if (name === "avatar") {
+                    onChange(inputField.current.value);
+                } else {
+                    onChange({ value: inputField.current.value });
+                }                  
+            }
+        };
+    
+        if (inputField.current) {
+            inputField.current.addEventListener("input", handleInputChange);
         }
+    
+        return () => {
+            if (inputField.current) {
+                inputField.current.removeEventListener("input", handleInputChange);
+            }
+        };
         // eslint-disable-next-line
     }, []);
+    
 
     switch(type){
 
