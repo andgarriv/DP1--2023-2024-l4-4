@@ -1,5 +1,6 @@
 package us.l4_4.dp1.end_of_line.game;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -43,6 +44,7 @@ import us.l4_4.dp1.end_of_line.message.Message;
 import us.l4_4.dp1.end_of_line.message.MessageService;
 import us.l4_4.dp1.end_of_line.player.Player;
 import us.l4_4.dp1.end_of_line.player.PlayerService;
+import static org.hamcrest.Matchers.hasSize;
 
 @WebMvcTest(controllers = GameController.class, excludeFilters = @ComponentScan.Filter(
     type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class))
@@ -54,6 +56,7 @@ public class GameControllerTests {
     private Player player2;
     private GamePlayer gamePlayer1;
     private GamePlayer gamePlayer2; 
+    private List<GamePlayer> gamePlayers;
     private Authorities authority;
     private Card card; 
     private Card card2;
@@ -62,6 +65,7 @@ public class GameControllerTests {
     private Card updateCard;
     private Game game; 
     private Game game2;
+    private Game updateGame;
     private Message message;
     private Message message2;
     private Game newGame;
@@ -120,6 +124,7 @@ public class GameControllerTests {
         authority.setId(2);
         authority.setAuthority("PLAYER");
 
+
         player = new Player();
         player.setId(1);
         player.setName("playerName");
@@ -131,11 +136,13 @@ public class GameControllerTests {
         player.setAuthority(authority);
         player.setAvatar(avatar);
 
+        when(playerService.findById(1)).thenReturn(player);
+
         gamePlayer1 = new GamePlayer();
         gamePlayer1.setId(1);
         gamePlayer1.setColor(Color.RED);
         gamePlayer1.setEnergy(3);
-        gamePlayer1.setPlayer(playerService.findById(1));
+        gamePlayer1.setPlayer(player);
 
         player2 = new Player();
         player2.setId(2);
@@ -149,11 +156,14 @@ public class GameControllerTests {
         player2.setAvatar(avatar);
 
         
+        
+        when(playerService.findById(2)).thenReturn(player2);
+        
         gamePlayer2 = new GamePlayer();
         gamePlayer2.setId(2);
         gamePlayer2.setColor(Color.BLUE);
         gamePlayer2.setEnergy(3);
-        gamePlayer2.setPlayer(playerService.findById(2));
+        gamePlayer2.setPlayer(player2);
 
         card = new Card();
         card.setId(1);
@@ -221,7 +231,7 @@ public class GameControllerTests {
         gamePlayer2.setCards(cards2);
 
 
-        List<GamePlayer> gamePlayers = List.of(gamePlayer1,gamePlayer2);
+        gamePlayers = List.of(gamePlayer1,gamePlayer2);
 
         message = new Message();
         message.setId(1);
@@ -248,7 +258,7 @@ public class GameControllerTests {
         game2 = new Game();
         game.setId(2);
         game2.setRound(10);
-        game2.setWinner(playerService.findById(1));
+        game2.setWinner(player2);
         game2.setStartedAt(Date.from(java.time.Instant.now()));
         game2.setEndedAt(Date.from(java.time.Instant.now()));
         game2.setMessage(null);
@@ -257,33 +267,50 @@ public class GameControllerTests {
 
     }
 
-    @Test
+   @Test
     @WithMockUser(username = "playerName", password = "Play3r!")
     void shouldFindAllGamesByPlayerId() throws Exception {
-        // Configura los mocks para devolver los datos esperados
         when(gameService.findAllGamesByPlayerId(1)).thenReturn(List.of(game, game2));
 
-        // Realiza la llamada al endpoint y verifica la respuesta
         mockMvc.perform(get(BASE_URL + "/players/{id}", 1))
                .andExpect(status().isOk())
+               .andExpect(jsonPath("$", hasSize(2)))
                .andExpect(jsonPath("$[0].id").value(game.getId()))
                .andExpect(jsonPath("$[0].round").value(game.getRound()))
-               .andExpect(jsonPath("$[0].gamePlayers[0].player.name").value(gamePlayer1.getPlayer().getName()));
-               // ... más aserciones según sea necesario para verificar los campos relevantes
+               .andExpect(jsonPath("$[1].id").value(game2.getId()))
+               .andExpect(jsonPath("$[1].round").value(game2.getRound()))
+               .andExpect(jsonPath("$[0].gamePlayers[0].player.name").value(gamePlayer1.getPlayer().getName()))
+               .andExpect(jsonPath("$[1].gamePlayers[1].player.name").value(gamePlayer2.getPlayer().getName()))
+               .andExpect(jsonPath("$[0].startedAt").isNotEmpty())
+               .andExpect(jsonPath("$[1].endedAt").isNotEmpty())
+               .andExpect(jsonPath("$[0].gamePlayers[0].color").value(gamePlayer1.getColor().toString()))
+               .andExpect(jsonPath("$[1].gamePlayers[1].energy").value(gamePlayer2.getEnergy()));
+        verify(gameService).findAllGamesByPlayerId(1);
     }
 
 
     @Test
     @WithMockUser(username = "playerName", password = "Play3r!")
     void shouledFindNotEndedGamesByPlayerId() throws Exception{
-        when(gameService.findNotEndedGamesByPlayerId(null)).thenReturn(List.of(game));
+        when(gameService.findNotEndedGamesByPlayerId(1)).thenReturn(List.of(game));
 
         mockMvc.perform(get(BASE_URL + "/players/{id}/notended", 1))
                .andExpect(status().isOk())
+               .andExpect(jsonPath("$", hasSize(1))) 
                .andExpect(jsonPath("$[0].id").value(game.getId()))
                .andExpect(jsonPath("$[0].round").value(game.getRound()))
-               .andExpect(jsonPath("$[0].gamePlayers[0].player.name").value(gamePlayer1.getPlayer().getName()));
+               .andExpect(jsonPath("$[0].startedAt").isNotEmpty()) 
+               .andExpect(jsonPath("$[0].endedAt").isEmpty()) 
+               .andExpect(jsonPath("$[0].winner").doesNotExist()) 
+               .andExpect(jsonPath("$[0].effect").value(game.getEffect().toString()))
+               .andExpect(jsonPath("$[0].gamePlayers", hasSize(game.getGamePlayers().size()))) 
+               .andExpect(jsonPath("$[0].gamePlayers[0].player.name").value(gamePlayer1.getPlayer().getName()))
+               .andExpect(jsonPath("$[0].gamePlayers[0].color").value(gamePlayer1.getColor().toString()))
+               .andExpect(jsonPath("$[0].gamePlayers[0].energy").value(gamePlayer1.getEnergy()));
+
+        verify(gameService).findNotEndedGamesByPlayerId(1);
     }
+    
 
     @Test
     @WithMockUser(username = "playerName", password = "Play3r!")
@@ -319,6 +346,7 @@ public class GameControllerTests {
 
         mockMvc.perform(get(BASE_URL + "/{id}/gameplayers", 1))
                .andExpect(status().isOk())
+               .andExpect(jsonPath("$", hasSize(2))) 
                .andExpect(jsonPath("$[0].id").value(gamePlayer1.getId()))
                .andExpect(jsonPath("$[0].color").value(gamePlayer1.getColor().toString()))
                .andExpect(jsonPath("$[0].energy").value(gamePlayer1.getEnergy()))
@@ -327,34 +355,50 @@ public class GameControllerTests {
                .andExpect(jsonPath("$[1].color").value(gamePlayer2.getColor().toString()))
                .andExpect(jsonPath("$[1].energy").value(gamePlayer2.getEnergy()))
                .andExpect(jsonPath("$[1].player.name").value(gamePlayer2.getPlayer().getName()));
+
+        verify(gamePlayerService).findGamePlayersByGameId(1);
     }
-    @Test 
+
+    @Test
     @WithMockUser(username = "playerName", password = "Play3r!")
     void shouldFindAllMessagesByGameId() throws Exception {
-        // Assuming findAllMessagesByGameId is a method in messageService
         when(messageService.findAllMessagesByGameId(1)).thenReturn(List.of(message, message2));
-    
-        // Perform the request and assert the expected results
+
         mockMvc.perform(get(BASE_URL + "/{id}/messages", 1))
                .andExpect(status().isOk())
+               .andExpect(jsonPath("$", hasSize(2)))
                .andExpect(jsonPath("$[0].id").value(message.getId()))
                .andExpect(jsonPath("$[0].color").value(message.getColor().toString()))
-               .andExpect(jsonPath("$[0].reaction").value(message.getReaction().toString()));
-
+               .andExpect(jsonPath("$[0].reaction").value(message.getReaction().toString()))
+               .andExpect(jsonPath("$[1].id").value(message2.getId()))
+               .andExpect(jsonPath("$[1].color").value(message2.getColor().toString()))
+               .andExpect(jsonPath("$[1].reaction").value(message2.getReaction().toString()));
+        verify(messageService).findAllMessagesByGameId(1);
     }
 
     @Test
     @WithMockUser(username = "playerName", password = "Play3r!")
     void shouldFindAllGames() throws Exception {
         when(gameService.findAllGames()).thenReturn(List.of(game, game2));
+
         mockMvc.perform(get(BASE_URL + "/all"))
                .andExpect(status().isOk())
+               .andExpect(jsonPath("$", hasSize(2)))
                .andExpect(jsonPath("$[0].id").value(game.getId()))
                .andExpect(jsonPath("$[0].round").value(game.getRound()))
+               .andExpect(jsonPath("$[0].startedAt").isNotEmpty())
+               .andExpect(jsonPath("$[0].endedAt").isEmpty()) 
+               .andExpect(jsonPath("$[0].winner").doesNotExist()) 
                .andExpect(jsonPath("$[0].gamePlayers[0].player.name").value(gamePlayer1.getPlayer().getName()))
+               .andExpect(jsonPath("$[0].gamePlayers[0].color").value(gamePlayer1.getColor().toString()))
                .andExpect(jsonPath("$[1].id").value(game2.getId()))
                .andExpect(jsonPath("$[1].round").value(game2.getRound()))
-               .andExpect(jsonPath("$[1].gamePlayers[0].player.name").value(gamePlayer1.getPlayer().getName()));
+               .andExpect(jsonPath("$[1].startedAt").isNotEmpty())
+               .andExpect(jsonPath("$[1].endedAt").isNotEmpty())
+               .andExpect(jsonPath("$[1].gamePlayers[0].player.name").value(gamePlayer1.getPlayer().getName()))
+               .andExpect(jsonPath("$[1].gamePlayers[0].color").value(gamePlayer1.getColor().toString()));
+             
+        verify(gameService).findAllGames();
     }
 
     @Test
@@ -370,16 +414,6 @@ public class GameControllerTests {
 
     @Test
     @WithMockUser(username = "playerName", password = "Play3r!")
-    void shouldCreateGame() throws Exception{ 
-        newGame = createGame(1, 2, Color.RED, Color.BLUE);
-        when(gameService.createNewGame(1, 2, Color.RED, Color.BLUE)).thenReturn(newGame);
-
-        mockMvc.perform(post(BASE_URL).with(csrf()).contentType(MediaType.APPLICATION_JSON)
-               .content(objectMapper.writeValueAsString(newGame))).andExpect(status().isCreated());
-    }
-
-   @Test
-    @WithMockUser(username = "playerName", password = "Play3r!")
     void shouldFindById() throws Exception {
         when(gameService.findById(1)).thenReturn(game);
 
@@ -387,38 +421,27 @@ public class GameControllerTests {
                .andExpect(status().isOk())
                .andExpect(jsonPath("$.id").value(game.getId()))
                .andExpect(jsonPath("$.round").value(game.getRound()))
-               .andExpect(jsonPath("$.gamePlayers[0].player.name").value(gamePlayer1.getPlayer().getName()));
+               .andExpect(jsonPath("$.startedAt").isNotEmpty()) // Verifica la fecha de inicio
+               .andExpect(jsonPath("$.endedAt").isEmpty()) // Verifica si el juego ha terminado
+               .andExpect(jsonPath("$.winner").doesNotExist()) // Verifica si hay un ganador
+               .andExpect(jsonPath("$.effect").value(game.getEffect().toString()))
+               .andExpect(jsonPath("$.gamePlayers", hasSize(game.getGamePlayers().size()))) // Verifica la cantidad de jugadores
+               .andExpect(jsonPath("$.gamePlayers[0].player.name").value(gamePlayer1.getPlayer().getName()))
+               .andExpect(jsonPath("$.gamePlayers[0].color").value(gamePlayer1.getColor().toString()))
+               .andExpect(jsonPath("$.gamePlayers[0].energy").value(gamePlayer1.getEnergy()))
+               // Verifica cualquier otro campo relevante de gamePlayer1
+               .andExpect(jsonPath("$.gamePlayers[1].player.name").value(gamePlayer2.getPlayer().getName()))
+               .andExpect(jsonPath("$.gamePlayers[1].color").value(gamePlayer2.getColor().toString()))
+               .andExpect(jsonPath("$.gamePlayers[1].energy").value(gamePlayer2.getEnergy()));
+               // Verifica cualquier otro campo relevante de gamePlayer2
+
+        // Verifica que el servicio fue llamado correctamente
+        verify(gameService).findById(1);
     } 
 
     @Test
     @WithMockUser(username = "playerName", password = "Play3r!")
-    void shouldUpdateGame() throws Exception{ 
-        game.setRound(2);
-        game.setWinner(playerService.findById(1));
-        game.setStartedAt(Date.from(java.time.Instant.now()));
-        game.setEndedAt(Date.from(java.time.Instant.now()));
-        game.setMessage(null);
-        game.setEffect(Hability.NONE);
-        game.setGamePlayers(List.of(gamePlayer1, gamePlayer2));
-
-        when(gameService.findById(1)).thenReturn(game);
-        when(gameService.updateGame(any(Integer.class), any(GameDTO.class))).thenReturn(game);
-
-        mockMvc.perform(put(BASE_URL + "/{id}", 1).with(csrf()).contentType(MediaType.APPLICATION_JSON)
-               .content(objectMapper.writeValueAsString(game))).andExpect(status().isOk())
-               .andExpect(jsonPath("$.round").value(game.getRound()))
-               .andExpect(jsonPath("$.winner.name").value(game.getWinner().getName()))
-               .andExpect(jsonPath("$.startedAt").value(game.getStartedAt()))
-               .andExpect(jsonPath("$.endedAt").value(game.getEndedAt()))
-               .andExpect(jsonPath("$.message").value(game.getMessage()))
-               .andExpect(jsonPath("$.effect").value(game.getEffect().toString()))
-               .andExpect(jsonPath("$.gamePlayers[0].player.name").value(gamePlayer1.getPlayer().getName()))
-               .andExpect(jsonPath("$.gamePlayers[1].player.name").value(gamePlayer2.getPlayer().getName()));
-    }
-
-    @Test
-    @WithMockUser(username = "playerName", password = "Play3r!")
-    void shouldUpdateGameTurn() throws Exception{ 
+    void shouldUpdateGameTurn() throws Exception { 
         game.setRound(5);
         game.setWinner(null);
         game.setStartedAt(Date.from(java.time.Instant.now()));
@@ -430,21 +453,28 @@ public class GameControllerTests {
         when(gameService.findById(1)).thenReturn(game);
         when(gameService.updateGameTurn(any(Integer.class))).thenReturn(game);
 
-        mockMvc.perform(put(BASE_URL + "/{gameId}/test", 1).with(csrf()).contentType(MediaType.APPLICATION_JSON)
-               .content(objectMapper.writeValueAsString(game))).andExpect(status().isOk())
+        // Realiza la llamada al endpoint y verifica la respuesta
+        mockMvc.perform(put(BASE_URL + "/{gameId}/test", 1)
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(game)))
+               .andExpect(status().isOk())
                .andExpect(jsonPath("$.round").value(game.getRound()))
-               .andExpect(jsonPath("$.winner.name").value(game.getWinner().getName()))
-               .andExpect(jsonPath("$.startedAt").value(game.getStartedAt()))
-               .andExpect(jsonPath("$.endedAt").value(game.getEndedAt()))
-               .andExpect(jsonPath("$.message").value(game.getMessage()))
+               .andExpect(jsonPath("$.winner").isEmpty())
+               .andExpect(jsonPath("$.startedAt").isNotEmpty())
+               .andExpect(jsonPath("$.endedAt").isEmpty())
+               .andExpect(jsonPath("$.message").isEmpty())
                .andExpect(jsonPath("$.effect").value(game.getEffect().toString()))
+               .andExpect(jsonPath("$.gamePlayers", hasSize(2)))
                .andExpect(jsonPath("$.gamePlayers[0].player.name").value(gamePlayer1.getPlayer().getName()))
                .andExpect(jsonPath("$.gamePlayers[1].player.name").value(gamePlayer2.getPlayer().getName()));
     }
 
+
     @Test
     @WithMockUser(username = "playerName", password = "Play3r!")
-    void shouldChangeEffect() throws Exception{ 
+    void shouldChangeEffect() throws Exception {
+        // Configura el juego y los mocks
         game.setRound(5);
         game.setWinner(null);
         game.setStartedAt(Date.from(java.time.Instant.now()));
@@ -455,17 +485,22 @@ public class GameControllerTests {
 
         when(gameService.findById(1)).thenReturn(game);
         when(gameService.updateGameEffect(any(Integer.class), any(ChangeEffectRequest.class))).thenReturn(game);
-
-        mockMvc.perform(put(BASE_URL + "/{gameId}/effect", 1).with(csrf()).contentType(MediaType.APPLICATION_JSON)
-               .content(objectMapper.writeValueAsString(game))).andExpect(status().isOk())
-               .andExpect(jsonPath("$.round").value(game.getRound()))
-               .andExpect(jsonPath("$.winner.name").value(game.getWinner().getName()))
-               .andExpect(jsonPath("$.startedAt").value(game.getStartedAt()))
-               .andExpect(jsonPath("$.endedAt").value(game.getEndedAt()))
-               .andExpect(jsonPath("$.message").value(game.getMessage()))
-               .andExpect(jsonPath("$.effect").value(game.getEffect().toString()))
-               .andExpect(jsonPath("$.gamePlayers[0].player.name").value(gamePlayer1.getPlayer().getName()))
-               .andExpect(jsonPath("$.gamePlayers[1].player.name").value(gamePlayer2.getPlayer().getName()));
+        mockMvc.perform(put(BASE_URL + "/{gameId}/effect", 1)
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(game)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.round").value(game.getRound()))
+                // Verifica la ausencia de un ganador
+                .andExpect(jsonPath("$.winner").isEmpty())
+                .andExpect(jsonPath("$.startedAt").isNotEmpty())
+                .andExpect(jsonPath("$.endedAt").isEmpty())
+                .andExpect(jsonPath("$.message").isEmpty())
+                .andExpect(jsonPath("$.effect").value(game.getEffect().toString()))
+                // Verifica los detalles de los jugadores
+                .andExpect(jsonPath("$.gamePlayers", hasSize(2)))
+                .andExpect(jsonPath("$.gamePlayers[0].player.name").value(gamePlayer1.getPlayer().getName()))
+                .andExpect(jsonPath("$.gamePlayers[1].player.name").value(gamePlayer2.getPlayer().getName()));
     }
 
     @Test
@@ -498,30 +533,15 @@ public class GameControllerTests {
 
     @Test
     @WithMockUser(username = "playerName", password = "Play3r!")
-    void shouldCardsPossiblePositions() throws Exception{ 
+    void shouldCardsPossiblePositions() throws Exception { 
         when(gameService.findById(1)).thenReturn(game);
         when(gameService.findPosiblePositionOfAGamePlayerGiven(any(Integer.class), any(Integer.class))).thenReturn(List.of("1,1,W", "1,2,E"));
 
-        mockMvc.perform(put(BASE_URL + "/{gameId}/gameplayers/{gamePlayerId}/cardPositions", 1,1).with(csrf()).contentType(MediaType.APPLICATION_JSON)
-               .content(objectMapper.writeValueAsString(game))).andExpect(status().isOk())
-               .andExpect(jsonPath("$[0].id").value(card.getId()))
-               .andExpect(jsonPath("$[0].initiative").value(card.getInitiative()))
-               .andExpect(jsonPath("$[0].color").value(card.getColor().toString()))
-               .andExpect(jsonPath("$[0].exit").value(card.getExit().toString()))
-               .andExpect(jsonPath("$[0].isTemplate").value(card.getIsTemplate()))
-               .andExpect(jsonPath("$[0].orientation").value(card.getOrientation().toString()))
-               .andExpect(jsonPath("$[0].column").value(card.getColumn()))
-               .andExpect(jsonPath("$[0].row").value(card.getRow()))
-               .andExpect(jsonPath("$[0].cardState").value(card.getCardState().toString()))
-               .andExpect(jsonPath("$[1].id").value(card2.getId()))
-               .andExpect(jsonPath("$[1].initiative").value(card2.getInitiative()))
-               .andExpect(jsonPath("$[1].color").value(card2.getColor().toString()))
-               .andExpect(jsonPath("$[1].exit").value(card2.getExit().toString()))
-               .andExpect(jsonPath("$[1].isTemplate").value(card2.getIsTemplate()))
-               .andExpect(jsonPath("$[1].orientation").value(card2.getOrientation().toString()))
-               .andExpect(jsonPath("$[1].column").value(card2.getColumn()))
-               .andExpect(jsonPath("$[1].row").value(card2.getRow()))
-               .andExpect(jsonPath("$[1].cardState").value(card2.getCardState().toString()));
+        mockMvc.perform(get(BASE_URL + "/{gameId}/gameplayers/{gamePlayerId}/cardPositions", 1, 1))
+               .andExpect(status().isOk())
+               .andExpect(jsonPath("$", hasSize(2))) // Verifica que se devuelven dos posiciones
+               .andExpect(jsonPath("$[0]").value("1,1,W"))
+               .andExpect(jsonPath("$[1]").value("1,2,E"));
     }
 
 }

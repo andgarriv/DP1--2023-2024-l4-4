@@ -118,14 +118,15 @@ export default function Board() {
       if (dataGamePlayer[1].player.id === user.id) {
         setGamePlayerId(dataGamePlayer[1].id);
       }
-      if (dataGamePlayer[0].player.id === user.id && player1CardPossiblePositions.length === 0) {
+      if (dataGamePlayer[0].player.id === user.id && !dataGame.winner && player1CardPossiblePositions.length === 0) {
         setIsPositionsListEmpty(true);
-      } else if (dataGamePlayer[1].player.id === user.id && player2CardPossiblePositions.length === 0) {
+      } else if (dataGamePlayer[1].player.id === user.id && !dataGame.winner && player2CardPossiblePositions.length === 0) {
         setIsPositionsListEmpty(true);
       } else {
         setIsPositionsListEmpty(false);
       }
-
+      if (dataGame.winner)
+        setEffectUsedInRound(true);
     }
   }, [dataGamePlayer, setGamePlayerId, user, setIsPositionsListEmpty]);
 
@@ -485,31 +486,55 @@ export default function Board() {
             SPEED UP
           </Button>
           {dataGamePlayer[0].player.id === user.id && (
-            <div className="hand">
-              <img
-                src={energyCards[0].image}
-                alt="EnergyCard0"
-                style={{
-                  ...getRotationStyle(
-                    dataGamePlayer.length > 0 ? dataGamePlayer[0].energy : 0
-                  ),
-                  marginTop: "20%",
-                }}
-              />
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              <div className="hand">
+                <img
+                  src={energyCards[0].image}
+                  alt="EnergyCard0"
+                  style={{
+                    ...getRotationStyle(
+                      dataGamePlayer.length > 0 ? dataGamePlayer[0].energy : 0
+                    ),
+                    marginTop: "20%",
+                  }} />
+              </div>
+              <div className="hand">
+                <img
+                  src={energyCards[1].image}
+                  alt="EnergyCard0"
+                  style={{
+                    ...getRotationStyle(
+                      dataGamePlayer.length > 0 ? dataGamePlayer[1].energy : 0
+                    ),
+                    marginTop: "20%",
+                  }} />
+              </div>
             </div>
           )}
           {dataGamePlayer[1].player.id === user.id && (
-            <div className="hand">
-              <img
-                src={energyCards[1].image}
-                alt="EnergyCard0"
-                style={{
-                  ...getRotationStyle(
-                    dataGamePlayer.length > 0 ? dataGamePlayer[1].energy : 0
-                  ),
-                  marginTop: "20%",
-                }}
-              />
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              <div className="hand">
+                <img
+                  src={energyCards[1].image}
+                  alt="EnergyCard0"
+                  style={{
+                    ...getRotationStyle(
+                      dataGamePlayer.length > 0 ? dataGamePlayer[1].energy : 0
+                    ),
+                    marginTop: "20%",
+                  }} />
+              </div>
+              <div className="hand">
+                <img
+                  src={energyCards[0].image}
+                  alt="EnergyCard0"
+                  style={{
+                    ...getRotationStyle(
+                      dataGamePlayer.length > 0 ? dataGamePlayer[0].energy : 0
+                    ),
+                    marginTop: "20%",
+                  }} />
+              </div>
             </div>
           )}
         </div>

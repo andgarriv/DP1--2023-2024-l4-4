@@ -12,7 +12,7 @@ export default function StatsSwitcher() {
 
     return (
         <div className="home-page-container" style={{ color: 'white', backgroundColor: 'black', padding: '20px' }}>
-            <div className="hero-div" style={{height: "60%"}}>
+            <div className="hero-div" style={{height: "60%", width: "28%"}}>
                 {showGlobalStats ? <GlobalStats /> : <PlayerStats />}
                 <Button
                     className="normal-button"
