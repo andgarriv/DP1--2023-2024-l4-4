@@ -88,7 +88,7 @@ To execute the tests made in Postman, you must follow these steps:
 ```
 npm install -g newman
 ```
-If you encounter an error during the installation of Newman, visit the following link and follow its steps: [https://www.npmjs.com/package/newman]
+If you encounter an error during the installation of Newman, visit the following link and follow its steps: [[https://www.npmjs.com/package/newman](https://learn.microsoft.com/es-es/troubleshoot/azure/active-directory/cannot-run-scripts-powershell)]
 
 3) Once we have installed Postman, we go to the corresponding folder which is:
 ```
