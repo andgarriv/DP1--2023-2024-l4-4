@@ -4,7 +4,7 @@ import tokenService from "../../services/token.service";
 const PlayNowHandler = async (user, setVisible, setGameId, setOtherPlayer) => {
     try {
         const jwt = tokenService.getLocalAccessToken();
-        const playerResponse = await fetch(`/api/v1/games/players/${user.id}/notended`, {
+        const playerResponse = await fetch(`/api/v1/players/${user.id}/games/notended`, {
             headers: { Authorization: `Bearer ${jwt}` },
         });
 

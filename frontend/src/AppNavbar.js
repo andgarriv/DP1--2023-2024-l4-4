@@ -27,7 +27,7 @@ function AppNavbar() {
             if (jwt_decode(jwt).authorities.includes("PLAYER")) {
                 const interval = setInterval(async () => {
                     try {
-                        const playerResponse = await fetch(`/api/v1/games/players/${user.id}/notended`, {
+                        const playerResponse = await fetch(`/api/v1/players/${user.id}/games/notended`, {
                             headers: { Authorization: `Bearer ${jwt}` },
                         });
 
@@ -58,7 +58,7 @@ function AppNavbar() {
 
     const handleReject = async () => {
         try {
-            const gamePlayerResponse = await fetch(`/api/v1/gameplayers/${gameId}/${user.id}`, {
+            const gamePlayerResponse = await fetch(`/api/v1/players/${user.id}/games/${gameId}/gameplayer`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${jwt}`,

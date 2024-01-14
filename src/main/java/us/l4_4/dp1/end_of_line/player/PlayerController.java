@@ -1,6 +1,7 @@
 package us.l4_4.dp1.end_of_line.player;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import us.l4_4.dp1.end_of_line.auth.AuthService;
 import us.l4_4.dp1.end_of_line.authorities.AuthoritiesService;
+import us.l4_4.dp1.end_of_line.enums.FriendStatus;
+import us.l4_4.dp1.end_of_line.friendship.Friendship;
+import us.l4_4.dp1.end_of_line.friendship.FriendshipService;
+import us.l4_4.dp1.end_of_line.game.Game;
+import us.l4_4.dp1.end_of_line.game.GameService;
+import us.l4_4.dp1.end_of_line.gameplayer.GamePlayer;
+import us.l4_4.dp1.end_of_line.gameplayer.GamePlayerService;
 
 @RestController
 @RequestMapping("/api/v1/players")
@@ -31,14 +39,21 @@ public class PlayerController {
     private AuthService authService;
     public final PasswordEncoder encoder;
     private AuthoritiesService authoritiesService;
+    private GameService gameService;
+    private FriendshipService friendshipService;
+    private GamePlayerService gamePlayerService;
 
     @Autowired
     public PlayerController(PlayerService playerService, AuthService authService, PasswordEncoder encoder,
-            AuthoritiesService authoritiesService) {
+            AuthoritiesService authoritiesService, GameService gameService, FriendshipService friendshipService,
+            GamePlayerService gamePlayerService) {
         this.playerService = playerService;
         this.authService = authService;
         this.encoder = encoder;
         this.authoritiesService = authoritiesService;
+        this.gameService = gameService;
+        this.friendshipService = friendshipService;
+        this.gamePlayerService = gamePlayerService;
     }
 
     @GetMapping("/all")
@@ -59,10 +74,40 @@ public class PlayerController {
             return playerService.findByNickname(nickname);
     }
 
+    @GetMapping("/{id}/games/{gameId}/gameplayer")
+    @ResponseStatus(HttpStatus.OK)
+    public GamePlayer findGamePlayerByGameAndPlayer(@PathVariable Integer id, @PathVariable Integer gameId){
+        return gamePlayerService.findGamePlayerByGameAndPlayer(id, gameId);
+    }
+
     @GetMapping("/{id}/friends")
     @ResponseStatus(HttpStatus.OK)
     public List<Player> findAllFriendsByPlayerId(@PathVariable Integer id) {
         return playerService.findAllFriendsByPlayerId(id);
+    }
+
+    @GetMapping("/{id}/friendships/{friendState}")
+    @ResponseStatus(HttpStatus.OK)
+    public Iterable<Friendship> findAllFriendshipsByPlayerId(@PathVariable @Valid Integer id, @PathVariable @Valid FriendStatus friendState) {
+        return friendshipService.findAllFriendshipsByPlayerId(id, friendState);
+    }
+
+    @GetMapping("/{id}/games")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Game> findAllGamesByPlayerId(@PathVariable Integer id) {
+        return gameService.findAllGamesByPlayerId(id);
+    }
+
+    @GetMapping("/{id}/games/notended")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Game> findNotEndedGamesByPlayerId(@PathVariable Integer id) {
+        return gameService.findNotEndedGamesByPlayerId(id);
+    }
+
+    @GetMapping("/{id}/statistics")
+    @ResponseStatus(HttpStatus.OK)
+    public Map<String, String> getGameStatisticsByPlayerId(@PathVariable Integer id) {
+        return gameService.calculateStatisticsByPlayerId(id);
     }
 
     @PostMapping()
@@ -73,6 +118,12 @@ public class PlayerController {
         player.setAuthority(authoritiesService.findByAuthority("PLAYER"));
         playerService.save(player);
         return player;
+    }
+
+    @PostMapping("/{id}/playerachievements")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void createPlayerAchievement(@PathVariable Integer id) {
+        gameService.createPlayerAchievement(id);
     }
 
     @PutMapping("/{id}")

@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ChangeEffectRequest {
+public class EffectDTO {
 
     private String effect;
 }

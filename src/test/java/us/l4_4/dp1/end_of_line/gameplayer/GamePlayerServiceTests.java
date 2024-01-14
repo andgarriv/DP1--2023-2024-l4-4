@@ -1,7 +1,8 @@
 package us.l4_4.dp1.end_of_line.gameplayer;
 
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -107,7 +108,7 @@ public class GamePlayerServiceTests {
         List<Integer> cards_ids = List.of(4, 5, 6);
         gamePlayerDTO.setCards_ids(cards_ids);
 
-        gamePlayer = gamePlayerService.update(gamePlayerDTO, gamePlayer.getId());
+        gamePlayer = gamePlayerService.update(gamePlayer.getId(), gamePlayerDTO);
         assertEquals(Color.YELLOW, gamePlayer.getColor());
         assertEquals(1, gamePlayer.getEnergy());
         assertEquals(6, gamePlayer.getPlayer().getId());
@@ -123,7 +124,7 @@ public class GamePlayerServiceTests {
         List<Integer> cards_ids = List.of(4, 5, 6);
         gamePlayerDTO.setCards_ids(cards_ids);
 
-        assertThrows(ResourceNotFoundException.class, () -> gamePlayerService.update(gamePlayerDTO, 1000));
+        assertThrows(ResourceNotFoundException.class, () -> gamePlayerService.update( 1000, gamePlayerDTO));
     }
 
     @Test

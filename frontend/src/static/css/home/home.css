@@ -361,7 +361,7 @@
 }
 
 .scrollable-content::-webkit-scrollbar-thumb {
-  background-color: rgba(44, 44, 44, 0.5);
+  background-color: #75FBFD;
   border-radius: 6px;
   
 }

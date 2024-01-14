@@ -1,16 +1,21 @@
 package us.l4_4.dp1.end_of_line.game;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import javax.swing.tree.ExpandVetoException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,13 +29,12 @@ import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import lombok.With;
 import us.l4_4.dp1.end_of_line.authorities.Authorities;
 import us.l4_4.dp1.end_of_line.authorities.AuthoritiesService;
 import us.l4_4.dp1.end_of_line.card.Card;
-import us.l4_4.dp1.end_of_line.card.CardController;
 import us.l4_4.dp1.end_of_line.card.CardService;
 import us.l4_4.dp1.end_of_line.enums.CardStatus;
 import us.l4_4.dp1.end_of_line.enums.Color;
@@ -44,7 +48,6 @@ import us.l4_4.dp1.end_of_line.message.Message;
 import us.l4_4.dp1.end_of_line.message.MessageService;
 import us.l4_4.dp1.end_of_line.player.Player;
 import us.l4_4.dp1.end_of_line.player.PlayerService;
-import static org.hamcrest.Matchers.hasSize;
 
 @WebMvcTest(controllers = GameController.class, excludeFilters = @ComponentScan.Filter(
     type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class))
@@ -454,7 +457,7 @@ public class GameControllerTests {
         when(gameService.updateGameTurn(any(Integer.class))).thenReturn(game);
 
         // Realiza la llamada al endpoint y verifica la respuesta
-        mockMvc.perform(put(BASE_URL + "/{gameId}/test", 1)
+        mockMvc.perform(put(BASE_URL + "/{gameId}", 1)
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(game)))
@@ -484,7 +487,7 @@ public class GameControllerTests {
         game.setGamePlayers(List.of(gamePlayer1, gamePlayer2));
 
         when(gameService.findById(1)).thenReturn(game);
-        when(gameService.updateGameEffect(any(Integer.class), any(ChangeEffectRequest.class))).thenReturn(game);
+        when(gameService.updateGameEffect(any(Integer.class), any(EffectDTO.class))).thenReturn(game);
         mockMvc.perform(put(BASE_URL + "/{gameId}/effect", 1)
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
@@ -509,7 +512,7 @@ public class GameControllerTests {
         when(gameService.findById(1)).thenReturn(game);
         when(gameService.changeCardsInHand(any(Integer.class))).thenReturn(List.of(card, card2));
 
-        mockMvc.perform(put(BASE_URL + "/{gameId}/changeCardsInHand", 1).with(csrf()).contentType(MediaType.APPLICATION_JSON)
+        mockMvc.perform(put(BASE_URL + "/{gameId}/cards/discard", 1).with(csrf()).contentType(MediaType.APPLICATION_JSON)
                .content(objectMapper.writeValueAsString(game))).andExpect(status().isOk())
                .andExpect(jsonPath("$[0].id").value(card.getId()))
                .andExpect(jsonPath("$[0].initiative").value(card.getInitiative()))
@@ -537,7 +540,7 @@ public class GameControllerTests {
         when(gameService.findById(1)).thenReturn(game);
         when(gameService.findPosiblePositionOfAGamePlayerGiven(any(Integer.class), any(Integer.class))).thenReturn(List.of("1,1,W", "1,2,E"));
 
-        mockMvc.perform(get(BASE_URL + "/{gameId}/gameplayers/{gamePlayerId}/cardPositions", 1, 1))
+        mockMvc.perform(get(BASE_URL + "/{gameId}/gameplayers/{gamePlayerId}/cards/positions", 1, 1))
                .andExpect(status().isOk())
                .andExpect(jsonPath("$", hasSize(2))) // Verifica que se devuelven dos posiciones
                .andExpect(jsonPath("$[0]").value("1,1,W"))

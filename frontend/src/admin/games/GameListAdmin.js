@@ -67,7 +67,6 @@ export default function AdminGamesList() {
                     },
                 });
                 const data = await response.json();
-                console.log(data);
                 setGames(data);
             } catch (error) {
                 setMessage("Error fetching games data");

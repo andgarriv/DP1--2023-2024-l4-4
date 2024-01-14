@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,16 +42,15 @@ public class GameController {
     @Autowired
     MessageService messageService;
 
-    @GetMapping("/players/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public List<Game> findAllGamesByPlayerId(@PathVariable Integer id) {
-        return gameService.findAllGamesByPlayerId(id);
+    @GetMapping("/all")
+    public Iterable<Game> findAllGames() {
+        return gameService.findAllGames();
     }
 
-    @GetMapping("/players/{id}/notended")
+    @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public List<Game> findNotEndedGamesByPlayerId(@PathVariable Integer id) {
-        return gameService.findNotEndedGamesByPlayerId(id);
+    public Game findById(@PathVariable Integer id) {
+        return gameService.findById(id);
     }
 
     @GetMapping("/{id}/cards")
@@ -73,76 +71,55 @@ public class GameController {
         return messageService.findAllMessagesByGameId(id);
     }
 
-    @GetMapping("/all")
-    public Iterable<Game> findAllGames() {
-        return gameService.findAllGames();
+    @GetMapping("/{id}/gameplayers/{gamePlayerId}/cards/positions")
+    @ResponseStatus(HttpStatus.OK)
+    public List<String> cardsPossiblePositions(@PathVariable Integer id, @PathVariable Integer gamePlayerId) {
+        return gameService.findPosiblePositionOfAGamePlayerGiven(id, gamePlayerId);
     }
 
-    @DeleteMapping("/{gameId}/{gamePlayerId}")
-    public ResponseEntity<?> deleteGame(@PathVariable Integer gameId, @PathVariable Integer gamePlayerId) {
-        try {
-            gameService.deleteGame(gameId, gamePlayerId);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    @GetMapping("/statistics")
+    @ResponseStatus(HttpStatus.OK)
+    public Map<String, String> getGameStatistics() {
+        return gameService.calculateStatistics();
     }
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public Game create(@RequestBody @Valid NewGameRequest newGameRequest) {
-        Integer player1_id = newGameRequest.getPlayer1Id();
-        Integer player2_id = newGameRequest.getPlayer2Id();
-        Color player1_color_enum = Color.valueOf(newGameRequest.getPlayer1Color());
-        Color player2_color_enum = Color.valueOf(newGameRequest.getPlayer2Color());
-        return gameService.createNewGame(player1_id, player2_id, player1_color_enum, player2_color_enum);
-    }
-
-    @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public Game findById(@PathVariable Integer id) {
-        return gameService.findById(id);
+    public Game create(@RequestBody @Valid NewGameDTO newGameDTO) {
+        Integer player1Id = newGameDTO.getPlayer1Id();
+        Integer player2Id = newGameDTO.getPlayer2Id();
+        Color player1Color = Color.valueOf(newGameDTO.getPlayer1Color());
+        Color player2Color = Color.valueOf(newGameDTO.getPlayer2Color());
+        return gameService.createNewGame(player1Id, player2Id, player1Color, player2Color);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Game update(@PathVariable Integer id, @RequestBody @Valid GameDTO gameDTO) {
-        return gameService.updateGame(id, gameDTO);
+    public Game update(@PathVariable Integer id) {
+    return gameService.updateGameTurn(id);
     }
 
-    @PutMapping("/{gameId}/test")
+    @PutMapping("/{id}/effect")
     @ResponseStatus(HttpStatus.OK)
-    public Game pruebaTurn(@PathVariable Integer gameId) {
-    return gameService.updateGameTurn(gameId);
+    public Game changeEffect(@PathVariable Integer id, @RequestBody @Valid EffectDTO effectDTO) {
+        return gameService.updateGameEffect(id, effectDTO);
     }
 
-    @PutMapping("/{gameId}/effect")
+    @PutMapping("/{id}/cards/discard")
     @ResponseStatus(HttpStatus.OK)
-    public Game changeEffect(@PathVariable Integer gameId, @RequestBody @Valid ChangeEffectRequest changeEffectRequest) {
-        return gameService.updateGameEffect(gameId, changeEffectRequest);
+    public List<Card> changeCardsInHand(@PathVariable Integer id) {
+        return gameService.changeCardsInHand(id);
     }
 
-    @PutMapping("/{gameId}/changeCardsInHand")
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public List<Card> changeCardsInHand(@PathVariable Integer gameId) {
-        return gameService.changeCardsInHand(gameId);
+    public void delete(@PathVariable Integer id) {
+        gameService.delete(id);
     }
 
-    @GetMapping("/{gameId}/gameplayers/{gamePlayerId}/cardPositions")
+    @DeleteMapping("/{id}/gameplayers/{gamePlayerId}")
     @ResponseStatus(HttpStatus.OK)
-    public List<String> cardsPossiblePositions(@PathVariable Integer gameId, @PathVariable Integer gamePlayerId) {
-        return gameService.findPosiblePositionOfAGamePlayerGiven(gamePlayerId, gameId);
-    }
-
-    @GetMapping("/statistics")
-    public ResponseEntity<Map<String, String>> getGameStatistics() {
-        Map<String, String> stats = gameService.calculateStatistics();
-        return ResponseEntity.ok(stats);
-    }
-
-    @GetMapping("/statistics/{id}")
-    public ResponseEntity<Map<String, String>> getGameStatisticsByPlayerId(@PathVariable Integer id) {
-        Map<String, String> stats = gameService.calculateStatisticsByPlayerId(id);
-        return ResponseEntity.ok(stats);
+    public void deleteGame(@PathVariable Integer id, @PathVariable Integer gamePlayerId) {
+        gameService.deleteGame(id, gamePlayerId);
     }
 }

@@ -41,7 +41,7 @@ export async function gameLogic(
       const playerId2 = dataGame.gamePlayers[1].player.id;
       try {
         await fetch(
-          `/api/v1/playerachievements/${playerId1}`,
+          `/api/v1/players/${playerId1}/playerachievements`,
           {
             method: "POST",
             headers: {
@@ -51,7 +51,7 @@ export async function gameLogic(
           }
         );
         await fetch(
-          `/api/v1/playerachievements/${playerId2}`,
+          `/api/v1/players/${playerId2}/playerachievements`,
           {
             method: "POST",
             headers: {
@@ -154,7 +154,7 @@ export async function gameLogic(
     // Actualizar las posiciones posibles de las cartas
     try {
       const responsePlayer1CardPossiblePositions = await fetch(
-        `/api/v1/games/${gameId}/gameplayers/${dataGamePlayer[0].id}/cardPositions`,
+        `/api/v1/games/${gameId}/gameplayers/${dataGamePlayer[0].id}/cards/positions`,
         {
           headers: {
             Authorization: `Bearer ${jwt}`,
@@ -167,7 +167,7 @@ export async function gameLogic(
         );
       }
       const responsePlayer2CardPossiblePositions = await fetch(
-        `/api/v1/games/${gameId}/gameplayers/${dataGamePlayer[1].id}/cardPositions`,
+        `/api/v1/games/${gameId}/gameplayers/${dataGamePlayer[1].id}/cards/positions`,
         {
           headers: {
             Authorization: `Bearer ${jwt}`,
@@ -410,7 +410,7 @@ export async function playCard(cardId, row, column, orientation, jwt) {
 }
 
 export async function updateTurn(gameId, gamePlayerId, jwt) {
-  const response = await fetch(`/api/v1/games/${gameId}/test`, {
+  const response = await fetch(`/api/v1/games/${gameId}`, {
     method: "PUT",
     headers: {
       Authorization: `Bearer ${jwt}`,
@@ -424,10 +424,6 @@ export async function updateTurn(gameId, gamePlayerId, jwt) {
 }
 
 export async function changeEffect(jwt, gameId, effect, isMyTurn) {
-  if (!isMyTurn) {
-    console.log("No es tu turno");
-    return;
-  }
   try {
     const response = await fetch(`/api/v1/games/${gameId}/effect`, {
       method: "PUT",
@@ -447,12 +443,8 @@ export async function changeEffect(jwt, gameId, effect, isMyTurn) {
 }
 
 export async function changeCardsInHand(jwt, gameId, isMyTurn) {
-  if (!isMyTurn) {
-    console.log("No es tu turno");
-    return;
-  }
   try {
-    const response = await fetch(`/api/v1/games/${gameId}/changeCardsInHand`, {
+    const response = await fetch(`/api/v1/games/${gameId}/cards/discard`, {
       method: "PUT",
       headers: {
         Authorization: `Bearer ${jwt}`,
@@ -470,7 +462,6 @@ export async function changeCardsInHand(jwt, gameId, isMyTurn) {
 
 export async function postMessage(jwt, gameId, reaction, color) {
   try {
-    console.log(JSON.stringify({ gameId, reaction, color }));
     const response = await fetch(`/api/v1/messages`, {
       method: "POST",
       headers: {
