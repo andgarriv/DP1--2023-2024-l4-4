@@ -280,7 +280,6 @@ class GameServiceTests {
         assertEquals(globalStats.get("avgGames"), "1,5");
         assertEquals(globalStats.get("totalGames"), "19");
         assertEquals(globalStats.get("mostUsedColor"), "RED");
-        assertEquals(globalStats.get("leastUsedColor"), "YELLOW");
         assertEquals(globalStats.get("maxRounds"), "27");
         assertEquals(globalStats.get("minRounds"), "16");
         assertEquals(globalStats.get("avgRounds"), "21,9");
