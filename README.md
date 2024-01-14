@@ -88,7 +88,8 @@ To execute the tests made in Postman, you must follow these steps:
 ```
 npm install -g newman
 ```
-If you encounter an error during the installation of Newman, visit the following link and follow its steps:
+If you encounter an error during the installation of Newman, visit the following link and follow its steps: [https://www.npmjs.com/package/newman]
+
 3) Once we have installed Postman, we go to the corresponding folder which is:
 ```
 \DP1--2023-2024-l4-4\src\test\java\us\l4_4\dp1\end_of_line\PostmanTest
