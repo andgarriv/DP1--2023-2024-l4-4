@@ -199,11 +199,11 @@ class cardControllerTests {
         updateCard.setRow(3);
         updateCard.setOrientation(Orientation.N);
 
-        when(this.cardService.findById(60000)).thenReturn(updateCard);
+        when(this.cardService.findById(1)).thenReturn(updateCard);
         when(this.cardService.update(any(Integer.class), any(CardDTO.class))).thenReturn(updateCard);
 
 
-        mockMvc.perform(put(BASE_URL + "/{id}", 698798776).with(csrf()).contentType(MediaType.APPLICATION_JSON)
+        mockMvc.perform(put(BASE_URL + "/{id}", 1).with(csrf()).contentType(MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsString(updateCard))).andExpect(status().isOk())
         .andExpect(jsonPath("$.column").value(4))
         .andExpect(jsonPath("$.row").value(3))
