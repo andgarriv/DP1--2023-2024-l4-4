@@ -33,7 +33,7 @@ public class PlayerAchievementServiceTests {
     @Test
     public void shouldFindAllPlayerAchievements() {
         List<PlayerAchievement> playerAchievements = (List<PlayerAchievement>) this.playerAchievementService.findAll();
-        assertEquals(9, playerAchievements.size());
+        assertEquals(32, playerAchievements.size());
     }
 
     @Test

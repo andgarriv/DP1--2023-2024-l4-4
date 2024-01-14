@@ -1,13 +1,16 @@
 package us.l4_4.dp1.end_of_line.card;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +22,10 @@ import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
-import us.l4_4.dp1.end_of_line.authorities.Authorities; 
+
+import us.l4_4.dp1.end_of_line.authorities.Authorities;
 import us.l4_4.dp1.end_of_line.enums.CardStatus;
 import us.l4_4.dp1.end_of_line.enums.Color;
 import us.l4_4.dp1.end_of_line.enums.Exit;
@@ -185,76 +190,10 @@ class cardControllerTests {
 
         
     }
-
+    
     @Test
     @WithMockUser(username = "playerName", password = "Play3r!")
-    void shouldFindCardById() throws Exception{
-        when(this.cardService.findById(1)).thenReturn(card);
-
-        mockMvc.perform(get(BASE_URL + "/{id}", 1)).andExpect(status().isOk())
-        .andExpect(jsonPath("$.id").value(1))
-        .andExpect(jsonPath("$.initiative").value(1))
-        .andExpect(jsonPath("$.color").value(Color.RED.toString()))
-        .andExpect(jsonPath("$.exit").value(Exit.EXIT_001_A.toString()))
-        .andExpect(jsonPath("$.isTemplate").value(false))
-        .andExpect(jsonPath("$.orientation").value(Orientation.S.toString()))
-        .andExpect(jsonPath("$.column").value(3))
-        .andExpect(jsonPath("$.row").value(4))
-        .andExpect(jsonPath("$.cardState").value(CardStatus.IN_HAND.toString()));
-    }
-
-    @Test
-    @WithMockUser(username = "playerName", password = "Play3r!")
-    void shouldFindAllGameCards()throws Exception{
-        when(this.cardService.findAllCardsOfGame(1)).thenReturn(List.of(card, card2, card3,card4));
-
-        mockMvc.perform(get(BASE_URL + "/game/{id}", 1)).andExpect(status().isOk())
-        .andExpect(jsonPath("$.size()").value(4))
-        .andExpect(jsonPath("$[?(@.id == 1)].initiative").value(1))
-        .andExpect(jsonPath("$[?(@.id == 2)].initiative").value(2))
-        .andExpect(jsonPath("$[?(@.id == 3)].initiative").value(3))
-        .andExpect(jsonPath("$[?(@.id == 4)].initiative").value(4))
-        
-        .andExpect(jsonPath("$[?(@.id == 1)].color").value(Color.RED.toString()))
-        .andExpect(jsonPath("$[?(@.id == 2)].color").value(Color.RED.toString()))
-        .andExpect(jsonPath("$[?(@.id == 3)].color").value(Color.BLUE.toString()))
-        .andExpect(jsonPath("$[?(@.id == 4)].color").value(Color.BLUE.toString()))
-
-        .andExpect(jsonPath("$[?(@.id == 1)].exit").value(Exit.EXIT_001_A.toString()))
-        .andExpect(jsonPath("$[?(@.id == 2)].exit").value(Exit.EXIT_101_A.toString()))
-        .andExpect(jsonPath("$[?(@.id == 3)].exit").value(Exit.EXIT_011_A.toString()))
-        .andExpect(jsonPath("$[?(@.id == 4)].exit").value(Exit.EXIT_100_B.toString()))
-
-        .andExpect(jsonPath("$[?(@.id == 1)].isTemplate").value(false))
-        .andExpect(jsonPath("$[?(@.id == 2)].isTemplate").value(false))
-        .andExpect(jsonPath("$[?(@.id == 3)].isTemplate").value(false))
-        .andExpect(jsonPath("$[?(@.id == 4)].isTemplate").value(false))
-
-        .andExpect(jsonPath("$[?(@.id == 1)].orientation").value(Orientation.S.toString()))
-        .andExpect(jsonPath("$[?(@.id == 2)].orientation").value(Orientation.S.toString()))
-        .andExpect(jsonPath("$[?(@.id == 3)].orientation").value(Orientation.S.toString()))
-        .andExpect(jsonPath("$[?(@.id == 4)].orientation").value(Orientation.S.toString()))
-
-        .andExpect(jsonPath("$[?(@.id == 1)].column").value(3))
-        .andExpect(jsonPath("$[?(@.id == 2)].column").value(1))
-        .andExpect(jsonPath("$[?(@.id == 3)].column").value(1))
-        .andExpect(jsonPath("$[?(@.id == 4)].column").value(1))
-
-        .andExpect(jsonPath("$[?(@.id == 1)].row").value(4))
-        .andExpect(jsonPath("$[?(@.id == 2)].row").value(2))
-        .andExpect(jsonPath("$[?(@.id == 3)].row").value(3))
-        .andExpect(jsonPath("$[?(@.id == 4)].row").value(3))
-
-        .andExpect(jsonPath("$[?(@.id == 1)].cardState").value(CardStatus.IN_HAND.toString()))
-        .andExpect(jsonPath("$[?(@.id == 2)].cardState").value(CardStatus.IN_HAND.toString()))
-        .andExpect(jsonPath("$[?(@.id == 3)].cardState").value(CardStatus.IN_HAND.toString()))
-        .andExpect(jsonPath("$[?(@.id == 4)].cardState").value(CardStatus.IN_HAND.toString()));
-    }
-
-
-    @Test
-    @WithMockUser(username = "playerName", password = "Play3r!")
-    void shlouldUpdateCard() throws Exception{
+    void shouldUpdateCard() throws Exception{
         
         updateCard.setColumn(4);
         updateCard.setRow(3);

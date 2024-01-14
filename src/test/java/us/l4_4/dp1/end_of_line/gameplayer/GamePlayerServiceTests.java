@@ -129,7 +129,7 @@ public class GamePlayerServiceTests {
 
     @Test
     void shouldFindGamePlayerByGameAndPlayer(){
-        GamePlayer gamePlayer = gamePlayerService.findGamePlayerByGameAndPlayer(1, 5);
+        GamePlayer gamePlayer = gamePlayerService.findGamePlayerByGameAndPlayer(5, 1);
         assertEquals(5, gamePlayer.getPlayer().getId());
         assertEquals(Color.VIOLET, gamePlayer.getColor());
         assertEquals(3, gamePlayer.getEnergy());

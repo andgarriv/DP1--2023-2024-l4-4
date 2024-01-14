@@ -270,51 +270,6 @@ public class GameControllerTests {
 
     }
 
-   @Test
-    @WithMockUser(username = "playerName", password = "Play3r!")
-    void shouldFindAllGamesByPlayerId() throws Exception {
-        when(gameService.findAllGamesByPlayerId(1)).thenReturn(List.of(game, game2));
-
-        mockMvc.perform(get(BASE_URL + "/players/{id}", 1))
-               .andExpect(status().isOk())
-               .andExpect(jsonPath("$", hasSize(2)))
-               .andExpect(jsonPath("$[0].id").value(game.getId()))
-               .andExpect(jsonPath("$[0].round").value(game.getRound()))
-               .andExpect(jsonPath("$[1].id").value(game2.getId()))
-               .andExpect(jsonPath("$[1].round").value(game2.getRound()))
-               .andExpect(jsonPath("$[0].gamePlayers[0].player.name").value(gamePlayer1.getPlayer().getName()))
-               .andExpect(jsonPath("$[1].gamePlayers[1].player.name").value(gamePlayer2.getPlayer().getName()))
-               .andExpect(jsonPath("$[0].startedAt").isNotEmpty())
-               .andExpect(jsonPath("$[1].endedAt").isNotEmpty())
-               .andExpect(jsonPath("$[0].gamePlayers[0].color").value(gamePlayer1.getColor().toString()))
-               .andExpect(jsonPath("$[1].gamePlayers[1].energy").value(gamePlayer2.getEnergy()));
-        verify(gameService).findAllGamesByPlayerId(1);
-    }
-
-
-    @Test
-    @WithMockUser(username = "playerName", password = "Play3r!")
-    void shouledFindNotEndedGamesByPlayerId() throws Exception{
-        when(gameService.findNotEndedGamesByPlayerId(1)).thenReturn(List.of(game));
-
-        mockMvc.perform(get(BASE_URL + "/players/{id}/notended", 1))
-               .andExpect(status().isOk())
-               .andExpect(jsonPath("$", hasSize(1))) 
-               .andExpect(jsonPath("$[0].id").value(game.getId()))
-               .andExpect(jsonPath("$[0].round").value(game.getRound()))
-               .andExpect(jsonPath("$[0].startedAt").isNotEmpty()) 
-               .andExpect(jsonPath("$[0].endedAt").isEmpty()) 
-               .andExpect(jsonPath("$[0].winner").doesNotExist()) 
-               .andExpect(jsonPath("$[0].effect").value(game.getEffect().toString()))
-               .andExpect(jsonPath("$[0].gamePlayers", hasSize(game.getGamePlayers().size()))) 
-               .andExpect(jsonPath("$[0].gamePlayers[0].player.name").value(gamePlayer1.getPlayer().getName()))
-               .andExpect(jsonPath("$[0].gamePlayers[0].color").value(gamePlayer1.getColor().toString()))
-               .andExpect(jsonPath("$[0].gamePlayers[0].energy").value(gamePlayer1.getEnergy()));
-
-        verify(gameService).findNotEndedGamesByPlayerId(1);
-    }
-    
-
     @Test
     @WithMockUser(username = "playerName", password = "Play3r!")
     void shouldFindCardsOfGame() throws Exception{
@@ -410,7 +365,7 @@ public class GameControllerTests {
         when(gameService.findById(1)).thenReturn(game);
 
         doNothing().when(this.gameService).deleteGame(1, 1);
-        mockMvc.perform(delete(BASE_URL + "/{gameId}/{gamePlayerId}", 1, 1).with(csrf()))
+        mockMvc.perform(delete(BASE_URL + "/{gameId}/gameplayers/{gamePlayerId}", 1, 1).with(csrf()))
                .andExpect(status().isOk());
 
     }

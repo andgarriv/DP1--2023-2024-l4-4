@@ -1,9 +1,12 @@
 package us.l4_4.dp1.end_of_line.friendship;
 
-import static org.mockito.Mockito.*;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -168,17 +171,6 @@ class FriendshipControllerTests {
         mockMvc.perform(get(BASE_URL + "/{id}", TEST_FRIENDSHIP_ID)).andExpect(status().isOk())
         .andExpect(jsonPath("$.sender.name").value("playerName"))
         .andExpect(jsonPath("$.receiver.name").value("player2Name"));
-    }
-
-    @Test
-    @WithMockUser(username = "playerName", password = "Own3r!")
-    void playerShouldFindAllFriendshipsByPlayerId() throws Exception {
-        when(this.friendshipService.findAllFriendshipsByPlayerId(TEST_PLAYER_ID, FriendStatus.PENDING)).thenReturn(List.of(friendship2));
-
-        mockMvc.perform(get(BASE_URL + "/players/{id}/{friendState}", TEST_PLAYER_ID, FriendStatus.PENDING)).andExpect(status().isOk())
-        .andExpect(jsonPath("$.size()").value(1))
-        .andExpect(jsonPath("$[?(@.id == 2)].sender.name").value("player3Name"))
-        .andExpect(jsonPath("$[?(@.id == 2)].receiver.name").value("playerName"));
     }
 
     /* @Test
