@@ -107,7 +107,6 @@ export default function NewGame() {
         const data = await response.json();
         setPlayers(data);
         setLoading(false);
-        console.log(data);
       } catch (error) {
         console.error('Error fetching players data:', error);
       }

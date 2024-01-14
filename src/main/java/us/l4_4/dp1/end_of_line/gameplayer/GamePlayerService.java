@@ -61,7 +61,7 @@ public class GamePlayerService {
         return gamePlayerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("GamePlayer", "id", id));
     }
 
-    public GamePlayer update(GamePlayerDTO gamePlayerDTO, Integer id) throws DataAccessException{
+    public GamePlayer update(Integer id, GamePlayerDTO gamePlayerDTO) throws DataAccessException{
         GamePlayer gamePlayer = gamePlayerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("GamePlayer", "id", id));
         gamePlayer.setColor(gamePlayerDTO.getColor());
         gamePlayer.setEnergy(gamePlayerDTO.getEnergy());
@@ -78,8 +78,8 @@ public class GamePlayerService {
     }
 
     @Transactional
-    public GamePlayer findGamePlayerByGameAndPlayer(Integer gameId, Integer playerId) throws DataAccessException{
-        GamePlayer gamePlayer = gamePlayerRepository.findGamePlayerByGameAndPlayer(gameId, playerId);
+    public GamePlayer findGamePlayerByGameAndPlayer(Integer playerId, Integer gameId) throws DataAccessException{
+        GamePlayer gamePlayer = gamePlayerRepository.findGamePlayerByGameAndPlayer(playerId, gameId);
         if(gamePlayer == null)
             throw new ResourceNotFoundException("GamePlayer", "game_id", gameId);
     return gamePlayer;

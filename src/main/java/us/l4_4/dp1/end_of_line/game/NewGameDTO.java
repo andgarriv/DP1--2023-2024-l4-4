@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class NewGameRequest {
+public class NewGameDTO {
 
     @NotNull
     @Min(0)

@@ -12,7 +12,7 @@ export default function PlayerStats() {
         const jwt = tokenService.getLocalAccessToken();
         const user = tokenService.getUser();
 
-        const playerResponse = await fetch(`/api/v1/games/statistics/${user.id}`, {
+        const playerResponse = await fetch(`/api/v1/players/${user.id}/statistics`, {
           headers: { Authorization: `Bearer ${jwt}` },
         });
         if (!playerResponse.ok) {

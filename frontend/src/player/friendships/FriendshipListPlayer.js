@@ -54,7 +54,7 @@ export default function FriendshipList() {
     const jwt = tokenService.getLocalAccessToken();
     const user = tokenService.getUser();
     const [friendshipType, setFriendshipType] = useState("ACCEPTED");
-    const [friendships, setFriendships] = useFetchState(null, `/api/v1/friendships/players/${user.id}/${friendshipType}`, jwt);
+    const [friendships, setFriendships] = useFetchState(null, `/api/v1/players/${user.id}/friendships/${friendshipType}`, jwt);
     const [currentPage, setCurrentPage] = useState(1);
     const [friendshipsPerPage] = useState(5);
 
@@ -71,7 +71,7 @@ export default function FriendshipList() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch(`/api/v1/friendships/players/${user.id}/${friendshipType}`, {
+                const response = await fetch(`/api/v1/players/${user.id}/friendships/${friendshipType}`, {
                     headers: {
                         Authorization: `Bearer ${jwt}`,
                     },

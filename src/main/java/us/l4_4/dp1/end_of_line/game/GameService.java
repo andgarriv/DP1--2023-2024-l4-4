@@ -34,7 +34,6 @@ import us.l4_4.dp1.end_of_line.exceptions.BadRequestException;
 import us.l4_4.dp1.end_of_line.exceptions.ResourceNotFoundException;
 import us.l4_4.dp1.end_of_line.gameplayer.GamePlayer;
 import us.l4_4.dp1.end_of_line.gameplayer.GamePlayerRepository;
-import us.l4_4.dp1.end_of_line.message.Message;
 import us.l4_4.dp1.end_of_line.message.MessageRepository;
 import us.l4_4.dp1.end_of_line.player.Player;
 import us.l4_4.dp1.end_of_line.player.PlayerRepository;
@@ -80,17 +79,19 @@ public class GameService {
     }
 
     @Transactional
+    public void delete(Integer id) {
+        gameRepository.deleteById(id);
+    }
+
+    @Transactional
     public void deleteGame(Integer gameId, Integer gamePlayerId) {
-        Game game = gameRepository.findById(gameId).orElse(null);
-        if (game == null) {
-            throw new BadRequestException("No se puede eliminar una partida que no existe");
-        }
+        Game game = findById(gameId);
         List<GamePlayer> gamePlayers = gamePlayerRepository.findGamePlayersByGameId(gameId);
 
         if (game.getRound() < 3) {
             gamePlayers.forEach(gamePlayerRepository::delete);
 
-            gameRepository.deleteById(gameId);
+            delete(gameId);
             return;
         } else {
             GamePlayer winner = gamePlayers.stream()
@@ -226,36 +227,9 @@ public class GameService {
                 .orElseThrow(() -> new ResourceNotFoundException("Game", "id", id));
     }
 
-    @Transactional
-    public Game updateGame(Integer id, GameDTO gameDTO) throws DataAccessException {
-        Game game = gameRepository.findById(id).get();
-        game.setRound(gameDTO.getRounds());
-        if (gameDTO.getWinner_id() != null) {
-            game.setWinner(playerRepository.findById(gameDTO.getWinner_id()).get());
-        }
-        game.setStartedAt(gameDTO.getStartedAt());
-        if (gameDTO.getEndedAt() != null) {
-            game.setEndedAt(gameDTO.getEndedAt());
-        }
-        if (gameDTO.getMessage_id() != null) {
-            List<Message> messages = gameDTO.getMessage_id()
-                    .stream()
-                    .map(messageId -> messageRepository.findById(messageId)
-                            .orElseThrow(() -> new ResourceNotFoundException("Message", "id", messageId)))
-                    .collect(Collectors.toList());
-            game.setMessage(messages);
-        }
-        List<GamePlayer> gamePlayers = gameDTO.getGamePlayers_ids()
-                .stream()
-                .map(gamePlayerId -> gamePlayerRepository.findById(gamePlayerId).get())
-                .collect(Collectors.toList());
-        game.setGamePlayers(gamePlayers);
-        return gameRepository.save(game);
-    }
-
     @Transactional(readOnly = true)
     public Integer whoIsNext(Integer gameId) {
-        Game game = gameRepository.findById(gameId).get();
+        Game game = findById(gameId);
         List<GamePlayer> gamePlayers = game.getGamePlayers();
         Integer id1 = gamePlayers.get(0).getId();
         Integer id2 = gamePlayers.get(1).getId();
@@ -301,14 +275,14 @@ public class GameService {
     }
 
     @Transactional
-    public List<String> findPosiblePositionOfAGamePlayerGiven(Integer gamePlayerId, Integer gameId) {
-        return findPosiblePositionOfAGamePlayerGiven(gamePlayerId, gameId, false);
+    public List<String> findPosiblePositionOfAGamePlayerGiven(Integer gameId, Integer gamePlayerId) {
+        return findPosiblePositionOfAGamePlayerGiven(gameId, gamePlayerId, false);
     }
 
     @Transactional
-    public List<String> findPosiblePositionOfAGamePlayerGiven(Integer gamePlayerId, Integer gameId, Boolean reverse) {
+    public List<String> findPosiblePositionOfAGamePlayerGiven(Integer gameId, Integer gamePlayerId, Boolean reverse) {
         GamePlayer gp = gamePlayerRepository.findById(gamePlayerId).get();
-        Game game = gameRepository.findById(gameId).get();
+        Game game = findById(gameId);
         Integer round = game.getRound();
         Integer cardsInHand = gamePlayerRepository.findById(gamePlayerId).get().getCards().stream()
                 .filter(card -> card.getCardState() == CardStatus.IN_HAND)
@@ -363,7 +337,7 @@ public class GameService {
         if ((n - 1) < 0)
             oeste = 6 + "," + m;
 
-        List<Integer> salidas = extraerNumerosDeSalida(ultimaCartaEchada.getExit().toString());
+        List<Integer> salidas = getExits(ultimaCartaEchada.getExit().toString());
 
         if (ultimaCartaEchada.getOrientation().equals(Orientation.S)) {
             if (ultimaCartaEchada.getExit().equals(Exit.START)) {
@@ -422,7 +396,7 @@ public class GameService {
         return res;
     }
 
-    public static ArrayList<Integer> extraerNumerosDeSalida(String texto) {
+    public static ArrayList<Integer> getExits(String texto) {
 
         ArrayList<Integer> digitos = new ArrayList<>();
 
@@ -442,8 +416,8 @@ public class GameService {
     }
 
     @Transactional
-    public Game updateGameEffect(Integer gameId, ChangeEffectRequest changeEffectRequest) {
-        Game game = gameRepository.findById(gameId).get();
+    public Game updateGameEffect(Integer gameId, EffectDTO effectDTO) {
+        Game game = findById(gameId);
         GamePlayer gp = gamePlayerRepository.findById(game.getGamePlayerTurnId()).get();
 
         if (game.getEffect() != Hability.NONE) {
@@ -452,8 +426,8 @@ public class GameService {
         } else if (gp.getCards().stream().filter(card -> card.getCardState() == CardStatus.IN_HAND).count() == 5) {
             if (gp.getEnergy() <= 0) {
                 System.out.println("No tienes suficiente energia para cambiar el efecto");
-            } else if (changeEffectRequest.getEffect() != null && game.getRound() > 4) {
-                Hability effect = Hability.valueOf(changeEffectRequest.getEffect());
+            } else if (effectDTO.getEffect() != null && game.getRound() > 4) {
+                Hability effect = Hability.valueOf(effectDTO.getEffect());
                 game.setEffect(effect);
                 gp.setEnergy(gp.getEnergy() - 1);
                 if (effect == Hability.EXTRA_GAS) {
@@ -469,7 +443,7 @@ public class GameService {
 
     @Transactional
     public Card extraGasEffect(Integer gameId) {
-        Game game = gameRepository.findById(gameId).get();
+        Game game = findById(gameId);
         Integer gamePlayerId = game.getGamePlayerTurnId();
         List<Card> cards = gamePlayerRepository.findById(gamePlayerId).get().getCards();
         List<Card> cardsInHand = cards.stream()
@@ -491,7 +465,7 @@ public class GameService {
     @Transactional
     public List<Card> changeCardsInHand(Integer gameId) {
         List<Card> newCardsInHand = new ArrayList<>();
-        Game game = gameRepository.findById(gameId).get();
+        Game game = findById(gameId);
         Integer gamePlayerId = game.getGamePlayerTurnId();
         List<Card> cards = gamePlayerRepository.findById(gamePlayerId).get().getCards();
         List<Card> allCardsInHand = cards.stream()
@@ -609,7 +583,7 @@ public class GameService {
 
     @Transactional
     public Game updateGameTurn(Integer gameId) {
-        Game game = gameRepository.findById(gameId).get();
+        Game game = findById(gameId);
         Hability effect = game.getEffect();
         Integer round = game.getRound();
         Integer turnGamePlayerId = game.getGamePlayerTurnId();
@@ -643,8 +617,8 @@ public class GameService {
                 }
         }
 
-        if (findPosiblePositionOfAGamePlayerGiven(turnGamePlayerId, gameId).isEmpty()
-                && (findPosiblePositionOfAGamePlayerGiven(turnGamePlayerId, gameId, true).isEmpty())) {
+        if (findPosiblePositionOfAGamePlayerGiven(gameId, turnGamePlayerId).isEmpty()
+                && (findPosiblePositionOfAGamePlayerGiven(gameId, turnGamePlayerId, true).isEmpty())) {
             Integer otherGamePlayerId = game.getGamePlayers().stream()
                     .filter(gp -> !gp.getId().equals(turnGamePlayerId))
                     .findFirst()
@@ -939,5 +913,4 @@ public class GameService {
 
         return Arrays.asList(maxStreak, currentStreak);
     }
-
 }

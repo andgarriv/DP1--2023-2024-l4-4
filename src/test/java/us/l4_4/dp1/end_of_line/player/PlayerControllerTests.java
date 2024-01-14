@@ -34,6 +34,8 @@ import us.l4_4.dp1.end_of_line.authorities.Authorities;
 import us.l4_4.dp1.end_of_line.authorities.AuthoritiesService;
 import us.l4_4.dp1.end_of_line.enums.FriendStatus;
 import us.l4_4.dp1.end_of_line.friendship.Friendship;
+import us.l4_4.dp1.end_of_line.friendship.FriendshipService;
+import us.l4_4.dp1.end_of_line.gameplayer.GamePlayerService;
 
 @WebMvcTest(controllers = PlayerController.class, excludeFilters = @ComponentScan.Filter(
     type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class))
@@ -53,10 +55,16 @@ class PlayerControllerTests {
     private PlayerService playerService;
 
     @MockBean
+    private FriendshipService friendshipService;
+
+    @MockBean
     private AuthService authService;
 
     @MockBean
     private AuthoritiesService authoritiesService;
+
+    @MockBean
+    private GamePlayerService gamePlayerService;
 
     @MockBean
     private PasswordEncoder passwordEncoder;
@@ -69,6 +77,7 @@ class PlayerControllerTests {
 
     private Player admin, player, player2, player3, newPlayer; 
     private Authorities authority, authority2;
+    private Friendship friendship, friendship2;
 
     private Player createPlayer(Integer id, Boolean isAdmin) {
         Player player = new Player();
@@ -103,13 +112,13 @@ class PlayerControllerTests {
         player2 = createPlayer(3, false);
         player3 = createPlayer(4, false);
 
-        Friendship friendship = new Friendship();
+        friendship = new Friendship();
         friendship.setId(1);
         friendship.setSender(player);
         friendship.setReceiver(player2);
         friendship.setFriendState(FriendStatus.ACCEPTED);
 
-        Friendship friendship2 = new Friendship();
+        friendship2 = new Friendship();
         friendship2.setId(2);
         friendship2.setSender(player3);
         friendship2.setReceiver(player);
@@ -154,6 +163,60 @@ class PlayerControllerTests {
                 .andExpect(jsonPath("$.size()").value(1))
                 .andExpect(jsonPath("$[?(@.id == 3)].name").value("Name3"));
     }
+
+    @Test
+    @WithMockUser(username = "playerName", password = "Own3r!")
+    void playerShouldFindAllFriendshipsByPlayerId() throws Exception {
+        when(this.friendshipService.findAllFriendshipsByPlayerId(TEST_PLAYER_ID, FriendStatus.PENDING)).thenReturn(List.of(friendship2));
+
+        mockMvc.perform(get(BASE_URL + "/{id}/friendships/{friendState}", TEST_PLAYER_ID, FriendStatus.PENDING)).andExpect(status().isOk())
+        .andExpect(jsonPath("$.size()").value(1))
+        .andExpect(jsonPath("$[?(@.id == 2)].sender.name").value("player3Name"))
+        .andExpect(jsonPath("$[?(@.id == 2)].receiver.name").value("playerName"));
+    }
+
+    /* @Test
+    @WithMockUser(username = "playerName", password = "Play3r!")
+    void shouldFindAllGamesByPlayerId() throws Exception {
+        when(gameService.findAllGamesByPlayerId(1)).thenReturn(List.of(game, game2));
+
+        mockMvc.perform(get(BASE_URL + "/players/{id}", 1))
+               .andExpect(status().isOk())
+               .andExpect(jsonPath("$", hasSize(2)))
+               .andExpect(jsonPath("$[0].id").value(game.getId()))
+               .andExpect(jsonPath("$[0].round").value(game.getRound()))
+               .andExpect(jsonPath("$[1].id").value(game2.getId()))
+               .andExpect(jsonPath("$[1].round").value(game2.getRound()))
+               .andExpect(jsonPath("$[0].gamePlayers[0].player.name").value(gamePlayer1.getPlayer().getName()))
+               .andExpect(jsonPath("$[1].gamePlayers[1].player.name").value(gamePlayer2.getPlayer().getName()))
+               .andExpect(jsonPath("$[0].startedAt").isNotEmpty())
+               .andExpect(jsonPath("$[1].endedAt").isNotEmpty())
+               .andExpect(jsonPath("$[0].gamePlayers[0].color").value(gamePlayer1.getColor().toString()))
+               .andExpect(jsonPath("$[1].gamePlayers[1].energy").value(gamePlayer2.getEnergy()));
+        verify(gameService).findAllGamesByPlayerId(1);
+    }
+
+    @Test
+    @WithMockUser(username = "playerName", password = "Play3r!")
+    void shouledFindNotEndedGamesByPlayerId() throws Exception{
+        when(gameService.findNotEndedGamesByPlayerId(1)).thenReturn(List.of(game));
+
+        mockMvc.perform(get(BASE_URL + "/players/{id}/notended", 1))
+               .andExpect(status().isOk())
+               .andExpect(jsonPath("$", hasSize(1))) 
+               .andExpect(jsonPath("$[0].id").value(game.getId()))
+               .andExpect(jsonPath("$[0].round").value(game.getRound()))
+               .andExpect(jsonPath("$[0].startedAt").isNotEmpty()) 
+               .andExpect(jsonPath("$[0].endedAt").isEmpty()) 
+               .andExpect(jsonPath("$[0].winner").doesNotExist()) 
+               .andExpect(jsonPath("$[0].effect").value(game.getEffect().toString()))
+               .andExpect(jsonPath("$[0].gamePlayers", hasSize(game.getGamePlayers().size()))) 
+               .andExpect(jsonPath("$[0].gamePlayers[0].player.name").value(gamePlayer1.getPlayer().getName()))
+               .andExpect(jsonPath("$[0].gamePlayers[0].color").value(gamePlayer1.getColor().toString()))
+               .andExpect(jsonPath("$[0].gamePlayers[0].energy").value(gamePlayer1.getEnergy()));
+
+        verify(gameService).findNotEndedGamesByPlayerId(1);
+    } */
 
     @Test
     @WithMockUser()

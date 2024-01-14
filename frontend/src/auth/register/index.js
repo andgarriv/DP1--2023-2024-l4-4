@@ -25,7 +25,6 @@ export default function Register() {
         return response.json();
       })
       .then(data => {
-        console.log("Player created:", data);
         window.location.href = "/login";
       })
       .catch(error => {

@@ -136,7 +136,6 @@ export default function EditPlayerProfile() {
     );
 
       if (response.ok) {
-        console.log("Player updated successfully");
         window.location.href = "/profile";
       } else {
         const data = await response.json();

@@ -26,7 +26,7 @@ function GameNavbar() {
         async function fetchGameData() {
             const jwt = tokenService.getLocalAccessToken();
             const user = tokenService.getUser();
-            const playerResponse = await fetch(`/api/v1/games/players/${user.id}`, {
+            const playerResponse = await fetch(`/api/v1/players/${user.id}/games`, {
                 headers: { Authorization: `Bearer ${jwt}` },
             });
 

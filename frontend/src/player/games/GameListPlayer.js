@@ -56,7 +56,7 @@ export default function PlayerGamesList() {
     useEffect(() => {
         async function fetchData() {
             try {
-                const playerResponse = await fetch(`/api/v1/games/players/${user.id}`, {
+                const playerResponse = await fetch(`/api/v1/players/${user.id}/games`, {
                     headers: { Authorization: `Bearer ${jwt}` },
                 });
                 if (!playerResponse.ok) {

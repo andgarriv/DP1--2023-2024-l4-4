@@ -49,14 +49,14 @@ class PlayerServiceTests {
 	void shouldFindAllPlayers() {
 		List<Player> players = (List<Player>) this.playerService.findAll();
 		List<Player> players2 = this.authoritiesService.findAllByAuthority("PLAYER");
-		assertEquals(10, players.size());
+		assertEquals(20, players.size());
 		assertEquals(players.size(), players2.size());
 	}
 
 	@Test
 	void shouldFindAllAdmins() {
 		List<Player> admins = this.authoritiesService.findAllByAuthority("ADMIN");
-		assertEquals(4, admins.size());
+		assertEquals(5, admins.size());
 	}
 
 	@Test

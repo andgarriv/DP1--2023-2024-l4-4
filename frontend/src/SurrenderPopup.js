@@ -9,7 +9,7 @@ function SurrenderPopup({ setVisible, visible, gameId }) {
 
     const handleReject = async () => {
         try {
-            const gamePlayerResponse = await fetch(`/api/v1/gameplayers/${gameId}/${user.id}`, {
+            const gamePlayerResponse = await fetch(`/api/v1/players/${user.id}/games/${gameId}/gameplayer`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${jwt}`,

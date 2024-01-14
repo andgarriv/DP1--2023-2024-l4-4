@@ -69,8 +69,6 @@ public class SecurityConfiguration {
 
 			.requestMatchers("/api/v1/cards").authenticated()
 			.requestMatchers("/api/v1/cards/**").authenticated()
-			
-			.requestMatchers( "/api/v1/gameplayers/**").authenticated()
 
 			.requestMatchers(HttpMethod.POST,"/api/v1/messages").authenticated()
 			.requestMatchers("/api/v1/messages").authenticated()
