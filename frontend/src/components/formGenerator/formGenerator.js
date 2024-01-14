@@ -1,13 +1,13 @@
-import "./css/formGenerator.css";
-import "filepond/dist/filepond.min.css";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
+import "filepond/dist/filepond.min.css";
+import "./css/formGenerator.css";
 
 import {
-  useState,
-  useImperativeHandle,
   forwardRef,
   useEffect,
+  useImperativeHandle,
   useRef,
+  useState,
 } from "react";
 
 import PropTypes from "prop-types";
@@ -135,9 +135,7 @@ const FormGenerator = forwardRef((props, ref) => {
           props.inputs.map((input, index) => {
             return (
               <>
-                {props.childrenPosition !== -1 &&
-                  index === props.childrenPosition &&
-                  props.children}
+                
                 <FormInput
                   key={index}
                   tag={input.tag}
@@ -159,7 +157,7 @@ const FormGenerator = forwardRef((props, ref) => {
               </>
             );
           })}
-        {props.childrenPosition === -1 && props.children}
+        {props.children}
       </form>
 
       <button onClick={handleSubmit} className={`${props.buttonClassName}`}>

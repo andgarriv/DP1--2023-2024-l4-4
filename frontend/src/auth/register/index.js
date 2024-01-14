@@ -58,18 +58,19 @@ export default function Register() {
             numberOfColumns={1}
             listenEnterKey
             buttonText="Save"
-            buttonClassName="auth-button-eol"
-          />
-          {avatarUrl && (
-          <div style={{ textAlign: "center", marginTop: "10px" }}>
-            <img
-              src={avatarUrl}
-              alt="Avatar Preview"
-              style={{ width: "100px", height: "100px", borderRadius: "50%" }}
-              onError={handleImageError}
-            />
-          </div>
-        )}
+            buttonClassName="auth-button-eol">
+            {avatarUrl && (
+              <div style={{ textAlign: "center", marginTop: "10px" }}>
+                <img
+                  src={avatarUrl}
+                  alt="Avatar Preview"
+                  style={{ width: "100px", height: "100px", borderRadius: "50%" }}
+                  onError={handleImageError}
+                />
+              </div>
+            )}
+          </FormGenerator>
+          
         </div>
       </div>
     </div>
