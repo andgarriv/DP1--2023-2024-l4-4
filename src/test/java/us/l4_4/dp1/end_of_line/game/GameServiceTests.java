@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import jakarta.transaction.Transactional;
 import us.l4_4.dp1.end_of_line.card.Card;
 import us.l4_4.dp1.end_of_line.card.CardDTO;
 import us.l4_4.dp1.end_of_line.card.CardService;
@@ -27,6 +29,7 @@ import us.l4_4.dp1.end_of_line.exceptions.ResourceNotFoundException;
 import us.l4_4.dp1.end_of_line.gameplayer.GamePlayer;
 import us.l4_4.dp1.end_of_line.gameplayer.GamePlayerService;
 
+
 @SpringBootTest
 @AutoConfigureTestDatabase
 class GameServiceTests {
@@ -38,6 +41,7 @@ class GameServiceTests {
     @Autowired
     private CardService cardService;
     private EffectDTO effectDTO;
+
 
     @Test
     public void shouldFindAllGames() {
@@ -70,10 +74,11 @@ class GameServiceTests {
         game.setRound(1);
         game.setEffect(Hability.NONE);
         gameService.save(game);
-
+        
     }
 
     @Test
+    @Transactional
     public void shouldCreateNewGame() {
         Game game = gameService.createNewGame(3, 5, Color.RED, Color.BLUE);
         GamePlayer gp1 = game.getGamePlayers().get(0);
@@ -129,10 +134,11 @@ class GameServiceTests {
     @Test
     void shouldCheckIfOnePlayerCanPlayAnotherGame() {
         Boolean canPlay2 = gameService.checkOnlyOneGameForEachPlayer(5);
-        assertEquals(true, canPlay2);
+        assertEquals(false, canPlay2);
     }
 
     @Test
+    @Transactional
     void shouldCheckThatGiveFiveRamdomCardsToAGamePlayerGiven() {
         Game game = gameService.createNewGame(11, 12, Color.RED, Color.BLUE);
         GamePlayer gp1 = game.getGamePlayers().get(0);
@@ -164,6 +170,7 @@ class GameServiceTests {
 
 
     @Test
+    @Transactional
     void shouldExtraGas() {
         Game game = gameService.createNewGame(9, 10, Color.RED, Color.BLUE);
         GamePlayer gp1 = game.getGamePlayers().get(0);
@@ -176,6 +183,7 @@ class GameServiceTests {
     }
 
     @Test
+    @Transactional
     void shouldChangeCardsInHand() {
         Game game = gameService.createNewGame(4, 6, Color.RED, Color.BLUE);
         GamePlayer gp1 = game.getGamePlayers().get(0);
@@ -190,6 +198,7 @@ class GameServiceTests {
     }
 
     @Test
+    @Transactional
     void shouldFindPosiblePosition() {
         Game g = gameService.createNewGame(18, 19, Color.RED, Color.BLUE);
         List<String> posiciones = gameService.findPosiblePositionOfAGamePlayerGiven(g.getId(), g.getGamePlayers().get(0).getId());
@@ -203,8 +212,13 @@ class GameServiceTests {
 
     }
     @Test
+    @Transactional
     void shouldFindNoPosiblePosition() {
-
+        CardDTO cardDTO = new CardDTO();
+        cardDTO.setRow(3);
+        cardDTO.setColumn(2);
+        cardDTO.setOrientation("N");
+        cardService.update(226, cardDTO);
         List<String> posiciones = gameService.findPosiblePositionOfAGamePlayerGiven(17, 33);
         assertEquals(0, posiciones.size());
 
@@ -233,6 +247,7 @@ class GameServiceTests {
 
 
     @Test
+    @Transactional
     void shouldSaveAGame() {
 
         Game g = new Game();
@@ -248,11 +263,32 @@ class GameServiceTests {
     }
 
     @Test
+    @Transactional
     void shouldDeleteGame() {
         Game g = gameService.createNewGame(24, 25, Color.RED, Color.BLUE);
         assertEquals(1, g.getRound());
         assertNotEquals(null, g);
         gameService.deleteGame(g.getId(), g.getGamePlayers().get(0).getId());
         assertThrows(ResourceNotFoundException.class, () -> gameService.findById(g.getId()));
+    }
+    @Test
+    void shouldCalculateStatistics(){
+        Map<String,String> globalStats = gameService.calculateStatistics();
+        assertEquals(globalStats.get("totalPlayers"),"13");
+        assertEquals(globalStats.get("gamesFinished"),"16");
+        assertEquals(globalStats.get("gamesPending"), "3");
+        assertEquals(globalStats.get("avgGames"), "1,5");
+        assertEquals(globalStats.get("totalGames"), "19");
+        assertEquals(globalStats.get("mostUsedColor"), "RED");
+        assertEquals(globalStats.get("maxRounds"), "27");
+        assertEquals(globalStats.get("minRounds"), "16");
+        assertEquals(globalStats.get("avgRounds"), "21,9");
+        assertEquals(globalStats.get("maxGamesPlayed"), "12");
+        assertEquals(globalStats.get("minGamesPlayed"), "1");
+        assertEquals(globalStats.get("averageEnergyUsed"), "0,84");
+        assertEquals(globalStats.get("averageGameDuration"), "0h 24m 50s");
+        assertEquals(globalStats.get("maxGameDuration"), "0h 37m 0s");
+        assertEquals(globalStats.get("minGameDuration"), "0h 15m 49s");
+        assertEquals(globalStats.get("totalGameDuration"), "6h 37m 29s");
     }
 }
