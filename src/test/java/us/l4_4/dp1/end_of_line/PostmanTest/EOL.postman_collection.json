@@ -1,9 +1,10 @@
 {
 	"info": {
-		"_postman_id": "da154092-ee1b-4311-89d5-f386542dc8d0",
-		"name": "EOL",
+		"_postman_id": "85ac811a-f884-411e-ae34-d99da520aacc",
+		"name": "EOL Copy 2",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "26144947"
+		"_exporter_id": "26140924",
+		"_collection_link": "https://orange-capsule-642161.postman.co/workspace/EOL~4dd06015-512a-487e-8e27-691798ad0195/collection/26140924-85ac811a-f884-411e-ae34-d99da520aacc?action=share&source=collection_link&creator=26140924"
 	},
 	"item": [
 		{
@@ -464,6 +465,116 @@
 		{
 			"name": "Game",
 			"item": [
+				{
+					"name": "GetStatistics",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Verificar juegos pendientes\", function () {\r",
+									"    pm.expect(pm.response.json().gamesPending).to.eql(\"1\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verificar juegos terminados\", function () {\r",
+									"    pm.expect(pm.response.json().gamesFinished).to.eql(\"16\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verificar total de jugadores\", function () {\r",
+									"    pm.expect(pm.response.json().totalPlayers).to.eql(\"9\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verificar total de juegos\", function () {\r",
+									"    pm.expect(pm.response.json().totalGames).to.eql(\"17\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verificar duración promedio de juego\", function () {\r",
+									"    pm.expect(pm.response.json().averageGameDuration).to.eql(\"0h 24m 50s\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verificar promedio de juegos por jugador\", function () {\r",
+									"    pm.expect(pm.response.json().avgGames).to.eql(\"1,9\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verificar máximo de rondas en un juego\", function () {\r",
+									"    pm.expect(pm.response.json().maxRounds).to.eql(\"27\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Verificar promedio de rondas por juego\", function () {\r",
+									"    pm.expect(pm.response.json().avgRounds).to.eql(\"21,9\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verificar energía promedio utilizada\", function () {\r",
+									"    pm.expect(pm.response.json().averageEnergyUsed).to.eql(\"0,91\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verificar duración total de todos los juegos\", function () {\r",
+									"    pm.expect(pm.response.json().totalGameDuration).to.eql(\"6h 37m 29s\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verificar mínimo de juegos jugados por jugador\", function () {\r",
+									"    pm.expect(pm.response.json().minGamesPlayed).to.eql(\"1\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verificar color más utilizado\", function () {\r",
+									"    pm.expect(pm.response.json().mostUsedColor).to.eql(\"RED\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verificar máximo de juegos jugados por un jugador\", function () {\r",
+									"    pm.expect(pm.response.json().maxGamesPlayed).to.eql(\"12\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verificar duración mínima de un juego\", function () {\r",
+									"    pm.expect(pm.response.json().minGameDuration).to.eql(\"0h 15m 49s\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verificar duración máxima de un juego\", function () {\r",
+									"    pm.expect(pm.response.json().maxGameDuration).to.eql(\"0h 37m 0s\");\r",
+									"});\r",
+									"pm.test(\"Verificar rondas minimas de un juego\", function () {\r",
+									"    pm.expect(pm.response.json().minRounds).to.eql(\"16\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/games/statistics",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"games",
+								"statistics"
+							]
+						}
+					},
+					"response": []
+				},
 				{
 					"name": "GetAllGames",
 					"event": [
@@ -953,38 +1064,6 @@
 								"33",
 								"cards",
 								"positions"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "GetStatistics",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8080/api/v1/games/statistics",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"v1",
-								"games",
-								"statistics"
 							]
 						}
 					},
