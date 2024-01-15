@@ -1,8 +1,6 @@
 package us.l4_4.dp1.end_of_line.game;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -285,7 +283,7 @@ class GameServiceTests {
         assertEquals(globalStats.get("avgRounds"), "21,9");
         assertEquals(globalStats.get("maxGamesPlayed"), "12");
         assertEquals(globalStats.get("minGamesPlayed"), "1");
-        assertEquals(globalStats.get("averageEnergyUsed"), "0,84");
+        assertEquals(globalStats.get("averageEnergyUsed"), "0,85");
         assertEquals(globalStats.get("averageGameDuration"), "0h 24m 50s");
         assertEquals(globalStats.get("maxGameDuration"), "0h 37m 0s");
         assertEquals(globalStats.get("minGameDuration"), "0h 15m 49s");

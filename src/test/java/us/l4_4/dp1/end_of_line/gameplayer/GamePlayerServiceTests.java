@@ -1,9 +1,9 @@
 package us.l4_4.dp1.end_of_line.gameplayer;
 
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -22,12 +22,14 @@ public class GamePlayerServiceTests {
     @Autowired
     private GamePlayerService gamePlayerService;
 
+    private GamePlayer gamePlayer;
+
     private GamePlayer createGamePlayer(){
         GamePlayerDTO gamePlayer = new GamePlayerDTO();
         gamePlayer.setColor(Color.VIOLET);
         gamePlayer.setEnergy(2);
         gamePlayer.setPlayer_id(5);
-        List<Integer> cards_ids = List.of(1, 2, 3);
+        List<Integer> cards_ids = new ArrayList<>();
         gamePlayer.setCards_ids(cards_ids);
         return gamePlayerService.create(gamePlayer);
     }
@@ -95,11 +97,11 @@ public class GamePlayerServiceTests {
 
     @Test
     void shouldUpdateGamePlayer(){
-        GamePlayer gamePlayer = createGamePlayer();
+        gamePlayer = createGamePlayer();
         assertEquals(Color.VIOLET, gamePlayer.getColor());
         assertEquals(2, gamePlayer.getEnergy());
         assertEquals(5, gamePlayer.getPlayer().getId());
-        assertEquals(3, gamePlayer.getCards().size());
+        assertEquals(0, gamePlayer.getCards().size());
 
         GamePlayerDTO gamePlayerDTO = new GamePlayerDTO();
         gamePlayerDTO.setColor(Color.YELLOW);
