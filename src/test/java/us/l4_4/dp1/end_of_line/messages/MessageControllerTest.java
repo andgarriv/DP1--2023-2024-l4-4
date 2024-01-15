@@ -48,7 +48,7 @@ private static final String BASE_URL = "/api/v1/messages";
         private ObjectMapper objectMapper;
 
         @BeforeEach
-    void setUp() {
+        void setUp() {
 
         LocalDate birthDate = LocalDate.of(1999, 01, 01);
         String avatar = "https://cdn-icons-png.flaticon.com/512/147/147144.png";

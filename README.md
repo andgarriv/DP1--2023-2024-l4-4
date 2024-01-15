@@ -75,4 +75,27 @@ You can start the development server to see frontend using the command (maybe yo
 ```
 npm start
 ```
+
 You can then access the EOL frontend at [http://localhost:3000](http://localhost:3000)
+
+## Run Postman collection
+
+To execute the tests made in Postman, you must follow these steps:
+
+1) Have Node.js installed.
+2) Install Newman with the following command:
+
+```
+npm install -g newman
+```
+If you encounter an error during the installation of Newman, visit the following link and follow its steps: [[https://www.npmjs.com/package/newman](https://learn.microsoft.com/es-es/troubleshoot/azure/active-directory/cannot-run-scripts-powershell)]
+
+3) Once we have installed Postman, we go to the corresponding folder which is:
+```
+\DP1--2023-2024-l4-4\src\test\java\us\l4_4\dp1\end_of_line\PostmanTest
+```
+4) Once in that folder, and with the backend running, we execute the following command:
+```
+newman run '.\Postman Collection'
+```
+5) To conclude, once the execution is finished, you will see the results of the tests in the console.
