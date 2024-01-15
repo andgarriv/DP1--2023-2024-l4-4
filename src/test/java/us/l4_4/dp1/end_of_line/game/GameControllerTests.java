@@ -15,7 +15,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,6 +34,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import lombok.With;
 import us.l4_4.dp1.end_of_line.authorities.Authorities;
 import us.l4_4.dp1.end_of_line.authorities.AuthoritiesService;
 import us.l4_4.dp1.end_of_line.card.Card;
@@ -269,6 +272,31 @@ public class GameControllerTests {
         game2.setGamePlayers(gamePlayers);
 
     }
+    @Test
+@WithMockUser(username = "playerName", password = "Play3r!")    
+void shouldFindGameStatistics() throws Exception {
+    Map<String, String> mockStats = new HashMap<>();
+    mockStats.put("gamesPending", "2");
+    mockStats.put("gamesFinished", "15");
+    mockStats.put("totalPlayers", "10");
+    mockStats.put("totalGames", "17");
+    mockStats.put("averageGameDuration", "43h 34m 36s");
+    mockStats.put("avgGames", "1,7");
+    mockStats.put("maxRounds", "27");
+    mockStats.put("leastUsedColor", "YELLOW");
+    mockStats.put("avgRounds", "21,6");
+    mockStats.put("averageEnergyUsed", "0,86");
+    mockStats.put("totalGameDuration", "653h 39m 0s");
+    mockStats.put("minGamesPlayed", "1");
+    mockStats.put("mostUsedColor", "RED");
+    mockStats.put("maxGamesPlayed", "12");
+    mockStats.put("minGameDuration", "0h 15m 49s");
+    mockStats.put("maxGameDuration", "648h 3m 31s");
+    mockStats.put("minRounds", "16");
+
+    when(gameService.calculateStatistics()).thenReturn(mockStats);
+}
+
 
     @Test
     @WithMockUser(username = "playerName", password = "Play3r!")
@@ -501,5 +529,4 @@ public class GameControllerTests {
                .andExpect(jsonPath("$[0]").value("1,1,W"))
                .andExpect(jsonPath("$[1]").value("1,2,E"));
     }
-
 }

@@ -83,7 +83,7 @@ public class PlayerService {
 			if (games.get(i).getGamePlayers().stream().map(gp -> gp.getPlayer()).collect(Collectors.toList()).contains(deletePlayer)) {
 				gameRepository.delete(games.get(i));
 			} else {
-				GamePlayer gp = gamePlayerRepository.findGamePlayerByGameAndPlayer(games.get(i).getId(), id);
+				GamePlayer gp = gamePlayerRepository.findGamePlayerByGameAndPlayer(id, games.get(i).getId());
 				gp.setPlayer(deletePlayer);
 				gamePlayerRepository.save(gp);
 				Game g = games.get(i);
