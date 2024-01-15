@@ -71,7 +71,7 @@ function AppNavbar() {
             }
 
             const gamePlayer = await gamePlayerResponse.json();
-            const response = await fetch(`/api/v1/games/${gameId}/${gamePlayer.id}`, {
+            const response = await fetch(`/api/v1/games/${gameId}/gameplayers/${gamePlayer.id}`, {
                 method: 'DELETE',
                 headers: {
                     Authorization: `Bearer ${jwt}`,
